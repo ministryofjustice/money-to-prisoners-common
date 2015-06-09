@@ -9,7 +9,7 @@ var argv = require('yargs').argv;
 // Proxy existing server via brower-sync and serve on localhost:3000
 gulp.task('serve', ['build'], function() {
   var host = argv.host || argv.h || 'localhost';
-  var port = argv.port || argv.p || 8000;
+  var port = argv.port || argv.p || 8001;
 
   browserSync({
     proxy: host + ':' + port,
