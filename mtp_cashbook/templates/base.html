@@ -6,12 +6,12 @@
   <title>{% block title %}mtp_cashbook{% endblock title %} | mtp_cashbook</title>
   {% load staticfiles %}
   {% if DEBUG %}
-  
+
   <link rel="stylesheet" href="{% static "stylesheets/app.css" %}">
-  
+
   {% else %}
   <link rel="stylesheet" href="{% static "stylesheets/app.min.css" %}">
-  
+
   {% endif %}
   {% block head %}
   {% endblock head %}
@@ -21,7 +21,7 @@
   {% endblock content %}
 
   {% if DEBUG %}
-  
+
   <script src="{% static "javascripts/app.js" %}"></script>
   <script src="//localhost:35729/livereload.js"></script>
   {% else %}
