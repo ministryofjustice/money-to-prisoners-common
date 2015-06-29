@@ -1,4 +1,9 @@
+$images-dir: '/static/images/';
+
 // Your sass styles go here
 body {
   background-color: #fa9491;
 }
+
+@import 'moj';
+@import 'govuk';
