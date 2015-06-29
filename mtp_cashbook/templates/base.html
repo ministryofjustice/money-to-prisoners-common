@@ -1,4 +1,6 @@
-{% extends 'layouts/django/base.html' %}
+{% extends 'layouts/django/internal.html' %}
+
+{% block page_title %}Digital cashbook{% endblock %}
 
 {% block stylesheets %}
   {% load staticfiles %}
@@ -7,7 +9,7 @@
   {% else %}
   <link rel="stylesheet" href="{% static "stylesheets/app.min.css" %}">
   {% endif %}
-{% endblock stylesheets %}
+{% endblock %}
 
 {% block javascripts %}
   {% if DEBUG %}
@@ -15,5 +17,13 @@
   {% else %}
   <script src="{% static "javascripts/app.min.js" %}"></script>
   {% endif %}
-{% endblock javascripts %}
+{% endblock %}
 
+{% block global_subheader %}
+  <div class="user-details">
+    Logged in as Firstname Lastname
+    <span>
+      <a href="{% url 'auth:logout' %}">Log out</a>
+    </span>
+  </div>
+{% endblock %}

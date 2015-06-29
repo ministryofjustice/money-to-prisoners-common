@@ -1,9 +1,11 @@
-$images-dir: '/static/images/';
+$assets-prefix: '/static';
 
-// Your sass styles go here
-body {
-  background-color: #fa9491;
-}
-
-@import 'moj';
 @import 'govuk';
+@import 'moj';
+
+// App colours
+@import 'colours';
+
+// App elements
+@import 'components/subheader';
+@import 'components/summary_boxes';

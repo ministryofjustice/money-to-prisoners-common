@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Yo{% endblock title %}
-
 {% block content %}
-<div class="row">
-  <div class="small-12 columns moj-wrapper">
-    <h1>
-      You are logged in!
-    </h1>
-    <p><a href="{% url 'auth:logout' %}">Log out</a></p>
-  </div>
-</div>
+  <h1>Money sent to prisoners</h1>
+
+  <ul class="SummaryBoxes">
+    <li class="SummaryBoxes--unprocessed">
+      <a href="#TODO">
+        <h2>New</h2>
+        <p><strong>54</strong> Payments to credit</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="#TODO">
+        <h2>History</h2>
+        <p><span>Payments</span> credited by you</p>
+      </a>
+    </li>
+  </ul>
+
 {% endblock content %}
