@@ -1,6 +1,7 @@
 {% extends 'layouts/django/internal.html' %}
+{% load i18n %}
 
-{% block page_title %}Digital cashbook{% endblock %}
+{% block page_title %}{% trans "Digital cashbook" %}{% endblock %}
 
 {% block stylesheets %}
   {% load staticfiles %}
@@ -21,9 +22,9 @@
 
 {% block global_subheader %}
   <div class="user-details">
-    Logged in as Firstname Lastname
+    {% trans "Logged in as Firstname Lastname" %}
     <span>
-      <a href="{% url 'auth:logout' %}">Log out</a>
+      <a href="{% url 'auth:logout' %}">{% trans "Log out" %}</a>
     </span>
   </div>
 {% endblock %}
