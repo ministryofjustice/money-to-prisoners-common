@@ -1,14 +1,31 @@
 {% extends "base.html" %}
-
-{% block title %}Yo{% endblock title %}
+{% load i18n %}
 
 {% block content %}
-<div class="row">
-  <div class="small-12 columns moj-wrapper">
-    <h1>
-      You are logged in!
-    </h1>
-    <p><a href="{% url 'auth:logout' %}">Log out</a></p>
-  </div>
-</div>
+  <h1>{% trans "Money sent to prisoners" %}</h1>
+
+  <ul class="SummaryBoxes">
+    <li class="SummaryBoxes--unprocessed">
+      <a href="#TODO">
+        <h2>{% trans "New" %}</h2>
+        <p>
+          {% blocktrans with payments_count="<strong>54</strong>" %}
+          {{ payments_count }} Payments to credit
+          {% endblocktrans %}
+        </p>
+      </a>
+    </li>
+
+    <li>
+      <a href="#TODO">
+        <h2>{% trans "History" %}</h2>
+        <p>
+          {% blocktrans with firstline="<span>" endfirstline="</span>" %}
+          {{ firstline }}Payments{{ endfirstline }} credited by you
+          {% endblocktrans %}
+        </p>
+      </a>
+    </li>
+  </ul>
+
 {% endblock content %}

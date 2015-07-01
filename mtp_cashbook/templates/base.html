@@ -1,34 +1,30 @@
-<!doctype html>
-<html class="no-js" lang="en" >
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}mtp_cashbook{% endblock title %} | mtp_cashbook</title>
+{% extends 'layouts/django/internal.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Digital cashbook" %}{% endblock %}
+
+{% block stylesheets %}
   {% load staticfiles %}
   {% if DEBUG %}
-
   <link rel="stylesheet" href="{% static "stylesheets/app.css" %}">
-
   {% else %}
   <link rel="stylesheet" href="{% static "stylesheets/app.min.css" %}">
-
   {% endif %}
-  {% block head %}
-  {% endblock head %}
-</head>
-<body>
-  {% block content %}
-  {% endblock content %}
+{% endblock %}
 
+{% block javascripts %}
   {% if DEBUG %}
-
   <script src="{% static "javascripts/app.js" %}"></script>
-  <script src="//localhost:35729/livereload.js"></script>
   {% else %}
   <script src="{% static "javascripts/app.min.js" %}"></script>
   {% endif %}
+{% endblock %}
 
-  {% block scripts %}
-  {% endblock scripts %}
-</body>
-</html>
+{% block global_subheader %}
+  <div class="user-details">
+    {% trans "Logged in as Firstname Lastname" %}
+    <span>
+      <a href="{% url 'auth:logout' %}">{% trans "Log out" %}</a>
+    </span>
+  </div>
+{% endblock %}
