@@ -7,5 +7,6 @@ $assets-prefix: '/static';
 @import 'colours';
 
 // App elements
+@import 'components/table';
 @import 'components/subheader';
 @import 'components/summary_boxes';

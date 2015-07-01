@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- <h1>Control total: &pound;745</h1>
+  <h2>Total payments credited: &pound;60</h2> -->
+
+  <input type="submit" value="I've credited ticked payments in NOMIS">
+  <button>Discard</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Prisoner no</th>
+        <th>Prisoner name</th>
+        <th>Amount</th>
+        <th>Sender</th>
+        <th>Credited?</th>
+      </tr>
+    </thead>
+
+    <tfoot>
+      <tr>
+        <th colspan="5" style="padding:0"></th>
+      </tr>
+    </tfoot>
+
+    <tbody>
+      <tr class="odd">
+        <td>A1450AE</td>
+        <td>Nicholas Finney</td>
+        <td>&pound;80.00</td>
+        <td>Inga Y. Santana</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <tr>
+        <td>A1436AE</td>
+        <td>Douglas</td>
+        <td>&pound;50.00</td>
+        <td>John Smith</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <tr class="odd is-selected">
+        <td>A2342JE</td>
+        <td>Billy Piper</td>
+        <td>&pound;30.00</td>
+        <td>Chris Evans</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <tr class="is-selected">
+        <td>A8392DJ</td>
+        <td>Com Truise</td>
+        <td>&pound;20.00</td>
+        <td>Nicole Kidman</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <tr class="odd">
+        <td>A2393KD</td>
+        <td>Brad Pitt</td>
+        <td>&pound;55.00</td>
+        <td>Jennifer Aniston</td>
+        <td><input type="checkbox"></td>
+      </tr>
+    </tbody>
+  </table>
+
+{% endblock content %}

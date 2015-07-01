@@ -1,0 +1,45 @@
+$bg-color: #fff;
+$bg-color-alt: #ededed;
+$bg-color-selected: #e3f0ff;
+$border-color: #979797;
+
+table {
+  border-collapse: collapse;
+
+  th, td {
+    padding: .75em 1em;
+    border: $border-color solid;
+    border-width: 1px 0 1px 1px;
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  th {
+    border-color: $border-color;
+  }
+
+  td {
+    background: $bg-color;
+    border-color: $bg-color $border-color;
+  }
+}
+
+tfoot th {
+  border-top: none;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+td {
+  tr.odd & {
+    background: $bg-color-alt;
+  }
+
+  tr.is-selected & {
+    background: $bg-color-selected;
+  }
+}
