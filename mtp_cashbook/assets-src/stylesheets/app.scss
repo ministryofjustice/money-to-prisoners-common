@@ -3,10 +3,11 @@ $assets-prefix: '/static';
 @import 'govuk';
 @import 'moj';
 
-// App colours
+// App overrides
 @import 'colours';
+@import 'components/buttons';
+@import 'components/table';
 
 // App elements
-@import 'components/table';
 @import 'components/subheader';
 @import 'components/summary_boxes';

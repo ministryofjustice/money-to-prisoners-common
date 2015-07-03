@@ -14,6 +14,10 @@ table {
     &:first-child {
       border-left: none;
     }
+
+    &.check {
+      text-align: center;
+    }
   }
 
   th {

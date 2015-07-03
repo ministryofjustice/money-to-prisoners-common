@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <!-- <h1>Control total: &pound;745</h1>
-  <h2>Total payments credited: &pound;60</h2> -->
+  <div class="totals">
+    <p>Control total: <strong>&pound;745</strong></p>
+    <p>Total payments credited: &pound;60</p>
+  </div>
 
-  <input type="submit" value="I've credited ticked payments in NOMIS">
-  <button>Discard</button>
+  <input type="submit" value="I've credited ticked payments in NOMIS" class="button">
+  <button class="button button-secondary">Discard</button>
 
   <table>
     <thead>
@@ -30,7 +32,7 @@
         <td>Nicholas Finney</td>
         <td>&pound;80.00</td>
         <td>Inga Y. Santana</td>
-        <td><input type="checkbox"></td>
+        <td class="check"><input type="checkbox"></td>
       </tr>
 
       <tr>
@@ -38,7 +40,7 @@
         <td>Douglas</td>
         <td>&pound;50.00</td>
         <td>John Smith</td>
-        <td><input type="checkbox"></td>
+        <td class="check"><input type="checkbox"></td>
       </tr>
 
       <tr class="odd is-selected">
@@ -46,7 +48,7 @@
         <td>Billy Piper</td>
         <td>&pound;30.00</td>
         <td>Chris Evans</td>
-        <td><input type="checkbox"></td>
+        <td class="check"><input type="checkbox"></td>
       </tr>
 
       <tr class="is-selected">
@@ -54,7 +56,7 @@
         <td>Com Truise</td>
         <td>&pound;20.00</td>
         <td>Nicole Kidman</td>
-        <td><input type="checkbox"></td>
+        <td class="check"><input type="checkbox"></td>
       </tr>
 
       <tr class="odd">
@@ -62,9 +64,12 @@
         <td>Brad Pitt</td>
         <td>&pound;55.00</td>
         <td>Jennifer Aniston</td>
-        <td><input type="checkbox"></td>
+        <td class="check"><input type="checkbox"></td>
       </tr>
     </tbody>
   </table>
+
+  <input type="submit" value="I've credited ticked payments in NOMIS" class="button">
+  <button class="button button-secondary">Discard</button>
 
 {% endblock content %}
