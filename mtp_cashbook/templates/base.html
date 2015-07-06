@@ -21,10 +21,12 @@
 {% endblock %}
 
 {% block global_subheader %}
+  {% if request.user.is_authenticated %}
   <div class="user-details">
-    {% trans "Logged in as Firstname Lastname" %}
+    {% trans "Logged in as " %}{{ request.user.get_full_name|default:request.user.username }}
     <span>
       <a href="{% url 'auth:logout' %}">{% trans "Log out" %}</a>
     </span>
   </div>
+  {% endif %}
 {% endblock %}
