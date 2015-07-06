@@ -23,7 +23,9 @@
 {% block global_subheader %}
   {% if request.user.is_authenticated %}
   <div class="user-details">
-    {% trans "Logged in as " %}{{ request.user.get_full_name|default:request.user.username }}
+    {% blocktrans with full_name=request.user.get_full_name|default:request.user.username %}
+    Logged in as {{ full_name }}.
+    {% endblocktrans %}
     <span>
       <a href="{% url 'auth:logout' %}">{% trans "Log out" %}</a>
     </span>
