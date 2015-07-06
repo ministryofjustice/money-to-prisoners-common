@@ -33,7 +33,7 @@
       <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
         <td>{{ transaction.prisoner_number }}</td>
         <td>??? ???</td>
-        <td>&pound;{{ transaction.amount|currency }}</td>
+        <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
         <td>{{ transaction.sender }}</td>
         <td class="check"><input type="checkbox" {% if transaction.credited %}checked{% endif %}></td>
       </tr>
