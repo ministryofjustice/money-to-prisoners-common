@@ -3,7 +3,16 @@ $bg-color-alt: #ededed;
 $bg-color-selected: #e3f0ff;
 $border-color: #979797;
 
+// Fixes
+
+.numeric {
+  font-family: ntatabularnumbers;
+}
+
+// App specific
+
 table {
+  width: auto;
   border-collapse: collapse;
 
   th, td {
@@ -46,8 +55,4 @@ td {
   tr.is-selected & {
     background: $bg-color-selected;
   }
-}
-
-.numeric {
-  font-family: ntatabularnumbers;
 }
