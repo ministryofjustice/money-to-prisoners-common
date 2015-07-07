@@ -2,6 +2,8 @@
 {% load currency i18n %}
 
 {% block content %}
+  <form method="post" action="">
+  {% csrf_token %}
   <div class="totals">
     <p>
       {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
@@ -13,6 +15,8 @@
   {% include "cashbook/includes/batch_buttons.html" %}
 
   {% if object_list %}
+  {{ form.errors }}
+
   <div class="batch">
     <table>
       <thead>
@@ -32,14 +36,14 @@
       </tfoot>
 
       <tbody>
-      {% for transaction in object_list %}
+      {% for transaction_pk, transaction in object_list %}
         <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
           <td>{{ transaction.prisoner_number }}</td>
           <td>??? ???</td>
           <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
           <td>{{ transaction.sender }}</td>
           <td class="check">
-            <input type="checkbox" name="transactions" value="{{ transaction.id }}" id="check-{{ transaction.id }}" {% if transaction.credited %}checked{% endif %}>
+            <input type="checkbox" name="{{ form.transactions.html_name }}" value="{{ transaction_pk }}" id="check-{{ transaction.id }}" {% if transaction.credited %}checked{% endif %}>
             <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
           </td>
         </tr>
