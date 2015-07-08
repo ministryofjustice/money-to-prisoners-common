@@ -1,0 +1,50 @@
+$component: Checkbox;
+
+input[type=checkbox] {
+  $checkbox-size: 20px;
+
+  @extend .u-vh;
+
+  + label {
+    cursor: pointer;
+    margin: 0;
+    padding-left: 30px;
+    background: url(../images/box.png) left 0 no-repeat;
+    -webkit-background-size: $checkbox-size $checkbox-size;
+    background-size: $checkbox-size $checkbox-size;
+  }
+
+  &:checked + label {
+    background-image: url(../images/tickbox.png);
+  }
+
+  &:focus + label {
+    outline: 3px solid $yellow;
+  }
+
+  // Variants
+
+  &.#{$component}--right + label {
+    padding: 0 30px 0 0;
+    background-position: right 0;
+  }
+
+  &.#{$component}--no-text + label {
+    @extend .u-hide-text;
+    display: inline-block;
+    width: $checkbox-size;
+    height: $checkbox-size;
+    padding: 0;
+  }
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min-device-pixel-ratio: 2) {
+    + label {
+      background-image: url(../images/box@2x.png);
+    }
+
+    &:checked + label {
+      background-image: url(../images/tickbox@2x.png);
+    }
+  }
+}

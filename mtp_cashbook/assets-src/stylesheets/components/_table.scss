@@ -26,6 +26,11 @@ table {
 
     &.check {
       text-align: center;
+      padding: 5px 1em 0;
+
+      input[type=checkbox] {
+        @extend .Checkbox--no-text;
+      }
     }
   }
 
@@ -40,6 +45,7 @@ table {
 }
 
 tfoot th {
+  padding: 0;
   border-top: none;
 }
 

@@ -4,7 +4,6 @@
 {% block content %}
   <div class="totals">
     <p>Control total: <strong>&pound;{{ total|currency }}</strong></p>
-    <p>Total payments credited: &pound;60</p>
   </div>
 
   <input type="submit" value="I've credited ticked payments in NOMIS" class="button">
@@ -25,7 +24,7 @@
 
       <tfoot>
         <tr>
-          <th colspan="5" style="padding:0"></th>
+          <th colspan="5"></th>
         </tr>
       </tfoot>
 
@@ -36,12 +35,15 @@
           <td>??? ???</td>
           <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
           <td>{{ transaction.sender }}</td>
-          <td class="check"><input type="checkbox" {% if transaction.credited %}checked{% endif %}></td>
+          <td class="check">
+            <input type="checkbox" name="transactions" value="{{ transaction.id }}" id="check-{{ transaction.id }}" {% if transaction.credited %}checked{% endif %}>
+            <label for="check-{{ transaction.id }}">Credited</label>
+          </td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
-    <p class="select-all"><label for="select-all">Select all<input type="checkbox" id="select-all"></label></p>
+    <p class="select-all"><input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">Select all</label></p>
   </div>
   {% else %}
     <p>{% trans "No transactions found" %}</p>
@@ -49,7 +51,5 @@
 
   <input type="submit" value="I've credited ticked payments in NOMIS" class="button">
   <button class="button button-secondary">Discard</button>
-
-
 
 {% endblock content %}
