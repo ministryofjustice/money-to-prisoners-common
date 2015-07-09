@@ -3,22 +3,25 @@
 
 {% block content %}
   <div class="totals">
-    <p>Control total: <strong>&pound;{{ total|currency }}</strong></p>
+    <p>
+      {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
+        Control total: {{ highlight }}{{ total }}{{ highlightend }}
+      {% endblocktrans %}
+    </p>
   </div>
 
-  <input type="submit" value="I've credited ticked payments in NOMIS" class="button">
-  <button class="button button-secondary">Discard</button>
+  {% include "cashbook/includes/batch_buttons.html" %}
 
   {% if object_list %}
   <div class="batch">
     <table>
       <thead>
         <tr>
-          <th>Prisoner no</th>
-          <th>Prisoner name</th>
-          <th>Amount</th>
-          <th>Sender</th>
-          <th>Credited?</th>
+          <th>{% trans "Prisoner no" %}</th>
+          <th>{% trans "Prisoner name" %}</th>
+          <th>{% trans "Amount" %}</th>
+          <th>{% trans "Sender" %}</th>
+          <th>{% trans "Credited?" %}</th>
         </tr>
       </thead>
 
@@ -37,19 +40,18 @@
           <td>{{ transaction.sender }}</td>
           <td class="check">
             <input type="checkbox" name="transactions" value="{{ transaction.id }}" id="check-{{ transaction.id }}" {% if transaction.credited %}checked{% endif %}>
-            <label for="check-{{ transaction.id }}">Credited</label>
+            <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
           </td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
-    <p class="select-all"><input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">Select all</label></p>
+    <p class="select-all"><input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">{% trans "Select all" %}</label></p>
   </div>
   {% else %}
     <p>{% trans "No transactions found" %}</p>
   {% endif %}
 
-  <input type="submit" value="I've credited ticked payments in NOMIS" class="button">
-  <button class="button button-secondary">Discard</button>
+  {% include "cashbook/includes/batch_buttons.html" %}
 
 {% endblock content %}
