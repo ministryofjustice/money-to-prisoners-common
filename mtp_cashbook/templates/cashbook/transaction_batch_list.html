@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load currency i18n %}
+{% load currency core i18n %}
 
 {% block content %}
   <form method="post" action="">
@@ -43,7 +43,7 @@
           <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
           <td>{{ transaction.sender }}</td>
           <td class="check">
-            <input type="checkbox" name="{{ form.transactions.html_name }}" value="{{ transaction_pk }}" id="check-{{ transaction.id }}" {% if transaction.credited %}checked{% endif %}>
+            <input type="checkbox" name="{{ form.transactions.html_name }}" value="{{ transaction_pk }}" id="check-{{ transaction.id }}" {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}>
             <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
           </td>
         </tr>
