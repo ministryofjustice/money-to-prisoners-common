@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load currency i18n %}
+
+{% block content %}
+  <div class="totals">
+    <p>
+      {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
+        Control total: {{ highlight }}{{ total }}{{ highlightend }}
+      {% endblocktrans %}
+    </p>
+  </div>
+
+  {% include "cashbook/includes/batch_buttons.html" %}
+
+  {% if object_list %}
+  <div class="batch">
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Prisoner no" %}</th>
+          <th>{% trans "Prisoner name" %}</th>
+          <th>{% trans "Amount" %}</th>
+          <th>{% trans "Sender" %}</th>
+          <th>{% trans "Credited?" %}</th>
+        </tr>
+      </thead>
+
+      <tfoot>
+        <tr>
+          <th colspan="5"></th>
+        </tr>
+      </tfoot>
+
+      <tbody>
+      {% for transaction in object_list %}
+        <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
+          <td>{{ transaction.prisoner_number }}</td>
+          <td>??? ???</td>
+          <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
+          <td>{{ transaction.sender }}</td>
+          <td class="check">
+            <input type="checkbox" name="transactions" value="{{ transaction.id }}" id="check-{{ transaction.id }}" {% if transaction.credited %}checked{% endif %}>
+            <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="select-all"><input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">{% trans "Select all" %}</label></p>
+  </div>
+  {% else %}
+    <p>{% trans "No transactions found" %}</p>
+  {% endif %}
+
+  {% include "cashbook/includes/batch_buttons.html" %}
+
+{% endblock content %}

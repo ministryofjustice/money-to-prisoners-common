@@ -1,0 +1,18 @@
+// Fixes
+
+button,
+.button {
+  font-family: inherit;
+}
+
+.button-secondary {
+  background-color: $grey-3;
+}
+
+// App specific
+
+button,
+.button {
+  padding-top: .3em;
+  padding-bottom: .3em;
+}

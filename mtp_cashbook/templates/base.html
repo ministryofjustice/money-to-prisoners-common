@@ -12,7 +12,7 @@
   {% endif %}
 {% endblock %}
 
-{% block javascripts %}
+{% block include_js %}
   {% if DEBUG %}
   <script src="{% static "javascripts/app.js" %}"></script>
   {% else %}
