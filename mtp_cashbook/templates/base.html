@@ -1,7 +1,9 @@
-{% extends 'layouts/django/internal.html' %}
+{% extends 'templates/layouts/django/internal.html' %}
 {% load i18n %}
 
 {% block page_title %}{% trans "Digital cashbook" %}{% endblock %}
+
+{% block proposition %}{% trans "Digital cashbook" %}{% endblock %}
 
 {% block stylesheets %}
   {% load staticfiles %}

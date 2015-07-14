@@ -1,19 +1,20 @@
 $assets-prefix: '/static';
 
 @import 'govuk';
-@import 'moj';
+@import 'moj-internal';
 
 @import 'base';
 
 // App overrides
 @import 'colours';
-@import 'components/buttons';
-@import 'components/forms';
-@import 'components/table';
+@import 'elements/buttons';
+@import 'elements/forms';
+@import 'elements/table';
+@import 'elements/subheader';
 
 // App elements
-@import 'components/subheader';
-@import 'components/summary_boxes';
+@import 'elements/user-details';
+@import 'elements/summary-boxes';
 
 // Page specific styles
-@import 'pages/batch'
+@import 'views/batch'
