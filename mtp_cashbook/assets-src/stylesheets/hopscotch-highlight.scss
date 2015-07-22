@@ -1,0 +1,133 @@
+// Hopscotch highlight
+
+#hopscotch-overlay,
+.hopscotch-overlay {
+  position: fixed;
+  z-index: 999990;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url(000000-0.5.png);
+  background: rgba(0,0,0,.4);
+}
+
+.hopscotch-highlighted {
+  position: relative;
+  z-index: 999992;
+}
+
+#hopscotch-highlight {
+  position: absolute;
+  z-index: 999991;
+  background: #fff;
+  background: rgba(255,255,255,.9);
+  width: 100px;
+  height: 100px;
+  top: 0;
+  left: 0;
+}
+
+// Hopscotch overrides
+
+div.hopscotch-bubble {
+  color: #fff;
+  background-color: #000;
+  border-color: #000;
+
+  .hopscotch-bubble-arrow-container.down {
+    left: 50%;
+    margin-left: -17px;
+
+    .hopscotch-bubble-arrow {
+      display: none;
+    }
+
+    .hopscotch-bubble-arrow-border {
+      border-top-color: #000;
+    }
+  }
+
+  .hopscotch-bubble-arrow-container.up {
+    left: 50%;
+    margin-left: -17px;
+
+    .hopscotch-bubble-arrow {
+      display: none;
+    }
+
+    .hopscotch-bubble-arrow-border {
+      border-bottom-color: #000;
+    }
+  }
+
+  .hopscotch-bubble-arrow-container.left {
+    top: 50%;
+    margin-top: -17px;
+
+    .hopscotch-bubble-arrow {
+      display: none;
+    }
+
+    .hopscotch-bubble-arrow-border {
+      border-right-color: #000;
+    }
+  }
+
+  .hopscotch-bubble-arrow-container.right {
+    top: 50%;
+    margin-top: -17px;
+
+    .hopscotch-bubble-arrow {
+      display: none;
+    }
+
+    .hopscotch-bubble-arrow-border {
+      border-left-color: #000;
+    }
+  }
+
+  .hopscotch-nav-button.next,
+  .hopscotch-nav-button.next:hover {
+    height: auto;
+    @include font(nta, $em-base);
+    padding: 7px 30px 5px;
+    font-weight: normal;
+    text-shadow: none;
+    background: $link-active-colour;
+    border: none;
+    border-bottom: 2px solid darken($link-active-colour, 20);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hopscotch-bubble-content {
+    margin: 0;
+  }
+
+  .hopscotch-content,
+  .hopscotch-bubble-close {
+    @include font(nta, $em-base);
+    font-size: 16px;
+  }
+
+  .hopscotch-bubble-number {
+    display: none;
+  }
+
+  .hopscotch-bubble-close {
+    top: initial;
+    bottom: 0;
+    left: 0;
+    position: relative;
+    display: inline;
+    width: auto;
+    height: auto;
+    padding: 0;
+    color: #fff;
+    text-indent: 0;
+    text-decoration: underline;
+    background: none;
+  }
+
+}

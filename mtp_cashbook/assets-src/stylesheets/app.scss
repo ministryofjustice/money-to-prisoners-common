@@ -1,5 +1,8 @@
 $images-dir: '/static/images/';
 
+// Vendor
+@import '../../hopscotch/dist/css/hopscotch';
+
 @import 'govuk';
 @import 'moj-internal';
 
@@ -11,6 +14,8 @@ $images-dir: '/static/images/';
 @import 'elements/forms';
 @import 'elements/table';
 @import 'elements/subheader';
+
+@import 'hopscotch-highlight';
 
 // App elements
 @import 'elements/user-details';

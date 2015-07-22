@@ -5,7 +5,7 @@
   <h1>{% trans "Money sent to prisoners" %}</h1>
 
   <ul class="SummaryBoxes">
-    <li class="SummaryBoxes--unprocessed">
+    <li class="SummaryBoxes--unprocessed" id="tour-step-1">
       <a href="{% url 'transaction-list' %}">
         <h2>{% trans "New" %}</h2>
         <p>
@@ -16,7 +16,7 @@
       </a>
     </li>
 
-    <li>
+    <li id="tour-step-2">
       <a href="#TODO">
         <h2>{% trans "History" %}</h2>
         <p>
