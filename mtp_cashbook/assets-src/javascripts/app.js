@@ -92,7 +92,6 @@
 
   var tour = {
     id: 'batch',
-    multipage: true,
     steps: [
       {
         content: '<p>You can see what needs to be credited to prisoners in NOMIS by clicking ‘New payments’.</p><p>You’ll get a batch of payment to credit. No-one else in your team will be able to see the batch you’re working on.</p>',
@@ -165,12 +164,31 @@
       closeTooltip: 'Dismiss'
     },
     onNext: hopscotch.highlight.remove,
-    onEnd: hopscotch.highlight.remove,
-    onClose: hopscotch.highlight.remove,
-    onShow: hopscotch.highlight.show
+    onEnd: function() {
+      hopscotch.highlight.remove();
+      Cookies.remove('hopscotch');
+      Cookies.set('hopscotch.state', 'dismissed');
+    },
+    onClose: function() {
+      hopscotch.highlight.remove();
+      Cookies.set('hopscotch.state', 'dismissed');
+    },
+    onShow: function() {
+      hopscotch.highlight.show();
+      Cookies.set('hopscotch', hopscotch.getCurrStepNum());
+    }
+  };
+
+  var runTour = function(){
+    hopscotch.startTour(tour, parseInt(Cookies.get('hopscotch') || 0));
+    Cookies.remove('hopscotch.state');
   };
 
   // Start the tour!
-  hopscotch.startTour(tour);
+  if (Cookies.get('hopscotch.state') !== 'dismissed') {
+    runTour();
+  }
+
+  $('.start-tour').on('click', runTour);
 
 })();
