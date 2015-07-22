@@ -1,4 +1,4 @@
-/* global $, hopscotch, window, document */
+/* global $, hopscotch, window */
 (function(){
   'use strict';
 
@@ -120,7 +120,7 @@
         padding: 10,
         placement: 'top',
         xOffset: 'center',
-        table: "column"
+        table: 'column'
       },
       {
         content: '<p>Check it matches the prisoner name.</p>',
@@ -128,7 +128,7 @@
         padding: 10,
         placement: 'top',
         xOffset: 'center',
-        table: "column"
+        table: 'column'
       },
       {
         content: '<p>Add payment amount as usual.</p>',
@@ -136,7 +136,7 @@
         padding: 10,
         placement: 'top',
         xOffset: 'center',
-        table: "column"
+        table: 'column'
       },
       {
         content: '<p>Keep track by ticking payments you’ve credited.</p>',
@@ -144,7 +144,7 @@
         padding: 10,
         placement: 'top',
         xOffset: 'center',
-        table: "column"
+        table: 'column'
       },
       {
         content: '<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>',
