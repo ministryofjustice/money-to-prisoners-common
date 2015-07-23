@@ -100,16 +100,16 @@
     onNext: hopscotch.highlight.remove,
     onEnd: function() {
       hopscotch.highlight.remove();
-      Cookies.remove('hopscotch', { path: path });
-      Cookies.set('hopscotch.state', 'dismissed', { path: path });
+      Cookies.remove('hopscotch.' + tour.id);
+      Cookies.set('hopscotch.state.' + tour.id, 'dismissed');
     },
     onClose: function() {
       hopscotch.highlight.remove();
-      Cookies.set('hopscotch.state', 'dismissed', { path: path });
+      Cookies.set('hopscotch.state.' + tour.id, 'dismissed');
     },
     onShow: function() {
       hopscotch.highlight.show();
-      Cookies.set('hopscotch', hopscotch.getCurrStepNum(), { path: path });
+      Cookies.set('hopscotch.' + tour.id, hopscotch.getCurrStepNum());
     }
   };
 
@@ -117,11 +117,11 @@
     tour = _.extend(tourBase, tourSteps);
 
     var runTour = function(){
-      hopscotch.startTour(tour, parseInt(Cookies.get('hopscotch') || 0));
-      Cookies.remove('hopscotch.state', { path: path });
+      hopscotch.startTour(tour, parseInt(Cookies.get('hopscotch.' + tour.id) || 0));
+      Cookies.remove('hopscotch.state.' + tour.id);
     };
 
-    if (Cookies.get('hopscotch.state') !== 'dismissed') {
+    if (Cookies.get('hopscotch.state.' + tour.id) !== 'dismissed') {
       runTour();
     }
 
