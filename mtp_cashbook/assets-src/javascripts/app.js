@@ -90,6 +90,8 @@
     hopscotch.highlight.positionHighlight(target, step.table);
   };
 
+  var path = window.location.pathname;
+
   var tour = {
     id: 'batch',
     steps: [
@@ -166,22 +168,22 @@
     onNext: hopscotch.highlight.remove,
     onEnd: function() {
       hopscotch.highlight.remove();
-      Cookies.remove('hopscotch');
-      Cookies.set('hopscotch.state', 'dismissed');
+      Cookies.remove('hopscotch', { path: path });
+      Cookies.set('hopscotch.state', 'dismissed', { path: path });
     },
     onClose: function() {
       hopscotch.highlight.remove();
-      Cookies.set('hopscotch.state', 'dismissed');
+      Cookies.set('hopscotch.state', 'dismissed', { path: path });
     },
     onShow: function() {
       hopscotch.highlight.show();
-      Cookies.set('hopscotch', hopscotch.getCurrStepNum());
+      Cookies.set('hopscotch', hopscotch.getCurrStepNum(), { path: path });
     }
   };
 
   var runTour = function(){
     hopscotch.startTour(tour, parseInt(Cookies.get('hopscotch') || 0));
-    Cookies.remove('hopscotch.state');
+    Cookies.remove('hopscotch.state', { path: path });
   };
 
   // Start the tour!
