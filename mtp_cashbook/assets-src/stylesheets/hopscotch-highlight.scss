@@ -116,10 +116,11 @@ div.hopscotch-bubble {
   }
 
   .hopscotch-bubble-close {
+    cursor: pointer;
     top: initial;
-    bottom: 0;
-    left: 0;
-    position: relative;
+    bottom: 10px;
+    left: 10px;
+    position: absolute;
     display: inline;
     width: auto;
     height: auto;
