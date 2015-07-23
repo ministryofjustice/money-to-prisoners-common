@@ -90,78 +90,10 @@
     hopscotch.highlight.positionHighlight(target, step.table);
   };
 
-  var path = window.location.pathname;
+  var path = window.location.pathname,
+      tour;
 
-  var tour = {
-    id: 'batch',
-    steps: [
-      {
-        content: '<p>You can see what needs to be credited to prisoners in NOMIS by clicking ‘New payments’.</p><p>You’ll get a batch of payment to credit. No-one else in your team will be able to see the batch you’re working on.</p>',
-        target: 'tour-step-1',
-        padding: 10,
-        placement: 'bottom',
-        xOffset: 'center'
-      },
-      {
-        content: '<p>You can see all payments you’ve credited to NOMIS in your history.</p>',
-        target: 'tour-step-2',
-        padding: 10,
-        placement: 'bottom',
-        xOffset: 'center'
-      },
-      {
-        content: '<p>The table shows payments to be credited to NOMIS.</p>',
-        target: 'tour-step1',
-        padding: 10,
-        placement: 'right'
-      },
-      {
-        content: '<p>Start be entering the prisoner number in NOMIS.</p>',
-        target: 'tour-step2',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column'
-      },
-      {
-        content: '<p>Check it matches the prisoner name.</p>',
-        target: 'tour-step3',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column'
-      },
-      {
-        content: '<p>Add payment amount as usual.</p>',
-        target: 'tour-step4',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column'
-      },
-      {
-        content: '<p>Keep track by ticking payments you’ve credited.</p>',
-        target: 'tour-step5',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column'
-      },
-      {
-        content: '<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>',
-        target: 'tour-step6',
-        padding: 10,
-        placement: 'bottom',
-        xOffset: 'center'
-      },
-      {
-        content: '<p>Click ‘Discard’ to stop crediting payments on this page. This will release them to be credited by other people in your team.</p>',
-        target: 'tour-step7',
-        padding: 10,
-        placement: 'bottom',
-        xOffset: 'center'
-      }
-    ],
+  var tourBase = {
     i18n: {
       closeTooltip: 'Dismiss'
     },
@@ -181,16 +113,19 @@
     }
   };
 
-  var runTour = function(){
-    hopscotch.startTour(tour, parseInt(Cookies.get('hopscotch') || 0));
-    Cookies.remove('hopscotch.state', { path: path });
-  };
+  if (typeof tourSteps !== 'undefined') {
+    tour = _.extend(tourBase, tourSteps);
 
-  // Start the tour!
-  if (Cookies.get('hopscotch.state') !== 'dismissed') {
-    runTour();
+    var runTour = function(){
+      hopscotch.startTour(tour, parseInt(Cookies.get('hopscotch') || 0));
+      Cookies.remove('hopscotch.state', { path: path });
+    };
+
+    if (Cookies.get('hopscotch.state') !== 'dismissed') {
+      runTour();
+    }
+
+    $('.start-tour').on('click', runTour);
   }
-
-  $('.start-tour').on('click', runTour);
 
 })();

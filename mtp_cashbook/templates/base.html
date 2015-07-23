@@ -15,6 +15,9 @@
 {% endblock %}
 
 {% block include_js %}
+  <script>
+    {% block view_js %}{% endblock %}
+  </script>
   {% if DEBUG %}
   <script src="{% static "javascripts/app.js" %}"></script>
   {% else %}

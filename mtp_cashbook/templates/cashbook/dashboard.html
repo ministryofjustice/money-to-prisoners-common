@@ -5,7 +5,7 @@
   <h1>{% trans "Money sent to prisoners" %}</h1>
 
   <ul class="SummaryBoxes">
-    <li class="SummaryBoxes--unprocessed" id="tour-step-1">
+    <li class="SummaryBoxes--unprocessed" id="tour-step1">
       <a href="{% url 'transaction-list' %}">
         <h2>{% trans "New" %}</h2>
         <p>
@@ -16,7 +16,7 @@
       </a>
     </li>
 
-    <li id="tour-step-2">
+    <li id="tour-step2">
       <a href="#TODO">
         <h2>{% trans "History" %}</h2>
         <p>
@@ -29,3 +29,25 @@
   </ul>
 
 {% endblock content %}
+
+{% block view_js %}
+  var tourSteps = {
+    id: 'dashboard',
+    steps: [
+      {
+        content: '<p>You can see what needs to be credited to prisoners in NOMIS by clicking ‘New payments’.</p><p>You’ll get a batch of payment to credit. No-one else in your team will be able to see the batch you’re working on.</p>',
+        target: 'tour-step1',
+        padding: 10,
+        placement: 'bottom',
+        xOffset: 'center'
+      },
+      {
+        content: '<p>You can see all payments you’ve credited to NOMIS in your history.</p>',
+        target: 'tour-step2',
+        padding: 10,
+        placement: 'bottom',
+        xOffset: 'center'
+      }
+    ]
+  };
+{% endblock %}
