@@ -125,7 +125,10 @@
       runTour();
     }
 
-    $('.start-tour').on('click', runTour);
+    $('.start-tour').on('click', function(e){
+      e.preventDefault();
+      runTour();
+    });
   }
 
 })();
