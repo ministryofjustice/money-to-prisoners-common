@@ -11,6 +11,9 @@ var paths = {
       'mtp_cashbook/apps/**/assets-src/stylesheets/**/*.scss'
   ],
   ie_styles: 'mtp_cashbook/assets-src/ie/**/*.scss',
+  css_files: [
+    'mtp_cashbook/assets-src/bower_components/hopscotch/dist/css/hopscotch.css'
+  ],
   scripts: [
     'mtp_cashbook/assets-src/javascripts/**/*',
     '!mtp_cashbook/assets-src/javascripts/templates.js',
