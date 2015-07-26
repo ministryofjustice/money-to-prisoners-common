@@ -14,14 +14,12 @@
 
 .hopscotch-highlighted {
   position: relative;
-  z-index: 999992;
+  z-index: 999991;
 }
 
 #hopscotch-highlight {
   position: absolute;
-  z-index: 999991;
-  background: #fff;
-  background: rgba(255,255,255,.9);
+  z-index: 999992;
   width: 100px;
   height: 100px;
   top: 0;

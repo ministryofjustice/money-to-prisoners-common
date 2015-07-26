@@ -65,15 +65,18 @@
     },
 
     positionHighlight: function(el, table) {
-      var h = $('#hopscotch-highlight');
-      var p = hopscotch.highlight.settings.padding;
+      var h = $('<div/>').attr('id', 'hopscotch-highlight').appendTo('body');
 
-      h.css({'top': el.offset().top - p, 'left': el.offset().left - p});
-      h.css({'width': el.width() + p * 2, 'height': el.height() + p * 2});
+      h.css({
+        'top': el.offset().top,
+        'left': el.offset().left,
+        'width': el.outerWidth(),
+        'height': el.outerHeight()
+      });
 
       if (typeof table !== 'undefined') {
         // Resize highlight to column height
-        h.css('height', el.closest('table').height() + hopscotch.highlight.settings.padding * 2);
+        h.css('height', el.closest('table').height());
       }
     },
 
