@@ -1,4 +1,4 @@
-/* global $, hopscotch, window */
+/* global $, _, hopscotch, window, Cookies, tourSteps */
 (function(){
   'use strict';
 
@@ -90,8 +90,7 @@
     hopscotch.highlight.positionHighlight(target, step.table);
   };
 
-  var path = window.location.pathname,
-      tour;
+  var tour;
 
   var tourBase = {
     i18n: {
