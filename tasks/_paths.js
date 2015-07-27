@@ -25,6 +25,9 @@ var paths = {
       'mtp_cashbook/assets-src/images/**/*',
       'mtp_cashbook/apps/**/assets-src/images/**/*'
   ],
+  vendor_images: [
+      'mtp_cashbook/assets-src/bower_components/hopscotch-highlight/src/images/**/*'
+  ],
   templates: [
       'mtp_cashbook/templates/**/*',
       'mtp_cashbook/apps/**/templates/**/*'
