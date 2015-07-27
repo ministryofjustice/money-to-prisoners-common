@@ -106,12 +106,40 @@
       Cookies.set('hopscotch.state.' + tour.id, 'dismissed');
     },
     onClose: function() {
+      var stepNo = hopscotch.getCurrStepNum();
+
       hopscotch.highlight.remove();
+
       Cookies.set('hopscotch.state.' + tour.id, 'dismissed');
+
+      if (tour.steps[stepNo].dismissTo) {
+        setTimeout(function(){
+          hopscotch.startTour(tour, tour.steps[stepNo].dismissTo);
+        }, 300);
+      }
     },
     onShow: function() {
-      hopscotch.highlight.show();
-      Cookies.set('hopscotch.' + tour.id, hopscotch.getCurrStepNum());
+      var stepNo = hopscotch.getCurrStepNum();
+
+      if (tour.steps[stepNo].highlight) {
+        hopscotch.highlight.show();
+      }
+
+      if (tour.steps[stepNo].fadeout) {
+        setTimeout(function(){
+          $('.hopscotch-bubble').fadeOut(300, function(){
+            hopscotch.endTour(false);
+          });
+        }, 5000);
+      }
+
+      if (tour.steps[stepNo].target === 'tour-intro') {
+        $('.hopscotch-bubble-arrow-container').remove();
+        $('.hopscotch-nav-button').text('Yes please');
+        $('.hopscotch-bubble-close').text('Not now');
+      }
+
+      Cookies.set('hopscotch.' + tour.id, stepNo);
     }
   };
 

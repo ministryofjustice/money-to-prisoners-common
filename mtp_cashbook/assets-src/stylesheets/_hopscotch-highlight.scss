@@ -28,6 +28,15 @@
 
 // Hopscotch overrides
 
+#tour-intro {
+  position: absolute;
+  z-index: 0;
+  width: 1px;
+  height: 1px;
+  top: 40%;
+  left: 50%;
+}
+
 div.hopscotch-bubble {
   color: #fff;
   background-color: #000;
