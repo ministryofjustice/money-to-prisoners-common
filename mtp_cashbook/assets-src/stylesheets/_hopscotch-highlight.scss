@@ -124,7 +124,8 @@ div.hopscotch-bubble {
 
   .hopscotch-bubble-close {
     cursor: pointer;
-    top: initial;
+    top: auto;
+    right: auto;
     bottom: 10px;
     left: 10px;
     position: absolute;
