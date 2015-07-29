@@ -34,6 +34,12 @@
   </div>
   {% endif %}
 
+  <p class="subheader-item phase-banner">
+    <strong class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</strong>
+    {# #TODO - add current location for feedback view #}
+    {% blocktrans %}This is a new service – your <a href="#">feedback</a> will help us to improve it.{% endblocktrans %}
+  </p>
+
   {% if messages %}
   <ul class="messages">
       {% for message in messages %}
@@ -41,10 +47,4 @@
       {% endfor %}
   </ul>
   {% endif %}
-
-  <p class="subheader-item phase-banner">
-    <strong class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</strong>
-    {# #TODO - add current location for feedback view #}
-    {% blocktrans %}This is a new service – your <a href="#">feedback</a> will help us to improve it.{% endblocktrans %}
-  </p>
 {% endblock %}
