@@ -43,7 +43,8 @@
   {% endif %}
 
   <p class="subheader-item phase-banner">
-    <strong class="phase-tag phase-tag-alpha">Alpha</strong>
-    This is a new service – your <a href="#">feedback</a> will help us to improve it.
+    <strong class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</strong>
+    {# #TODO - add current location for feedback view #}
+    {% blocktrans %}This is a new service – your <a href="#">feedback</a> will help us to improve it.{% endblocktrans %}
   </p>
 {% endblock %}
