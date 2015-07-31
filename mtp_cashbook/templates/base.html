@@ -1,4 +1,4 @@
-{% extends 'templates/layouts/django/internal.html' %}
+{% extends 'layouts/django/internal.html' %}
 {% load i18n %}
 
 {% block page_title %}{% trans "Digital cashbook" %}{% endblock %}
@@ -41,4 +41,10 @@
       {% endfor %}
   </ul>
   {% endif %}
+
+  <p class="subheader-item phase-banner">
+    <strong class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</strong>
+    {# #TODO - add current location for feedback view #}
+    {% blocktrans %}This is a new service – your <a href="#">feedback</a> will help us to improve it.{% endblocktrans %}
+  </p>
 {% endblock %}
