@@ -20,6 +20,7 @@
   {% else %}
   <script src="{% static "javascripts/app.min.js" %}"></script>
   {% endif %}
+  <script type="text/javascript">$(moj.init);</script>
 {% endblock %}
 
 {% block global_subheader %}
@@ -34,17 +35,17 @@
   </div>
   {% endif %}
 
-  {% if messages %}
-  <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-  </ul>
-  {% endif %}
-
   <p class="subheader-item phase-banner">
     <strong class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</strong>
     {# #TODO - add current location for feedback view #}
     {% blocktrans %}This is a new service – your <a href="#">feedback</a> will help us to improve it.{% endblocktrans %}
   </p>
+
+  {% if messages %}
+  <ul class="messages" role="alert" tabindex="-1">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 {% endblock %}
