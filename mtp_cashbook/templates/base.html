@@ -27,10 +27,13 @@
   {% if request.user.is_authenticated %}
   <div class="user-details">
     {% blocktrans with full_name=request.user.get_full_name|default:request.user.username %}
-    Logged in as {{ full_name }}.
+    Logged in as {{ full_name }}
     {% endblocktrans %}
     <span>
       <a href="{% url 'auth:logout' %}">{% trans "Log out" %}</a>
+    </span>
+    <span>
+      <a href="#" class="js-FeatureTour-start" id="tour-resume">{% trans "Help" %}</a>
     </span>
   </div>
   {% endif %}

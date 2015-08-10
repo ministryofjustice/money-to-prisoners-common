@@ -1,4 +1,3 @@
-/* global $ */
 (function(){
   'use strict';
 
@@ -17,5 +16,6 @@
   checks.on('change', function() {
     var check = $(this);
     check.closest('tr')[check.is(':checked') ? 'addClass' : 'removeClass']('is-selected');
-  })
+  });
+
 })();

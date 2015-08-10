@@ -8,7 +8,7 @@ var browserSync = require('browser-sync');
 var nconf = require('nconf');
 var reload = browserSync.reload;
 
-gulp.task('sass', ['clean-css'], function() {
+gulp.task('sass', ['clean-css', 'vendor-css'], function() {
   nconf.use('file', { file: './.bowerrc' });
   nconf.load();
   var bowerDir = nconf.get('directory');

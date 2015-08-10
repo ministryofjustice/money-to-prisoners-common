@@ -18,14 +18,14 @@
   {{ form.errors }}
 
   <div class="batch">
-    <table>
+    <table id="tour-step1">
       <thead>
         <tr>
-          <th>{% trans "Prisoner no" %}</th>
-          <th>{% trans "Prisoner name" %}</th>
-          <th>{% trans "Amount" %}</th>
+          <th id="tour-step2">{% trans "Prisoner no" %}</th>
+          <th id="tour-step3">{% trans "Prisoner name" %}</th>
+          <th id="tour-step4">{% trans "Amount" %}</th>
           <th>{% trans "Sender" %}</th>
-          <th>{% trans "Credited?" %}</th>
+          <th id="tour-step5">{% trans "Credited?" %}</th>
         </tr>
       </thead>
 
@@ -59,3 +59,74 @@
   {% include "cashbook/includes/batch_buttons.html" %}
 
 {% endblock content %}
+
+{% block include_js %}
+  <script>
+    var tour = {
+      id: 'batch',
+      steps: [
+        {
+          content: '{% blocktrans %}<p>The table shows payments to be credited to NOMIS.</p>{% endblocktrans %}',
+          target: 'tour-step1',
+          padding: 10,
+          placement: 'right',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>Start by entering the prisoner number in NOMIS.</p>{% endblocktrans %}',
+          target: 'tour-step2',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>Check it matches the prisoner name.</p>{% endblocktrans %}',
+          target: 'tour-step3',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>Add payment amount as usual.</p>{% endblocktrans %}',
+          target: 'tour-step4',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>Keep track by ticking payments you’ve credited.</p>{% endblocktrans %}',
+          target: 'tour-step5',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>{% endblocktrans %}',
+          target: 'tour-step6',
+          padding: 10,
+          placement: 'bottom',
+          xOffset: 'center',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>Click ‘Discard’ to stop crediting payments on this page. This will release them to be credited by other people in your team.</p>{% endblocktrans %}',
+          target: 'tour-step7',
+          padding: 10,
+          placement: 'bottom',
+          xOffset: 'center',
+          highlight: true
+        }
+      ]
+    };
+  </script>
+
+  {{ block.super }}
+{% endblock %}
