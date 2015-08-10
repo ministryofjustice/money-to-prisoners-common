@@ -60,69 +60,73 @@
 
 {% endblock content %}
 
-{% block view_js %}
-  var tourSteps = {
-    id: 'batch',
-    steps: [
-      {
-        content: '<p>The table shows payments to be credited to NOMIS.</p>',
-        target: 'tour-step1',
-        padding: 10,
-        placement: 'right',
-        highlight: true
-      },
-      {
-        content: '<p>Start by entering the prisoner number in NOMIS.</p>',
-        target: 'tour-step2',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column',
-        highlight: true
-      },
-      {
-        content: '<p>Check it matches the prisoner name.</p>',
-        target: 'tour-step3',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column',
-        highlight: true
-      },
-      {
-        content: '<p>Add payment amount as usual.</p>',
-        target: 'tour-step4',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column',
-        highlight: true
-      },
-      {
-        content: '<p>Keep track by ticking payments you’ve credited.</p>',
-        target: 'tour-step5',
-        padding: 10,
-        placement: 'top',
-        xOffset: 'center',
-        table: 'column',
-        highlight: true
-      },
-      {
-        content: '<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>',
-        target: 'tour-step6',
-        padding: 10,
-        placement: 'bottom',
-        xOffset: 'center',
-        highlight: true
-      },
-      {
-        content: '<p>Click ‘Discard’ to stop crediting payments on this page. This will release them to be credited by other people in your team.</p>',
-        target: 'tour-step7',
-        padding: 10,
-        placement: 'bottom',
-        xOffset: 'center',
-        highlight: true
-      }
-    ]
-  };
+{% block include_js %}
+  <script>
+    var tour = {
+      id: 'batch',
+      steps: [
+        {
+          content: '<p>The table shows payments to be credited to NOMIS.</p>',
+          target: 'tour-step1',
+          padding: 10,
+          placement: 'right',
+          highlight: true
+        },
+        {
+          content: '<p>Start by entering the prisoner number in NOMIS.</p>',
+          target: 'tour-step2',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '<p>Check it matches the prisoner name.</p>',
+          target: 'tour-step3',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '<p>Add payment amount as usual.</p>',
+          target: 'tour-step4',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '<p>Keep track by ticking payments you’ve credited.</p>',
+          target: 'tour-step5',
+          padding: 10,
+          placement: 'top',
+          xOffset: 'center',
+          table: 'column',
+          highlight: true
+        },
+        {
+          content: '<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>',
+          target: 'tour-step6',
+          padding: 10,
+          placement: 'bottom',
+          xOffset: 'center',
+          highlight: true
+        },
+        {
+          content: '<p>Click ‘Discard’ to stop crediting payments on this page. This will release them to be credited by other people in your team.</p>',
+          target: 'tour-step7',
+          padding: 10,
+          placement: 'bottom',
+          xOffset: 'center',
+          highlight: true
+        }
+      ]
+    };
+  </script>
+
+  {{ block.super }}
 {% endblock %}

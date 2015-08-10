@@ -15,9 +15,6 @@
 {% endblock %}
 
 {% block include_js %}
-  <script>
-    {% block view_js %}{% endblock %}
-  </script>
   {% if DEBUG %}
   <script src="{% static "javascripts/app.js" %}"></script>
   {% else %}
@@ -36,7 +33,7 @@
       <a href="{% url 'auth:logout' %}">{% trans "Log out" %}</a>
     </span>
     <span>
-      <a href="#" class="start-tour" id="tour-resume">Help</a>
+      <a href="#" class="js-FeatureTour-start" id="tour-resume">{% trans "Help" %}</a>
     </span>
   </div>
   {% endif %}
