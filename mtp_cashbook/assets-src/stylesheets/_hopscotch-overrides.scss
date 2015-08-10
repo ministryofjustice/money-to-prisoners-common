@@ -14,6 +14,10 @@ div.hopscotch-bubble {
   background-color: #000;
   border-color: #000;
 
+  button:focus {
+    outline: 3px solid $yellow;
+  }
+
   .hopscotch-bubble-arrow-container.down {
     left: 50%;
     margin-left: -17px;

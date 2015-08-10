@@ -106,6 +106,9 @@
         $('.hopscotch-bubble-close').text('Not now');
       }
 
+      // focus on next button (prevent keyboard traps)
+      $('.hopscotch-next').focus();
+
       Cookies.set('hopscotch.' + this.tour.id, stepNo);
     }
   };
