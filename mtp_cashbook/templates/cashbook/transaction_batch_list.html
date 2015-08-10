@@ -66,14 +66,14 @@
       id: 'batch',
       steps: [
         {
-          content: '<p>The table shows payments to be credited to NOMIS.</p>',
+          content: '{% blocktrans %}<p>The table shows payments to be credited to NOMIS.</p>{% endblocktrans %}',
           target: 'tour-step1',
           padding: 10,
           placement: 'right',
           highlight: true
         },
         {
-          content: '<p>Start by entering the prisoner number in NOMIS.</p>',
+          content: '{% blocktrans %}<p>Start by entering the prisoner number in NOMIS.</p>{% endblocktrans %}',
           target: 'tour-step2',
           padding: 10,
           placement: 'top',
@@ -82,7 +82,7 @@
           highlight: true
         },
         {
-          content: '<p>Check it matches the prisoner name.</p>',
+          content: '{% blocktrans %}<p>Check it matches the prisoner name.</p>{% endblocktrans %}',
           target: 'tour-step3',
           padding: 10,
           placement: 'top',
@@ -91,7 +91,7 @@
           highlight: true
         },
         {
-          content: '<p>Add payment amount as usual.</p>',
+          content: '{% blocktrans %}<p>Add payment amount as usual.</p>{% endblocktrans %}',
           target: 'tour-step4',
           padding: 10,
           placement: 'top',
@@ -100,7 +100,7 @@
           highlight: true
         },
         {
-          content: '<p>Keep track by ticking payments you’ve credited.</p>',
+          content: '{% blocktrans %}<p>Keep track by ticking payments you’ve credited.</p>{% endblocktrans %}',
           target: 'tour-step5',
           padding: 10,
           placement: 'top',
@@ -109,7 +109,7 @@
           highlight: true
         },
         {
-          content: '<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>',
+          content: '{% blocktrans %}<p>Click this button when you’ve finished.</p><p>Any unticked payments will be released for other people in your team to work on. They won’t stay ‘checkout out’ to you.</p>{% endblocktrans %}',
           target: 'tour-step6',
           padding: 10,
           placement: 'bottom',
@@ -117,7 +117,7 @@
           highlight: true
         },
         {
-          content: '<p>Click ‘Discard’ to stop crediting payments on this page. This will release them to be credited by other people in your team.</p>',
+          content: '{% blocktrans %}<p>Click ‘Discard’ to stop crediting payments on this page. This will release them to be credited by other people in your team.</p>{% endblocktrans %}',
           target: 'tour-step7',
           padding: 10,
           placement: 'bottom',
