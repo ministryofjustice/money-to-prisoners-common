@@ -1,7 +1,6 @@
 // Messages module
 // Dependencies: moj, _, jQuery
 
-/* global moj, _, $ */
 (function () {
   'use strict';
 

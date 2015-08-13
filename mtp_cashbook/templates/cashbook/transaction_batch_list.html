@@ -4,7 +4,7 @@
 {% block content %}
   <form method="post" action="">
   {% csrf_token %}
-  <div class="totals">
+  <div class="totals js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
     <p>
       {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
         Control total: {{ highlight }}{{ total }}{{ highlightend }}
@@ -43,7 +43,14 @@
           <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
           <td>{{ transaction.sender }}</td>
           <td class="check">
-            <input type="checkbox" name="{{ form.transactions.html_name }}" value="{{ transaction_pk }}" id="check-{{ transaction.id }}" {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}>
+            <input
+              type="checkbox"
+              name="{{ form.transactions.html_name }}"
+              value="{{ transaction_pk }}"
+              id="check-{{ transaction.id }}"
+              {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}
+              class="js-RunningTotal-item"
+              data-amount="{{ transaction.amount|currency }}">
             <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
           </td>
         </tr>
