@@ -8,9 +8,11 @@
 {% block stylesheets %}
   {% load staticfiles %}
   {% if DEBUG %}
-  <link rel="stylesheet" href="{% static "stylesheets/app.css" %}">
+  <link rel="stylesheet" href="{% static "stylesheets/app.css" %}" media="screen, handheld, projection, tv">
+  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}" media="print">
   {% else %}
-  <link rel="stylesheet" href="{% static "stylesheets/app.min.css" %}">
+  <link rel="stylesheet" href="{% static "stylesheets/app.min.css" %}" media="screen, handheld, projection, tv">
+  <link rel="stylesheet" href="{% static "stylesheets/app-print.min.css" %}" media="print">
   {% endif %}
 {% endblock %}
 

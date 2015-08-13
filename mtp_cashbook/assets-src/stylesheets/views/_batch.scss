@@ -1,29 +1,42 @@
-.totals {
-  margin-top: 3em;
-  margin-bottom: 1em;
+.v-batch {
+  .totals {
+    margin-top: 3em;
+    margin-bottom: 1em;
 
-  p {
-    font-size: 24px;
-    margin-top: 0;
+    p {
+      font-size: 24px;
+      margin-top: 0;
 
-    @include breakpoint($desktop) {
-      display: inline;
-    }
+      @include breakpoint($desktop) {
+        display: inline;
+      }
 
-    &:first-child {
-      margin-top: 1em;
-      margin-right: .5em;
-      margin-bottom: 0;
-      font-size: 36px;
+      &:first-child {
+        margin-top: 1em;
+        margin-right: .5em;
+        margin-bottom: 0;
+        font-size: 36px;
+      }
     }
   }
-}
 
-.batch {
-  display: inline-block;
-}
+  .batch {
+    display: inline-block;
+  }
 
-.select-all {
-  text-align: right;
-  font-weight: bold;
+  .select-all {
+    text-align: right;
+    font-weight: bold;
+  }
+
+  @include print {
+    .global-header,
+    .global-subheader,
+    .global-footer,
+    .select-all,
+    .button,
+    .check label {
+      display: none;
+    }
+  }
 }

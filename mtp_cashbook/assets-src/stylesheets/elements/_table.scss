@@ -29,7 +29,7 @@ table {
       padding: 5px 1em 0;
 
       input[type=checkbox] {
-        @extend .Checkbox--no-text;
+        @extend .Checkbox--no-text !optional;
       }
     }
   }
