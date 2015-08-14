@@ -30,6 +30,7 @@ $images-dir: '/static/images/';
 @import 'elements/user-details';
 @import 'elements/summary-boxes';
 @import 'elements/messages';
+@import 'elements/dialog';
 
 // Page specific styles
 @import 'views/batch'
