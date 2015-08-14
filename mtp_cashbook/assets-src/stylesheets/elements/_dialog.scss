@@ -9,6 +9,8 @@ $dialog-padding: 30px;
   padding: 0;
   margin: 0;
   text-align: left;
+  display: block;
+  clear: both;
 
   .js-enabled & {
     display: none;

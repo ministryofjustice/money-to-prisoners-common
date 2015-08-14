@@ -59,13 +59,31 @@
       {% endfor %}
       </tbody>
     </table>
-    <p class="select-all"><input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">{% trans "Select all" %}</label></p>
+
+    <p class="select-all">
+      <input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">{% trans "Select all" %}</label>
+    </p>
+
+    <p class="print">
+      <a href="#print-dialog" class="js-Dialog">{% trans "Print batch" %}</a>
+    </p>
   </div>
   {% else %}
     <p>{% trans "No transactions found" %}</p>
   {% endif %}
 
   {% include "cashbook/includes/batch_buttons.html" %}
+
+  <dialog id="print-dialog" class="Dialog">
+    <div class="Dialog-inner">
+      {% blocktrans %}
+      <h3>Before you print</h3>
+      <p>Have you tried changing the size of the window so you can see the payments and NOMIS at the same time?</p>
+      <p>You could also try using the ALT + TAB keys to switch between the windows.</p>
+      {% endblocktrans %}
+      <button class="button u-nojs-hidden js-Print">{% trans "Print now" %}</button>
+    </div>
+  </dialog>
 
 {% endblock content %}
 

@@ -22,11 +22,13 @@
       // close element
       this.$close
         .attr('href', '#')
+        .attr('role', 'button')
         .addClass('Dialog-close');
     },
 
     bindEvents: function () {
       moj.Events.on('Dialog.render', this.render);
+      moj.Events.on('Dialog.close', this.closeDialog);
       this.$body.on('click', this.selector, this.render);
     },
 
@@ -53,13 +55,18 @@
       }
 
       $dialog
-        .attr('open', '')
-        .attr('tabindex', '-1')
+        .attr({
+          'open': 'true',
+          'tabindex': '-1',
+          'role': 'dialog'
+        })
         .append(this.$close)
+        .show()
         .focus();
 
-      this.$body
-        .prepend(this.$backdrop);
+      this.$body.prepend(this.$backdrop);
+
+      $(window).scrollTop(0);
 
       // bind close events
       this.$body.on('click.Dialog', '.Dialog-close, .Dialog-backdrop', this.closeDialog);
@@ -73,15 +80,10 @@
         e.preventDefault();
       }
 
-      $dialog
-        .removeAttr('open')
-        .removeAttr('tabindex');
+      $dialog.removeAttr('open tabindex role');
 
-      this.$close
-        .remove();
-
-      this.$backdrop
-        .remove();
+      this.$close.remove();
+      this.$backdrop.remove();
 
       this.$triggerEl.focus();
 
