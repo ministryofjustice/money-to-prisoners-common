@@ -80,6 +80,10 @@
         e.preventDefault();
       }
 
+      if ($dialog.length === 0) {
+        return;
+      }
+
       $dialog.removeAttr('open tabindex role');
 
       this.$close.remove();
