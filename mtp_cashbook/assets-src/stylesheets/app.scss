@@ -6,6 +6,9 @@ $images-dir: '/static/images/';
 @import 'vendor/hopscotch';
 @import '../../hopscotch-highlight/src/stylesheets/hopscotch-highlight';
 
+// Breakpoints
+@import '$breakpoints';
+
 @import 'govuk';
 @import 'moj-internal';
 
