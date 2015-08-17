@@ -1,38 +1,50 @@
+/* jshint node: true */
+
 'use strict';
 
 var paths = require('./_paths');
 var gulp = require('gulp');
-var filter = require('gulp-filter');
 var sass = require('gulp-ruby-sass');
 var browserSync = require('browser-sync');
 var nconf = require('nconf');
 var reload = browserSync.reload;
 
+
+function getBowerDir () {
+  nconf
+    .file({ file: './.bowerrc' })
+    .load();
+
+  return __dirname + '/../' + nconf.get('directory') + '/';
+}
+
+function getModulePaths (module) {
+  var modulePath = getBowerDir() + module + '/paths.json';
+  var obj = require(modulePath);
+
+  return obj.import_paths;
+}
+
+function getLoadPaths () {
+  var bowerDir = getBowerDir();
+  var govukImportPaths = getModulePaths('govuk-template');
+  var mojularImportPaths = getModulePaths('mojular');
+  var joined = govukImportPaths.concat(mojularImportPaths);
+
+  return joined.map(function(path) {
+    return bowerDir + '/' + path;
+  });
+}
+
 gulp.task('sass', ['clean-css', 'vendor-css'], function() {
-  nconf.use('file', { file: './.bowerrc' });
-  nconf.load();
-  var bowerDir = nconf.get('directory');
+  var loadPaths = getLoadPaths();
 
-  nconf.use('file', { file: './' + bowerDir + '/govuk-template/paths.json' });
-  nconf.load();
-
-  var govUkImportPaths = nconf.get('import_paths');
-
-  nconf.use('file', { file: './' + bowerDir + '/mojular/paths.json' });
-  nconf.load();
-
-  var mojImportPaths = nconf.get('import_paths');
-
-  return gulp
-    .src(paths.styles)
-    .pipe(sass({
+  return sass('mtp_cashbook/assets-src/stylesheets/', {
       lineNumbers: true,
-      loadPath: govUkImportPaths.concat(mojImportPaths).map(function(i) {
-        return bowerDir + '/' + i;
-      })
-    }))
-    .on('error', function (err) { console.log(err.message); })
+      sourceMaps: false,
+      loadPath: loadPaths
+    })
+    .on('error', function (err) { console.error('Sass Error!', err.message); })
     .pipe(gulp.dest(paths.dest + 'stylesheets/'))
-    .pipe(filter('**/*.css'))  // don't react to .map files when reloading browser
     .pipe(reload({ stream:true }));
 });
