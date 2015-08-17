@@ -12,6 +12,10 @@ $images-dir: '/static/images/';
 @import 'govuk';
 @import 'moj-internal';
 
+// App extensions
+@import '@print';
+@import 'utilities';
+
 @import 'base';
 
 // App overrides
@@ -27,6 +31,7 @@ $images-dir: '/static/images/';
 @import 'elements/user-details';
 @import 'elements/summary-boxes';
 @import 'elements/messages';
+@import 'elements/dialog';
 
 // Page specific styles
 @import 'views/batch'
