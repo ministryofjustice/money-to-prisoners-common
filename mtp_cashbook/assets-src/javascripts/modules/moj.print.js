@@ -50,13 +50,13 @@
         Cookies.set(this.cookieName, true);
       }
 
-      window.print();
-
       // close dialog if open
       moj.Events.trigger('Dialog.close');
 
       // trigger a render of this object to check if the cookie is set
       moj.Events.trigger('Print.render');
+
+      window.print();
     }
   };
 
