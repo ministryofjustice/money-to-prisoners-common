@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load currency core i18n %}
+
+{% block content %}
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">Back to dashboard</a>
+    <h1>Locked transactions</h1>
+    {% if object_list %}
+    <p>Select the ones you wish to unlock below</p>
+    {% endif %}
+  </header>
+
+  <form method="post" action="">
+  {% csrf_token %}
+
+  {% if object_list %}
+    {% include "cashbook/includes/locked_buttons.html" %}
+
+    {{ form.errors }}
+
+    <div class="batch">
+      <table>
+        <thead>
+          <tr>
+            <th>{% trans "Prisoner no" %}</th>
+            <th>{% trans "Prisoner name" %}</th>
+            <th>{% trans "Amount" %}</th>
+            <th>{% trans "Sender" %}</th>
+            <th>{% trans "Unlock" %}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for transaction_pk, transaction in object_list %}
+          <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
+            <td>{{ transaction.prisoner_number }}</td>
+            <td>??? ???</td>
+            <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
+            <td>{{ transaction.sender }}</td>
+            <td class="check">
+              <input
+                type="checkbox"
+                name="{{ form.transactions.html_name }}"
+                value="{{ transaction_pk }}"
+                id="check-{{ transaction.id }}"
+                {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}
+                class="js-RunningTotal-item"
+                data-amount="{{ transaction.amount|currency }}">
+              <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th colspan="5" class="align-right">
+              <input type="checkbox" id="select-all" class="Checkbox--right">
+              <label for="select-all">{% trans "Select all" %}</label>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    {% include "cashbook/includes/locked_buttons.html" %}
+  {% else %}
+    <p>{% trans "No locked transactions found" %}</p>
+  {% endif %}
+
+  <dialog id="print-dialog" class="Dialog">
+    <div class="Dialog-inner">
+      {% blocktrans %}
+      <h3>Before you print</h3>
+      <p>Have you tried changing the size of the window so you can see the payments and NOMIS at the same time?</p>
+      <p>You could also try using the ALT + TAB keys to switch between the windows.</p>
+      {% endblocktrans %}
+      <button class="button u-nojs-hidden js-Print">{% trans "Print now" %}</button>
+
+      <p>
+        <input type="checkbox" name="remove-print-prompt" id="remove-print-prompt" value="1">
+        <label for="remove-print-prompt">{% trans "Don't show this message again" %}</label>
+      </p>
+    </div>
+  </dialog>
+
+{% endblock content %}
