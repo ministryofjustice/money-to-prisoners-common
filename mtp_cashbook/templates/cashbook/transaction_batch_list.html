@@ -31,12 +31,6 @@
         </tr>
       </thead>
 
-      <tfoot>
-        <tr>
-          <th colspan="5"></th>
-        </tr>
-      </tfoot>
-
       <tbody>
       {% for transaction_pk, transaction in object_list %}
         <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
@@ -58,15 +52,19 @@
         </tr>
       {% endfor %}
       </tbody>
+
+      <tfoot>
+        <tr>
+          <th colspan="3" class="print">
+            <a href="#print-dialog" class="js-Dialog">{% trans "Print batch" %}</a>
+          </th>
+          <th colspan="2" class="select-all">
+            <input type="checkbox" id="select-all" class="Checkbox--right">
+            <label for="select-all">{% trans "Select all" %}</label>
+          </th>
+        </tr>
+      </tfoot>
     </table>
-
-    <p class="select-all">
-      <input type="checkbox" id="select-all" class="Checkbox--right"> <label for="select-all">{% trans "Select all" %}</label>
-    </p>
-
-    <p class="print">
-      <a href="#print-dialog" class="js-Dialog">{% trans "Print batch" %}</a>
-    </p>
   </div>
   {% else %}
     <p>{% trans "No transactions found" %}</p>
