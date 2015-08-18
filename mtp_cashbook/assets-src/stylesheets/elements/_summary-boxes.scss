@@ -4,13 +4,20 @@ $component: SummaryBoxes;
   $box-width: 210px;
   $box-height: 175px;
   $header-height: 50px;
+  $boxes-per-row: 2;
+  $box-container-width: ($box-width + ($container-h-padding*2)) * $boxes-per-row;
 
+  @include clearfix;
   margin: 0;
   padding: 0;
 
+  @include breakpoint($tablet) {
+    max-width: em($box-container-width);
+  }
+
   li {
     float: left;
-    margin: 0 30px $container-h-padding 0;
+    margin: 0 $container-h-padding*2 $container-h-padding*2 0;
     list-style: none;
     background: $grey-3;
 
@@ -69,6 +76,13 @@ li.#{$component}--unprocessed {
 
   & h2 {
     background: $green-1;
+  }
+}
+li.#{$component}--locked {
+  background: $orange-25;
+
+  & h2 {
+    background: $orange;
   }
 }
 
