@@ -3,6 +3,10 @@
     margin-top: 3em;
     margin-bottom: 1em;
 
+    @include print {
+      margin-top: 0;
+    }
+
     p {
       font-size: 24px;
       margin-top: 0;
@@ -21,23 +25,23 @@
   }
 
   .batch {
+    margin: 1em 0;
     display: inline-block;
-  }
 
-  .select-all {
-    float: right;
-    font-weight: bold;
+    @include print {
+      display: block;
+    }
   }
 
   .print {
-    display: block;
-    float: left;
+    font-weight: normal;
+  }
+
+  .select-all {
+    text-align: right;
   }
 
   @include print {
-    .global-header,
-    .global-subheader,
-    .global-footer,
     .select-all,
     .print,
     .button,
