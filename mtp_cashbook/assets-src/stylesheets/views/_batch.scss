@@ -3,6 +3,10 @@
     margin-top: 3em;
     margin-bottom: 1em;
 
+    @include print {
+      margin-top: 0;
+    }
+
     p {
       font-size: 24px;
       margin-top: 0;
@@ -21,7 +25,12 @@
   }
 
   .batch {
+    margin: 1em 0;
     display: inline-block;
+
+    @include print {
+      display: block;
+    }
   }
 
   .print {
@@ -33,9 +42,6 @@
   }
 
   @include print {
-    .global-header,
-    .global-subheader,
-    .global-footer,
     .select-all,
     .print,
     .button,

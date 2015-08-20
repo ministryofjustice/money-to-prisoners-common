@@ -74,7 +74,7 @@
     },
 
     closeDialog: function (e) {
-      var $dialog = this.$body.find('dialog[open]');
+      var $dialog = this.$body.find('.Dialog:visible');
 
       if (e) {
         e.preventDefault();
@@ -84,7 +84,9 @@
         return;
       }
 
-      $dialog.removeAttr('open tabindex role');
+      $dialog
+        .removeAttr('open tabindex role')
+        .hide();
 
       this.$close.remove();
       this.$backdrop.remove();

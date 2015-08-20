@@ -23,7 +23,7 @@
       this.$totalsContainer = $(this.selector);
       this.label = this.$totalsContainer.data('label');
 
-      this.$label = $('<p>');
+      this.$label = $('<p>').addClass('print-hidden');
       this.$total = $('<strong>');
     },
 

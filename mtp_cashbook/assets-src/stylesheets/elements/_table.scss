@@ -1,7 +1,7 @@
 $bg-color: #fff;
 $bg-color-alt: #ededed;
 $bg-color-selected: #e3f0ff;
-$border-color: #979797;
+$border-color: $grey-1;
 
 // Fixes
 
@@ -18,7 +18,12 @@ table {
   th, td {
     padding: .75em 1em;
     border: $border-color solid;
-    border-width: 1px 0 1px 1px;
+    border-width: 0 0 0 1px;
+
+    @include print {
+      padding-top: .3em;
+      padding-bottom: .3em;
+    }
 
     &:first-child {
       border-left: none;
@@ -42,7 +47,15 @@ table {
   td {
     background: $bg-color;
     border-color: $bg-color $border-color;
+
+    @include print {
+      border-bottom-color: $border-color;
+    }
   }
+}
+
+thead th {
+  border-width: 1px 0 1px 1px;
 }
 
 tfoot th {
@@ -51,7 +64,7 @@ tfoot th {
 }
 
 tr:last-child td {
-  border-bottom: none;
+  border-bottom-color: $border-color;
 }
 
 td {

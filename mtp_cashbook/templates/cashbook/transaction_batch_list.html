@@ -72,7 +72,7 @@
 
   {% include "cashbook/includes/batch_buttons.html" %}
 
-  <dialog id="print-dialog" class="Dialog">
+  <div id="print-dialog" class="Dialog">
     <div class="Dialog-inner">
       {% blocktrans %}
       <h3>Before you print</h3>
@@ -86,7 +86,7 @@
         <label for="remove-print-prompt">{% trans "Don't show this message again" %}</label>
       </p>
     </div>
-  </dialog>
+  </div>
 
 {% endblock content %}
 
