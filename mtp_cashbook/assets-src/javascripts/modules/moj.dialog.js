@@ -1,7 +1,6 @@
 // Dialog module
 // Dependencies: moj, _, jQuery
 
-/* globals console */
 (function () {
   'use strict';
 
@@ -74,7 +73,7 @@
     },
 
     closeDialog: function (e) {
-      var $dialog = this.$body.find('.Dialog:visible');
+      var $dialog = this.$body.find('dialog[open]');
 
       if (e) {
         e.preventDefault();
@@ -83,7 +82,6 @@
       if ($dialog.length === 0) {
         return;
       }
-
       $dialog
         .removeAttr('open tabindex role')
         .hide();
