@@ -14,17 +14,16 @@
       if (this.$totalsContainer.length) {
         this.bindEvents();
         this.render();
-        this.updateTotal();
       }
     },
 
     cacheEls: function () {
       this.$items = $('.js-RunningTotal-item');
       this.$totalsContainer = $(this.selector);
-      this.label = this.$totalsContainer.data('label');
+      this.labelText = this.$totalsContainer.data('label');
 
       this.$label = $('<p>').addClass('print-hidden');
-      this.$total = $('<strong>');
+      this.$total = $('<strong>').addClass('js-RunningTotal-total');
     },
 
     bindEvents: function () {
@@ -33,10 +32,9 @@
     },
 
     updateTotal: function () {
-      this.$total.html('&pound;' + this.calculateTotal());
-      this.$label
-        .text(this.label)
-        .append(this.$total);
+      var total = this.calculateTotal();
+
+      $('.js-RunningTotal-total').html('&pound;' + total);
     },
 
     calculateTotal: function () {
@@ -57,10 +55,14 @@
     render: function () {
       this.$label
         .attr('aria-live', 'polite')
-        .attr('aria-atomic', 'false');
+        .attr('aria-atomic', 'false')
+        .text(this.labelText)
+        .append(this.$total);
 
       this.$totalsContainer
         .append(this.$label);
+
+      this.updateTotal();
     }
   };
 

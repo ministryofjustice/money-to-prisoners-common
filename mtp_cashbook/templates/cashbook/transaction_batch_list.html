@@ -6,12 +6,15 @@
 {% block content %}
   <form method="post" action="">
   {% csrf_token %}
-  <div class="totals js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
-    <p>
-      {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
-        Control total: {{ highlight }}{{ total }}{{ highlightend }}
-      {% endblocktrans %}
-    </p>
+
+  <div class="totals js-StickyHeader"  id="tour-step-total">
+    <div class="container js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
+      <p>
+        {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
+          Control total: {{ highlight }}{{ total }}{{ highlightend }}
+        {% endblocktrans %}
+      </p>
+    </div>
   </div>
 
   {% include "cashbook/includes/batch_buttons.html" %}
@@ -136,6 +139,14 @@
           placement: 'top',
           xOffset: 'center',
           table: 'column',
+          highlight: true
+        },
+        {
+          content: '{% blocktrans %}<p>A running total of ticked payments will be displayed here.</p>{% endblocktrans %}',
+          target: 'tour-step-total',
+          padding: 10,
+          placement: 'bottom',
+          xOffset: 'center',
           highlight: true
         },
         {
