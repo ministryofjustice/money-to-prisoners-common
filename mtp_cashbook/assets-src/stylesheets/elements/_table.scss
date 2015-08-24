@@ -1,6 +1,6 @@
-$bg-color: #fff;
+$bg-color: $white;
 $bg-color-alt: #ededed;
-$bg-color-selected: #e3f0ff;
+$bg-color-selected: $light-blue-25;
 $border-color: $grey-1;
 
 // Fixes
@@ -29,6 +29,7 @@ table {
       border-left: none;
     }
 
+    // modifiers
     &.check {
       text-align: center;
       padding: 5px 1em 0;
@@ -36,6 +37,15 @@ table {
       input[type=checkbox] {
         @extend .Checkbox--no-text !optional;
       }
+    }
+
+    &.cell--compact {
+      border-width: 0;
+      padding: .75em 0;
+    }
+
+    &.cell--bold {
+      font-weight: 700;
     }
   }
 
@@ -54,25 +64,26 @@ table {
   }
 }
 
-thead th {
-  border-width: 1px 0 1px 1px;
-}
-
-tfoot th {
-  padding: 1em 0 0;
-  border-width: 1px 0 0;
-}
-
-tr:last-child td {
-  border-bottom-color: $border-color;
-}
-
-td {
-  tr.odd & {
-    background: $bg-color-alt;
+thead {
+  th {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
   }
+}
 
-  tr.is-selected & {
-    background: $bg-color-selected;
+tbody {
+  tr {
+    &:last-child td {
+      border-bottom-width: 1px;
+      border-bottom-color: $border-color;
+    }
+
+    &.odd td {
+      background: $bg-color-alt;
+    }
+
+    &.is-selected td {
+      background: $bg-color-selected;
+    }
   }
 }

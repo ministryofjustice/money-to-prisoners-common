@@ -25,6 +25,8 @@
   <div class="batch">
     <table id="tour-step1">
       <thead>
+        {% include "cashbook/includes/table_actions.html" with location='header' field_name=form.transactions.html_name %}
+
         <tr>
           <th id="tour-step2">{% trans "Prisoner no" %}</th>
           <th id="tour-step3">{% trans "Prisoner name" %}</th>
@@ -57,15 +59,7 @@
       </tbody>
 
       <tfoot>
-        <tr>
-          <th colspan="3" class="print">
-            <a href="#print-dialog" class="js-Dialog">{% trans "Print batch" %}</a>
-          </th>
-          <th colspan="2" class="select-all">
-            <input type="checkbox" id="select-all" class="Checkbox--right">
-            <label for="select-all">{% trans "Select all" %}</label>
-          </th>
-        </tr>
+        {% include "cashbook/includes/table_actions.html" with location='footer' field_name=form.transactions.html_name %}
       </tfoot>
     </table>
   </div>
