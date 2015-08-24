@@ -6,12 +6,14 @@
 {% block content %}
   <form method="post" action="">
   {% csrf_token %}
-  <div class="totals js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
-    <p>
-      {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
-        Control total: {{ highlight }}{{ total }}{{ highlightend }}
-      {% endblocktrans %}
-    </p>
+  <div class="totals js-StickyHeader">
+    <div class="container js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
+      <p>
+        {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
+          Control total: {{ highlight }}{{ total }}{{ highlightend }}
+        {% endblocktrans %}
+      </p>
+    </div>
   </div>
 
   {% include "cashbook/includes/batch_buttons.html" %}
