@@ -42,20 +42,12 @@
   }
 
   .batch {
-    margin: 1em 0;
+    margin: 1em 0 0;
     display: inline-block;
 
     @include print {
       display: block;
     }
-  }
-
-  .print {
-    font-weight: normal;
-  }
-
-  .select-all {
-    text-align: right;
   }
 
   @include print {
