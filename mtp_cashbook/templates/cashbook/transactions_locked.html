@@ -3,10 +3,10 @@
 
 {% block content %}
   <header class="ContentHeader">
-    <a href="{% url 'dashboard' %}" class="ContentHeader-back">Back to dashboard</a>
-    <h1>Locked transactions</h1>
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans "Back to dashboard" %}</a>
+    <h1>{% trans "Locked transactions" %}</h1>
     {% if object_list %}
-    <p>Select the ones you wish to unlock below</p>
+    <p>{% trans "Select the ones you wish to unlock below" %}</p>
     {% endif %}
   </header>
 
@@ -21,6 +21,8 @@
     <div class="batch">
       <table>
         <thead>
+          {% include "cashbook/includes/table_actions.html" with location='header' field_name=form.transactions.html_name print=False %}
+
           <tr>
             <th>{% trans "Prisoner no" %}</th>
             <th>{% trans "Prisoner name" %}</th>
@@ -46,19 +48,14 @@
                 {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}
                 class="js-RunningTotal-item"
                 data-amount="{{ transaction.amount|currency }}">
-              <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
+              <label for="check-{{ transaction.id }}">{% trans "Unlock" %}</label>
             </td>
           </tr>
         {% endfor %}
         </tbody>
 
         <tfoot>
-          <tr>
-            <th colspan="5" class="align-right">
-              <input type="checkbox" id="select-all" class="Checkbox--right">
-              <label for="select-all">{% trans "Select all" %}</label>
-            </th>
-          </tr>
+          {% include "cashbook/includes/table_actions.html" with location='footer' field_name=form.transactions.html_name print=False %}
         </tfoot>
       </table>
     </div>
