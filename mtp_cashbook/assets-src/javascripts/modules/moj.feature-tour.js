@@ -29,9 +29,13 @@
     startOnClick: function (e) {
       e.preventDefault();
 
+      // if a tour object doesn't exist, return
+      if (!this.tour) {
+        return;
+      }
+
       // remove any existing cookies for this tour
       Cookies.remove('hopscotch.state.' + this.tour.id);
-
       this.render();
     },
 
