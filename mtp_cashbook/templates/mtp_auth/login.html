@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load i18n core %}
+{% extends "base.html" %}{% load i18n core widget_tweaks %}
 
 {% block content %}
   <h1>{%trans 'Process money sent to prisoners' %}</h1>
@@ -42,7 +42,7 @@
                   <span class="error-message">{{ error }}</span>
                 {% endfor %}
               </label>
-              {{ field|addclass:'form-control' }}
+              {{ field|attr:"autocomplete:off"|add_class:'form-control' }}
             </div>
           {% endfor %}
 
