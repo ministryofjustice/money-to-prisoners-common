@@ -2,4 +2,8 @@ input {
   font-family: inherit;
 }
 
+.main-content label + * {
+  margin-top: 0;
+}
+
 @import 'checkbox';
