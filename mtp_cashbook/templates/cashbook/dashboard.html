@@ -26,6 +26,17 @@
         </p>
       </a>
     </li>
+
+    <li class="SummaryBoxes--locked">
+      <a href="{% url 'transactions-locked' %}">
+        <h2>{% trans "Locked" %}</h2>
+        <p>
+          {% blocktrans with payments_count="<strong>{0}</strong>"|safewrap:locked_transactions %}
+          {{ payments_count }} Transactions in progress
+          {% endblocktrans %}
+        </p>
+      </a>
+    </li>
   </ul>
 
   <div id="tour-intro"></div>

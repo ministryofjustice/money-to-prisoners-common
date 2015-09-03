@@ -1,7 +1,9 @@
 {% load i18n %}
 <tr>
   <td colspan="3" class="cell--compact">
+    {% if print != False %}
     <a href="#print-dialog" class="js-Dialog">{% trans "Print these transactions" %}</a>
+    {% endif %}
   </td>
   <td colspan="2" align="right" class="cell--compact cell--bold">
     <input type="checkbox" id="select-all-{{ location }}" class="Checkbox--right js-SelectAll" data-name="{{ field_name }}">
