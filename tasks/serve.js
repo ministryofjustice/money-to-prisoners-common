@@ -11,15 +11,17 @@ gulp.task('serve', ['build'], function() {
   var host = argv.host || argv.h || 'localhost';
   var port = argv.port || argv.p || 8001;
 
-  browserSync({
+  browserSync.init({
     proxy: host + ':' + port,
     open: false,
     port: 3000
   });
 
-  gulp.watch(paths.templates, browserSync.reload);
-  gulp.watch(paths.images, ['images']);
-  gulp.watch(paths.ie_styles, ['ie-css']);
+  gulp.watch(paths.templates).on('change', browserSync.reload);;
+  gulp.watch(paths.images, ['img-watch']);
   gulp.watch(paths.styles, ['sass']);
-  gulp.watch(paths.scripts, ['scripts', browserSync.reload]);
+  gulp.watch(paths.scripts, ['js-watch']);
 });
+
+gulp.task('img-watch', ['images'], browserSync.reload);
+gulp.task('js-watch', ['scripts'], browserSync.reload);

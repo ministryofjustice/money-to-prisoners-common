@@ -9,7 +9,7 @@ var filter = require('gulp-filter');
 gulp.task('lint', function() {
   var withoutTemplates = filter(['**/*.js', '!**/*templates.js']);
 
-  gulp
+  return gulp
     .src(paths.scripts)
     .pipe(withoutTemplates)
     .pipe(jshint())

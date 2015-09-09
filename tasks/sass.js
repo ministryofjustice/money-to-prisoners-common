@@ -7,7 +7,6 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
 var nconf = require('nconf');
-var reload = browserSync.reload;
 
 
 function getBowerDir () {
@@ -46,5 +45,5 @@ gulp.task('sass', ['clean-css', 'vendor-css'], function() {
         includePaths: loadPaths
       }).on('error', sass.logError))
       .pipe(gulp.dest(paths.dest + 'stylesheets/'))
-      .pipe(reload({ stream:true }));
+      .pipe(browserSync.stream());
 });
