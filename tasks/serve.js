@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 'use strict';
 
 var gulp = require('gulp');
@@ -17,7 +19,7 @@ gulp.task('serve', ['build'], function() {
     port: 3000
   });
 
-  gulp.watch(paths.templates).on('change', browserSync.reload);;
+  gulp.watch(paths.templates).on('change', browserSync.reload);
   gulp.watch(paths.images, ['img-watch']);
   gulp.watch(paths.styles, ['sass']);
   gulp.watch(paths.scripts, ['js-watch']);

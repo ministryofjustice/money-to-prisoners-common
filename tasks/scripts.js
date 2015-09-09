@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 'use strict';
 
 var gulp = require('gulp');
@@ -7,7 +9,7 @@ var concat = require('gulp-concat');
 
 gulp.task('scripts', ['clean-js'], function() {
   var jsFilter = filter('**/*.js');
-  var scripts = paths.vendor_scripts.concat(paths.scripts);
+  var scripts = paths.vendorScripts.concat(paths.scripts);
 
   return gulp.src(scripts)
     .pipe(jsFilter)

@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 'use strict';
 
 var gulp = require('gulp');
@@ -6,7 +8,7 @@ var rename = require('gulp-rename');
 
 gulp.task('vendor-css', function() {
   return gulp
-    .src(paths.css_files)
+    .src(paths.cssFiles)
     .pipe(rename({
       prefix: '_',
       extname: '.scss'
