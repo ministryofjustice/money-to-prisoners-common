@@ -4,7 +4,7 @@
 
 var paths = require('./_paths');
 var gulp = require('gulp');
-var sass = require('gulp-ruby-sass');
+var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
 var nconf = require('nconf');
 var reload = browserSync.reload;
@@ -36,15 +36,15 @@ function getLoadPaths () {
   });
 }
 
+
 gulp.task('sass', ['clean-css', 'vendor-css'], function() {
   var loadPaths = getLoadPaths();
 
-  return sass('mtp_cashbook/assets-src/stylesheets/', {
-      lineNumbers: true,
-      sourceMaps: false,
-      loadPath: loadPaths
-    })
-    .on('error', function (err) { console.error('Sass Error!', err.message); })
-    .pipe(gulp.dest(paths.dest + 'stylesheets/'))
-    .pipe(reload({ stream:true }));
+  return gulp.src('mtp_cashbook/assets-src/stylesheets/**/*.scss')
+      .pipe(sass({
+        outputStyle: 'expanded',
+        includePaths: loadPaths
+      }).on('error', sass.logError))
+      .pipe(gulp.dest(paths.dest + 'stylesheets/'))
+      .pipe(reload({ stream:true }));
 });
