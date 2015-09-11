@@ -87,3 +87,12 @@ tbody {
     }
   }
 }
+
+tfoot {
+  tr {
+    &:first-child td {
+      border-top-width: 1px;
+      border-top-color: $border-color;
+    }
+  }
+}

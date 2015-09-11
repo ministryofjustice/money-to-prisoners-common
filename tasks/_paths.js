@@ -4,34 +4,32 @@
 
 var mainBowerFiles = require('main-bower-files');
 var vendorFiles = mainBowerFiles();
+var appBase = 'mtp_cashbook/';
+var baseAssetsPath = appBase + 'assets-src/';
 
 var paths = {
-  src: 'mtp_cashbook/assets-src/',
-  dest: 'mtp_cashbook/assets/',
+  src: baseAssetsPath,
+  dest: appBase + 'assets/',
   styles: [
-      'mtp_cashbook/assets-src/stylesheets/**/*.scss',
-      'mtp_cashbook/apps/**/assets-src/stylesheets/**/*.scss'
+    baseAssetsPath + 'stylesheets/**/*.scss'
   ],
   cssFiles: [
-    'mtp_cashbook/assets-src/bower_components/hopscotch/dist/css/hopscotch.css'
+    baseAssetsPath + 'bower_components/hopscotch/dist/css/hopscotch.css'
   ],
   scripts: [
-    'mtp_cashbook/assets-src/javascripts/**/*',
-    '!mtp_cashbook/assets-src/javascripts/templates.js',
-    'mtp_cashbook/apps/**/assets-src/javascripts/**/*',
-    '!mtp_cashbook/apps/**/assets-src/javascripts/templates.js'
+    baseAssetsPath + 'javascripts/**/*.js'
   ],
-  vendorScripts: vendorFiles,
+  vendorScripts: vendorFiles.concat([
+    baseAssetsPath + 'bower_components/checked-polyfill/checked-polyfill.js'
+  ]),
   images: [
-      'mtp_cashbook/assets-src/images/**/*',
-      'mtp_cashbook/apps/**/assets-src/images/**/*'
+    baseAssetsPath + 'images/**/*'
   ],
   vendorImages: [
-      'mtp_cashbook/assets-src/bower_components/hopscotch-highlight/src/images/**/*'
+    baseAssetsPath + 'bower_components/hopscotch-highlight/src/images/**/*'
   ],
   templates: [
-      'mtp_cashbook/templates/**/*',
-      'mtp_cashbook/apps/**/templates/**/*'
+    appBase + 'templates/**/*'
   ]
 };
 
