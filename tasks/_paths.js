@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 'use strict';
 
 var mainBowerFiles = require('main-bower-files');
@@ -10,8 +12,7 @@ var paths = {
       'mtp_cashbook/assets-src/stylesheets/**/*.scss',
       'mtp_cashbook/apps/**/assets-src/stylesheets/**/*.scss'
   ],
-  ie_styles: 'mtp_cashbook/assets-src/ie/**/*.scss',
-  css_files: [
+  cssFiles: [
     'mtp_cashbook/assets-src/bower_components/hopscotch/dist/css/hopscotch.css'
   ],
   scripts: [
@@ -20,12 +21,12 @@ var paths = {
     'mtp_cashbook/apps/**/assets-src/javascripts/**/*',
     '!mtp_cashbook/apps/**/assets-src/javascripts/templates.js'
   ],
-  vendor_scripts: vendorFiles,
+  vendorScripts: vendorFiles,
   images: [
       'mtp_cashbook/assets-src/images/**/*',
       'mtp_cashbook/apps/**/assets-src/images/**/*'
   ],
-  vendor_images: [
+  vendorImages: [
       'mtp_cashbook/assets-src/bower_components/hopscotch-highlight/src/images/**/*'
   ],
   templates: [

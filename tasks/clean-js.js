@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 'use strict';
 
 var gulp = require('gulp');
@@ -6,5 +8,7 @@ var del = require('del');
 
 gulp.task('clean-js', function(cb) {
   // Ensure the files are deleted before calling next task
-  del(paths.dest + 'javascripts', cb);
+  del(paths.dest + 'javascripts').then(function () {
+    cb();
+  });
 });
