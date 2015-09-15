@@ -4,7 +4,11 @@
 {% block template_type %}v-batch{% endblock %}
 
 {% block content %}
-  <form method="post" action="">
+  <form
+    method="post"
+    action=""
+    class="js-BeforeUnload"
+    data-unload-msg="{% trans 'You are about to lose your ticked payments. If you have credited NOMIS with the selected prisoner payments, you must submit them.' %}">
   {% csrf_token %}
 
   <div class="totals js-StickyHeader"  id="tour-step-total">
