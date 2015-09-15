@@ -4,18 +4,20 @@ $component: Checkbox;
   input[type=checkbox] {
     $checkbox-size: 20px;
 
-    @extend .u-vh;
+    @include visually-hidden;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 
     + label {
       cursor: pointer;
       margin: 0;
       padding-left: 30px;
       background: url(../images/box.png) left 0 no-repeat;
-      -webkit-background-size: $checkbox-size $checkbox-size;
-      background-size: $checkbox-size $checkbox-size;
     }
 
     &:checked + label {
+      background-image: url(../images/tickbox.png);
+    }
+    &.checked + label {
       background-image: url(../images/tickbox.png);
     }
 
@@ -26,7 +28,7 @@ $component: Checkbox;
     // Variants
 
     &.#{$component}--right + label {
-      padding: 0 30px 0 0;
+      padding: 0 30px 1px 0;
       background-position: right 0;
     }
 

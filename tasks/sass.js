@@ -39,7 +39,7 @@ function getLoadPaths () {
 gulp.task('sass', ['clean-css', 'vendor-css'], function() {
   var loadPaths = getLoadPaths();
 
-  return gulp.src('mtp_cashbook/assets-src/stylesheets/**/*.scss')
+  return gulp.src(paths.styles)
       .pipe(sass({
         outputStyle: 'expanded',
         includePaths: loadPaths
