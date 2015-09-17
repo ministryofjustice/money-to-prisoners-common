@@ -8,7 +8,7 @@
     method="post"
     action=""
     class="js-BeforeUnload"
-    data-unload-msg="{% trans 'You are about to lose your ticked payments. If you have credited NOMIS with the selected prisoner payments, you must submit them.' %}">
+    data-unload-msg="{% trans "You are leaving this page, but have ticked payments. &#10;&#10;You must click &#8216;I&#8217;ve credited payments in NOMIS&#8217; if payments have been credited." %}">
   {% csrf_token %}
 
   <div class="totals js-StickyHeader"  id="tour-step-total">
