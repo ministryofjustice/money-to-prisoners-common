@@ -44,10 +44,12 @@ $component: Checkbox;
     only screen and (min-device-pixel-ratio: 2) {
       + label {
         background-image: url(../images/box@2x.png);
+        background-size: 20px 20px;
       }
 
       &:checked + label {
         background-image: url(../images/tickbox@2x.png);
+        background-size: 20px 20px;
       }
     }
   }
