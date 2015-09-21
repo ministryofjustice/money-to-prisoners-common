@@ -8,7 +8,7 @@
     selector: '.js-Dialog',
 
     init: function () {
-      _.bindAll(this, 'render', 'closeDialog', 'onKeyUp');
+      _.bindAll(this, 'render', 'openDialog', 'closeDialog', 'onKeyUp');
       this.cacheEls();
       this.bindEvents();
     },
@@ -16,30 +16,30 @@
     cacheEls: function () {
       this.$body = $('body');
       this.$backdrop = $('<div>').addClass('Dialog-backdrop');
-      this.$close = $('<a>');
-
-      // close element
-      this.$close
-        .attr('href', '#')
-        .attr('role', 'button')
-        .addClass('Dialog-close');
     },
 
     bindEvents: function () {
       moj.Events.on('Dialog.render', this.render);
       moj.Events.on('Dialog.close', this.closeDialog);
       this.$body.on('click', this.selector, this.render);
+      this.$body.on('click', '.js-Dialog-close', this.closeDialog);
     },
 
     render: function (e) {
-      this.$triggerEl = $(e.target);
+      var $triggerEl = $(e.target);
+      var target = e.targetSelector || $triggerEl.attr('href');
 
       e.preventDefault();
-      this.openDialog(this.$triggerEl.attr('href'));
+
+      this.$triggerEl = $triggerEl;
+      this.openDialog(target);
     },
 
     openDialog: function (target) {
-      var $dialog = $(target);
+      var $dialog = $(typeof target === 'string' ? target : target.dialogTarget);
+      var hideClose = $dialog.data('hide-close');
+      var disableBackdropClose = $dialog.data('disable-backdrop-close');
+      var closeSelector = '.Dialog-close';
 
       // log warning if target doesn't exist
       if ($dialog.length === 0) {
@@ -47,33 +47,47 @@
         return;
       }
 
-      if ($dialog.data('close-label')) {
-        this.$close.text($dialog.data('close-label'));
-      } else {
-        this.$close.text('close');
+      // if close button not needed, don't run
+      if (!hideClose) {
+        var $close = $('<a>')
+          .attr('href', '#')
+          .attr('role', 'button')
+          .addClass('Dialog-close');
+
+        if ($dialog.data('close-label')) {
+          $close.text($dialog.data('close-label'));
+        } else {
+          $close.text('close');
+        }
+
+        $dialog.append($close);
       }
 
+      if (!disableBackdropClose) {
+        closeSelector += ', .Dialog-backdrop';
+      }
+
+      // bind close events
+      this.$body.on('click.Dialog', closeSelector, this.closeDialog);
+      this.$body.on('keyup.Dialog', this.onKeyUp);
+
+      // show dialog and backdrop
       $dialog
         .attr({
           'open': 'true',
           'tabindex': '-1',
           'role': 'dialog'
         })
-        .append(this.$close)
         .show()
         .focus();
 
       this.$body.prepend(this.$backdrop);
-
       $(window).scrollTop(0);
-
-      // bind close events
-      this.$body.on('click.Dialog', '.Dialog-close, .Dialog-backdrop', this.closeDialog);
-      this.$body.on('keyup.Dialog', this.onKeyUp);
     },
 
     closeDialog: function (e) {
       var $dialog = this.$body.find('dialog[open]');
+      var $close = $dialog.find('.Dialog-close');
 
       if (e) {
         e.preventDefault();
@@ -86,7 +100,7 @@
         .removeAttr('open tabindex role')
         .hide();
 
-      this.$close.remove();
+      $close.remove();
       this.$backdrop.remove();
 
       this.$triggerEl.focus();

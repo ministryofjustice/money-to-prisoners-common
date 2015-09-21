@@ -22,8 +22,7 @@
 
     bindEvents: function () {
       moj.Events.on('BatchValidation.render', this.render);
-      this.$body
-        .on('submit.BatchValidation', this.selector, this.onSubmit);
+      this.$form.on('click', ':submit', this.onSubmit);
     },
 
     _allChecked: function () {
@@ -56,17 +55,33 @@
     },
 
     onSubmit: function (e) {
+      var $el = $(e.target);
+      var type = $el.val();
       var checkedValid = this._allChecked();
       var numChecked = this._numChecked();
 
+      if(type !== 'submit') {
+        return;
+      }
+
       if (numChecked === 0) {
         e.preventDefault();
-        // TODO: handle error
+        moj.Events.trigger({
+          type: 'Dialog.render',
+          target: e.target,
+          targetSelector: '#empty-selection-dialog'
+        });
+        return;
       }
 
       if (!checkedValid) {
         e.preventDefault();
-        // TODO: handle error
+        moj.Events.trigger({
+          type: 'Dialog.render',
+          target: e.target,
+          targetSelector: '#incomplete-batch-dialog'
+        });
+        return;
       }
     }
   };

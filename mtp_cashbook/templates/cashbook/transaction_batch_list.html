@@ -10,83 +10,102 @@
     class="js-BeforeUnload js-BatchValidation"
     data-transactions-name="{{ form.transactions.html_name }}"
     data-unload-msg="{% trans "You are leaving this page, but have ticked payments. &#10;&#10;You must click &#8216;I&#8217;ve credited payments in NOMIS&#8217; if payments have been credited." %}">
-  {% csrf_token %}
+    {% csrf_token %}
 
-  <div class="totals js-StickyHeader"  id="tour-step-total">
-    <div class="container js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
-      <p>
-        {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
-          Control total: {{ highlight }}{{ total }}{{ highlightend }}
-        {% endblocktrans %}
-      </p>
+    <div class="totals js-StickyHeader"  id="tour-step-total">
+      <div class="container js-RunningTotal" data-label="{% trans 'Total payments you have credited: ' %}">
+        <p>
+          {% blocktrans with total=total|currency highlight="<strong>&pound;" highlightend="</strong>" %}
+            Control total: {{ highlight }}{{ total }}{{ highlightend }}
+          {% endblocktrans %}
+        </p>
+      </div>
     </div>
-  </div>
 
-  {% include "cashbook/includes/batch_buttons.html" %}
+    {% include "cashbook/includes/batch_buttons.html" %}
 
-  {% if object_list %}
-  {{ form.errors }}
+    {% if object_list %}
+    {{ form.errors }}
 
-  <div class="batch">
-    <table id="tour-step1">
-      <thead>
-        {% include "cashbook/includes/table_actions.html" with location='header' field_name=form.transactions.html_name %}
+    <div class="batch">
+      <table id="tour-step1">
+        <thead>
+          {% include "cashbook/includes/table_actions.html" with location='header' field_name=form.transactions.html_name %}
 
-        <tr>
-          <th id="tour-step2">{% trans "Prisoner no" %}</th>
-          <th id="tour-step3">{% trans "Prisoner name" %}</th>
-          <th id="tour-step4">{% trans "Amount" %}</th>
-          <th>{% trans "Sender" %}</th>
-          <th id="tour-step5">{% trans "Credited?" %}</th>
-        </tr>
-      </thead>
+          <tr>
+            <th id="tour-step2">{% trans "Prisoner no" %}</th>
+            <th id="tour-step3">{% trans "Prisoner name" %}</th>
+            <th id="tour-step4">{% trans "Amount" %}</th>
+            <th>{% trans "Sender" %}</th>
+            <th id="tour-step5">{% trans "Credited?" %}</th>
+          </tr>
+        </thead>
 
-      <tbody>
-      {% for transaction_pk, transaction in object_list %}
-        <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
-          <td>{{ transaction.prisoner_number }}</td>
-          <td>??? ???</td>
-          <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
-          <td>{{ transaction.sender }}</td>
-          <td class="check">
-            <input
-              type="checkbox"
-              name="{{ form.transactions.html_name }}"
-              value="{{ transaction_pk }}"
-              id="check-{{ transaction.id }}"
-              {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}
-              class="js-RunningTotal-item"
-              data-amount="{{ transaction.amount|currency }}">
-            <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
+        <tbody>
+        {% for transaction_pk, transaction in object_list %}
+          <tr {% if forloop.counter|divisibleby:2 %}{% else %}class="odd"{% endif %}>
+            <td>{{ transaction.prisoner_number }}</td>
+            <td>??? ???</td>
+            <td class="numeric">&pound;{{ transaction.amount|currency }}</td>
+            <td>{{ transaction.sender }}</td>
+            <td class="check">
+              <input
+                type="checkbox"
+                name="{{ form.transactions.html_name }}"
+                value="{{ transaction_pk }}"
+                id="check-{{ transaction.id }}"
+                {% if transaction_pk|to_string in form.transactions.value %}checked{% endif %}
+                class="js-RunningTotal-item"
+                data-amount="{{ transaction.amount|currency }}">
+              <label for="check-{{ transaction.id }}">{% trans "Credited" %}</label>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
 
-      <tfoot>
-        {% include "cashbook/includes/table_actions.html" with location='footer' field_name=form.transactions.html_name %}
-      </tfoot>
-    </table>
-  </div>
-  {% else %}
-    <p>{% trans "No transactions found" %}</p>
-  {% endif %}
+        <tfoot>
+          {% include "cashbook/includes/table_actions.html" with location='footer' field_name=form.transactions.html_name %}
+        </tfoot>
+      </table>
+    </div>
+    {% else %}
+      <p>{% trans "No transactions found" %}</p>
+    {% endif %}
 
-  {% include "cashbook/includes/batch_buttons.html" %}
+    {% include "cashbook/includes/batch_buttons.html" %}
+
+    <dialog id="incomplete-batch-dialog" class="Dialog u-nojs-hidden" data-hide-close="true" data-disable-backdrop-close="true">
+      <div class="Dialog-inner">
+        <h3>{% trans "Confirm submission" %}</h3>
+        <p>{% trans "Are you sure you want to submit only the selected payments as a batch?" %}</p>
+        <button type="submit" class="button" value="override">{% trans "Yes, submit" %}</button>
+        <button type="button" class="button button-secondary js-Dialog-close">{% trans "No, continue editing" %}</button>
+      </div>
+    </dialog>
+  </form>
+
+  <dialog id="empty-selection-dialog" class="Dialog u-nojs-hidden" data-hide-close="true" data-disable-backdrop-close="true">
+    <div class="Dialog-inner">
+      <h3>{% trans "Select payments first" %}</h3>
+      <p>{% trans "Please select the payments which you have credited to NOMIS." %}</p>
+      <button type="button" class="button js-Dialog-close">{% trans "OK" %}</button>
+    </div>
+  </dialog>
 
   <dialog id="print-dialog" class="Dialog">
     <div class="Dialog-inner">
+      <h3>{% trans "Before you print" %}</h3>
       {% blocktrans %}
-      <h3>Before you print</h3>
       <p>Have you tried changing the size of the window so you can see the payments and NOMIS at the same time?</p>
       <p>You could also try using the ALT + TAB keys to switch between the windows.</p>
       {% endblocktrans %}
-      <button class="button u-nojs-hidden js-Print">{% trans "Print now" %}</button>
 
-      <p>
+      <p class="u-nojs-hidden">
         <input type="checkbox" name="remove-print-prompt" id="remove-print-prompt" value="1">
         <label for="remove-print-prompt">{% trans "Don't show this message again" %}</label>
       </p>
+
+      <button type="button" class="button u-nojs-hidden js-Print">{% trans "Print now" %}</button>
     </div>
   </dialog>
 

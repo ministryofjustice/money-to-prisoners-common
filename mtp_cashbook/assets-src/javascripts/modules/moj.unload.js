@@ -31,8 +31,10 @@
       var $btn = $(e.target);
       var type = $btn.val();
 
-      if (type === 'submit') {
+      if (type === 'submit' || type === 'override') {
         this.submitting = true;
+      } else {
+        this.submitting = false;
       }
     },
 
