@@ -61,7 +61,7 @@ $dialog-padding: 30px;
     position: relative;
 
     > *:first-child {
-      margin-top: $dialog-padding * 1.5;
+      margin-top: 5px;
     }
 
     @include breakpoint(641px) {

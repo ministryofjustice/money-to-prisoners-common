@@ -18,13 +18,16 @@
       this.$body = $('body');
       this.$selectAll = $(this.selector);
       this.fieldName = this.$selectAll.data('name');
-      this.$checks = $('[name="' + this.fieldName + '"]');
+      this.checksSelector = '[name="' + this.fieldName + '"]';
+      this.$checks = $(this.checksSelector);
     },
 
     bindEvents: function () {
       moj.Events.on('SelectAll.render', this.render);
-      this.$body.on('change', this.selector, this.onSelectAllChange);
-      this.$body.on('change', this.$checks, this.onCheckChange);
+      this.$body
+        .on('change.SelectAll', this.selector, this.onSelectAllChange)
+        .on('change.SelectAll', this.checksSelector, this.onCheckChange)
+        .on('keypress.SelectAll', this.checksSelector + ', ' + this.selector, this.onCheckKeypress);
     },
 
     onSelectAllChange: function (e) {
@@ -50,6 +53,13 @@
         $row.addClass('is-selected');
       } else {
         $row.removeClass('is-selected');
+      }
+    },
+
+    onCheckKeypress: function (e) {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        return false;
       }
     },
 
