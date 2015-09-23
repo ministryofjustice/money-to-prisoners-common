@@ -1,7 +1,8 @@
-/* jshint node: true, camelcase: false */
+/* jshint node: true */
 
 'use strict';
 
+var path = require('path');
 var paths = require('./_paths');
 var gulp = require('gulp');
 var sass = require('gulp-sass');
@@ -14,13 +15,14 @@ function getBowerDir () {
     .file({ file: './.bowerrc' })
     .load();
 
-  return __dirname + '/../' + nconf.get('directory') + '/';
+  return path.join(__dirname, '..', nconf.get('directory'));
 }
 
 function getModulePaths (module) {
-  var modulePath = getBowerDir() + module + '/paths.json';
+  var modulePath = path.join(getBowerDir(), module, 'paths.json');
   var obj = require(modulePath);
 
+  /* jshint camelcase: false */
   return obj.import_paths;
 }
 
@@ -30,9 +32,11 @@ function getLoadPaths () {
   var mojularImportPaths = getModulePaths('mojular');
   var joined = govukImportPaths.concat(mojularImportPaths);
 
-  return joined.map(function(path) {
-    return bowerDir + '/' + path;
+  joined = joined.map(function(originalPath) {
+    return path.join(bowerDir, originalPath);
   });
+
+  return joined.concat(bowerDir);
 }
 
 
