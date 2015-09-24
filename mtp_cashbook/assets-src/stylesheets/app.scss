@@ -4,7 +4,9 @@ $images-dir: '/static/images/';
 
 // Vendor
 @import 'vendor/hopscotch';
-@import '../../hopscotch-highlight/src/stylesheets/hopscotch-highlight';
+
+// loaded from bower lib
+@import 'hopscotch-highlight/src/stylesheets/hopscotch-highlight';
 
 // Breakpoints
 @import '$breakpoints';
