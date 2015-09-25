@@ -1,0 +1,29 @@
+.messages {
+  font-size: em(24);
+  text-align: center;
+  padding: 0;
+  margin: em(20) 0 0;
+
+  &:focus {
+    outline: 3px solid $yellow;
+  }
+
+  li {
+    list-style: none;
+    padding: em(15) 0;
+    margin: em(10) 0 0;
+
+    &.success {
+      background-color: $green-3;
+    }
+    &.info {
+      background-color: $light-blue-50;
+    }
+    &.warning {
+      background-color: $orange-50;
+    }
+    &.error {
+      background-color: $mellow-red-50;
+    }
+  }
+}
