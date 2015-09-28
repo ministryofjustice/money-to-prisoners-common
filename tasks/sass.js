@@ -41,7 +41,7 @@ function getLoadPaths () {
 }
 
 
-gulp.task('sass', ['clean-css', 'vendor-css'], function() {
+gulp.task('sass', ['clean-css'], function() {
   var loadPaths = getLoadPaths();
 
   return gulp.src(paths.styles)

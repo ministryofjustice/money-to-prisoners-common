@@ -13,9 +13,6 @@ var paths = {
   styles: [
     baseAssetsPath + 'stylesheets/**/*.scss'
   ],
-  cssFiles: [
-    baseAssetsPath + 'bower_components/hopscotch/dist/css/hopscotch.css'
-  ],
   scripts: [
     baseAssetsPath + 'javascripts/**/*.js'
   ],
