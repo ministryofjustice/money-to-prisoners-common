@@ -3,7 +3,7 @@
 'use strict';
 
 var path = require('path');
-var paths = require('./_paths');
+var paths = require('../_paths');
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
@@ -41,7 +41,7 @@ function getLoadPaths () {
 }
 
 
-gulp.task('sass', ['clean-css'], function() {
+gulp.task('sass', ['clean:css'], function() {
   var loadPaths = getLoadPaths();
 
   return gulp.src(paths.styles)
