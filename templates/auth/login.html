@@ -1,9 +1,9 @@
-{% extends 'base.html' %}{% load i18n widget_tweaks %}
+{% extends 'base.html' %}{% load i18n moj_utils widget_tweaks %}
 
 {% block content %}
   <h1>
     {% block auth_title %}
-      {%trans 'Money sent to prisoners' %}
+      {% trans 'Money sent to prisoners' %}
     {% endblock %}
   </h1>
   <h2>{%trans 'Sign in' %}</h2>
@@ -19,15 +19,15 @@
             <ol class="error-summary-list">
               {% for field, errors in form.errors.items %}
                 {% with field_obj=form|field_from_name:field %}
-                <li><a href="#{{ field_obj.auto_id }}-label">
-                  {{ field_obj.label }}
-                  {% for error in errors %}
-                    {% if not forloop.first  %}
-                      {% trans 'and' %}
-                    {% endif %}
-                    {{ error }}
-                  {% endfor %}
-                </a></li>
+                  <li><a href="#{{ field_obj.auto_id }}-label">
+                    {{ field_obj.label }}
+                    {% for error in errors %}
+                      {% if not forloop.first  %}
+                        {% trans 'and' %}
+                      {% endif %}
+                      {{ error }}
+                    {% endfor %}
+                  </a></li>
                 {% endwith %}
               {% endfor %}
             </ol>
