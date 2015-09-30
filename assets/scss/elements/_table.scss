@@ -1,0 +1,98 @@
+$bg-color: $white;
+$bg-color-alt: #ededed;
+$bg-color-selected: $light-blue-25;
+$border-color: $grey-1;
+
+// Fixes
+
+.numeric {
+  font-family: ntatabularnumbers;
+}
+
+// App specific
+
+table {
+  width: auto;
+  border-collapse: collapse;
+
+  th, td {
+    padding: .75em 1em;
+    border: $border-color solid;
+    border-width: 0 0 0 1px;
+
+    @include print {
+      padding-top: .3em;
+      padding-bottom: .3em;
+    }
+
+    &:first-child {
+      border-left: none;
+    }
+
+    // modifiers
+    &.check {
+      text-align: center;
+      padding: 5px 1em 0;
+
+      input[type=checkbox] {
+        @extend .Checkbox--no-text !optional;
+      }
+    }
+
+    &.cell--compact {
+      border-width: 0;
+      padding: .75em 0;
+    }
+
+    &.cell--bold {
+      font-weight: 700;
+    }
+  }
+
+  th {
+    background: $bg-color;
+    border-color: $border-color;
+  }
+
+  td {
+    background: $bg-color;
+    border-color: $bg-color $border-color;
+
+    @include print {
+      border-bottom-color: $border-color;
+    }
+  }
+}
+
+thead {
+  th {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+  }
+}
+
+tbody {
+  tr {
+    &:last-child td {
+      border-bottom-width: 1px;
+      border-bottom-color: $border-color;
+    }
+
+    &.odd td {
+      background: $bg-color-alt;
+    }
+
+    &.is-selected td {
+      background: $bg-color-selected;
+    }
+  }
+}
+
+tfoot {
+  tr {
+    &:first-child td {
+      border-top-width: 1px;
+      border-top-color: $border-color;
+    }
+  }
+}

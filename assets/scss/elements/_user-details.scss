@@ -1,0 +1,13 @@
+.user-details {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-right: em(20);
+  background: $grey-3;
+  text-align: right;
+
+  span {
+    margin-left: em(20);
+    padding-left: em(20);
+    border-left: 2px solid $grey-1;
+  }
+}
