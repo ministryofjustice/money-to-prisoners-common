@@ -1,7 +1,11 @@
-{% extends "base.html" %}{% load i18n core widget_tweaks %}
+{% extends 'base.html' %}{% load i18n moj_utils widget_tweaks %}
 
 {% block content %}
-  <h1>{%trans 'Process money sent to prisoners' %}</h1>
+  <h1>
+    {% block auth_title %}
+      {% trans 'Money sent to prisoners' %}
+    {% endblock %}
+  </h1>
   <h2>{%trans 'Sign in' %}</h2>
 
   <div class="container">
@@ -15,15 +19,15 @@
             <ol class="error-summary-list">
               {% for field, errors in form.errors.items %}
                 {% with field_obj=form|field_from_name:field %}
-                <li><a href="#{{ field_obj.auto_id }}-label">
-                  {{ field_obj.label }}
-                  {% for error in errors %}
-                    {% if not forloop.first  %}
-                      {% trans 'and' %}
-                    {% endif %}
-                    {{ error }}
-                  {% endfor %}
-                </a></li>
+                  <li><a href="#{{ field_obj.auto_id }}-label">
+                    {{ field_obj.label }}
+                    {% for error in errors %}
+                      {% if not forloop.first  %}
+                        {% trans 'and' %}
+                      {% endif %}
+                      {{ error }}
+                    {% endfor %}
+                  </a></li>
                 {% endwith %}
               {% endfor %}
             </ol>
@@ -42,7 +46,7 @@
                   <span class="error-message">{{ error }}</span>
                 {% endfor %}
               </label>
-              {{ field|attr:"autocomplete:off"|add_class:'form-control' }}
+              {{ field|attr:'autocomplete:off'|add_class:'form-control' }}
             </div>
           {% endfor %}
 
