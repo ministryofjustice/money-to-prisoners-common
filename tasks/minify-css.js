@@ -3,7 +3,7 @@
 'use strict';
 
 var gulp = require('gulp');
-var paths = require('./_paths');
+var paths = require('../_paths');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 

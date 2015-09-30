@@ -3,7 +3,7 @@
 'use strict';
 
 var gulp = require('gulp');
-var paths = require('./_paths');
+var paths = require('../_paths');
 var browserSync = require('browser-sync');
 var argv = require('yargs').argv;
 
@@ -12,11 +12,16 @@ var argv = require('yargs').argv;
 gulp.task('serve', ['build'], function() {
   var host = argv.host || argv.h || 'localhost';
   var port = argv.port || argv.p || 8001;
+  var browsersyncPort = argv.browsersyncport || 3000;
+  var browsersyncUIPort = argv.browsersyncuiport || 3001;
 
   browserSync.init({
     proxy: host + ':' + port,
     open: false,
-    port: 3000
+    port: browsersyncPort,
+    ui: {
+      port: browsersyncUIPort
+    }
   });
 
   gulp.watch(paths.templates).on('change', browserSync.reload);

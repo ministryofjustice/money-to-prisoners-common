@@ -3,11 +3,11 @@
 'use strict';
 
 var gulp = require('gulp');
-var paths = require('./_paths');
+var paths = require('../_paths');
 var filter = require('gulp-filter');
 var concat = require('gulp-concat');
 
-gulp.task('scripts', ['clean-js'], function() {
+gulp.task('scripts', ['clean:js'], function() {
   var jsFilter = filter('**/*.js');
   var scripts = paths.vendorScripts.concat(paths.scripts);
 

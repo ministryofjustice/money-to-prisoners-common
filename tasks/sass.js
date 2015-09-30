@@ -3,7 +3,7 @@
 'use strict';
 
 var path = require('path');
-var paths = require('./_paths');
+var paths = require('../_paths');
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
@@ -15,7 +15,7 @@ function getBowerDir () {
     .file({ file: './.bowerrc' })
     .load();
 
-  return path.join(__dirname, '..', nconf.get('directory'));
+  return path.join(process.cwd(), nconf.get('directory'));
 }
 
 function getModulePaths (module) {
@@ -30,7 +30,8 @@ function getLoadPaths () {
   var bowerDir = getBowerDir();
   var govukImportPaths = getModulePaths('govuk-template');
   var mojularImportPaths = getModulePaths('mojular');
-  var joined = govukImportPaths.concat(mojularImportPaths);
+  var mtpImportPaths = getModulePaths('money-to-prisoners-common');
+  var joined = govukImportPaths.concat(mojularImportPaths).concat(mtpImportPaths);
 
   joined = joined.map(function(originalPath) {
     return path.join(bowerDir, originalPath);
@@ -40,7 +41,7 @@ function getLoadPaths () {
 }
 
 
-gulp.task('sass', ['clean-css', 'vendor-css'], function() {
+gulp.task('sass', ['clean:css'], function() {
   var loadPaths = getLoadPaths();
 
   return gulp.src(paths.styles)
