@@ -1,0 +1,84 @@
+$component: Dialog;
+$dialog-width: 600px;
+$dialog-padding: 30px;
+
+.#{$component} {
+  background: white;
+  position: static;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: block;
+  clear: both;
+
+  .js-enabled & {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: 1px solid #6f777b;
+
+    @include breakpoint(641px) {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: $dialog-width;
+      margin-top: $dialog-padding;
+      margin-left: -($dialog-width / 2);
+      max-height: 90%;
+      overflow-y: scroll;
+    }
+
+    &[open] {
+      display: block;
+    }
+  }
+
+  &:focus {
+    outline: 3px solid $yellow;
+  }
+}
+
+// Children / Siblings
+.#{$component}-backdrop {
+  .js-enabled & {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+}
+.#{$component}-inner {
+  .js-enabled & {
+    padding: $dialog-padding / 2;
+    position: relative;
+
+    > *:first-child {
+      margin-top: 5px;
+    }
+
+    @include breakpoint(641px) {
+      padding: $dialog-padding;
+    }
+  }
+}
+.#{$component}-close {
+  .js-enabled & {
+    position: absolute;
+    top: $dialog-padding / 2;
+    right: $dialog-padding / 2;
+    margin: 0;
+
+    @include breakpoint(641px) {
+      top: $dialog-padding;
+      right: $dialog-padding;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.main-content {
+  border-top: 1px solid transparent;
+
+  * + * {
+    margin-top: 1em;
+  }
+}

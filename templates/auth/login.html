@@ -1,0 +1,60 @@
+{% extends 'base.html' %}{% load i18n moj_utils widget_tweaks %}
+
+{% block content %}
+  <h1>
+    {% block auth_title %}
+      {% trans 'Money sent to prisoners' %}
+    {% endblock %}
+  </h1>
+  <h2>{%trans 'Sign in' %}</h2>
+
+  <div class="container">
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        {% if form.errors or form.non_field_errors %}
+          <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
+            <h1 class="error-summary-heading heading-medium" id="error-summary-heading">{% trans 'There was a problem submitting the form' %}</h1>
+            <p>{% trans 'Because of the following problems:' %}</p>
+
+            <ol class="error-summary-list">
+              {% for field, errors in form.errors.items %}
+                {% with field_obj=form|field_from_name:field %}
+                  <li><a href="#{{ field_obj.auto_id }}-label">
+                    {{ field_obj.label }}
+                    {% for error in errors %}
+                      {% if not forloop.first  %}
+                        {% trans 'and' %}
+                      {% endif %}
+                      {{ error }}
+                    {% endfor %}
+                  </a></li>
+                {% endwith %}
+              {% endfor %}
+            </ol>
+          </div>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}">
+
+          {% for field in form %}
+            <div class="form-group{% if field.errors %} error{% endif %}">
+              <label for="{{ field.id_for_label }}" id="{{ field.auto_id }}-label" class="form-label">
+                {{ field.label }}
+                {% for error in field.errors %}
+                  <span class="error-message">{{ error }}</span>
+                {% endfor %}
+              </label>
+              {{ field|attr:'autocomplete:off'|add_class:'form-control' }}
+            </div>
+          {% endfor %}
+
+          <div class="form-group">
+            <button type="submit" class="button">{% trans 'Sign in' %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
