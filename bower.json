@@ -6,8 +6,10 @@
     "Dom Smith <dom@teneightfive.com>"
   ],
   "main": [
+    "./assets/images/**",
     "./assets/javascripts/**",
-    "./assets/scscs/_mtp.scss"
+    "./templates/**",
+    "./assets/scss/_mtp.scss"
   ],
   "description": "Common assets and template for the Money to Prisoners service",
   "license": "MIT",
