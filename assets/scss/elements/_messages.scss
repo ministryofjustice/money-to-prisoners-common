@@ -13,16 +13,16 @@
     padding: em(15) 0;
     margin: em(10) 0 0;
 
-    &.success {
+    &.message--success {
       background-color: $green-3;
     }
-    &.info {
+    &.message--info {
       background-color: $light-blue-50;
     }
-    &.warning {
+    &.message--warning {
       background-color: $orange-50;
     }
-    &.error {
+    &.message--error {
       background-color: $mellow-red-50;
     }
   }
