@@ -1,4 +1,5 @@
-{% extends 'base.html' %}{% load i18n moj_utils widget_tweaks %}
+{% extends 'base.html' %}
+{% load i18n moj_utils widget_tweaks %}
 
 {% block content %}
   <h1>
@@ -11,7 +12,7 @@
   <div class="container">
     <div class="grid-row">
       <div class="column-two-thirds">
-        {% if form.errors or form.non_field_errors %}
+        {% if form.errors %}
           <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
             <h1 class="error-summary-heading heading-medium" id="error-summary-heading">{% trans 'There was a problem submitting the form' %}</h1>
             <p>{% trans 'Because of the following problems:' %}</p>
@@ -19,15 +20,21 @@
             <ol class="error-summary-list">
               {% for field, errors in form.errors.items %}
                 {% with field_obj=form|field_from_name:field %}
-                  <li><a href="#{{ field_obj.auto_id }}-label">
-                    {{ field_obj.label }}
+                  <li>
+                    {% if field_obj %}
+                      <a href="#{{ field_obj.auto_id }}-label">
+                        {{ field_obj.label }} –
+                    {% endif %}
                     {% for error in errors %}
                       {% if not forloop.first  %}
                         {% trans 'and' %}
                       {% endif %}
                       {{ error }}
                     {% endfor %}
-                  </a></li>
+                    {% if field_obj %}
+                      </a>
+                    {% endif %}
+                  </li>
                 {% endwith %}
               {% endfor %}
             </ol>
