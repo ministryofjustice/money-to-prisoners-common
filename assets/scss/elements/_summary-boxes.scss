@@ -8,7 +8,7 @@ $component: SummaryBoxes;
   $box-container-width: ($box-width + ($container-h-padding*2)) * $boxes-per-row;
 
   @include clearfix;
-  margin: 0;
+  margin: 68px 0 0 0;
   padding: 0;
 
   @include breakpoint($tablet) {
@@ -84,9 +84,4 @@ li.#{$component}--locked {
   & h2 {
     background: $orange;
   }
-}
-
-// Siblings
-h1 + .#{$component} {
-  margin-top: 68px;
 }
