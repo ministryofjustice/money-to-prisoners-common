@@ -21,8 +21,8 @@
     "tests"
   ],
   "dependencies": {
-    "lodash": "~2.4.1",
-    "mojular": "ministryofjustice/mojular#0.5.3",
+    "lodash": "~3.10.1",
+    "mojular": "ministryofjustice/mojular#0.7.0",
     "hopscotch": "~0.2.5",
     "js-cookie": "~2.0.3",
     "jquery": "~1.11",
