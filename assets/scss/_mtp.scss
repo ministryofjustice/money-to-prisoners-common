@@ -7,6 +7,10 @@
 @import '$breakpoints';
 @import '@print';
 @import 'utilities';
+@import 'breakpoint';
+@import 'hopscotch';
+@import 'hopscotch-highlight';
+@import 'hopscotch-overrides';
 
 @import 'base';
 
@@ -19,10 +23,6 @@
 @import 'elements/subheader';
 @import 'elements/content-header';
 
-// loaded from bower lib
-@import 'hopscotch/dist/css/hopscotch';
-@import 'hopscotch-highlight/src/stylesheets/hopscotch-highlight';
-@import 'hopscotch-overrides';
 
 // App elements
 @import 'elements/user-details';

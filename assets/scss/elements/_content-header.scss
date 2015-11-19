@@ -1,9 +1,11 @@
 $component: ContentHeader;
 
 .#{$component} {
+
+  margin-bottom: 1em;
+
   h1 {
     margin-top: 1.225em;
-    margin-bottom: 0;
     font-size: em(36);
   }
   p {
