@@ -6,7 +6,7 @@ var bindAll = require('lodash/function/bindAll');
 var extend = require('lodash/object/extend');
 var hopscotch = require('hopscotch');
 var hopscotchHighlight = require('hopscotch-highlight').hopscotchHighlight;
-var cookie = require('mojular-govuk-elements/modules/cookie-message').Cookie;
+var cookie = require('js-cookie');
 
 exports.FeatureTour = {
   init: function () {

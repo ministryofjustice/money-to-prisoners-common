@@ -3,7 +3,7 @@
 'use strict';
 
 var bindAll = require('lodash/function/bindAll');
-var cookie = require('mojular-govuk-elements/modules/cookie-message').Cookie;
+var cookie = require('js-cookie');
 
 exports.Print = {
   selector: '.js-Print',
