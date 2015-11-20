@@ -35,7 +35,7 @@
     "mojular-govuk-elements": "mojular/govuk-elements#0.2.3",
     "mojular-moj-elements": "mojular/moj-elements#0.2.1",
     "mojular-templates": "mojular/templates#0.0.10",
-    "money-to-prisoners-gulp-tasks": "ministryofjustice/money-to-prisoners-gulp-tasks#0.1.0",
+    "money-to-prisoners-gulp-tasks": "ministryofjustice/money-to-prisoners-gulp-tasks#0.1.1",
     "q": "^1.4.1",
     "request": "^2.63.0",
     "require-dir": "^0.3.0",
