@@ -27,7 +27,7 @@
     "globule": "^0.2.0",
     "gulp": "^3.9.0",
     "hopscotch": "0.2.5",
-    "hopscotch-highlight": "ministryofjustice/hopscotch-highlight#1.0.0",
+    "hopscotch-highlight": "ministryofjustice/hopscotch-highlight#1.0.1",
     "imports-loader": "^0.6.5",
     "jquery": "~1.11",
     "js-cookie": "~2.0.3",
