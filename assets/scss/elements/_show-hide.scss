@@ -1,36 +1,7 @@
 $component: ShowHide;
 
 .#{$component} {
-  text-decoration: none;
 
-  .ShowHide-hide {
-    display: inline-block;
-    color: $text-colour;
-  }
-  .ShowHide-show {
-    display: none;
-    color: $text-colour;
-  }
+  cursor: pointer;
 
-  &.ShowHide-hidden {
-    .ShowHide-hide {
-      display: none;
-    }
-    .ShowHide-show {
-      display: inline-block;
-    }
-  }
-
-  .ShowHide-icon {
-    display: inline-block;
-    float: left;
-    width: 1em;
-    height: 1em;
-    margin-right: 0.5em;
-    background: $page-colour;
-    border-radius: 100%;
-    text-align: center;
-    vertical-align: middle;
-    font-weight: bold;
-  }
 }
