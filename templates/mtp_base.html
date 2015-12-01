@@ -30,16 +30,6 @@
   {% endif %}
 {% endblock %}
 
-{% block include_js %}
-  {% if DEBUG %}
-    <script src="{% static "javascripts/app.js" %}"></script>
-  {% else %}
-    <script src="{% static "javascripts/app.min.js" %}"></script>
-  {% endif %}
-
-  <script type="text/javascript">$(moj.init);</script>
-
-{% endblock %}
 
 {% block global_subheader %}
   {% if request.user.is_authenticated %}
