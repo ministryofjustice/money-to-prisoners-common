@@ -1,14 +1,14 @@
 // Show-hide module
 
-/* globals exports, require */
+/* globals exports */
 'use strict';
 
 exports.ShowHide = {
-  collapsedText: "&ominus; Collapsed",
-  expandedText: "&oplus; Collapse",
+  collapsedText: '&ominus; Collapsed',
+  expandedText: '&oplus; Collapse',
 
   init: function () {
-    $(".HistoryHeader").append('<span class="ShowHide HistoryHeader-aside">'+this.expandedText+'</span>');
+    $('.HistoryHeader').append('<span class="ShowHide HistoryHeader-aside">'+this.expandedText+'</span>');
 
     this.$showHideButtons = $('.ShowHide');
     this.$showHideButtons.on('click', this.onShowHide.bind(this));
