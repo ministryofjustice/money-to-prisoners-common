@@ -1,53 +1,30 @@
 // Show-hide module
-// usage sample:
-//   <a class="u-nojs-hidden ShowHide js-ShowHide" href="#target-selector">
-//     <span class="ShowHide-hide">Collapse <span class="ShowHide-icon">&minus;</span></span>
-//     <span class="ShowHide-show">Collapsed <span class="ShowHide-icon">&plus;</span></span>
-//   </a>
-// Dependencies: moj, _, jQuery
 
-/* globals exports, require */
+/* globals exports */
 'use strict';
 
-var bindAll = require('lodash/function/bindAll');
-
 exports.ShowHide = {
-  selector: '.js-ShowHide',
+  collapsedText: 'Expand',
+  expandedText: 'Collapse',
 
   init: function () {
-    bindAll(this, 'onShowHide');
-    this.cacheEls();
-    this.bindEvents();
-    this.setup();
-  },
+    $('.HistoryHeader').append('<span class="ShowHide HistoryHeader-aside print-hidden">'+this.expandedText+'</span>');
 
-  cacheEls: function () {
-    this.$showHideButtons = $(this.selector);
-  },
-
-  bindEvents: function () {
-    this.$showHideButtons.on('click', this.onShowHide);
-  },
-
-  setup: function () {
-    this.$showHideButtons.each(function () {
-      var $showHideButton = $(this);
-      if ($showHideButton.is('.ShowHide-hidden')) {
-        $($showHideButton.attr('href')).hide();
-      }
-    });
+    this.$showHideButtons = $('.ShowHide');
+    this.$showHideButtons.on('click', this.onShowHide.bind(this));
   },
 
   onShowHide: function (e) {
+    var $target = $(e.target);
     e.preventDefault();
-    var $showHideButton = $(e.target).closest(this.selector),
-      $target = $($showHideButton.attr('href'));
-    if ($showHideButton.is('.ShowHide-hidden')) {
-      $target.show();
+    if ($target.hasClass('ShowHide-hidden')) {
+      $target.html(this.expandedText);
+      $target.removeClass('ShowHide-hidden');
     } else {
-      $target.hide();
+      $target.html(this.collapsedText);
+      $target.addClass('ShowHide-hidden');
     }
-    $showHideButton
-      .toggleClass('ShowHide-hidden');
+    $target.closest('table').find('tbody,thead').toggle();
+
   }
 };
