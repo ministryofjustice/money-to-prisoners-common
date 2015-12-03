@@ -4,4 +4,9 @@ $component: Upload;
   label {
     font-weight: 700;
   }
+
+  input[type=file] {
+    width: 100%;
+  }
+
 }
