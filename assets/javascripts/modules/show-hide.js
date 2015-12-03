@@ -11,7 +11,7 @@ exports.ShowHide = {
     $('.HistoryHeader').append('<span class="ShowHide HistoryHeader-aside print-hidden">'+this.expandedText+'</span>');
 
     this.$showHideButtons = $('.ShowHide');
-    this.$showHideButtons.on('click', this.onShowHide.bind(this));
+    this.$showHideButtons.on('click', $.proxy(this.onShowHide, this));
   },
 
   onShowHide: function (e) {
