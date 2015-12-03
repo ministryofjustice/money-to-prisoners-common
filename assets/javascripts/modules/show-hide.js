@@ -4,11 +4,11 @@
 'use strict';
 
 exports.ShowHide = {
-  collapsedText: '&ominus; Collapsed',
-  expandedText: '&oplus; Collapse',
+  collapsedText: 'Expand',
+  expandedText: 'Collapse',
 
   init: function () {
-    $('.HistoryHeader').append('<span class="ShowHide HistoryHeader-aside">'+this.expandedText+'</span>');
+    $('.HistoryHeader').append('<span class="ShowHide HistoryHeader-aside print-hidden">'+this.expandedText+'</span>');
 
     this.$showHideButtons = $('.ShowHide');
     this.$showHideButtons.on('click', this.onShowHide.bind(this));
