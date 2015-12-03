@@ -27,7 +27,7 @@ exports.FeatureTour = {
   bindEvents: function () {
     this.base.Events.on('FeatureTour.render', this.render);
     this.$startTour.on('click', this.startOnClick);
-    $(window).on('resize', hopscotchHighlight.onresize.bind(hopscotchHighlight));
+    $(window).on('resize', $.proxy(hopscotchHighlight.onresize, hopscotchHighlight));
   },
 
   startOnClick: function (e) {
