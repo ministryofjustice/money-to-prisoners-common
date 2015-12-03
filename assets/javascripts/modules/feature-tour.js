@@ -13,7 +13,6 @@ exports.FeatureTour = {
     bindAll(this, 'render', 'startOnClick', 'hopscotchOnEnd', 'hopscotchOnClose', 'hopscotchOnShow');
     this.cacheEls();
     this.bindEvents();
-    this.render();
   },
 
   cacheEls: function () {
