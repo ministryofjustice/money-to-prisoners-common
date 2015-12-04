@@ -1,0 +1,14 @@
+// A block box that's only visible when printing a page
+
+.print-box {
+  @include screen {
+    display: none;
+  }
+
+  @include print {
+    width: 93.5%;
+    border: 2px solid $grey-1;
+    padding: 1em;
+    margin: 1em 0 2em 0;
+  }
+}
