@@ -67,6 +67,10 @@ $dialog-padding: 30px;
     @include breakpoint(641px) {
       padding: $dialog-padding;
     }
+
+    @include print {
+      display: none;
+    }
   }
 }
 .#{$component}-close {
