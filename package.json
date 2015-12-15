@@ -1,6 +1,6 @@
 {
   "name": "money-to-prisoners-common",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Assets common to all money-to-prisoners applications",
   "main": "index.js",
   "scripts": {
