@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans 'Feedback submitted' %}</h2>
+<div class="container">
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{% trans 'Thank you for submitting feedback about the service.' %}</p>
+      {% if return_to %}
+      {% blocktrans %}
+      <p>To return to your workflow, <a href="{{ return_to }}">click here</a>.</p>
+      {% endblocktrans %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
