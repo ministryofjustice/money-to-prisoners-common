@@ -2,7 +2,7 @@ $component: Checkbox;
 
 @include screen {
   input[type=checkbox] {
-    $checkbox-size: 20px;
+    $checkbox-size: 50px;
 
     @include visually-hidden;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
@@ -11,7 +11,7 @@ $component: Checkbox;
       cursor: pointer;
       margin: 0;
       padding-left: 30px;
-      background: url(../images/box.png) left 0 no-repeat;
+      background: url(../images/box.png) center center no-repeat;
     }
 
     &:checked + label {
