@@ -48,11 +48,4 @@
     <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
   </div>
 
-  {% if messages %}
-    <ul class="messages" role="alert" tabindex="-1">
-      {% for message in messages %}
-        <li{% if message.tags %} class="message--{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
 {% endblock %}
