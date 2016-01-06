@@ -14,7 +14,7 @@ IMAGES_SRC_DIR=./assets/images
 IMAGES_DST_DIR=../../${APP_PATH}/assets/images
 
 NODE_MODULES=./node_modules
-NODE_BIN=${NODE_MODULES}/.bin
+export NODE_BIN=${NODE_MODULES}/.bin
 
 # kill all processes spawned by this script in the
 # background when it stops, in particular django
@@ -52,11 +52,12 @@ case $COMMAND in
     start & PID=$!
     echo Starting Browser-Sync
     ${NODE_BIN}/browser-sync start --host=localhost --port=3000 --proxy=localhost:${APP_PORT} --no-open --ui-port=3001 &
-    shift
     echo "Watching changes"
     fswatch -o $@ | xargs -n1 -I{} sh -c 'echo "---- Change detected ----"; ./run.sh build; ${NODE_BIN}/browser-sync reload'
     ;;
   test*)
+    source venv/bin/activate > /dev/null
+    pip install -r requirements/dev.txt > /dev/null
     RUN_FUNCTIONAL_TESTS=1 ./manage.py test
     ;;
   *)
