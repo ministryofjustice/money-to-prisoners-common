@@ -21,6 +21,8 @@ SASS_DIRS = $(NODE_MODULES)/hopscotch-highlight/src/stylesheets $(NODE_MODULES)/
 
 SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss)
 
+IMAGE_FILES := $(ASSETS_SOURCE)/images/* $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/*
+
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
 WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON) $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
@@ -80,10 +82,10 @@ node_modules:
 	npm install
 	@echo "node_modules installed. Don't forget to link to local modules as needed (eg npm link money-to-prisoners-common)"
 
-$(MTP_APP)/assets/images: $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/*
+$(MTP_APP)/assets/images: $(IMAGE_FILES)
 	@echo Collecting images
 	@mkdir -p $@
-	@cp $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/* ./$(MTP_APP)/assets/images
+	@cp $(IMAGE_FILES) ./$(MTP_APP)/assets/images
 
 $(SELENIUM):
 		@$(NODE_BIN)/selenium-standalone install
