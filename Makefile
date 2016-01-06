@@ -35,7 +35,7 @@ SELENIUM = $(NODE_MODULES)/selenium-standalone/.selenium
 .PHONY: start
 start: build
 	@echo Starting the Django server
-	$(RUN_TASK) $(MTP_APP) $(MTP_PORT) start
+	$(RUN_TASK) $(MTP_APP) start $(MTP_PORT)
 
 # all the assets
 .PHONY: build
@@ -50,17 +50,17 @@ clean:
 .PHONY: watch
 watch: build
 	@echo Monitoring changes
-	$(RUN_TASK) $(MTP_APP) $(MTP_PORT) watch $(WATCHLIST)
+	$(RUN_TASK) $(MTP_APP) watch $(MTP_PORT) $(WATCHLIST)
 
 # as above but also run browser-sync for dynamic browser reload
 .PHONY: serve
 serve: build
-	$(RUN_TASK) $(MTP_APP) $(MTP_PORT) serve $(WATCHLIST)
+	$(RUN_TASK) $(MTP_APP) serve $(MTP_PORT) $(WATCHLIST)
 
 # selenium tests tasks
 .PHONY: test-headless test test-wip
 test-headless test test-wip: $(SELENIUM)
-	$(RUN_TASK) $(MTP_APP) $(MTP_PORT) $@
+	$(RUN_TASK) $(MTP_APP) $@ $(MTP_PORT)
 
 ######################
 #### FILE TARGETS ####

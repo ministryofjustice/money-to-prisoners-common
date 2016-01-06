@@ -4,7 +4,9 @@
 # passed. It's normally run from the makefile
 
 APP_PATH=./$1
-APP_PORT=$2
+COMMAND=$2
+APP_PORT=$3
+shift
 shift
 shift
 
@@ -29,7 +31,7 @@ function start {
   ./manage.py runserver 0.0.0.0:${APP_PORT}
 }
 
-case "$1" in
+case $COMMAND in
   start)
     # just run normally
     start
