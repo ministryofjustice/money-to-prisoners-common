@@ -56,17 +56,20 @@ case $COMMAND in
     fswatch -o $@ | xargs -n1 -I{} sh -c 'echo "---- Change detected ----"; ./run.sh build; ${NODE_BIN}/browser-sync reload'
     ;;
   test*)
+    echo Running the test suite
     source venv/bin/activate > /dev/null
     pip install -r requirements/dev.txt > /dev/null
+    ./manage.py collectstatic --noinput > /dev/null
     RUN_FUNCTIONAL_TESTS=1 ./manage.py test
     ;;
   *)
-    echo "Usage: $0 [start|watch|serve|test-headless] <args>"
-    echo " - $0 start: just start the application server"
-    echo " - $0 watch <list of asset directories to monitor>: start the "
+    echo "Usage: $0 <app-name> [start|watch|serve|test] <args>"
+    echo " - start <port>: just start the application server"
+    echo " - watch <port> <list of asset directories to monitor>: start the "
     echo "   application server and recompile the assets if they are changed"
-    echo " - $0 serve <list of asset directories to monitor>: start the "
+    echo " - serve <port> <list of asset directories to monitor>: start the "
     echo "   browser-sync server and recompile the assets if they are changed"
-    echo " - $0 test: run the test suite"
+    echo " - test: run the test suite"
     exit 1
 esac
+exit 0
