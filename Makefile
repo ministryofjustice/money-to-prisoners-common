@@ -17,11 +17,11 @@ ALL_JS := $(shell find -L $(ASSETS_SOURCE)/javascripts $(MTP_COMMON)/assets/java
 
 CSS_PATH = $(ASSETS_TARGET)/stylesheets
 
-SASS_DIRS = $(NODE_MODULES)/hopscotch-highlight/src/stylesheets $(NODE_MODULES)/hopscotch/dist/css $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-media/dist $(NODE_MODULES)/bourbon/app/assets/stylesheets $(NODE_MODULES)/susy/sass $(ASSETS_SOURCE)/stylesheets $(GOVUK_ELEMENTS)/sass $(MOJ_ELEMENTS)/sass $(MTP_COMMON)/assets/scss $(MTP_COMMON)/assets/scss/elements $(NODE_MODULES)
+SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-media/dist $(NODE_MODULES)/bourbon/app/assets/stylesheets $(NODE_MODULES)/susy/sass $(ASSETS_SOURCE)/stylesheets $(GOVUK_ELEMENTS)/sass $(MOJ_ELEMENTS)/sass $(MTP_COMMON)/assets/scss $(MTP_COMMON)/assets/scss/elements $(NODE_MODULES)
 
 SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss)
 
-IMAGE_FILES := $(ASSETS_SOURCE)/images/* $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/*
+IMAGE_FILES := $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/*
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
