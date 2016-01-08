@@ -5,12 +5,11 @@ MOJ_ELEMENTS = $(NODE_MODULES)/mojular-moj-elements
 RUN_TASK = $(MTP_COMMON)/tasks.sh
 NODE_BIN = $(NODE_MODULES)/.bin
 
-MTP_APP = $(app)
-MTP_PORT = $(port)
+MTP_APP_PATH = mtp_$(subst -,_,$(app))
 
-ASSETS_TARGET = ./$(MTP_APP)/assets
-ASSETS_SOURCE = ./$(MTP_APP)/assets-src
-TEMPLATES = ./$(MTP_APP)/templates
+ASSETS_TARGET = ./$(MTP_APP_PATH)/assets
+ASSETS_SOURCE = ./$(MTP_APP_PATH)/assets-src
+TEMPLATES = ./$(MTP_APP_PATH)/templates
 
 JS_PATH = $(ASSETS_TARGET)/scripts
 ALL_JS := $(shell find -L $(ASSETS_SOURCE)/javascripts $(MTP_COMMON)/assets/javascripts -name \*.js)
@@ -33,36 +32,20 @@ SELENIUM = $(NODE_MODULES)/selenium-standalone/.selenium
 #### RECIPES ####
 #################
 
-# start the server normally
-.PHONY: start
-start: build
-	@echo Starting the Django server
-	$(RUN_TASK) $(MTP_APP) start $(MTP_PORT)
-
 # all the assets
 .PHONY: build
-build: node_modules $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css ./$(MTP_APP)/assets/images
+build: node_modules $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css ./$(MTP_APP_PATH)/assets/images
 
 # remove all the assets
 .PHONY: clean
 clean:
 	rm -rf $(ASSETS_TARGET) $(NODE_MODULES)
 
-# run normally but monitor assets and recompile them when they change
+# monitor assets and recompile them when they change
 .PHONY: watch
-watch: build
+watch:
 	@echo Monitoring changes
-	$(RUN_TASK) $(MTP_APP) watch $(MTP_PORT) $(WATCHLIST)
-
-# as above but also run browser-sync for dynamic browser reload
-.PHONY: serve
-serve: build
-	$(RUN_TASK) $(MTP_APP) serve $(MTP_PORT) $(WATCHLIST)
-
-# selenium tests tasks
-.PHONY: test-headless test test-wip
-test-headless test test-wip: $(SELENIUM)
-	$(RUN_TASK) $(MTP_APP) $@ $(MTP_PORT)
+	@fswatch -l 1 -o $(WATCHLIST) | xargs -n1 -I {} /usr/bin/env bash -c './run.sh $(watch_callback)'
 
 ######################
 #### FILE TARGETS ####
@@ -79,13 +62,15 @@ $(CSS_PATH)/%.css: $(SASS_FILES)
 	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ > /dev/null 2>&1
 
 node_modules:
+	@echo Installing node modules
 	npm install
 	@echo "node_modules installed. Don't forget to link to local modules as needed (eg npm link money-to-prisoners-common)"
 
-$(MTP_APP)/assets/images: $(IMAGE_FILES)
+$(MTP_APP_PATH)/assets/images: $(IMAGE_FILES)
 	@echo Collecting images
 	@mkdir -p $@
-	@cp $(IMAGE_FILES) ./$(MTP_APP)/assets/images
+	@cp $(IMAGE_FILES) ./$(MTP_APP_PATH)/assets/images
 
 $(SELENIUM):
-		@$(NODE_BIN)/selenium-standalone install
+	@echo Installing selenium binaries
+	@$(NODE_BIN)/selenium-standalone install
