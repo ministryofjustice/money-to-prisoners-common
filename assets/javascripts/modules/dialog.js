@@ -1,5 +1,5 @@
 // Dialog module
-/* global exports, require */
+/* global exports, require, $, ga */
 
 'use strict';
 
@@ -35,6 +35,9 @@ exports.Dialog = {
 
     this.$triggerEl = $triggerEl;
     this.openDialog(target);
+
+    // Tell google analytics about the dalog opening
+    ga && ga('send', 'event', 'dialog', 'open', target);
   },
 
   openDialog: function (target) {
@@ -109,6 +112,9 @@ exports.Dialog = {
 
     // unbind close events
     this.$body.off('.Dialog');
+
+    // Tell google analytics about the dalog closing
+    ga && ga('send', 'event', 'dialog', 'close');
   },
 
   onKeyUp: function (e) {
