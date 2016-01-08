@@ -1,5 +1,5 @@
 // BeforeUnload module
-/* globals exports, require */
+/* globals exports, require, $, ga */
 'use strict';
 
 var bindAll = require('lodash/function/bindAll');
@@ -40,6 +40,8 @@ exports.BeforeUnload = {
 
   beforeUnload: function () {
     if (this.$form.serialize() !== this.initialData && !this.submitting) {
+      // Tell google analytics about the modified form
+      ga && ga('send', 'event', 'leave', 'modified form');
       return this.message;
     }
   }
