@@ -70,7 +70,7 @@ test-headless test test-wip: $(SELENIUM)
 
 $(JS_PATH)/app.bundle.js: $(ALL_JS)
 	@echo Generating `basename $@`
-	-@jshint $<
+	-@$(NODE_BIN)/jshint $<
 	@$(NODE_BIN)/webpack > /dev/null
 
 # Make the various css files (app, app-print) from their respective sources
