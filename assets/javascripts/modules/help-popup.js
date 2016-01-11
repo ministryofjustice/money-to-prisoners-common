@@ -15,7 +15,7 @@ exports.HelpPopup = {
 
   toggle: function(event) {
     var $helpBox = $(event.target).parent();
-    var $contents = $helpBox.find('ul');
+    var $contents = $helpBox.find('.help-box-contents');
     event.preventDefault();
     $contents.toggle();
     $helpBox.toggleClass('help-box-hidden');

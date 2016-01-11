@@ -1,60 +1,64 @@
 @if $is-print == false {
-.help-box {
+  .help-box {
 
-  margin-bottom: 4em;
+    &.help-box-popup {
+      h3 {
+        font-size: 1em;
+        font-weight: normal;
+        text-decoration: underline;
+        color: $link-colour;
+        cursor: pointer;
 
-  &.help-box-popup {
-    h3 {
-      font-size: 1em;
-      font-weight: normal;
-      text-decoration: underline;
-      color: $link-colour;
-      cursor: pointer;
+        div {
+          width: 30px;
+          height: 1em;
+          margin-right: 10px;
+          background-image: url(../images/arrows.png);
+          background-repeat: no-repeat;
+          background-position: -4px;
+          display: inline-block;
 
-      div {
-        width: 30px;
-        height: 1em;
-        margin-right: 10px;
-        float: left;
-        background-image: url(../images/arrows.png);
-        background-repeat: no-repeat;
-        background-position: -4px;
+          @media only screen and (-webkit-min-device-pixel-ratio: 2),
+            only screen and (min-device-pixel-ratio: 2) {
+            background-image: url(../images/arrows@2x.png);
+            background-size: 53px 15px;
+            background-position: 0;
+          }
+        }
+      }
 
-        @media only screen and (-webkit-min-device-pixel-ratio: 2),
-          only screen and (min-device-pixel-ratio: 2) {
-          background-image: url(../images/arrows@2x.png);
-          background-size: 53px 15px;
-          background-position: 0;
+      .help-box-contents {
+        border-left: 5px solid $border-colour;
+        padding: .2em .2em .2em 2em;
+        ul {
+          margin: 0;
+          list-style-type: disc;
+          li {
+            padding: 0 0 .3em 1em;
+          }
+        }
+        p {
+          margin: 1em 0 .2em 0;
+        }
+      }
+
+      &.help-box-hidden {
+        h3 div {
+          background-position: -40px;
+          @media only screen and (-webkit-min-device-pixel-ratio: 2),
+            only screen and (min-device-pixel-ratio: 2) {
+            background-image: url(../images/arrows@2x.png);
+            background-size: 50px 15px;
+            background-position: -28px;
+          }
+        }
+        .help-box-contents {
+          display: none;
         }
       }
     }
-
-    &.help-box-hidden h3 div {
-      background-position: -40px;
-      @media only screen and (-webkit-min-device-pixel-ratio: 2),
-        only screen and (min-device-pixel-ratio: 2) {
-        background-image: url(../images/arrows@2x.png);
-        background-size: 50px 15px;
-        background-position: -28px;
-      }
-    }
-
-    ul {
-      float: left; // to avoid IE8 bug: margin disappears for a split second on hide
-      display: none;
-      list-style-type: none;
-      border-left: 5px solid $border-colour;
-      margin-bottom: 4em;
-
-      li {
-        padding: .5em 0 .5em 1em;
-      }
-    }
   }
-}
-}
-
-@else {
+} @else {
   .help-box {
     display: none;
   }
