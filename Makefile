@@ -1,13 +1,21 @@
-# make default parameters, can be overridden when calling make
+#############################################
+#### SHARED MAKEFILE FOR MTP CLIENT APPS ####
+#############################################
+
+# mandatory parameters
+ifeq ($(app),)
+$(error The 'app' parameter is required)
+endif
+MTP_APP_PATH := mtp_$(subst -,_,$(app))
+
+# default parameters, can be overridden when calling make
 api_port ?= 8000
-browsersync_port ?= 3000
-browsersync_ui_port ?= 3030
-django_settings ?= mtp_api.settings
+port ?= 8001
+browsersync_port ?= 3001
+browsersync_ui_port ?= 3031
+django_settings ?= $(MTP_APP_PATH).settings
 command_script ?= make
 verbosity ?= 1
-
-# derrived parameters
-MTP_APP_PATH := mtp_$(subst -,_,$(app))
 
 ifeq ($(command_script),run.sh)
 override command_script := ./$(command_script)
@@ -58,7 +66,7 @@ SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 # usage instructions
 .PHONY: print_usage
 print_usage:
-	@echo "Usage: $(command_script) [start|watch|serve|clean|build]"
+	@echo "Usage: $(command_script) [start|watch|serve|update|build|clean|test]"
 	@echo " - start [port=<port>]: start the application server on http://localhost:$(port)/"
 	@echo " - watch [port=<port>]: start the application server and recompile the assets when they change"
 	@echo " - serve [port=<port>]: start the browser-sync server on http://localhost:$(browsersync_port)/"
@@ -126,7 +134,7 @@ build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/
 # remove all the assets
 .PHONY: clean
 clean:
-	rm -rf $(ASSETS_TARGET) $(NODE_MODULES)
+	@rm -rf $(ASSETS_TARGET) $(NODE_MODULES)
 
 ##########################
 #### INTERNAL RECIPES ####
