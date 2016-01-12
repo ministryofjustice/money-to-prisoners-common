@@ -2,7 +2,7 @@
 
 All assets used for [money-to-prisoners-cashbook](), [money-to-prisoners-prisoner-location-admin](https://github.com/ministryofjustice/money-to-prisoners-prisoner-location-admin/), [money-to-prisoners-bank-admin](https://github.com/ministryofjustice/money-to-prisoners-bank-admin/) are kept in this package.
 
-They are included into each application using [Bower](http://bower.io/).
+They are included into each application using [npm](http://npmjs.com/). Each application's build scripts run npm automatically.
 
 ### Sass, Javascript, Images
 
@@ -14,8 +14,24 @@ Common templates used across all 3 applications are kept in `./templates/`. They
 
 ## Working with this repository locally
 
-You can utilise [bower link](http://bower.io/docs/api/#link) to point the application that includes this package to a local copy so that changes are picked up immediately. Once all your changes are complete you can combine this in a series of commits or Pull Request. 
+The applications using this repository incorporate it with npm, resulting in a of copy it in the `node_modules/money-to-prisoners-common` directory. Making modifications in that directory is possible, but since the copy doesn't include `.git` you won't be able to commit your changes.
 
-*Note:* Gulp tasks are copied into the application's `./tasks/common/` directory using a bower [postinstall hook](https://github.com/bower/bower/blob/master/HOOKS.md), however, this is not trigured after a bower link. 
+The correct method is to clone this repo in another directory alongside this one and use npm link. Doing so will symlink the `node_modules/money-to-prisoners-common` to your local clone. Typically
+```
+$ git clone https://github.com/ministryofjustice/money-to-prisoners-cashbook
+$ git clone https://github.com/ministryofjustice/money-to-prisoners-common
+$ cd money-to-prisoners-common
+$ npm link
+$ cd ../money-to-prisoners-cashbook
+$ npm install
+$ npm link money-to-prisoners-common
+```
 
-If you make changes to the tasks and need them in the application you can run the command bower is running in that repository after an install.
+When changes are deployed in this repo, its version should be updated and the upstream projects' `package.json` should be modified to reflect this change:
+```
+...
+ "money-to-prisoners-common": "ministryofjustice/money-to-prisoners-common#1.2.0",
+...
+```
+
+This repository has a dependency on [mojular/moj-elements](https://github.com/mojular/moj-elements), which provides the assets and scripts for MOJ sites. The [mojular](https://github.com/mojular/) repositories are shared across multiple departments, and any change should be checked by members of the organization.
