@@ -1,16 +1,38 @@
-NODE_MODULES = ./node_modules
+# make default parameters, can be overridden when calling make
+api_port ?= 8000
+browsersync_port ?= 3000
+browsersync_ui_port ?= 3030
+django_settings ?= mtp_api.settings
+command_script ?= make
+verbosity ?= 1
+
+# derrived parameters
+MTP_APP_PATH := mtp_$(subst -,_,$(app))
+
+ifeq ($(command_script),run.sh)
+override command_script := ./$(command_script)
+endif
+
+ifeq ($(shell [ $(verbosity) -gt 1 ] && echo true),true)
+TASK_OUTPUT_REDIRECTION := &1
+else
+TASK_OUTPUT_REDIRECTION := /dev/null
+endif
+
+# functions
+is_port_open = $(shell nc -z localhost $(1) >$(TASK_OUTPUT_REDIRECTION) 2>&1 && echo true)
+
+# paths of folders, tools and assets
+NODE_MODULES := node_modules
+NODE_BIN := ./$(NODE_MODULES)/.bin
+
 MTP_COMMON = $(NODE_MODULES)/money-to-prisoners-common
 GOVUK_ELEMENTS = $(NODE_MODULES)/mojular-govuk-elements
 MOJ_ELEMENTS = $(NODE_MODULES)/mojular-moj-elements
-RUN_TASK = $(MTP_COMMON)/tasks.sh
-NODE_BIN = $(NODE_MODULES)/.bin
 
-MTP_APP = $(app)
-MTP_PORT = $(port)
-
-ASSETS_TARGET = ./$(MTP_APP)/assets
-ASSETS_SOURCE = ./$(MTP_APP)/assets-src
-TEMPLATES = ./$(MTP_APP)/templates
+ASSETS_TARGET = $(MTP_APP_PATH)/assets
+ASSETS_SOURCE = $(MTP_APP_PATH)/assets-src
+TEMPLATES = $(MTP_APP_PATH)/templates
 
 JS_PATH = $(ASSETS_TARGET)/scripts
 ALL_JS := $(shell find -L $(ASSETS_SOURCE)/javascripts $(MTP_COMMON)/assets/javascripts -name \*.js)
@@ -27,42 +49,104 @@ SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
 WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON) $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
 
-SELENIUM = $(NODE_MODULES)/selenium-standalone/.selenium
+SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 
 #################
 #### RECIPES ####
 #################
 
-# start the server normally
+# usage instructions
+.PHONY: print_usage
+print_usage:
+	@echo "Usage: $(command_script) [start|watch|serve|clean|build]"
+	@echo " - start [port=<port>]: start the application server on http://localhost:$(port)/"
+	@echo " - watch [port=<port>]: start the application server and recompile the assets when they change"
+	@echo " - serve [port=<port>]: start the browser-sync server on http://localhost:$(browsersync_port)/"
+	@echo "   and recompile the assets when they change"
+	@echo " - update: update node and python packages"
+	@echo " - build: compile all the assets"
+	@echo " - clean: delete compiled assets and node modules"
+	@echo " - test [tests=<tests>]: run the python test suite"
+
+# run the django dev server
 .PHONY: start
-start: build
-	@echo Starting the Django server
-	$(RUN_TASK) $(MTP_APP) start $(MTP_PORT)
+start: update_venv collect_static build
+	@venv/bin/python manage.py runserver 0:$(port)
+
+# run the django dev server and recompile assets on change
+.PHONY: watch
+watch:
+export
+watch:
+	@$(MAKE) -f $(MAKEFILE_LIST) --jobs 2 start internal_watch watch_callback=build
+
+# run the django dev server, recompile assets and reload browsers on change
+.PHONY: serve
+serve:
+export
+serve:
+	@$(MAKE) -f $(MAKEFILE_LIST) --jobs 3 start internal_browser_sync internal_watch watch_callback=internal_build_and_reload
+
+# set an environment variable if api server is running
+api_running:
+ifeq ($(call is_port_open,$(api_port)), true)
+export RUN_FUNCTIONAL_TESTS=true
+endif
+
+# run python tests
+.PHONY: test
+test: api_running
+ifeq ($(RUN_FUNCTIONAL_TESTS), true)
+	@echo Running all tests
+else
+	@echo Running non-functional tests only
+endif
+	@venv/bin/python manage.py test --verbosity=$(verbosity) $(tests)
+
+# update python virtual environment
+.PHONY: update_venv
+update_venv: venv/bin/pip
+	@echo Updating python packages
+	@venv/bin/pip install -r requirements/dev.txt >$(TASK_OUTPUT_REDIRECTION)
+
+# collect django static assets
+collect_static: | $(MTP_APP_PATH)/assets
+	@echo Collecting static Django assets
+	@venv/bin/python manage.py collectstatic --noinput >$(TASK_OUTPUT_REDIRECTION)
+
+# update node and python packages
+update: update_venv
+	@echo Updating node modules
+	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 
 # all the assets
 .PHONY: build
-build: node_modules $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css ./$(MTP_APP)/assets/images
+build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css $(MTP_APP_PATH)/assets/images
 
 # remove all the assets
 .PHONY: clean
 clean:
 	rm -rf $(ASSETS_TARGET) $(NODE_MODULES)
 
-# run normally but monitor assets and recompile them when they change
-.PHONY: watch
-watch: build
+##########################
+#### INTERNAL RECIPES ####
+##########################
+
+# load browser-sync
+.PHONY: internal_browser_sync
+internal_browser_sync:
+	@$(NODE_BIN)/browser-sync start --host=localhost --port=$(browsersync_port) --proxy=localhost:$(port) --no-open --ui-port=$(browsersync_ui_port)
+
+# monitor assets and recompile them when they change
+.PHONY: internal_watch
+internal_watch:
 	@echo Monitoring changes
-	$(RUN_TASK) $(MTP_APP) watch $(MTP_PORT) $(WATCHLIST)
+	@fswatch -l 1 -o $(WATCHLIST) | xargs -n1 -I {} /usr/bin/env bash -c '$(command_script) $(watch_callback)'
 
-# as above but also run browser-sync for dynamic browser reload
-.PHONY: serve
-serve: build
-	$(RUN_TASK) $(MTP_APP) serve $(MTP_PORT) $(WATCHLIST)
-
-# selenium tests tasks
-.PHONY: test-headless test test-wip
-test-headless test test-wip: $(SELENIUM)
-	$(RUN_TASK) $(MTP_APP) $@ $(MTP_PORT)
+# monitor assets, recompile them and reload browsers when they change
+.PHONY: internal_build_and_reload
+internal_build_and_reload: build
+	${NODE_BIN}/browser-sync reload --port=$(browsersync_port)
 
 ######################
 #### FILE TARGETS ####
@@ -71,21 +155,31 @@ test-headless test test-wip: $(SELENIUM)
 $(JS_PATH)/app.bundle.js: $(ALL_JS)
 	@echo Generating `basename $@`
 	-@$(NODE_BIN)/jshint $<
-	@$(NODE_BIN)/webpack > /dev/null
+	@$(NODE_BIN)/webpack >$(TASK_OUTPUT_REDIRECTION)
 
 # Make the various css files (app, app-print) from their respective sources
 $(CSS_PATH)/%.css: $(SASS_FILES)
 	@echo Generating `basename $@`
-	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ > /dev/null 2>&1
+	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ >$(TASK_OUTPUT_REDIRECTION) 2>&1
 
-node_modules:
-	npm install
+$(NODE_MODULES):
+	@echo Installing node modules
+	@npm install >$(TASK_OUTPUT_REDIRECTION)
 	@echo "node_modules installed. Don't forget to link to local modules as needed (eg npm link money-to-prisoners-common)"
 
-$(MTP_APP)/assets/images: $(IMAGE_FILES)
+venv/bin/pip:
+	@echo Creating python virtual environment
+	@virtualenv -p python3 venv >$(TASK_OUTPUT_REDIRECTION)
+	@venv/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
+
+$(MTP_APP_PATH)/assets:
+	@mkdir -p $@
+
+$(MTP_APP_PATH)/assets/images: $(IMAGE_FILES) | $(MTP_APP_PATH)/assets
 	@echo Collecting images
 	@mkdir -p $@
-	@cp $(IMAGE_FILES) ./$(MTP_APP)/assets/images
+	@cp $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
 
 $(SELENIUM):
-		@$(NODE_BIN)/selenium-standalone install
+	@echo Installing selenium binaries
+	@$(NODE_BIN)/selenium-standalone install
