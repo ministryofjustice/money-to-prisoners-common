@@ -6,9 +6,10 @@
   }
 
   @include print {
+    p {
+      margin: 1em .7em
+    }
     width: 93.5%;
     border: 2px solid $grey-1;
-    padding: 1em;
-    margin: 1em 0 2em 0;
   }
 }
