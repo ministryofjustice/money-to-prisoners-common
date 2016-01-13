@@ -27,25 +27,28 @@
 
 
 {% block global_subheader %}
-  {% if request.user.is_authenticated %}
-    <div class="user-details">
-      {% blocktrans with full_name=request.user.get_full_name|default:request.user.username %}
-        Logged in as {{ full_name }}
-      {% endblocktrans %}
+  {% block user_details %}
+    {% if request.user.is_authenticated %}
+      <div class="user-details">
+        {% blocktrans with full_name=request.user.get_full_name|default:request.user.username %}
+          Logged in as {{ full_name }}
+        {% endblocktrans %}
 
-      <span>
-        <a href="{% url 'logout' %}">{% trans "Sign out" %}</a>
-      </span>
+        <span>
+          <a href="{% url 'logout' %}">{% trans "Sign out" %}</a>
+        </span>
 
-      {% block user_menu %}{% endblock %}
+        {% block user_menu %}{% endblock %}
+      </div>
+    {% endif %}
+  {% endblock %}
+
+  {% block phase_banner %}
+    <div class="subheader-item phase-banner">
+      <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
+      {# #TODO - add current location for feedback view #}
+      {% url 'submit_ticket' as ticket_url %}
+      <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
     </div>
-  {% endif %}
-
-  <div class="subheader-item phase-banner">
-    <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
-    {# #TODO - add current location for feedback view #}
-    {% url 'submit_ticket' as ticket_url %}
-    <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
-  </div>
-
+  {% endblock %}
 {% endblock %}
