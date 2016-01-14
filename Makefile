@@ -51,7 +51,7 @@ SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-
 
 SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss)
 
-IMAGE_FILES := $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/*
+IMAGE_FILES := $(shell find $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets/images/* -type f 2>/dev/null)
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
@@ -78,7 +78,7 @@ print_usage:
 
 # run the django dev server
 .PHONY: start
-start: update_venv collect_static build
+start: update_venv build
 	@venv/bin/python manage.py runserver 0:$(port)
 
 # run the django dev server and recompile assets on change
@@ -96,6 +96,7 @@ serve:
 	@$(MAKE) -f $(MAKEFILE_LIST) --jobs 3 start internal_browser_sync internal_watch watch_callback=internal_build_and_reload
 
 # set an environment variable if api server is running
+.PHONY: api_running
 api_running:
 ifeq ($(call is_port_open,$(api_port)), true)
 export RUN_FUNCTIONAL_TESTS=true
@@ -118,18 +119,22 @@ update_venv: venv/bin/pip
 	@venv/bin/pip install -r requirements/dev.txt >$(TASK_OUTPUT_REDIRECTION)
 
 # collect django static assets
-collect_static: | $(MTP_APP_PATH)/assets
+.PHONY: static_assets
+static_assets:
 	@echo Collecting static Django assets
 	@venv/bin/python manage.py collectstatic --noinput >$(TASK_OUTPUT_REDIRECTION)
+	@echo Collecting images
+	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
 
 # update node and python packages
+.PHONY: update
 update: update_venv
 	@echo Updating node modules
 	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 
 # all the assets
 .PHONY: build
-build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css $(MTP_APP_PATH)/assets/images
+build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css static_assets
 
 # remove all the assets
 .PHONY: clean
@@ -179,14 +184,6 @@ venv/bin/pip:
 	@echo Creating python virtual environment
 	@virtualenv -p python3 venv >$(TASK_OUTPUT_REDIRECTION)
 	@venv/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
-
-$(MTP_APP_PATH)/assets:
-	@mkdir -p $@
-
-$(MTP_APP_PATH)/assets/images: $(IMAGE_FILES) | $(MTP_APP_PATH)/assets
-	@echo Collecting images
-	@mkdir -p $@
-	@cp $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
 
 $(SELENIUM):
 	@echo Installing selenium binaries
