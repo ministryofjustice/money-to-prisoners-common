@@ -37,7 +37,7 @@ exports.Dialog = {
     this.openDialog(target);
 
     // Tell google analytics about the dalog opening
-    ga && ga('send', 'event', 'dialog', 'open', target);
+    ga && ga('send', { 'hitType': 'pageview', 'page': '/-dialog_open/', 'title': 'Dialog popup opening' });
   },
 
   openDialog: function (target) {
@@ -114,7 +114,7 @@ exports.Dialog = {
     this.$body.off('.Dialog');
 
     // Tell google analytics about the dalog closing
-    ga && ga('send', 'event', 'dialog', 'close');
+    ga && ga('send', { 'hitType': 'pageview', 'page': '/-dialog_close/', 'title': 'Dialog popup closing' });
   },
 
   onKeyUp: function (e) {
