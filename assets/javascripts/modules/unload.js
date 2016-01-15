@@ -40,8 +40,8 @@ exports.BeforeUnload = {
 
   beforeUnload: function () {
     if (this.$form.serialize() !== this.initialData && !this.submitting) {
-      // Tell google analytics about the modified form
-      ga && ga('send', 'event', 'leave', 'modified form');
+      // Tell google analytics about unload popup
+      ga && ga('send', { 'hitType': 'pageview', 'page': '/-leaving_page_dialog/', 'title': 'Leaving page dialog opening' });
       return this.message;
     }
   }
