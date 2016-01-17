@@ -1,8 +1,9 @@
 // BeforeUnload module
-/* globals exports, require, $, ga */
+/* globals exports, require, $ */
 'use strict';
 
 var bindAll = require('lodash/function/bindAll');
+var analytics = require('./analytics');
 
 exports.BeforeUnload = {
   selector: '.js-BeforeUnload',
@@ -40,8 +41,7 @@ exports.BeforeUnload = {
 
   beforeUnload: function () {
     if (this.$form.serialize() !== this.initialData && !this.submitting) {
-      // Tell google analytics about unload popup
-      ga && ga('send', { 'hitType': 'pageview', 'page': '/-leaving_page_dialog/', 'title': 'Leaving page dialog opening' });
+      analytics.analytics.send('pageview', '/-leaving_page_dialog/');
       return this.message;
     }
   }
