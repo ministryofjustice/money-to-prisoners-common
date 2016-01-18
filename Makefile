@@ -13,6 +13,7 @@ api_port ?= 8000
 port ?= 8001
 browsersync_port ?= 3001
 browsersync_ui_port ?= 3031
+webdriver ?= phantomjs
 django_settings ?= $(MTP_APP_PATH).settings
 command_script ?= make
 verbosity ?= 1
@@ -100,6 +101,7 @@ serve:
 api_running:
 ifeq ($(call is_port_open,$(api_port)), true)
 export RUN_FUNCTIONAL_TESTS=true
+export WEBDRIVER=$(webdriver)
 endif
 
 # run python tests
