@@ -1,9 +1,8 @@
 // Dialog module
-/* global exports, require, $, ga */
+/* global exports, require, $ */
 
 'use strict';
 
-var Mojular = require('mojular');
 var bindAll = require('lodash/function/bindAll');
 
 exports.Dialog = {
@@ -35,9 +34,6 @@ exports.Dialog = {
 
     this.$triggerEl = $triggerEl;
     this.openDialog(target);
-
-    // Tell google analytics about the dalog opening
-    ga && ga('send', { 'hitType': 'pageview', 'page': '/-dialog_open/', 'title': 'Dialog popup opening' });
   },
 
   openDialog: function (target) {
@@ -45,12 +41,6 @@ exports.Dialog = {
     var hideClose = $dialog.data('hide-close');
     var disableBackdropClose = $dialog.data('disable-backdrop-close');
     var closeSelector = '.Dialog-close';
-
-    // log warning if target doesn't exist
-    if ($dialog.length === 0) {
-      Mojular.log('Modules.Dialog Warning: The target element, ' + target + ', does not exist.');
-      return;
-    }
 
     // if close button not needed, don't run
     if (!hideClose) {
@@ -112,9 +102,6 @@ exports.Dialog = {
 
     // unbind close events
     this.$body.off('.Dialog');
-
-    // Tell google analytics about the dalog closing
-    ga && ga('send', { 'hitType': 'pageview', 'page': '/-dialog_close/', 'title': 'Dialog popup closing' });
   },
 
   onKeyUp: function (e) {

@@ -107,7 +107,7 @@ endif
 # run python tests
 .PHONY: test
 test: api_running
-ifeq ($(RUN_FUNCTIONAL_TESTS), true)
+ifdef RUN_FUNCTIONAL_TESTS
 	@echo Running all tests
 else
 	@echo Running non-functional tests only
