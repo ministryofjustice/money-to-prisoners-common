@@ -78,19 +78,19 @@ print_usage:
 
 # run the django dev server
 .PHONY: start
-start: update_venv build
+start: build
 	@venv/bin/python manage.py runserver 0:$(port)
 
 # run the django dev server and recompile assets on change
 .PHONY: watch
-watch:
+watch: build
 export
 watch:
 	@$(MAKE) -f $(MAKEFILE_LIST) --jobs 2 start internal_watch watch_callback=build
 
 # run the django dev server, recompile assets and reload browsers on change
 .PHONY: serve
-serve:
+serve: build
 export
 serve:
 	@$(MAKE) -f $(MAKEFILE_LIST) --jobs 3 start internal_browser_sync internal_watch watch_callback=internal_build_and_reload
@@ -113,8 +113,8 @@ endif
 	@venv/bin/python manage.py test --verbosity=$(verbosity) $(tests)
 
 # update python virtual environment
-.PHONY: update_venv
-update_venv: venv/bin/pip
+.PHONY: virtual_env
+virtual_env: venv/bin/pip
 	@echo Updating python packages
 	@venv/bin/pip install -r requirements/dev.txt >$(TASK_OUTPUT_REDIRECTION)
 
@@ -128,13 +128,13 @@ static_assets:
 
 # update node and python packages
 .PHONY: update
-update: update_venv
+update: virtual_env
 	@echo Updating node modules
 	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 
 # all the assets
 .PHONY: build
-build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css static_assets
+build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css virtual_env static_assets
 
 # remove all the assets
 .PHONY: clean
