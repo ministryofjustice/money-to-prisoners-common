@@ -29,7 +29,7 @@ TASK_OUTPUT_REDIRECTION := /dev/null
 endif
 
 # functions
-is_port_open = $(shell nc -z localhost $(1) >$(TASK_OUTPUT_REDIRECTION) 2>&1 && echo true)
+is_port_open = $(shell nc -z localhost $(1) >/dev/null 2>&1 && echo true)
 
 # paths of folders, tools and assets
 NODE_MODULES := node_modules
