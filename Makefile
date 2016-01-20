@@ -81,7 +81,7 @@ print_usage:
 # run the django dev server
 .PHONY: start
 start: build
-	@venv/bin/python manage.py runserver 0:$(port)
+	@venv/bin/python manage.py runserver 0:$(port) --verbosity=$(verbosity)
 
 # run the django dev server and recompile assets on change
 .PHONY: watch
@@ -125,7 +125,7 @@ virtual_env: venv/bin/pip
 .PHONY: static_assets
 static_assets:
 	@echo Collecting static Django assets
-	@venv/bin/python manage.py collectstatic --noinput >$(TASK_OUTPUT_REDIRECTION)
+	@venv/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 	@echo Collecting images
 	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
 
