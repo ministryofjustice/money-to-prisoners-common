@@ -57,7 +57,7 @@ IMAGE_FILES := $(shell find $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/imag
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
-WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON) $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
+WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON)/assets $(MTP_COMMON)/templates $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
 
 SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 
@@ -137,7 +137,11 @@ update: virtual_env
 
 # all the assets
 .PHONY: build
-build: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css virtual_env static_assets
+build: virtual_env assets
+
+# Just for browser live-reload
+.PHONY: assets
+assets: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
 
 # remove all the assets
 .PHONY: clean
@@ -150,7 +154,7 @@ clean:
 
 # load browser-sync
 .PHONY: internal_browser_sync
-internal_browser_sync:
+internal_browser_sync: assets
 	@$(NODE_BIN)/browser-sync start --host=localhost --port=$(browsersync_port) --proxy=localhost:$(port) --no-open --ui-port=$(browsersync_ui_port)
 
 # monitor assets and recompile them when they change
@@ -161,8 +165,8 @@ internal_watch:
 
 # monitor assets, recompile them and reload browsers when they change
 .PHONY: internal_build_and_reload
-internal_build_and_reload: build
-	${NODE_BIN}/browser-sync reload --port=$(browsersync_port)
+internal_build_and_reload: assets
+	@$(NODE_BIN)/browser-sync reload --port=$(browsersync_port)
 
 ######################
 #### FILE TARGETS ####
