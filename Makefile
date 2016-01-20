@@ -16,6 +16,7 @@ browsersync_ui_port ?= 3031
 webdriver ?= phantomjs
 django_settings ?= $(MTP_APP_PATH).settings
 command_script ?= make
+python_requirements ?= requirements/dev.txt
 verbosity ?= 1
 
 ifeq ($(command_script),run.sh)
@@ -118,7 +119,7 @@ endif
 .PHONY: virtual_env
 virtual_env: venv/bin/pip
 	@echo Updating python packages
-	@venv/bin/pip install -r requirements/dev.txt >$(TASK_OUTPUT_REDIRECTION)
+	@venv/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # collect django static assets
 .PHONY: static_assets
