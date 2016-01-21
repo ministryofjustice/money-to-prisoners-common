@@ -30,7 +30,7 @@ TASK_OUTPUT_REDIRECTION := /dev/null
 endif
 
 # functions
-is_port_open = $(shell nc -z localhost $(1) >/dev/null 2>&1 && echo true)
+is_port_open = $(shell nc -z $(1) $(2) >/dev/null 2>&1 && echo true)
 
 # paths of folders, tools and assets
 NODE_MODULES := node_modules
@@ -97,17 +97,16 @@ export
 serve:
 	@$(MAKE) -f $(MAKEFILE_LIST) --jobs 3 start internal_browser_sync internal_watch watch_callback=internal_build_and_reload
 
-# set an environment variable if api server is running
-.PHONY: api_running
-api_running:
-ifeq ($(call is_port_open,$(api_port)), true)
-export RUN_FUNCTIONAL_TESTS=true
-export WEBDRIVER=$(webdriver)
-endif
+# build and run using docker locally
+.PHONY: docker
+docker: .host_machine_ip
+	@docker-compose build
+	@echo "Starting MTP $(app) in Docker on http://$(HOST_MACHINE_IP):$(port)/ in test mode"
+	@docker-compose up
 
 # run python tests
 .PHONY: test
-test: api_running
+test: .api_running
 ifdef RUN_FUNCTIONAL_TESTS
 	@echo Running all tests
 else
@@ -167,6 +166,39 @@ internal_watch:
 .PHONY: internal_build_and_reload
 internal_build_and_reload: assets
 	@$(NODE_BIN)/browser-sync reload --port=$(browsersync_port)
+
+# set an environment variable if api server is running
+.PHONY: .api_running
+.api_running:
+ifeq ($(call is_port_open,localhost,$(api_port)), true)
+export RUN_FUNCTIONAL_TESTS=true
+export WEBDRIVER=$(webdriver)
+endif
+
+# determine host machine ip, could be running via docker machine
+.PHONY: .host_machine_ip
+.host_machine_ip: .docker_machine
+HOST_MACHINE_IP := $(strip $(shell docker-machine ip default 2>/dev/null))
+ifeq ($(HOST_MACHINE_IP),)
+HOST_MACHINE_IP := localhost
+else
+ifneq ($(call is_port_open,$(HOST_MACHINE_IP),$(api_port)), true)
+HOST_MACHINE_IP := localhost
+endif
+endif
+export HOST_MACHINE_IP
+
+# connect to docker-machine if necessary
+.PHONY: .docker_machine
+.docker_machine:
+ifneq ($(strip $(shell which docker-machine)),)
+	@[ `docker-machine status default` = "Running" ] && echo 'Machine "default" is already running.' || docker-machine start default
+	$(eval DOCKER_MACHINE_ENV := $(shell docker-machine env default))
+	$(eval export DOCKER_MACHINE_NAME := $(shell echo '$(DOCKER_MACHINE_ENV)' | sed 's/.*DOCKER_MACHINE_NAME="\([^"]*\)".*/\1/'))
+	$(eval export DOCKER_HOST := $(shell echo '$(DOCKER_MACHINE_ENV)' | sed 's/.*DOCKER_HOST="\([^"]*\)".*/\1/'))
+	$(eval export DOCKER_CERT_PATH := $(shell echo '$(DOCKER_MACHINE_ENV)' | sed 's/.*DOCKER_CERT_PATH="\([^"]*\)".*/\1/'))
+	$(eval export DOCKER_TLS_VERIFY := $(shell echo '$(DOCKER_MACHINE_ENV)' | sed 's/.*DOCKER_TLS_VERIFY="\([^"]*\)".*/\1/'))
+endif
 
 ######################
 #### FILE TARGETS ####
