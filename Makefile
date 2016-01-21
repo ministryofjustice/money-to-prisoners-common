@@ -15,13 +15,8 @@ browsersync_port ?= 3001
 browsersync_ui_port ?= 3031
 webdriver ?= phantomjs
 django_settings ?= $(MTP_APP_PATH).settings
-command_script ?= make
 python_requirements ?= requirements/dev.txt
 verbosity ?= 1
-
-ifeq ($(command_script),run.sh)
-override command_script := ./$(command_script)
-endif
 
 ifeq ($(shell [ $(verbosity) -gt 1 ] && echo true),true)
 TASK_OUTPUT_REDIRECTION := &1
@@ -68,11 +63,12 @@ SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 # usage instructions
 .PHONY: print_usage
 print_usage:
-	@echo "Usage: $(command_script) [start|watch|serve|update|build|clean|test]"
+	@echo "Usage: make [start|watch|serve|docker|update|build|clean|test]"
 	@echo " - start [port=<port>]: start the application server on http://localhost:$(port)/"
 	@echo " - watch [port=<port>]: start the application server and recompile the assets when they change"
 	@echo " - serve [port=<port>]: start the browser-sync server on http://localhost:$(browsersync_port)/"
 	@echo "   and recompile the assets when they change"
+	@echo " - docker: build and run using Docker locally"
 	@echo " - update: update node and python packages"
 	@echo " - build: compile all the assets"
 	@echo " - clean: delete compiled assets and node modules"
@@ -160,7 +156,7 @@ internal_browser_sync: assets
 .PHONY: internal_watch
 internal_watch:
 	@echo Monitoring changes
-	@fswatch -l 1 -o $(WATCHLIST) | xargs -n1 -I {} /usr/bin/env bash -c '$(command_script) $(watch_callback)'
+	@fswatch -l 1 -o $(WATCHLIST) | xargs -n1 -I {} $(MAKE) -f $(MAKEFILE_LIST) $(watch_callback)
 
 # monitor assets, recompile them and reload browsers when they change
 .PHONY: internal_build_and_reload
