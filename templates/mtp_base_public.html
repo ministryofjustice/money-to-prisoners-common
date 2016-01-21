@@ -1,0 +1,37 @@
+{% extends 'layouts/django/external.html' %}
+{% load i18n staticfiles %}
+
+{% block page_title %}{% trans "Money to Prisoners" %}{% endblock %}
+
+{% block proposition %}{% trans "Money to Prisoners" %}{% endblock %}
+
+{% block head %}
+  {{ block.super }}
+  {% if GOOGLE_ANALYTICS_ID %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', '{{ GOOGLE_ANALYTICS_ID }}', 'auto');
+      ga('send', 'pageview');
+    </script>
+  {% endif %}
+{% endblock %}
+
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static "stylesheets/app.css" %}" media="screen, handheld, projection, tv">
+  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}" media="print">
+{% endblock %}
+
+
+{% block global_subheader %}
+  {% block phase_banner %}
+    <div class="subheader-item phase-banner">
+      <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
+      {% url 'submit_ticket' as ticket_url %}
+      <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
+    </div>
+  {% endblock %}
+{% endblock %}

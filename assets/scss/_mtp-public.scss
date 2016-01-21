@@ -1,7 +1,6 @@
 @charset 'UTF-8';
 
 @import 'govuk';
-@import 'moj-internal';
 
 // App extensions
 @import '$breakpoints';
@@ -16,10 +15,7 @@
 @import 'elements/buttons';
 @import 'elements/forms';
 @import 'elements/table';
-@import 'elements/subheader';
 @import 'elements/content-header';
-@import 'elements/upload';
-@import 'elements/checkbox';
 
 
 // App elements
