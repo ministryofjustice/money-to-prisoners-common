@@ -20,8 +20,10 @@ verbosity ?= 1
 
 ifeq ($(shell [ $(verbosity) -gt 1 ] && echo true),true)
 TASK_OUTPUT_REDIRECTION := &1
+PYTHON_WARNINGS := "-W default"
 else
 TASK_OUTPUT_REDIRECTION := /dev/null
+PYTHON_WARNINGS := "-W once"
 endif
 
 # functions
@@ -77,7 +79,7 @@ print_usage:
 # run the django dev server
 .PHONY: start
 start: build
-	@venv/bin/python manage.py runserver 0:$(port) --verbosity=$(verbosity)
+	@venv/bin/python $(PYTHON_WARNINGS) manage.py runserver 0:$(port) --verbosity=$(verbosity)
 
 # run the django dev server and recompile assets on change
 .PHONY: watch
@@ -108,7 +110,7 @@ ifdef RUN_FUNCTIONAL_TESTS
 else
 	@echo Running non-functional tests only
 endif
-	@venv/bin/python manage.py test --verbosity=$(verbosity) $(tests)
+	@venv/bin/python $(PYTHON_WARNINGS) manage.py test --verbosity=$(verbosity) $(tests)
 
 # update python virtual environment
 .PHONY: virtual_env
