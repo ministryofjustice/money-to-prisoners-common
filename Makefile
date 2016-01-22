@@ -105,7 +105,7 @@ docker: .host_machine_ip
 # run uwsgi, this is the entry point for docker running remotely
 uwsgi: venv/bin/uwsgi migrate_db static_assets
 	@echo "Starting MTP $(app) in uWSGI"
-	@venv/bin/uwsgi --ini conf/uwsgi/api.ini
+	@venv/bin/uwsgi --ini conf/uwsgi/$(subst -,_,$(app)).ini
 
 # run python tests
 .PHONY: test
