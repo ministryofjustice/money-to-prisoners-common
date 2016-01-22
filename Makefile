@@ -102,6 +102,11 @@ docker: .host_machine_ip
 	@echo "Starting MTP $(app) in Docker on http://$(HOST_MACHINE_IP):$(port)/ in test mode"
 	@docker-compose up
 
+# run uwsgi, this is the entry point for docker running remotely
+uwsgi: venv/bin/uwsgi migrate_db static_assets
+	@echo "Starting MTP $(app) in uWSGI"
+	@venv/bin/uwsgi --ini conf/uwsgi/api.ini
+
 # run python tests
 .PHONY: test
 test: .api_running
@@ -118,6 +123,11 @@ virtual_env: venv/bin/pip
 	@echo Updating python packages
 	@venv/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
 	@venv/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
+
+# migrate the db
+.PHONY: migrate_db
+migrate_db: venv/bin/python
+	@venv/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # collect django static assets
 .PHONY: static_assets
@@ -221,6 +231,9 @@ $(NODE_MODULES):
 venv/bin/python, venv/bin/pip:
 	@echo Creating python virtual environment
 	@virtualenv -p python3 venv >$(TASK_OUTPUT_REDIRECTION)
+
+venv/bin/uwsgi: venv/bin/pip
+	@venv/bin/pip install uWSGI
 
 $(SELENIUM):
 	@echo Installing selenium binaries
