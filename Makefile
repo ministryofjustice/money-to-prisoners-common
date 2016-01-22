@@ -116,6 +116,7 @@ endif
 .PHONY: virtual_env
 virtual_env: venv/bin/pip
 	@echo Updating python packages
+	@venv/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
 	@venv/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # collect django static assets
@@ -217,10 +218,9 @@ $(NODE_MODULES):
 	@npm install >$(TASK_OUTPUT_REDIRECTION)
 	@echo "node_modules installed. Don't forget to link to local modules as needed (eg npm link money-to-prisoners-common)"
 
-venv/bin/pip:
+venv/bin/python, venv/bin/pip:
 	@echo Creating python virtual environment
 	@virtualenv -p python3 venv >$(TASK_OUTPUT_REDIRECTION)
-	@venv/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
 
 $(SELENIUM):
 	@echo Installing selenium binaries
