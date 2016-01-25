@@ -103,7 +103,7 @@ docker: .host_machine_ip
 	@docker-compose up
 
 # run uwsgi, this is the entry point for docker running remotely
-uwsgi: venv/bin/uwsgi migrate_db static_assets
+uwsgi: venv/bin/uwsgi static_assets
 	@echo "Starting MTP $(app) in uWSGI"
 	@venv/bin/uwsgi --ini conf/uwsgi/$(subst -,_,$(app)).ini
 
@@ -125,6 +125,7 @@ virtual_env: venv/bin/pip
 	@venv/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # migrate the db
+# NB: client apps do not have databases
 .PHONY: migrate_db
 migrate_db: venv/bin/python
 	@venv/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
