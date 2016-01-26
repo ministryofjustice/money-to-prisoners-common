@@ -146,7 +146,7 @@ update: virtual_env
 
 # all the assets
 .PHONY: build
-build: virtual_env assets
+build: virtual_env assets static_assets
 
 # Just for browser live-reload
 .PHONY: assets
