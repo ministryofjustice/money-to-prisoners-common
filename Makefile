@@ -142,6 +142,7 @@ static_assets:
 .PHONY: update
 update: virtual_env
 	@echo Updating node modules
+	@npm set progress=false
 	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 
 # all the assets
@@ -226,6 +227,7 @@ $(CSS_PATH)/%.css: $(SASS_FILES)
 
 $(NODE_MODULES):
 	@echo Installing node modules
+	@npm set progress=false
 	@npm install >$(TASK_OUTPUT_REDIRECTION)
 	@echo "node_modules installed. Don't forget to link to local modules as needed (eg npm link money-to-prisoners-common)"
 
