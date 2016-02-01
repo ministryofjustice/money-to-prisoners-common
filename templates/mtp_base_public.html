@@ -31,7 +31,7 @@
     <div class="subheader-item phase-banner">
       <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
       {% url 'submit_ticket' as ticket_url %}
-      <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
+      <div class="phase-banner-message">{% blocktrans %}This is a new service - your <a href="{{ ticket_url }}">feedback</a> will help us to improve it.{% endblocktrans %}</div>
     </div>
   {% endblock %}
 {% endblock %}
