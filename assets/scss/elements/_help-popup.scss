@@ -12,29 +12,29 @@
         div {
           width: 30px;
           height: 1em;
-          margin-right: 10px;
           background-image: url(../images/arrows.png);
           background-repeat: no-repeat;
-          background-position: -4px;
+          background-position: -5px 3px;
           display: inline-block;
+          vertical-align: middle;
 
           @media only screen and (-webkit-min-device-pixel-ratio: 2),
             only screen and (min-device-pixel-ratio: 2) {
             background-image: url(../images/arrows@2x.png);
             background-size: 53px 15px;
-            background-position: 0;
+            background-position: -4px;
           }
         }
       }
 
       .help-box-contents {
         border-left: 5px solid $border-colour;
-        padding: .2em .2em .2em 2em;
+        padding: .2em;
         ul {
           margin: 0;
           list-style-type: disc;
           li {
-            padding: 0 0 .3em 1em;
+            padding: 0 0 .3em 1.2em;
           }
         }
         p {
@@ -44,12 +44,12 @@
 
       &.help-box-hidden {
         h3 div {
-          background-position: -40px;
+          background-position: -40px 1px;
           @media only screen and (-webkit-min-device-pixel-ratio: 2),
             only screen and (min-device-pixel-ratio: 2) {
             background-image: url(../images/arrows@2x.png);
-            background-size: 50px 15px;
-            background-position: -28px;
+            background-size: 51px 15px;
+            background-position: -32px;
           }
         }
         .help-box-contents {
