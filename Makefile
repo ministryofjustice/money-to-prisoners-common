@@ -133,10 +133,10 @@ migrate_db: venv/bin/python
 # collect django static assets
 .PHONY: static_assets
 static_assets:
-	@echo Collecting static Django assets
-	@venv/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 	@echo Collecting images
 	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
+	@echo Collecting static Django assets
+	@venv/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # update node and python packages
 .PHONY: update
