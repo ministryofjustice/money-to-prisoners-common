@@ -156,7 +156,7 @@ assets: $(NODE_MODULES) $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)
 # remove all the assets
 .PHONY: clean
 clean:
-	@rm -rf $(ASSETS_TARGET) $(NODE_MODULES) static
+	@git clean -dfX
 
 ##########################
 #### INTERNAL RECIPES ####
