@@ -30,6 +30,7 @@
     "js-cookie": "~2.0.3",
     "jshint": "^2.9.1",
     "mojular-moj-elements": "mojular/moj-elements#0.3.0",
+    "node-sass": "^3.4.2",
     "q": "^1.4.1",
     "request": "^2.63.0",
     "require-dir": "^0.3.0",
