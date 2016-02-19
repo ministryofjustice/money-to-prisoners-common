@@ -19,7 +19,7 @@ exports.analytics = {
 
   send: function() {
     if (this._gaExists()) {
-      [].unshift.call(arguments, "send");
+      [].unshift.call(arguments, 'send');
       ga.apply(window, arguments);
     }
   },
