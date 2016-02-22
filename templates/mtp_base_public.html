@@ -35,3 +35,10 @@
     </div>
   {% endblock %}
 {% endblock %}
+
+
+{% block support_links_items %}
+  {% for support_link in support_links %}
+    <li><a href="{{ support_link.url }}">{{ support_link.title }}</a></li>
+  {% endfor %}
+{% endblock %}
