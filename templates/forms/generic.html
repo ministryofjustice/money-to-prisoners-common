@@ -13,21 +13,21 @@
             <ol class="error-summary-list">
               {% for field, errors in form.errors.items %}
                 {% with field_obj=form|field_from_name:field %}
-                    {% if field_obj %}
-                      <a href="#{{ field_obj.auto_id }}-label">
-                        {{ field_obj.label }} –
-                    {% endif %}
                     {% for error in errors %}
-                      {% if not forloop.first  %}
-                        <br/>
+                      <li>
+                      {% if field_obj %}
+                      <a href="#{{ field_obj.auto_id }}-label">
+                        {% if forloop.first  %}
+                        {{ field_obj.label }} –
+                        {% endif %}
                       {% endif %}
                       {{ error }}
-                    {% endfor %}
-                    {% if field_obj %}
+                      {% if field_obj %}
                       </a>
-                    {% endif %}
+                      {% endif %}
+                      </li>
+                    {% endfor %}
                 {% endwith %}
-                <br/>
               {% endfor %}
             </ol>
           </div>
