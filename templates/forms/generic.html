@@ -19,7 +19,7 @@
                     {% endif %}
                     {% for error in errors %}
                       {% if not forloop.first  %}
-                        {% trans 'and' %}
+                        <br/>
                       {% endif %}
                       {{ error }}
                     {% endfor %}
@@ -27,6 +27,7 @@
                       </a>
                     {% endif %}
                 {% endwith %}
+                <br/>
               {% endfor %}
             </ol>
           </div>
