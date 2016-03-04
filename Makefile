@@ -50,7 +50,7 @@ SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-
 
 SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss)
 
-IMAGE_FILES := $(shell find $(MTP_COMMON)/assets/images/* $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets/images/* -type f 2>/dev/null)
+IMAGE_FILES := $(shell find $(MTP_COMMON)/assets/static/images/* $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets-src/static/images/* -type f 2>/dev/null)
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
@@ -133,9 +133,10 @@ migrate_db: venv/bin/python
 # collect django static assets
 .PHONY: static_assets
 static_assets:
-	@echo Collecting images
+	@echo Collecting static assets
 	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
-	@echo Collecting static Django assets
+	@rsync -ru --delete $(MTP_COMMON)/assets/static/stylesheets/* $(MTP_APP_PATH)/assets/stylesheets/
+	@rsync -ru --delete $(MTP_COMMON)/assets/static/javascripts/* $(MTP_APP_PATH)/assets/scripts/
 	@venv/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # update node and python packages
