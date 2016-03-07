@@ -2,7 +2,11 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{% trans 'Feedback submitted' %}</h2>
+<header class="ContentHeader">
+  <a href="/" class="ContentHeader-back">{% trans 'Home' %}</a>
+  <h1>{% trans 'Your feedback' %}</h1>
+</header>
+
 <div class="container">
   <div class="grid-row">
     <div class="column-two-thirds">
