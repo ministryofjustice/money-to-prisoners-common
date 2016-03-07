@@ -12,9 +12,7 @@
     <div class="column-two-thirds">
       <p>{% trans 'Thank you for submitting feedback about the service.' %}</p>
       {% if return_to %}
-      {% blocktrans %}
-      <p>To return to your workflow, <a href="{{ return_to }}">click here</a>.</p>
-      {% endblocktrans %}
+      <p><a href="{{ return_to }}">{% trans 'Return to your workflow.' %}</a></p>
       {% endif %}
     </div>
   </div>
