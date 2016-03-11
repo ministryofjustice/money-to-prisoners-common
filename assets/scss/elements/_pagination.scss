@@ -1,0 +1,12 @@
+$component: Pagination;
+
+.#{$component} {
+  padding-left: 0;
+  li {
+    display: inline;
+    + li {
+      padding-left: .5em;
+    }
+  }
+
+}
