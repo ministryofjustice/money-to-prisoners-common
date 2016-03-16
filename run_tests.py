@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import argparse
-import os
 import sys
 
 import django
@@ -43,11 +42,6 @@ def run_tests():
 
     if not settings.configured:
         settings.configure(**DEFAULT_SETTINGS)
-
-    # root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # if root_path not in sys.path:
-    #     sys.path.insert(0, root_path)
-
     django.setup()
 
     failures = DiscoverRunner(verbosity=args.verbosity, interactive=args.interactive,
