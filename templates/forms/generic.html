@@ -1,61 +1,62 @@
-{% load i18n moj_utils %}
+{% load i18n %}
+{% load mtp_utils %}
 
-  <h2>{{ form_title }}</h2>
+<h2>{{ form_title }}</h2>
 
-  <div class="container">
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        {% if form.errors %}
-          <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
-            <h1 class="error-summary-heading heading-medium" id="error-summary-heading">{% trans 'There was a problem submitting the form' %}</h1>
-            <p>{% trans 'Because of the following problems:' %}</p>
+<div class="container">
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {% if form.errors %}
+        <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
+          <h1 class="error-summary-heading heading-medium" id="error-summary-heading">{% trans 'There was a problem submitting the form' %}</h1>
+          <p>{% trans 'Because of the following problems:' %}</p>
 
-            <ol class="error-summary-list">
-              {% for field, errors in form.errors.items %}
-                {% with field_obj=form|field_from_name:field %}
-                    {% for error in errors %}
-                      <li>
-                      {% if field_obj %}
-                      <a href="#{{ field_obj.auto_id }}-label">
-                        {% if forloop.first  %}
-                        {{ field_obj.label }} –
-                        {% endif %}
+          <ol class="error-summary-list">
+            {% for field, errors in form.errors.items %}
+              {% with field_obj=form|field_from_name:field %}
+                  {% for error in errors %}
+                    <li>
+                    {% if field_obj %}
+                    <a href="#{{ field_obj.auto_id }}-label">
+                      {% if forloop.first  %}
+                      {{ field_obj.label }} –
                       {% endif %}
-                      {{ error }}
-                      {% if field_obj %}
-                      </a>
-                      {% endif %}
-                      </li>
-                    {% endfor %}
-                {% endwith %}
+                    {% endif %}
+                    {{ error }}
+                    {% if field_obj %}
+                    </a>
+                    {% endif %}
+                    </li>
+                  {% endfor %}
+              {% endwith %}
+            {% endfor %}
+          </ol>
+        </div>
+      {% endif %}
+
+      <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}">
+        {% csrf_token %}
+
+        {% for field in form.hidden_fields %}
+          {{ field }}
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+          <div class="form-group{% if field.errors %} error{% endif %}">
+            <label for="{{ field.id_for_label }}" id="{{ field.auto_id }}-label" class="form-label">
+              {{ field.label }}
+              {% for error in field.errors %}
+                <span class="error-message">{{ error }}</span>
               {% endfor %}
-            </ol>
+            </label>
+            {{ field }}
           </div>
-        {% endif %}
+        {% endfor %}
 
-        <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}">
-          {% csrf_token %}
-
-          {% for field in form.hidden_fields %}
-          	{{ field }}
-          {% endfor %}
-
-          {% for field in form.visible_fields %}
-            <div class="form-group{% if field.errors %} error{% endif %}">
-              <label for="{{ field.id_for_label }}" id="{{ field.auto_id }}-label" class="form-label">
-                {{ field.label }}
-                {% for error in field.errors %}
-                  <span class="error-message">{{ error }}</span>
-                {% endfor %}
-              </label>
-              {{ field }}
-            </div>
-          {% endfor %}
-
-          <div class="form-group">
-            <button type="submit" class="button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
-          </div>
-        </form>
-      </div>
+        <div class="form-group">
+          <button type="submit" class="button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
