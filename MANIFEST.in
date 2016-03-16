@@ -1,0 +1,4 @@
+include LICENSE
+include README.md
+recursive-include mtp_utils/static *
+recursive-include mtp_utils/templates *
