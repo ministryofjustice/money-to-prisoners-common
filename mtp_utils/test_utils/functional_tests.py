@@ -20,6 +20,7 @@ class FunctionalTestCase(LiveServerTestCase):
     Used for integration/functional testing of MTP client applications
     """
     auto_load_test_data = False
+    required_webdriver = None
 
     @classmethod
     def _databases_names(cls, include_mirrors=True):
@@ -33,6 +34,8 @@ class FunctionalTestCase(LiveServerTestCase):
             self.load_test_data()
 
         web_driver = os.environ.get('WEBDRIVER', 'phantomjs')
+        if self.required_webdriver and web_driver != self.required_webdriver:
+            raise unittest.SkipTest('%s webdriver required for this test' % self.required_webdriver)
         if web_driver == 'firefox':
             fp = webdriver.FirefoxProfile()
             fp.set_preference('browser.startup.homepage', 'about:blank')
@@ -47,12 +50,14 @@ class FunctionalTestCase(LiveServerTestCase):
                 self.driver = webdriver.Chrome(executable_path=next(paths))
             except StopIteration:
                 self.fail('Cannot find Chrome driver')
-        else:
+        elif web_driver == 'phantomjs':
             path = './node_modules/phantomjs/lib/phantom/bin/phantomjs'
             self.driver = webdriver.PhantomJS(executable_path=path)
+        else:
+            self.fail('Unknown webdriver %s' % web_driver)
 
-        self.driver.set_window_size(1000, 1000)
         self.driver.set_window_position(0, 0)
+        self.driver.set_window_size(1000, 1000)
 
     def tearDown(self):
         self.driver.quit()
