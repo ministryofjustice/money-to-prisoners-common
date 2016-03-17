@@ -29,6 +29,16 @@ class FunctionalTestCase(LiveServerTestCase):
             return super()._databases_names(include_mirrors=include_mirrors)
         return []
 
+    @classmethod
+    def setUpClass(cls):
+        remote_url = os.environ.get('DJANGO_TEST_REMOTE_INTEGRATION_URL', None)
+        if remote_url:
+            # do not start separate LiveServerThread
+            super(LiveServerTestCase, cls).setUpClass()
+            cls.live_server_url = remote_url
+        else:
+            super(FunctionalTestCase, cls).setUpClass()
+
     def setUp(self):
         if self.auto_load_test_data:
             self.load_test_data()
@@ -71,7 +81,7 @@ class FunctionalTestCase(LiveServerTestCase):
             with socket.socket() as sock:
                 sock.connect((
                     urlparse(settings.API_URL).netloc.split(':')[0],
-                    os.environ.get('CONTROLLER_PORT', 8800)
+                    int(os.environ.get('CONTROLLER_PORT', 8800))
                 ))
                 sock.sendall(b'load_test_data')
                 response = sock.recv(1024).strip()
