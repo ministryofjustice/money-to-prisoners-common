@@ -1,14 +1,19 @@
+import collections
+import functools
 import glob
 import logging
 import os
 import socket
+import types
 import unittest
 from urllib.parse import urlparse, urljoin
 
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.command import Command
 from selenium.webdriver.remote.webelement import WebElement
 
 logger = logging.getLogger('mtp')
@@ -21,6 +26,9 @@ class FunctionalTestCase(LiveServerTestCase):
     """
     auto_load_test_data = False
     required_webdriver = None
+    test_accessibility = False
+    accessibility_scope_selector = None
+    accessibility_standard = None
 
     @classmethod
     def _databases_names(cls, include_mirrors=True):
@@ -54,7 +62,7 @@ class FunctionalTestCase(LiveServerTestCase):
             self.driver = webdriver.Firefox(firefox_profile=fp)
         elif web_driver == 'chrome':
             paths = glob.glob('./node_modules/selenium-standalone/.selenium/chromedriver/*-chromedriver')
-            paths = filter(lambda path: os.path.isfile(path) and os.access(path, os.X_OK),
+            paths = filter(lambda _path: os.path.isfile(_path) and os.access(_path, os.X_OK),
                            paths)
             try:
                 self.driver = webdriver.Chrome(executable_path=next(paths))
@@ -65,6 +73,9 @@ class FunctionalTestCase(LiveServerTestCase):
             self.driver = webdriver.PhantomJS(executable_path=path)
         else:
             self.fail('Unknown webdriver %s' % web_driver)
+
+        if self.test_accessibility:
+            self.setup_accessibility_run()
 
         self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1000, 1000)
@@ -89,6 +100,67 @@ class FunctionalTestCase(LiveServerTestCase):
                 logger.error('Test data not reloaded!')
         except OSError:
             logger.exception('Error communicating with test server controller socket')
+
+    def enable_accessibility(self):
+        """
+        Turns on accessibility assertions for functional test methods.
+        This method runs once for a test case instance.
+        """
+        self.test_accessibility = True
+
+        def decorate_test(func):
+            @functools.wraps(func)
+            def decorated_test(test_case_self, *args, **kwargs):
+                current_standard = AccessibilityTestingMiddleware.standard
+                override_standard = getattr(func, '__accessibility_standard', self.accessibility_standard)
+                if override_standard:
+                    AccessibilityTestingMiddleware.standard = override_standard
+                result = func(*args, **kwargs)
+                test_case_self.assertAccessible()
+                if override_standard:
+                    AccessibilityTestingMiddleware.standard = current_standard
+                return result
+
+            return decorated_test
+
+        for attr in dir(self):
+            if not attr.startswith('test_'):
+                continue
+            test_method = getattr(self, attr)
+            if not callable(test_method) or getattr(test_method, '__disable_accessibility', False):
+                continue
+            setattr(self, attr, types.MethodType(decorate_test(test_method), self))
+
+    def setup_accessibility_run(self):
+        """
+        Turns on accessibility testing for each test run enabling web driver to run additional javascript.
+        NB: currently, only some explicit calls to the web driver (e.g. get) will cause accessibility checks,
+            so call self.assertAccessible() at strategic locations to force accessibility testing
+        """
+        self.audits = collections.OrderedDict()
+
+        execute_func = self.driver.execute
+        navigation_commands = {
+            Command.GET,
+            Command.GO_BACK, Command.GO_FORWARD, Command.REFRESH,
+            Command.CLICK_ELEMENT, Command.SUBMIT_ELEMENT,
+        }
+        key_commands = {Command.SEND_KEYS_TO_ELEMENT, Command.SEND_KEYS_TO_ACTIVE_ELEMENT}
+        submit_keys = {Keys.RETURN, Keys.ENTER}
+
+        @functools.wraps(execute_func)
+        def wrapped_execute(web_driver_self, driver_command, params=None):
+            result = execute_func(driver_command, params=params)
+            if driver_command in navigation_commands or \
+                    driver_command in key_commands and any(key in params.get('value', []) for key in submit_keys):
+                url = web_driver_self.current_url
+                if url not in self.audits:
+                    script = 'return getAccessibilityAudit("%s");' % (self.accessibility_scope_selector or '')
+                    audit = web_driver_self.execute_script(script)
+                    self.audits[url] = audit
+            return result
+
+        self.driver.execute = types.MethodType(wrapped_execute, self.driver)
 
     # Assertions
 
@@ -133,6 +205,49 @@ class FunctionalTestCase(LiveServerTestCase):
         """
         return self.assertFalse(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
                                 msg=msg)
+
+    def assertAccessible(self):
+        """
+        Checks accessibility audit
+        """
+
+        def htmlcs_code(code):
+            try:
+                parts = code.split('.')
+                standard = parts[0]
+                criterion = '.'.join(parts[3].split('_')[:3])
+                techniques = parts[4].replace(',', ', ')
+                return '%s §%s %s' % (standard, criterion, techniques)
+            except IndexError:
+                return code
+
+        messages = []
+        for url, audit in self.audits.items():
+            axs_audit = audit['axs']
+            htmlcs_audit = audit['htmlcs']
+            issues = len(axs_audit) + len(htmlcs_audit)
+            if not issues:
+                continue
+
+            message = 'Page at %s has %d accessibility issue%s' % (
+                url, issues, '' if issues == 1 else 's',
+            )
+            if axs_audit:
+                message += '\n\nGoogle Accessibility Tools:'
+                for issue in axs_audit:
+                    message += '\n- %(severity)s: %(message)s (%(code)s)' % issue
+                    for element in issue.get('elements', []):
+                        message += '\n  %s' % element
+            if htmlcs_audit:
+                message += '\n\nHTML Code Sniffer:'
+                for issue in htmlcs_audit:
+                    issue['code'] = htmlcs_code(issue['code'])
+                    message += '\n- %(message)s (%(code)s)' \
+                               '\n  %(element)s' % issue
+
+            messages.append(message)
+        if messages:
+            self.fail('\n\n'.join(messages))
 
     # Helper methods
 
@@ -196,3 +311,59 @@ class FunctionalTestCase(LiveServerTestCase):
         """
         for specifier, text in data.items():
             self.type_in(specifier, text)
+
+
+def enable_accessibility(suite):
+    """
+    Wraps tests in a suite such that subclasses of FunctionalTestCase
+    perform accessibility testing each time get is called on the web driver
+    :param suite: the unittest.TestSuite to wrap
+    """
+    for test_case in suite:
+        if isinstance(test_case, unittest.TestSuite):
+            enable_accessibility(test_case)
+        elif isinstance(test_case, FunctionalTestCase):
+            test_case.enable_accessibility()
+
+
+def disable_accessibility(method):
+    """
+    Remove automatic accessibility assertion at the end of the method
+    :param method: test case method
+    """
+    method.__disable_accessibility = True
+    return method
+
+
+def override_accessibility_standard(standard):
+    """
+    Overrides the default accessibility testing standard
+    :param standard: a standard supported by AccessibilityTestingMiddleware
+    """
+
+    def inner(method):
+        method.__accessibility_standard = standard
+        return method
+
+    return inner
+
+
+class AccessibilityTestingMiddleware:
+    """
+    View processing middleware to insert accessibility testing code into the HTML
+    """
+    standard = 'WCAG2AA'  # WCAG2A, WCAG2AA, WCAG2AAA, Section508
+
+    @classmethod
+    def process_response(cls, _, response):
+        if response and response.status_code == 200:
+            content = response.content
+            a11y_template = render_to_string('mtp_utils/a11y.html', {
+                'include_warnings': False,
+                'standard': cls.standard
+            })
+            a11y_template = a11y_template.encode(response.charset)
+            content = content.replace(b'</body>', a11y_template + b'\n</body>', 1)
+            response.content = content
+
+        return response
