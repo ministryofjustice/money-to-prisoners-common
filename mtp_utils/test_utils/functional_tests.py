@@ -3,7 +3,7 @@ import logging
 import os
 import socket
 import unittest
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 from django.conf import settings
 from django.test import LiveServerTestCase
@@ -92,23 +92,47 @@ class FunctionalTestCase(LiveServerTestCase):
 
     # Assertions
 
-    def assertInSource(self, search):  # noqa
+    def assertInSource(self, search, msg=None):  # noqa
         """
         Searches the page source for text or a regular expression
         """
         if hasattr(search, 'search'):
-            self.assertTrue(search.search(self.driver.page_source))
+            self.assertTrue(search.search(self.driver.page_source), msg=msg)
         else:
-            self.assertIn(search, self.driver.page_source)
+            self.assertIn(search, self.driver.page_source, msg=msg)
 
-    def assertNotInSource(self, search):  # noqa
+    def assertNotInSource(self, search, msg=None):  # noqa
         """
         Searches the page source to ensure it doesn't contain text or a regular expression
         """
         if hasattr(search, 'search'):
-            self.assertFalse(search.search(self.driver.page_source))
+            self.assertFalse(search.search(self.driver.page_source), msg=msg)
         else:
-            self.assertNotIn(search, self.driver.page_source)
+            self.assertNotIn(search, self.driver.page_source, msg=msg)
+
+    def _current_url_matches(self, expected_url, ignore_query_string=True):
+        current_url = self.driver.current_url
+        if ignore_query_string:
+            current_url = current_url.split('?')[0]
+        if hasattr(expected_url, 'search'):
+            return bool(expected_url.search(current_url))
+        else:
+            expected_url = urljoin(self.live_server_url, expected_url)
+            return expected_url == current_url
+
+    def assertCurrentUrl(self, expected_url, ignore_query_string=True, msg=None):  # noqa
+        """
+        Checks the current page url matches expected url or regular expression
+        """
+        return self.assertTrue(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
+                               msg=msg)
+
+    def assertNotCurrentUrl(self, expected_url, ignore_query_string=True, msg=None):  # noqa
+        """
+        Checks the current page url does not match expected url or regular expression
+        """
+        return self.assertFalse(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
+                                msg=msg)
 
     # Helper methods
 
