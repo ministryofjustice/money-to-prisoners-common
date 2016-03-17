@@ -8,16 +8,23 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 VERSION = importlib.import_module('mtp_utils').VERSION
 
-with open('README.md') as readme:
+with open('README.rst') as readme:
     README = readme.read()
 
 install_requires = [
     'Django>=1.9,<1.10',
 ]
 extras_require = {
-    'sentry': ['raven>=5.11'],
+    'monitoring': [
+        'raven>=5.11',
+    ],
+    'testing': [
+        'flake8>=2.5',
+        'pep8-naming>=0.3',
+        'responses>=0.5',
+        'selenium>=2.53',
+    ],
 }
-tests_require = []
 
 setup(
     name='money-to-prisoners-utils',
@@ -31,7 +38,7 @@ setup(
     long_description=README,
     classifiers=[
         'Framework :: Django',
-        'Intended Audience :: MoJ Developers',
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -39,6 +46,6 @@ setup(
     ],
     install_requires=install_requires,
     extras_require=extras_require,
-    tests_require=tests_require,
+    tests_require=extras_require['testing'],
     test_suite='run_tests.run_tests',
 )
