@@ -14,6 +14,7 @@ port ?= 8001
 browsersync_port ?= 3001
 browsersync_ui_port ?= 3031
 webdriver ?= phantomjs
+accessibility_tests ?= false
 django_settings ?= $(MTP_APP_PATH).settings
 python_requirements ?= requirements/dev.txt
 verbosity ?= 1
@@ -66,8 +67,8 @@ SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 #################
 
 # usage instructions
-.PHONY: print_usage
-print_usage:
+.PHONY: help
+help:
 	@echo "Usage: make [start|watch|serve|docker|update|build|clean|test]"
 	@echo " - start [port=<port>]: start the application server on http://localhost:$(port)/"
 	@echo " - watch [port=<port>]: start the application server and recompile the assets when they change"
@@ -78,6 +79,10 @@ print_usage:
 	@echo " - build: compile all the assets"
 	@echo " - clean: delete compiled assets and node modules"
 	@echo " - test [tests=<tests>]: run the python test suite"
+	@echo "        [webdriver=<phantomjs|firefox|chrome>] can be added to run functional tests in a specific driver"
+	@echo "        [accessibility_tests=true] can be added to run accessibility tests"
+	@echo ""
+	@echo "[verbosity=<0|1|2|3>] can be added to any task"
 
 # run the django dev server
 .PHONY: start
@@ -185,9 +190,12 @@ internal_build_and_reload: assets
 # set an environment variable if api server is running
 .PHONY: .api_running
 .api_running:
-ifeq ($(call is_port_open,localhost,$(api_port)), true)
+ifeq ($(call is_port_open,localhost,$(api_port)),true)
 export RUN_FUNCTIONAL_TESTS=true
 export WEBDRIVER=$(webdriver)
+ifeq ($(accessibility_tests),true)
+export RUN_ACCESSIBILITY_TESTS=true
+endif
 endif
 
 # determine host machine ip, could be running via docker machine
