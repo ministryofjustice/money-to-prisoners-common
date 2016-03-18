@@ -112,7 +112,7 @@ uwsgi: venv/bin/uwsgi static_assets
 
 # run python tests
 .PHONY: test
-test: .api_running build
+test: $(SELENIUM) .api_running build
 ifdef RUN_FUNCTIONAL_TESTS
 	@echo Running all tests
 else
