@@ -196,6 +196,8 @@ class FunctionalTestCase(LiveServerTestCase):
         """
         Checks the current page url matches expected url or regular expression
         """
+        msg = (msg if msg is not None
+               else "Expected URL '%s' does not match actual URL '%s'" % (expected_url, self.driver.current_url))
         return self.assertTrue(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
                                msg=msg)
 
@@ -203,6 +205,8 @@ class FunctionalTestCase(LiveServerTestCase):
         """
         Checks the current page url does not match expected url or regular expression
         """
+        msg = (msg if msg is not None
+               else "Expected URL '%s' matches actual URL '%s'" % (expected_url, self.driver.current_url))
         return self.assertFalse(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
                                 msg=msg)
 
