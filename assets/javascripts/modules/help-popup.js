@@ -9,7 +9,9 @@ exports.HelpPopup = {
     var $helpTitle = $('.help-box h3');
     if ($helpBoxes.length) {
       $helpBoxes.addClass('help-box-popup help-box-hidden');
-      $helpTitle.on('click', this.toggle);
+      $helpTitle
+        .attr('aria-expanded', 'false')
+        .on('click', this.toggle);
     }
   },
 
