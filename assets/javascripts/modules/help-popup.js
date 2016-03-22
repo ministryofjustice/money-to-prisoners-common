@@ -14,11 +14,15 @@ exports.HelpPopup = {
   },
 
   toggle: function(event) {
+    var $helpTitle = $(event.target);
     var $helpBox = $(event.target).closest('div.help-box');
     var $contents = $helpBox.find('.help-box-contents');
     event.preventDefault();
     $contents.toggle();
     $helpBox.toggleClass('help-box-hidden');
+    $helpTitle.attr(
+      'aria-expanded',
+      $helpTitle.attr('aria-expanded') === 'true' ? 'false' : 'true');
     return false;
   }
 };
