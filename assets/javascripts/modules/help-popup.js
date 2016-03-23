@@ -6,9 +6,9 @@ exports.HelpPopup = {
 
   init: function () {
     var $helpBoxes = $('.help-box');
-    var $helpTitles = $('.help-box h3');
+    var $helpTitles = $('.help-box-title');
     if ($helpBoxes.length) {
-      $helpBoxes.addClass('help-box-popup help-box-hidden');
+      $helpBoxes.addClass('help-box-hidden');
       $helpTitles
         .attr('aria-expanded', 'false')
         .on('click', this.toggle);
@@ -16,7 +16,7 @@ exports.HelpPopup = {
   },
 
   toggle: function(event) {
-    var $helpTitle = $(event.target).parent('h3');
+    var $helpTitle = $(event.target).parent('.help-box-title');
     var $helpBox = $(event.target).closest('div.help-box');
     var $contents = $helpBox.find('.help-box-contents');
     event.preventDefault();
