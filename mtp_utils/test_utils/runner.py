@@ -22,7 +22,7 @@ class TestRunner(DiscoverRunner):
             enable_accessibility(suite)
 
         if self.verbosity < 2:
-            logger = logging.getLogger('mtp')
-            logger.setLevel(logging.ERROR)
+            logging.getLogger().setLevel(logging.ERROR)
+            logging.getLogger('mtp').setLevel(logging.ERROR)
 
         return super().run_suite(suite, **kwargs)
