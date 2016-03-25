@@ -1,4 +1,7 @@
 include LICENSE
 include README.rst
-recursive-include mtp_utils/static *
-recursive-include mtp_utils/templates *
+recursive-include mtp_utils/static *.css
+recursive-include mtp_utils/static *.js
+recursive-include mtp_utils/static *.jpg
+recursive-include mtp_utils/static *.png
+recursive-include mtp_utils/templates *.html
