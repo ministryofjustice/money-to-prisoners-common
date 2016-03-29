@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<header class="ContentHeader">
+  <h2>Success</h2>
+</header>
+
+<p>{{ username }} has been deleted.</p>
+
+<a href="{% url "list-users" %}">Return to user management</a>
+{% endblock %}
