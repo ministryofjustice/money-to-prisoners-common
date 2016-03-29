@@ -1,3 +1,3 @@
 include LICENSE
 include README.rst
-recursive-include mtp_user_admin/templates *
+recursive-include mtp_user_admin/templates *.html
