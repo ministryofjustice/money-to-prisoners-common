@@ -210,7 +210,7 @@ class FunctionalTestCase(LiveServerTestCase):
         return self.assertFalse(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
                                 msg=msg)
 
-    def assertAccessible(self):
+    def assertAccessible(self):  # noqa
         """
         Checks accessibility audit
         """
