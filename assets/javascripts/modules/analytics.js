@@ -25,7 +25,7 @@ exports.analytics = {
   },
 
   _sendFromEvent: function(event) {
-    var analyticsParams = $(event.target).data(this.attrName).split(',');
+    var analyticsParams = $(event.currentTarget).data(this.attrName).split(',');
     this.send.apply(this, analyticsParams);
     return true;
   },
