@@ -4,12 +4,15 @@ from django.shortcuts import render
 from slumber.exceptions import HttpNotFoundError
 
 from moj_auth import api_client
+from mtp_utils.api import retrieve_all_pages
 
 
 @login_required
 @permission_required('auth.change_user', raise_exception=True)
 def list_users(request):
-    users = api_client.get_connection(request).users.get()['results']
+    users = retrieve_all_pages(
+        api_client.get_connection(request).users.get
+    )
     return render(request, 'mtp_user_admin/list.html', {'users': users})
 
 
