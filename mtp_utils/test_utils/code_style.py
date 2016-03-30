@@ -5,16 +5,28 @@ import sys
 import unittest
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from flake8.engine import get_style_guide
 
 
 class CodeStyleTestCase(unittest.TestCase):
-    def test_app_python_code_style(self):
-        if hasattr(settings, 'BASE_DIR'):
+    @classmethod
+    def get_root_path(cls):
+        if hasattr(cls, 'root_path'):
+            return cls.root_path
+        try:
             root_path = os.path.join(settings.BASE_DIR, os.path.pardir)
-        else:
-            root_path = os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)
-        root_path = os.path.abspath(root_path)
+            return os.path.abspath(root_path)
+        except (ImproperlyConfigured, AttributeError):
+            root_path = os.path.dirname(__file__)
+            for _ in range(10):
+                root_path = os.path.join(root_path, os.path.pardir)
+                if os.path.isfile(os.path.join(root_path, 'setup.cfg')):
+                    return os.path.abspath(root_path)
+        raise FileNotFoundError('Cannot find setup.cfg')
+
+    def test_app_python_code_style(self):
+        root_path = self.get_root_path()
         flake8_style = get_style_guide(
             config_file=os.path.join(root_path, 'setup.cfg'),
             paths=[root_path],
