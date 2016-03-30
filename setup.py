@@ -10,7 +10,7 @@ if sys.version_info < (3, 4):
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-VERSION = importlib.import_module('mtp_utils').VERSION
+__version__ = importlib.import_module('mtp_utils').__version__
 
 with open('README.rst') as readme:
     README = readme.read()
@@ -32,7 +32,7 @@ extras_require = {
 
 setup(
     name='money-to-prisoners-utils',
-    version=str(VERSION),
+    version=__version__,
     author='Ministry of Justice Digital Services',
     url='https://github.com/ministryofjustice/money-to-prisoners-utils',
     packages=find_packages(exclude=['tests']),
