@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<header class="ContentHeader">
+  <h2>Confirm deletion</h2>
+</header>
+
+<p>Are you sure you want to delete {{ username }}?</p>
+
+<form method="post" action="">
+  {% csrf_token %}
+  <input type="submit" value="Delete {{username}}" />
+</form>
+{% endblock %}
