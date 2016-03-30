@@ -37,4 +37,5 @@ setup(
         'Programming Language :: Python :: 3.4',
     ],
     install_requires=install_requires,
+    test_suite='run_tests.run_tests',
 )
