@@ -14,7 +14,7 @@ with open('README.rst') as readme:
 install_requires = [
     'Django>=1.9,<1.10',
     'money-to-prisoners-utils>=0.10',
-    'django-moj-auth'
+    'django-moj-auth==1.0'
 ]
 
 setup(
@@ -26,7 +26,6 @@ setup(
     include_package_data=True,
     license='MIT',
     description='Django app for user account administration in Money to Prisoners',
-    dependency_links=['http://github.com/ministryofjustice/django-moj-auth/tarball/master#egg=django-moj-auth'],
     long_description=README,
     classifiers=[
         'Framework :: Django',
