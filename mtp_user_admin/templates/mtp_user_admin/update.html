@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% trans "Edit user" as form_title %}
+{% trans "Save" as submit_text %}
+{% include "forms/generic.html" %}
+{% endblock %}

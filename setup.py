@@ -6,19 +6,20 @@ from setuptools import setup, find_packages
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-VERSION = importlib.import_module('mtp_user_admin').VERSION
+VERSION = importlib.import_module('mtp_user_admin').__version__
 
 with open('README.rst') as readme:
     README = readme.read()
 
 install_requires = [
     'Django>=1.9,<1.10',
-    'money-to-prisoners-utils>=0.10'
+    'money-to-prisoners-utils>=0.10',
+    'django-moj-auth==1.0'
 ]
 
 setup(
     name='money-to-prisoners-user-admin',
-    version=str(VERSION),
+    version=VERSION,
     author='Ministry of Justice Digital Services',
     url='https://github.com/ministryofjustice/money-to-prisoners-user-admin',
     packages=find_packages(exclude=['tests']),
@@ -35,4 +36,5 @@ setup(
         'Programming Language :: Python :: 3.4',
     ],
     install_requires=install_requires,
+    test_suite='run_tests.run_tests',
 )
