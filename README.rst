@@ -10,6 +10,6 @@ Developing
 ----------
 
 * Test using ``python setup.py test`` or ``./run_tests.py [arguments]``
-* Update VERSION in ``mtp_utils.__init__.py``
+* Update VERSION tuple in ``mtp_user_admin/__init__.py``
 * Git tag with version
-* Submit to PyPi with ``python setup.py sdist upload``
+* Submit to PyPi with ``python setup.py sdist bdist_wheel upload``
