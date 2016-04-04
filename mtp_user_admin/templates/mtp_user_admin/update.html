@@ -2,7 +2,72 @@
 {% load i18n %}
 
 {% block content %}
-{% trans "Edit user" as form_title %}
-{% trans "Save" as submit_text %}
-{% include "forms/generic.html" %}
+<header class="ContentHeader">
+  <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+  <h1>{% trans 'Edit a user' %}</h1>
+</header>
+<form action="" method="post" id="">
+  {% csrf_token %}
+
+  {% if form.errors or form.non_field_errors %}
+  <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
+    <h1 class="error-summary-heading heading-medium" id="error-summary-heading">{% trans 'Please fix the following errors' %}</h1>
+
+    <ol class="error-summary-list">
+      {% for field, errors in form.errors.items %}
+        {% with field_obj=form.field %}
+        <li><a href="#{{ field_obj.auto_id }}-label">
+          {% for error in errors %}
+            {% if not forloop.first  %}
+              {% trans 'and' %}
+            {% endif %}
+            {{ error }}
+          {% endfor %}
+        </a></li>
+        {% endwith %}
+      {% endfor %}
+    </ol>
+  </div>
+{% endif %}
+
+  <div class="form-group">
+    <label for="id_username" id="id_username-label" class="form-label">
+      {% trans 'Username' %}
+    </label>
+    <input id="id_username" name="username" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label for="id_first_name" id="id_first_name-label" class="form-label">
+      {% trans 'First name' %}
+    </label>
+    <input id="id_first_name" name="first_name" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label for="id_last_name" id="id_last_name-label" class="form-label">
+      {% trans 'Last name' %}
+    </label>
+    <input id="id_last_name" name="last_name" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label for="id_email" id="id_email-label" class="form-label">
+      {% trans 'Email' %}
+    </label>
+    <input id="id_email" name="email" type="text" />
+  </div>
+
+  <div class="form-group">
+    <input id="id_user_admin" name="user_admin" type="checkbox" />
+    <label for="id_user_admin" id="id_user_admin-label" class="form-label">
+      {% trans 'User admin' %}
+    </label>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="button" name="create">{% trans 'Save' %}</button>
+    <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+  </div>
+</form>
 {% endblock %}

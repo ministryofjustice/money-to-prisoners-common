@@ -3,10 +3,15 @@
 
 {% block content %}
 <header class="ContentHeader">
-  <h2>Success</h2>
+  <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+  <h1>{% trans 'Success' %}</h1>
 </header>
 
-<p>{{ username }} has been deleted.</p>
+<p>
+  {% blocktrans %}
+  {{ username }} has been deleted.
+  {% endblocktrans %}
+</p>
 
-<a href="{% url "list-users" %}">Return to user management</a>
+<a href="{% url "list-users" %}">{% trans 'Return to user management' %}</a>
 {% endblock %}
