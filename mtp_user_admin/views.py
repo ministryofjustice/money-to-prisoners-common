@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext, ungettext
 from django.views.generic.edit import FormView
 from moj_auth import api_client
 from mtp_utils.api import retrieve_all_pages
@@ -45,6 +46,24 @@ class UserCreationView(FormView):
         form_kwargs['request'] = self.request
         form_kwargs['create'] = True
         return form_kwargs
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        # TODO: this note only applies to cashbook; we need a way to pass it in from client apps
+        prison_count = len(self.request.user.user_data.get('prisons', []))
+        if prison_count > 0:
+            context_data['permissions_note'] = ungettext(
+                'The new user will have access to the same prison as you do.',
+                'The new user will have access to the same prisons as you do.',
+                prison_count
+            ) % {
+                'prison_count': prison_count
+            }
+        else:
+            context_data['permissions_note'] = ugettext('The new user will not have access to manage any prisons.')
+
+        return context_data
 
 
 @method_decorator(login_required, name='dispatch')

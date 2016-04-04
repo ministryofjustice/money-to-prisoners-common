@@ -90,6 +90,10 @@
       </div>
     {% endwith %}
 
+    {% if permissions_note %}
+      <p>{{ permissions_note }}</p>
+    {% endif %}
+
     <div class="form-group">
       <button type="submit" class="button" name="create">
         {% if form.create %}
