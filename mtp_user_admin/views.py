@@ -36,7 +36,7 @@ def delete_user(request, username):
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('auth.add_user', raise_exception=True), name='dispatch')
 class UserCreationView(FormView):
-    template_name = 'mtp_user_admin/create.html'
+    template_name = 'mtp_user_admin/update.html'
     form_class = UserUpdateForm
     success_url = reverse_lazy('list-users')
 

@@ -2,16 +2,16 @@
 {% load i18n %}
 
 {% block content %}
-<header class="ContentHeader">
-  <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-  <h1>{% trans 'Success' %}</h1>
-</header>
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+    <h1>{% trans 'Success' %}</h1>
+  </header>
 
-<p>
-  {% blocktrans %}
-  {{ username }} has been deleted.
-  {% endblocktrans %}
-</p>
+  <p>
+    {% blocktrans trimmed %}
+    User “{{ username }}” has been deleted.
+    {% endblocktrans %}
+  </p>
 
-<a href="{% url "list-users" %}">{% trans 'Return to user management' %}</a>
+  <a href="{% url "list-users" %}">{% trans 'Return to user management' %}</a>
 {% endblock %}

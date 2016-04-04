@@ -2,72 +2,104 @@
 {% load i18n %}
 
 {% block content %}
-<header class="ContentHeader">
-  <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-  <h1>{% trans 'Edit a user' %}</h1>
-</header>
-<form action="" method="post" id="">
-  {% csrf_token %}
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+    <h1>
+      {% if form.create %}
+        {% trans 'Create a new user' %}
+      {% else %}
+        {% trans 'Edit a user' %}
+      {% endif %}
+    </h1>
+  </header>
 
-  {% if form.errors or form.non_field_errors %}
-  <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
-    <h1 class="error-summary-heading heading-medium" id="error-summary-heading">{% trans 'Please fix the following errors' %}</h1>
+  <form action="." method="post">
+    {% csrf_token %}
 
-    <ol class="error-summary-list">
-      {% for field, errors in form.errors.items %}
-        {% with field_obj=form.field %}
-        <li><a href="#{{ field_obj.auto_id }}-label">
-          {% for error in errors %}
-            {% if not forloop.first  %}
-              {% trans 'and' %}
+    {% if form.non_field_errors %}
+        <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
+          {% for error in form.non_field_errors %}
+            {% if forloop.first %}
+              <h1 class="error-summary-heading heading-medium" id="error-summary-heading">
+                {{ error }}
+              </h1>
+            {% else %}
+              {{ error }}
             {% endif %}
-            {{ error }}
           {% endfor %}
-        </a></li>
-        {% endwith %}
-      {% endfor %}
-    </ol>
-  </div>
-{% endif %}
+        </div>
+      {% endif %}
 
-  <div class="form-group">
-    <label for="id_username" id="id_username-label" class="form-label">
-      {% trans 'Username' %}
-    </label>
-    <input id="id_username" name="username" type="text" />
-  </div>
+    {% with field=form.username %}
+      <div class="form-group {% if field.errors %}error{% endif %}">
+        <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+          {{ field.label }}
+        </label>
+        {% for error in field.errors %}
+          <span class="error-message">{{ error }}</span>
+        {% endfor %}
+        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" {% if not form.create %}disabled{% endif %} type="text" />
+      </div>
+    {% endwith %}
 
-  <div class="form-group">
-    <label for="id_first_name" id="id_first_name-label" class="form-label">
-      {% trans 'First name' %}
-    </label>
-    <input id="id_first_name" name="first_name" type="text" />
-  </div>
+    {% with field=form.first_name %}
+      <div class="form-group {% if field.errors %}error{% endif %}">
+        <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+          {{ field.label }}
+        </label>
+        {% for error in field.errors %}
+          <span class="error-message">{{ error }}</span>
+        {% endfor %}
+        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" type="text" />
+      </div>
+    {% endwith %}
 
-  <div class="form-group">
-    <label for="id_last_name" id="id_last_name-label" class="form-label">
-      {% trans 'Last name' %}
-    </label>
-    <input id="id_last_name" name="last_name" type="text" />
-  </div>
+    {% with field=form.last_name %}
+      <div class="form-group {% if field.errors %}error{% endif %}">
+        <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+          {{ field.label }}
+        </label>
+        {% for error in field.errors %}
+          <span class="error-message">{{ error }}</span>
+        {% endfor %}
+        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" type="text" />
+      </div>
+    {% endwith %}
 
-  <div class="form-group">
-    <label for="id_email" id="id_email-label" class="form-label">
-      {% trans 'Email' %}
-    </label>
-    <input id="id_email" name="email" type="text" />
-  </div>
+    {% with field=form.email %}
+      <div class="form-group {% if field.errors %}error{% endif %}">
+        <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+          {{ field.label }}
+        </label>
+        {% for error in field.errors %}
+          <span class="error-message">{{ error }}</span>
+        {% endfor %}
+        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" type="text" />
+      </div>
+    {% endwith %}
 
-  <div class="form-group">
-    <input id="id_user_admin" name="user_admin" type="checkbox" />
-    <label for="id_user_admin" id="id_user_admin-label" class="form-label">
-      {% trans 'User admin' %}
-    </label>
-  </div>
+    {% with field=form.user_admin %}
+      <div class="form-group {% if field.errors %}error{% endif %}">
+        <label id="{{ field.id_for_label }}-label" class="block-label {% if field.value %}selected{% endif %}">
+          <input id="{{ field.id_for_label }}" name="{{ field.html_name }}" {% if field.value %}checked="checked"{% endif %} type="checkbox" />
+          {{ field.label }}
+        </label>
+        {% for error in field.errors %}
+          <span class="error-message">{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% endwith %}
 
-  <div class="form-group">
-    <button type="submit" class="button" name="create">{% trans 'Save' %}</button>
-    <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
-  </div>
-</form>
+    <div class="form-group">
+      <button type="submit" class="button" name="create">
+        {% if form.create %}
+          {% trans 'Create' %}
+        {% else %}
+          {% trans 'Save' %}
+        {% endif %}
+      </button>
+      <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+    </div>
+
+  </form>
 {% endblock %}

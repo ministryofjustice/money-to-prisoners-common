@@ -2,20 +2,20 @@
 {% load i18n %}
 
 {% block content %}
-<header class="ContentHeader">
-  <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-  <h1>{% trans 'Confirm deletion' %}</h1>
-</header>
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+    <h1>{% trans 'Confirm deletion' %}</h1>
+  </header>
 
-<p>
-  {% blocktrans %}
-  Are you sure you want to delete {{ username }}?
-  {% endblocktrans %}
-</p>
+  <p>
+    {% blocktrans trimmed %}
+    Are you sure you want to delete user “{{ username }}”?
+    {% endblocktrans %}
+  </p>
 
-<form method="post" action="">
-  {% csrf_token %}
-  <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete' %}</button>
-  <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
-</form>
+  <form method="post" action=".">
+    {% csrf_token %}
+    <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete' %}</button>
+    <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+  </form>
 {% endblock %}
