@@ -1,6 +1,8 @@
 // Help popup module
-/* globals exports, $ */
+/* globals exports, $, require */
 'use strict';
+
+var analytics = require('./analytics');
 
 exports.HelpPopup = {
 
@@ -22,9 +24,13 @@ exports.HelpPopup = {
     event.preventDefault();
     $contents.toggle();
     $helpBox.toggleClass('help-box-hidden');
-    $helpTitle.attr(
-      'aria-expanded',
-      $helpTitle.attr('aria-expanded') === 'true' ? 'false' : 'true');
+    if ($helpBox.hasClass('help-box-hidden')) {
+      $helpTitle.attr('aria-expanded', 'false');
+      analytics.analytics.send('pageview', '/-help_close/');
+    } else {
+      $helpTitle.attr('aria-expanded', 'true');
+      analytics.analytics.send('pageview', '/-help_open/');
+    }
     return false;
   }
 };
