@@ -14,7 +14,7 @@ with open('README.rst') as readme:
 install_requires = [
     'Django>=1.9,<1.10',
     'money-to-prisoners-utils>=0.10',
-    'django-moj-auth==1.0'
+    'django-moj-auth>=1.0',
 ]
 
 setup(
