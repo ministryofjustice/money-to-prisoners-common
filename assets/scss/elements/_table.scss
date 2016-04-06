@@ -47,6 +47,18 @@ table {
     &.cell--bold {
       font-weight: 700;
     }
+
+    &.actions {
+      @include print {
+        display: none;
+      }
+      > div {
+        display: inline-block;
+        &:first-child {
+          margin-right: 5em;
+        }
+      }
+    }
   }
 
   th {
