@@ -25,8 +25,9 @@ class ELKFormatter(logging.Formatter):
                     record.exc_text = str(record.exc_info)
             log['@fields.exception'] = record.exc_text
 
-        if hasattr(record, 'elk_fields') and record.elk_fields:
+        if hasattr(record, 'elk_fields') and isinstance(record.elk_fields, dict):
             # additional fields can be added to LogRecord in an `elk_fields` dict
+            # ensure that any data passed can be json-serialised
             log.update(record.elk_fields)
 
         return json.dumps(log)
