@@ -1,0 +1,17 @@
+@include screen {
+  .delete-icon {
+    display: inline-block;
+    margin-top: 0;
+    vertical-align: -.3em;
+    width: 1em;
+    height: 1em;
+    background: url(../images/delete-icon.png) 0 0 no-repeat;
+
+    @media only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-pixel-ratio: 2) {
+      margin-top: .2em;
+      background-image: url(../images/delete-icon@2x.png);
+      background-size: 10px 10px;
+    }
+  }
+}
