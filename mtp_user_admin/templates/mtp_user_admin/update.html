@@ -8,39 +8,46 @@
       {% if form.create %}
         {% trans 'Create a new user' %}
       {% else %}
-        {% trans 'Edit a user' %}
+        {% trans 'Editing user' %} ‘{{ form.username.value }}’
       {% endif %}
     </h1>
   </header>
 
-  <form action="." method="post">
+  {% if form.create %}
+  <p>{% trans 'Fill in a user’s details to allow them access. You can give them an admin or general user role.' %}</p>
+  {% endif %}
+
+  <form action="." method="post" class="admin-form">
     {% csrf_token %}
 
     {% if form.non_field_errors %}
-        <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
-          {% for error in form.non_field_errors %}
-            {% if forloop.first %}
-              <h1 class="error-summary-heading heading-medium" id="error-summary-heading">
-                {{ error }}
-              </h1>
-            {% else %}
-              {{ error }}
-            {% endif %}
-          {% endfor %}
-        </div>
-      {% endif %}
+    <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
+      {% for error in form.non_field_errors %}
+        {% if forloop.first %}
+      <h1 class="error-summary-heading heading-medium" id="error-summary-heading">
+        {{ error }}
+      </h1>
+        {% else %}
+        {{ error }}
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
 
-    {% with field=form.username %}
-      <div class="form-group {% if field.errors %}error{% endif %}">
-        <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
-          {{ field.label }}
-        </label>
+    {% if form.create %}
+      {% with field=form.username %}
+    <div class="form-group {% if field.errors %}error{% endif %}">
+      <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+        {{ field.label }}
+      </label>
+      <p class="form-hint">You can only use letters, digits and: @ . + - _</p>
         {% for error in field.errors %}
-          <span class="error-message">{{ error }}</span>
+      <span class="error-message">{{ error }}</span>
         {% endfor %}
-        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" {% if not form.create %}disabled{% endif %} type="text" />
-      </div>
-    {% endwith %}
+      <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" {% if not form.create %}disabled{% endif %} type="text" />
+    </div>
+      {% endwith %}
+    {% endif %}
 
     {% with field=form.first_name %}
       <div class="form-group {% if field.errors %}error{% endif %}">
@@ -102,7 +109,7 @@
           {% trans 'Save' %}
         {% endif %}
       </button>
-      <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+      <a href="{% url 'list-users' %}" class="cancel">{% trans 'Cancel' %}</a>
     </div>
 
   </form>
