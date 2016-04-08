@@ -4,14 +4,8 @@
 {% block content %}
   <header class="ContentHeader">
     <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-    <h1>{% trans 'Success' %}</h1>
+    <h1>{% blocktrans %}User account {{ username }} deleted{% endblocktrans %}</h1>
   </header>
-
-  <p>
-    {% blocktrans trimmed %}
-    User “{{ username }}” has been deleted.
-    {% endblocktrans %}
-  </p>
 
   <a href="{% url "list-users" %}">{% trans 'Return to user management' %}</a>
 {% endblock %}
