@@ -1,7 +1,7 @@
 $component: Checkbox;
 
 @include screen {
-  input[type=checkbox] {
+  input[type=checkbox].#{$component} {
     $checkbox-size: 50px;
 
     @include visually-hidden;
