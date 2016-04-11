@@ -2,6 +2,17 @@ input {
   font-family: inherit;
 }
 
+form a.cancel {
+  margin-left: 10em;
+  &:visited {
+    color: $link-colour;
+  }
+}
+
 .main-content label + * {
   margin-top: 0;
+}
+
+form.admin-form {
+  width: 70%;
 }
