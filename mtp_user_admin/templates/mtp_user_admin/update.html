@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+<div class="admin">
   <header class="ContentHeader">
     <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
     <h1>
@@ -15,6 +16,9 @@
 
   {% if form.create %}
   <p>{% trans 'Fill in a user’s details to allow them access. You can give them an admin or general user role.' %}</p>
+    {% if permissions_note %}
+  <p>{{ permissions_note }}</p>
+    {% endif %}
   {% endif %}
 
   <form action="." method="post" class="admin-form">
@@ -40,7 +44,7 @@
       <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
         {{ field.label }}
       </label>
-      <p class="form-hint">You can only use letters, digits and: @ . + - _</p>
+      <p class="form-hint">{% trans 'Only use letters, digits and @.+-_ (30 characters max)' %}</p>
         {% for error in field.errors %}
       <span class="error-message">{{ error }}</span>
         {% endfor %}
@@ -97,10 +101,6 @@
       </div>
     {% endwith %}
 
-    {% if permissions_note %}
-      <p>{{ permissions_note }}</p>
-    {% endif %}
-
     <div class="form-group">
       <button type="submit" class="button" name="create">
         {% if form.create %}
@@ -111,6 +111,6 @@
       </button>
       <a href="{% url 'list-users' %}" class="cancel">{% trans 'Cancel' %}</a>
     </div>
-
   </form>
+</div>
 {% endblock %}
