@@ -23,14 +23,15 @@ def list_users(request):
 @login_required
 @permission_required('auth.delete_user', raise_exception=True)
 def delete_user(request, username):
-    if request.method == 'POST':
-        try:
+    try:
+        if request.method == 'POST':
             api_client.get_connection(request).users(username).delete()
             return render(request, 'mtp_user_admin/deleted.html', {'username': username})
-        except HttpNotFoundError:
+        else:
+            user = api_client.get_connection(request).users(username).get()
+            return render(request, 'mtp_user_admin/delete.html', {'user': user})
+    except HttpNotFoundError:
             raise Http404
-    else:
-        return render(request, 'mtp_user_admin/delete.html', {'username': username})
 
 
 class UserFormView(FormView):

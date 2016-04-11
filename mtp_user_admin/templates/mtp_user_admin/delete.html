@@ -8,14 +8,16 @@
   </header>
 
   <p>
-    {% blocktrans trimmed %}
-    Are you sure you want to delete user “{{ username }}”?
-    {% endblocktrans %}
+    {% trans 'Username:' %} {{ user.username }}<br/>
+    {% trans 'First name:' %} {{ user.first_name }}<br/>
+    {% trans 'Last name:' %} {{ user.last_name }}<br/>
+    {% trans 'Email:' %} {{ user.email }}<br/>
+    {% trans 'Can create and edit other users:' %} {{ user.user_admin }}<br/>
   </p>
 
   <form method="post" action=".">
     {% csrf_token %}
-    <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete' %}</button>
+    <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete user account' %}</button>
     <a href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
   </form>
 {% endblock %}
