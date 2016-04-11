@@ -5,8 +5,9 @@ button,
   font-family: inherit;
 }
 
-.button-secondary {
-  background-color: $grey-3;
+.button-secondary, .button-secondary:link {
+  background-color: $grey-3!important;
+  color: $text-colour!important;
 }
 
 .button + .button {
