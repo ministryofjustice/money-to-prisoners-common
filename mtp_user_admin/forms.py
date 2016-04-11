@@ -11,11 +11,11 @@ class UserUpdateForm(forms.Form):
         'generic': _('The service is currently unavailable.')
     }
 
-    username = forms.CharField(disabled=True)
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-    email = forms.CharField()
-    user_admin = forms.BooleanField(required=False)
+    username = forms.CharField(label=_('Username'), disabled=True)
+    first_name = forms.CharField(label=_('First name'))
+    last_name = forms.CharField(label=_('Last name'))
+    email = forms.EmailField(label=_('Email'))
+    user_admin = forms.BooleanField(label=_('Grant access to create and edit users'), required=False)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -47,3 +47,4 @@ class UserUpdateForm(forms.Form):
                             self.add_error(field, error)
                 except (ValueError, KeyError):
                     raise forms.ValidationError(self.error_messages['generic'])
+        return self.cleaned_data

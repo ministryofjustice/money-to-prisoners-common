@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="admin">
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+  </header>
+
+  <div class="box-highlight">
+    <h1 class="bold-large">
+      {% if create %}
+        {% blocktrans with username=user.username %}
+          User account ‘{{ username }}’ created
+        {% endblocktrans %}
+      {% else %}
+        {% blocktrans with username=user.username %}
+          User account ‘{{ username }}’ edited
+        {% endblocktrans %}
+      {% endif %}
+    </h1>
+  </div>
+
+  <ul>
+    <li>{% trans 'Username:' %} {{ user.username }}</li>
+    <li>{% trans 'First name:' %} {{ user.first_name }}</li>
+    <li>{% trans 'Last name:' %} {{ user.last_name }}</li>
+    <li>{% trans 'Email:' %} {{ user.email }}</li>
+    <li>{% trans 'Can create and edit other users:' %}
+      {% if user.user_admin %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</li>
+  </ul>
+
+  <p><a class="action" href="{% url "edit-user" username=user.username %}">{% trans 'Edit this user account' %}</a></p>
+
+  <p><a class="action" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a></p>
+</div>
+{% endblock %}

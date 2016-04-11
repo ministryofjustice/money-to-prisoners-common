@@ -14,7 +14,10 @@ with open('README.rst') as readme:
 install_requires = [
     'Django>=1.9,<1.10',
     'money-to-prisoners-utils>=0.10',
-    'django-moj-auth==1.0'
+    'django-moj-auth>=1.0',
+]
+tests_require = [
+    'money-to-prisoners-utils[testing]>=0.10',
 ]
 
 setup(
@@ -36,5 +39,6 @@ setup(
         'Programming Language :: Python :: 3.4',
     ],
     install_requires=install_requires,
+    tests_require=tests_require,
     test_suite='run_tests.run_tests',
 )

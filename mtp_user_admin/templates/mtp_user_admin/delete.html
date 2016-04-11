@@ -2,14 +2,24 @@
 {% load i18n %}
 
 {% block content %}
-<header class="ContentHeader">
-  <h2>Confirm deletion</h2>
-</header>
+<div class="admin">
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+    <h1>{% trans 'Delete user account' %}</h1>
+  </header>
+  <ul>
+    <li>{% trans 'Username:' %} {{ user.username }}</li>
+    <li>{% trans 'First name:' %} {{ user.first_name }}</li>
+    <li>{% trans 'Last name:' %} {{ user.last_name }}</li>
+    <li>{% trans 'Email:' %} {{ user.email }}</li>
+    <li>{% trans 'Can create and edit other users:' %}
+    {% if user.user_admin %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</li>
+  </ul>
 
-<p>Are you sure you want to delete {{ username }}?</p>
-
-<form method="post" action="">
-  {% csrf_token %}
-  <input type="submit" value="Delete {{username}}" />
-</form>
+  <form method="post" action=".">
+    {% csrf_token %}
+    <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete user account' %}</button>
+    <a class="cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+  </form>
+</div>
 {% endblock %}
