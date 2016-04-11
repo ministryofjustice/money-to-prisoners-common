@@ -182,6 +182,10 @@ class FunctionalTestCase(LiveServerTestCase):
         else:
             self.assertNotIn(search, self.driver.page_source, msg=msg)
 
+    def assertCssProperty(self, selector, property, expected_value):
+        element = self.driver.find_element_by_css_selector(selector)
+        self.assertEqual(expected_value, element.value_of_css_property(property))
+
     def _current_url_matches(self, expected_url, ignore_query_string=True):
         current_url = self.driver.current_url
         if ignore_query_string:
@@ -296,7 +300,7 @@ class FunctionalTestCase(LiveServerTestCase):
         """
         self.driver.find_element_by_xpath(
             '//*[text() = "' + text + '"] | '
-            '//input[@type="submit" and @value="' + text + '"]'
+            '//*[@type="submit" and @value="' + text + '"]'
         ).click()
 
     def login(self, username, password, url=None,
