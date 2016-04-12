@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -13,6 +14,8 @@ from mtp_utils.api import retrieve_all_pages
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
 from .forms import UserUpdateForm
+
+logger = logging.getLogger('mtp')
 
 
 @login_required
@@ -30,6 +33,17 @@ def delete_user(request, username):
     if request.method == 'POST':
         try:
             api_client.get_connection(request).users(username).delete()
+
+            admin_username = request.user.user_data.get('username', 'Unknown')
+            logger.info('Admin %(admin_username)s deleted user %(username)s' % {
+                'admin_username': admin_username,
+                'username': username,
+            }, extra={
+                'elk_fields': {
+                    '@fields.username': admin_username,
+                }
+            })
+
             return render(request, 'mtp_user_admin/deleted.html', {'username': username})
         except HttpClientError as e:
             try:
