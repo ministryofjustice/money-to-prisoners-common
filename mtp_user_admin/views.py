@@ -1,8 +1,10 @@
 import json
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext, ungettext
 from django.views.generic.edit import FormView
@@ -25,7 +27,6 @@ def list_users(request):
 @login_required
 @permission_required('auth.delete_user', raise_exception=True)
 def delete_user(request, username):
-    errors = []
     if request.method == 'POST':
         try:
             api_client.get_connection(request).users(username).delete()
@@ -34,12 +35,15 @@ def delete_user(request, username):
             try:
                 response_body = json.loads(e.content.decode('utf-8'))
                 for field in response_body:
-                    errors += response_body[field]
+                    for error in response_body[field]:
+                        messages.error(request, error)
             except (ValueError, KeyError):
-                errors.append(ugettext('This user could not be deleted.'))
+                messages.error(request, ugettext('This user could not be deleted.'))
+            return redirect(reverse('list-users'))
+
     try:
         user = api_client.get_connection(request).users(username).get()
-        return render(request, 'mtp_user_admin/delete.html', {'user': user, 'errors': errors})
+        return render(request, 'mtp_user_admin/delete.html', {'user': user})
     except HttpNotFoundError:
         raise Http404
 
