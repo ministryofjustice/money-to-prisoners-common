@@ -9,7 +9,6 @@
         background-position: -5px 3px;
         display: inline-block;
         vertical-align: middle;
-
         @media only screen and (-webkit-min-device-pixel-ratio: 2),
           only screen and (min-device-pixel-ratio: 2) {
           background-image: url(../images/arrows@2x.png);
@@ -17,12 +16,11 @@
           background-position: -4px;
         }
       }
+      a:visited { color: $link-colour }
     }
 
     .help-box-contents {
       margin-top: 1em;
-      border-left: 5px solid $border-colour;
-      padding: .2em;
       ul {
         margin: 0 0 0 0.8em;
         li {
