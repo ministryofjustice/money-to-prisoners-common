@@ -8,20 +8,6 @@
     <h1>{% trans 'Delete user account' %}</h1>
   </header>
 
-  {% if errors %}
-  <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
-    {% for error in errors %}
-    {% if forloop.first %}
-    <h1 class="error-summary-heading heading-medium" id="error-summary-heading">
-      {{ error }}
-    </h1>
-    {% else %}
-      {{ error }}
-    {% endif %}
-    {% endfor %}
-    </div>
-  {% endif %}
-
   <ul>
     <li>{% trans 'Username:' %} {{ user.username }}</li>
     <li>{% trans 'First name:' %} {{ user.first_name }}</li>
