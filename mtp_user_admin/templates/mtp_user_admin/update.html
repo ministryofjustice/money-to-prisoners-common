@@ -9,13 +9,13 @@
       {% if form.create %}
         {% trans 'Create a new user' %}
       {% else %}
-        {% trans 'Editing user' %} ‘{{ form.username.value }}’
+        {% trans 'Edit user' %} ‘{{ form.username.value }}’
       {% endif %}
     </h1>
   </header>
 
   {% if form.create %}
-  <p>{% trans 'Fill in a user’s details to allow them access. You can give them an admin or general user role.' %}</p>
+  <p>{% trans 'Fill in a user’s details to allow them access. You can give them a general user or admin role.' %}</p>
     {% if permissions_note %}
   <p>{{ permissions_note }}</p>
     {% endif %}
@@ -44,7 +44,7 @@
       <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
         {{ field.label }}
       </label>
-      <p class="form-hint">{% trans 'Only use letters, digits and @.+-_ (30 characters max)' %}</p>
+      <p class="form-hint">{% trans 'Use only letters, digits and @.+-_ (30 characters max)' %}</p>
         {% for error in field.errors %}
       <span class="error-message">{{ error }}</span>
         {% endfor %}
@@ -85,7 +85,7 @@
         {% for error in field.errors %}
           <span class="error-message">{{ error }}</span>
         {% endfor %}
-        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" type="text" />
+        <input id="{{ field.id_for_label }}" class="form-control" name="{{ field.html_name }}" value="{{ field.value|default:'' }}" type="email" />
       </div>
     {% endwith %}
 
