@@ -2,16 +2,22 @@ import json
 import logging
 
 from django import forms
+from django.core.validators import validate_email
 from django.utils.translation import ugettext_lazy as _
 from moj_auth import api_client
 from slumber.exceptions import HttpClientError
 
 logger = logging.getLogger('mtp')
 
+forms.CharField.default_error_messages = {
+    'required': _('This field is required'),
+}
+validate_email.message = _('Enter a valid email address')
+
 
 class UserUpdateForm(forms.Form):
     error_messages = {
-        'generic': _('The service is currently unavailable.')
+        'generic': _('The service is currently unavailable')
     }
 
     username = forms.CharField(label=_('Username'), disabled=True)
