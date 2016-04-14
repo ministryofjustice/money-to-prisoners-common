@@ -16,3 +16,12 @@ form a.cancel {
 form.admin-form {
   width: 70%;
 }
+
+.error-summary {
+  .error-summary-list {
+    .non-field-error {
+      color: $error-colour;
+      font-weight: bold;
+    }
+  }
+}
