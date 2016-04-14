@@ -9,15 +9,17 @@
       {% if form.create %}
         {% trans 'Create a new user' %}
       {% else %}
-        {% trans 'Edit user' %} ‘{{ form.username.value }}’
+        {% blocktrans trimmed with username=form.username.value %}
+          Edit user ‘{{ username }}’
+        {% endblocktrans %}
       {% endif %}
     </h1>
   </header>
 
   {% if form.create %}
-  <p>{% trans 'Fill in a user’s details to allow them access. You can give them a general user or admin role.' %}</p>
+    <p>{% trans 'Fill in a user’s details to allow them access. You can give them a general user or admin role.' %}</p>
     {% if permissions_note %}
-  <p>{{ permissions_note }}</p>
+      <p>{{ permissions_note }}</p>
     {% endif %}
   {% endif %}
 
