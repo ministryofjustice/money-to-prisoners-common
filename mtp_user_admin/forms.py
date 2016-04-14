@@ -3,7 +3,7 @@ import logging
 
 from django import forms
 from django.core.validators import validate_email
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from moj_auth import api_client
 from slumber.exceptions import HttpClientError
 

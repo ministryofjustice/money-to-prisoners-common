@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext, ungettext
+from django.utils.translation import gettext, ngettext
 from django.views.generic.edit import FormView
 from moj_auth import api_client
 from mtp_utils.api import retrieve_all_pages
@@ -48,11 +48,14 @@ def delete_user(request, username):
         except HttpClientError as e:
             try:
                 response_body = json.loads(e.content.decode('utf-8'))
-                for field in response_body:
-                    for error in response_body[field]:
-                        messages.error(request, error)
-            except (ValueError, KeyError):
-                messages.error(request, ugettext('This user could not be deleted.'))
+                for field, errors in response_body.items():
+                    if isinstance(errors, list):
+                        for error in errors:
+                            messages.error(request, error)
+                    else:
+                        messages.error(request, errors)
+            except (AttributeError, ValueError, KeyError):
+                messages.error(request, gettext('This user could not be deleted'))
             return redirect(reverse('list-users'))
 
     try:
@@ -91,7 +94,7 @@ class UserCreationView(UserFormView):
         # TODO: this note only applies to cashbook; we need a way to pass it in from client apps
         prison_count = len(self.request.user.user_data.get('prisons', []))
         if prison_count > 0:
-            context_data['permissions_note'] = ungettext(
+            context_data['permissions_note'] = ngettext(
                 'The new user will have access to the same prison as you do.',
                 'The new user will have access to the same prisons as you do.',
                 prison_count
@@ -99,7 +102,7 @@ class UserCreationView(UserFormView):
                 'prison_count': prison_count
             }
         else:
-            context_data['permissions_note'] = ugettext('The new user will not have access to manage any prisons.')
+            context_data['permissions_note'] = gettext('The new user will not have access to manage any prisons.')
 
         return context_data
 
