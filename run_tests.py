@@ -16,17 +16,19 @@ DEFAULT_SETTINGS = dict(
         'django.contrib.contenttypes',
         'django.contrib.auth',
         'django.contrib.sessions',
+        'django.contrib.messages',
     ),
     OAUTHLIB_INSECURE_TRANSPORT=True,
     API_URL='http://localhost:8000',
     AUTHENTICATION_BACKENDS=['mtp_user_admin.tests.backends.TestBackend'],
     SESSION_ENGINE='django.contrib.sessions.backends.signed_cookies',
+    MESSAGE_STORAGE='django.contrib.messages.storage.session.SessionStorage',
     TEMPLATES=[{
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': False,
         'OPTIONS': {
-            'context_processors': [],
+            'context_processors': ['django.contrib.messages.context_processors.messages'],
             'loaders': ['mtp_user_admin.tests.DummyTemplateLoader']
         },
     }],
@@ -35,6 +37,7 @@ DEFAULT_SETTINGS = dict(
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
     )
 )
 
