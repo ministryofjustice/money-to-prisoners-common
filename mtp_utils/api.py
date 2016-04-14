@@ -1,4 +1,27 @@
+import json
+
 from django.conf import settings
+from django.contrib import messages
+from django.utils.translation import gettext
+
+
+def api_errors_to_messages(request, error):
+    """
+    Adds messages for each error returned from the MTP apis
+    Useful for displaying errors when there's no form on the page
+    :param request: HttpRequest
+    :param error: HttpClientError
+    """
+    try:
+        response_body = json.loads(error.content.decode('utf-8'))
+        for field, errors in response_body.items():
+            if isinstance(errors, list):
+                for error in errors:
+                    messages.error(request, error)
+            else:
+                messages.error(request, errors)
+    except (AttributeError, ValueError, KeyError):
+        messages.error(request, gettext('This user could not be deleted'))
 
 
 def retrieve_all_pages(api_endpoint, **kwargs):
