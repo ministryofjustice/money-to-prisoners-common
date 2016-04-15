@@ -54,3 +54,11 @@
     <li><a href="{{ support_link.url }}">{{ support_link.title }}</a></li>
   {% endfor %}
 {% endblock %}
+
+
+{% block after_main_js %}
+  <!--
+  {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}
+  {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
+  -->
+{% endblock %}
