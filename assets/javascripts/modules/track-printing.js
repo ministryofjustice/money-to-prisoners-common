@@ -2,7 +2,7 @@
 /* globals exports, require  */
 'use strict';
 
-var analytics = require('analytics');
+var analytics = require('./analytics');
 
 exports.trackPrinting = {
   init: function () {
