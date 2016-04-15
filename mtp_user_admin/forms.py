@@ -65,9 +65,12 @@ class UserUpdateForm(forms.Form):
             except HttpClientError as e:
                 try:
                     response_body = json.loads(e.content.decode('utf-8'))
-                    for field in response_body:
-                        for error in response_body[field]:
-                            self.add_error(field, error)
-                except (ValueError, KeyError):
+                    for field, errors in response_body.items():
+                        if isinstance(errors, list):
+                            for error in errors:
+                                self.add_error(field, error)
+                        else:
+                            self.add_error(field, errors)
+                except (AttributeError, ValueError, KeyError):
                     raise forms.ValidationError(self.error_messages['generic'])
         return self.cleaned_data
