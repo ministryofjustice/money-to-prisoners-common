@@ -6,6 +6,7 @@ A Django app containing utilities and tools common to all Money to Prisoners ser
 Features
 --------
 
+* Reusable templates for form fields and errors
 * REST utilities for retrieving information from `money-to-prisoners-api`_
 * Integration and accessibility testing with selenium
 * Python code style testing
