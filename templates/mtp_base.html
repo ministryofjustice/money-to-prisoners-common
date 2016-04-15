@@ -64,3 +64,11 @@
     </div>
   {% endblock %}
 {% endblock %}
+
+
+{% block after_main_js %}
+  <!--
+  {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}
+  {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
+  -->
+{% endblock %}
