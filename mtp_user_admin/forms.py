@@ -2,17 +2,11 @@ import json
 import logging
 
 from django import forms
-from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 from moj_auth import api_client
 from slumber.exceptions import HttpClientError
 
 logger = logging.getLogger('mtp')
-
-forms.CharField.default_error_messages = {
-    'required': _('This field is required'),
-}
-validate_email.message = _('Enter a valid email address')
 
 
 class UserUpdateForm(forms.Form):
@@ -71,9 +65,12 @@ class UserUpdateForm(forms.Form):
             except HttpClientError as e:
                 try:
                     response_body = json.loads(e.content.decode('utf-8'))
-                    for field in response_body:
-                        for error in response_body[field]:
-                            self.add_error(field, error)
-                except (ValueError, KeyError):
+                    for field, errors in response_body.items():
+                        if isinstance(errors, list):
+                            for error in errors:
+                                self.add_error(field, error)
+                        else:
+                            self.add_error(field, errors)
+                except (AttributeError, ValueError, KeyError):
                     raise forms.ValidationError(self.error_messages['generic'])
         return self.cleaned_data

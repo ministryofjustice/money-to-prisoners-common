@@ -10,11 +10,11 @@
   <div class="box-highlight">
     <h1 class="bold-large">
       {% if create %}
-        {% blocktrans with username=user.username %}
+        {% blocktrans trimmed with username=user.username %}
           User account ‘{{ username }}’ created
         {% endblocktrans %}
       {% else %}
-        {% blocktrans with username=user.username %}
+        {% blocktrans trimmed with username=user.username %}
           User account ‘{{ username }}’ edited
         {% endblocktrans %}
       {% endif %}
@@ -22,16 +22,17 @@
   </div>
 
   <ul>
-    <li>{% trans 'Username:' %} {{ user.username }}</li>
-    <li>{% trans 'First name:' %} {{ user.first_name }}</li>
-    <li>{% trans 'Last name:' %} {{ user.last_name }}</li>
-    <li>{% trans 'Email:' %} {{ user.email }}</li>
-    <li>{% trans 'Can manage other users:' %}
-      {% if user.user_admin %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</li>
+    <li>{% blocktrans with username=user.username %}Username: {{ username }}{% endblocktrans %}</li>
+    <li>{% blocktrans with first_name=user.first_name %}First name: {{ first_name }}{% endblocktrans %}</li>
+    <li>{% blocktrans with last_name=user.last_name %}Last name: {{ last_name }}{% endblocktrans %}</li>
+    <li>{% blocktrans with email=user.email %}Email: {{ email }}{% endblocktrans %}</li>
+    <li>
+        {% trans 'Can manage other users:' %}
+        {% if user.user_admin %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}
+    </li>
   </ul>
 
   <p><a class="action" href="{% url "edit-user" username=user.username %}">{% trans 'Edit this user account' %}</a></p>
-
   <p><a class="action" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a></p>
 </div>
 {% endblock %}

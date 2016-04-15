@@ -1,7 +1,5 @@
-import json
 import logging
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -10,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext, ngettext
 from django.views.generic.edit import FormView
 from moj_auth import api_client
-from mtp_utils.api import retrieve_all_pages
+from mtp_utils.api import api_errors_to_messages, retrieve_all_pages
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
 from .forms import UserUpdateForm
@@ -46,16 +44,7 @@ def delete_user(request, username):
 
             return render(request, 'mtp_user_admin/deleted.html', {'username': username})
         except HttpClientError as e:
-            try:
-                response_body = json.loads(e.content.decode('utf-8'))
-                for field, errors in response_body.items():
-                    if isinstance(errors, list):
-                        for error in errors:
-                            messages.error(request, error)
-                    else:
-                        messages.error(request, errors)
-            except (AttributeError, ValueError, KeyError):
-                messages.error(request, gettext('This user could not be deleted'))
+            api_errors_to_messages(request, e)
             return redirect(reverse('list-users'))
 
     try:
