@@ -182,7 +182,7 @@ class FunctionalTestCase(LiveServerTestCase):
         else:
             self.assertNotIn(search, self.driver.page_source, msg=msg)
 
-    def assertCssProperty(self, selector, property, expected_value):
+    def assertCssProperty(self, selector, property, expected_value):  # noqa
         element = self.driver.find_element_by_css_selector(selector)
         self.assertEqual(expected_value, element.value_of_css_property(property))
 

@@ -1,18 +1,11 @@
 from unittest import mock
 
 from django import forms
-from django.core.urlresolvers import reverse
-from django.test import SimpleTestCase
+
+from tests.utils import SimpleTestCase
 
 
-class TemplatetaagTestCase(SimpleTestCase):
-    @mock.patch('tests.urls.get_context')
-    @mock.patch('tests.utils.get_template_source')
-    def load_mocked_template(self, template, context, mocked_template, mocked_context):
-        mocked_template.return_value = template
-        mocked_context.return_value = context
-        return self.client.get(reverse('dummy'))
-
+class TemplateTagTestCase(SimpleTestCase):
     def test_to_string_filter(self):
         class MagicInt(int):
             def __str__(self):
