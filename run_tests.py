@@ -11,7 +11,7 @@ DEFAULT_SETTINGS = dict(
     SECRET_KEY='a' * 24,
     ROOT_URLCONF='tests.urls',
     INSTALLED_APPS=(
-        'mtp_utils',
+        'mtp_common',
     ),
     TEMPLATES=[{
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -19,8 +19,8 @@ DEFAULT_SETTINGS = dict(
         'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
-                'mtp_utils.context_processors.analytics',
-                'mtp_utils.context_processors.app_environment',
+                'mtp_common.context_processors.analytics',
+                'mtp_common.context_processors.app_environment',
             ],
             'loaders': ['tests.utils.DummyTemplateLoader']
         },

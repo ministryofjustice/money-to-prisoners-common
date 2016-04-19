@@ -31,7 +31,7 @@ class ELKLoggingTestCase(unittest.TestCase):
                     'datefmt': '%Y-%m-%dT%H:%M:%S',
                 },
                 'elk': {
-                    '()': 'mtp_utils.logging.ELKFormatter'
+                    '()': 'mtp_common.logging.ELKFormatter'
                 }
             },
             'handlers': {

@@ -12,7 +12,7 @@ class TemplateTagTestCase(SimpleTestCase):
                 return 'magic'
 
         template = '''
-        {% load mtp_utils %}
+        {% load mtp_common %}
         {% if magic_int in ints %}PASS1{% endif %}
         {% if magic_int|to_string in ints %}FAIL1{% endif %}
         {% if magic_int in strs %}FAIL2{% endif %}
@@ -35,7 +35,7 @@ class TemplateTagTestCase(SimpleTestCase):
             test_field = forms.CharField()
 
         template = '''
-        {% load mtp_utils %}
+        {% load mtp_common %}
         {% with field=form|field_from_name:'missing_field' %}
             -{{ field.value }}-
         {% endwith %}
@@ -52,13 +52,13 @@ class TemplateTagTestCase(SimpleTestCase):
         self.assertIn('--', html)
         self.assertIn('+123+', html)
 
-    @mock.patch('mtp_utils.templatetags.mtp_utils.sentry_client')
+    @mock.patch('mtp_common.templatetags.mtp_common.sentry_client')
     def test_sentry_tag(self, mocked_sentry_client):
         sentry_dsn = 'http://sentry.example.com/123'
         mocked_sentry_client.get_public_dsn.return_value = sentry_dsn
 
         template = '''
-        {% load mtp_utils %}
+        {% load mtp_common %}
         {% sentry_js %}
         '''
         response = self.load_mocked_template(template, {})

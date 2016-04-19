@@ -1,0 +1,50 @@
+{% load static %}
+<script src="{% static 'mtp_common/a11y/axs_testing.js' %}"></script>
+<script src="{% static 'mtp_common/a11y/HTMLCS.js' %}"></script>
+<script>
+  function getAccessibilityAudit(scope) {
+    var audit = {}, axsConfiguration;
+
+    function getElementDescriptor(element) {
+      try {
+        return axs.utils.getQuerySelectorText(element);
+      } catch(e) {
+        return element.tagName + "#" + element.id;
+      }
+    }
+
+    axsConfiguration = new axs.AuditConfiguration({
+      showUnsupportedRulesWarning: false
+    });
+
+    if (scope) {
+      scope = document.querySelector(scope);
+      axsConfiguration.scope = scope;
+    }
+
+    audit.axs = axs.Audit.run(axsConfiguration).filter(function(issue) {
+      return issue.result === axs.constants.AuditResult.FAIL;
+    }).map(function(issue) {
+      return {
+        code: issue.rule.code,
+        message: issue.rule.heading,
+        severity: issue.rule.severity,
+        elements: issue.elements.map(getElementDescriptor)
+      };
+    });
+
+    HTMLCS.process('{{ standard|default:'WCAG2AA' }}', scope || window.document, function() {
+      audit.htmlcs = HTMLCS.getMessages().filter(function(issue) {
+        return issue.type == {% if include_warnings %}HTMLCS.WARNING{% else %}HTMLCS.ERROR{% endif %};
+      }).map(function(issue) {
+        return {
+          code: issue.code,
+          message: issue.msg,
+          element: getElementDescriptor(issue.element)
+        };
+      });
+    });
+
+    return audit;
+  }
+</script>

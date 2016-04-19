@@ -10,7 +10,7 @@ if sys.version_info < (3, 4):
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-__version__ = importlib.import_module('mtp_utils').__version__
+__version__ = importlib.import_module('mtp_common').__version__
 
 with open('README.rst') as readme:
     README = readme.read()
@@ -31,14 +31,14 @@ extras_require = {
 }
 
 setup(
-    name='money-to-prisoners-utils',
+    name='money-to-prisoners-common',
     version=__version__,
     author='Ministry of Justice Digital Services',
-    url='https://github.com/ministryofjustice/money-to-prisoners-utils',
+    url='https://github.com/ministryofjustice/money-to-prisoners-common',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     license='MIT',
-    description='Django app with shared utilities for Money to Prisoners serivces',
+    description='Django app with common code and assets for Money to Prisoners serivces',
     long_description=README,
     classifiers=[
         'Framework :: Django',

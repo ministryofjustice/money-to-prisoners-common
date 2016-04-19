@@ -1,0 +1,28 @@
+$component: ShowHide;
+
+.#{$component} {
+
+  cursor: pointer;
+  background-image: url(../mtp_common/images/collapse-button.png);
+  background-repeat: no-repeat;
+  padding-left: 30px;
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min-device-pixel-ratio: 2) {
+    background-image: url(../mtp_common/images/collapse-button@2x.png);
+    background-size: 25px 25px;
+  }
+
+  &.#{$component}-hidden {
+    background-image: url(../mtp_common/images/expand-button.png);
+
+    @media only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-pixel-ratio: 2) {
+      background-image: url(../mtp_common/images/expand-button@2x.png);
+      background-size: 25px 25px;
+    }
+
+
+  }
+
+}

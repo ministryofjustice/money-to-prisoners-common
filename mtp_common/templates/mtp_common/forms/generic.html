@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load mtp_common %}
+{% load widget_tweaks %}
+
+<h2>{{ form_title }}</h2>
+
+<div class="container">
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+
+      <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}">
+        {% csrf_token %}
+
+        {% for field in form.hidden_fields %}
+          {{ field }}
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+          <div class="form-group {% if field.errors %}error{% endif %}">
+            {% include 'mtp_common/forms/field-label.html' with field=field only %}
+            {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+            {{ field|add_class:'form-control' }}  {# add class form-control #}
+          </div>
+        {% endfor %}
+
+        <div class="form-group">
+          <button type="submit" class="button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

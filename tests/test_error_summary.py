@@ -14,7 +14,7 @@ class TestForm(forms.Form):
 
 
 template = """
-{% include 'mtp_utils/forms/error-summary.html' with form=form only %}
+{% include 'mtp_common/forms/error-summary.html' with form=form only %}
 """
 
 
