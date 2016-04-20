@@ -8,9 +8,9 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext, ngettext
 from django.views.generic.edit import FormView
 from moj_auth import api_client
-from mtp_utils.api import api_errors_to_messages, retrieve_all_pages
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
+from ..api import api_errors_to_messages, retrieve_all_pages
 from .forms import UserUpdateForm
 
 logger = logging.getLogger('mtp')
@@ -22,7 +22,7 @@ def list_users(request):
     users = retrieve_all_pages(
         api_client.get_connection(request).users.get
     )
-    return render(request, 'mtp_user_admin/list.html', {'users': users})
+    return render(request, 'mtp_common/user_admin/list.html', {'users': users})
 
 
 @login_required
@@ -42,20 +42,20 @@ def delete_user(request, username):
                 }
             })
 
-            return render(request, 'mtp_user_admin/deleted.html', {'username': username})
+            return render(request, 'mtp_common/user_admin/deleted.html', {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e)
             return redirect(reverse('list-users'))
 
     try:
         user = api_client.get_connection(request).users(username).get()
-        return render(request, 'mtp_user_admin/delete.html', {'user': user})
+        return render(request, 'mtp_common/user_admin/delete.html', {'user': user})
     except HttpNotFoundError:
         raise Http404
 
 
 class UserFormView(FormView):
-    template_name = 'mtp_user_admin/update.html'
+    template_name = 'mtp_common/user_admin/update.html'
     form_class = UserUpdateForm
 
     def get_form_kwargs(self):
@@ -64,7 +64,7 @@ class UserFormView(FormView):
         return form_kwargs
 
     def form_valid(self, form):
-        return render(self.request, 'mtp_user_admin/saved.html',
+        return render(self.request, 'mtp_common/user_admin/saved.html',
                       {'user': form.cleaned_data, 'create': form.create})
 
 

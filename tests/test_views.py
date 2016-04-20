@@ -5,7 +5,7 @@ from django.test import SimpleTestCase
 from slumber.exceptions import HttpClientError, HttpNotFoundError
 
 
-@mock.patch('mtp_user_admin.views.api_client')
+@mock.patch('mtp_common.user_admin.views.api_client')
 class DeleteUserTestCase(SimpleTestCase):
 
     def test_user_not_found(self, mock_api_client):
@@ -33,7 +33,7 @@ class DeleteUserTestCase(SimpleTestCase):
         self.assertIn('You cannot delete yourself', messages)
 
 
-@mock.patch('mtp_user_admin.forms.api_client')
+@mock.patch('mtp_common.user_admin.forms.api_client')
 class NewUserTestCase(SimpleTestCase):
 
     def test_new_user(self, mock_api_client):
@@ -50,8 +50,8 @@ class NewUserTestCase(SimpleTestCase):
         mock_api_client.get_connection().users().post.assert_called_with(new_user_data)
 
 
-@mock.patch('mtp_user_admin.forms.api_client')
-@mock.patch('mtp_user_admin.views.api_client')
+@mock.patch('mtp_common.user_admin.forms.api_client')
+@mock.patch('mtp_common.user_admin.views.api_client')
 class EditUserTestCase(SimpleTestCase):
 
     def _init_existing_user(self, mock_form_api_client):

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import include, url
 from django.shortcuts import render
 
 
@@ -12,5 +12,6 @@ def dummy_view(request):
 
 
 urlpatterns = [
-    url(r'^dummy$', dummy_view, name='dummy')
+    url(r'^dummy$', dummy_view, name='dummy'),
+    url(r'^', include('mtp_common.user_admin.urls')),
 ]

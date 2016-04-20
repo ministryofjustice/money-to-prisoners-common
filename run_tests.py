@@ -13,7 +13,6 @@ DEFAULT_SETTINGS = dict(
     ROOT_URLCONF='tests.urls',
     INSTALLED_APPS=(
         'mtp_common',
-        'mtp_user_admin',
         'django.contrib.contenttypes',
         'django.contrib.auth',
         'django.contrib.sessions',
@@ -21,7 +20,7 @@ DEFAULT_SETTINGS = dict(
     ),
     OAUTHLIB_INSECURE_TRANSPORT=True,
     API_URL='http://localhost:8000',
-    AUTHENTICATION_BACKENDS=['mtp_user_admin.tests.backends.TestBackend'],
+    AUTHENTICATION_BACKENDS=['tests.backends.TestBackend'],
     SESSION_ENGINE='django.contrib.sessions.backends.signed_cookies',
     MESSAGE_STORAGE='django.contrib.messages.storage.session.SessionStorage',
     TEMPLATES=[{
