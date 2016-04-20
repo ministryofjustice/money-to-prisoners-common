@@ -1,0 +1,8 @@
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/field-errors.html' with field=<field variable> only %}
+{% endcomment %}
+
+{% for error in field.errors %}
+  <span class="error-message">{{ error }}</span>
+{% endfor %}

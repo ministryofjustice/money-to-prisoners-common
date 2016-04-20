@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="admin">
+  <header class="ContentHeader">
+    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
+  </header>
+
+  <div class="box-highlight">
+    <h1 class="bold-large">{% blocktrans %}User account ‘{{ username }}’ deleted{% endblocktrans %}</h1>
+  </div>
+
+  <a class="action" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a>
+</div>
+{% endblock %}

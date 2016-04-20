@@ -1,0 +1,8 @@
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/field-label.html' with field=<field variable> only %}
+{% endcomment %}
+
+<label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+  {{ field.label }}
+</label>
