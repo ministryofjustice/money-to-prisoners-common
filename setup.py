@@ -17,6 +17,7 @@ with open('README.rst') as readme:
 
 install_requires = [
     'Django>=1.9,<1.10',
+    'django-moj-auth>=1.0',
 ]
 extras_require = {
     'monitoring': [

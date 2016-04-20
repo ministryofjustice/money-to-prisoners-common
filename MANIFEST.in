@@ -13,3 +13,4 @@ recursive-include mtp_common/static *.js
 recursive-include mtp_common/static *.jpg
 recursive-include mtp_common/static *.png
 recursive-include mtp_common/templates *.html
+recursive-include mtp_user_admin/templates *.html
