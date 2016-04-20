@@ -32,17 +32,20 @@ Developing
 
 .. _money-to-prisoners-api: https://github.com/ministryofjustice/money-to-prisoners-api
 
-# Money to Prisoners Common Assets
+Money to Prisoners Common Assets
+==================================
 
 All assets used for [money-to-prisoners-cashbook](), [money-to-prisoners-prisoner-location-admin](https://github.com/ministryofjustice/money-to-prisoners-prisoner-location-admin/), [money-to-prisoners-bank-admin](https://github.com/ministryofjustice/money-to-prisoners-bank-admin/) are kept in this package.
 
 They are included into each application using [npm](http://npmjs.com/). Each application's build scripts run npm automatically.
 
-### Sass, Javascript, Images
+Sass, Javascript, Images
+------------------------
 
 Static assets are in `./assets/(images|javascripts|scss)`. The base sass file, [`_mtp.scss`](https://github.com/ministryofjustice/money-to-prisoners-common/blob/master/assets/scss/_mtp.scss), is used to include the sass includes from this packge into each frontend app.
 
-### Django templates
+Django templates
+--------------------
 
 Common templates used across all 3 applications are kept in `./templates/`. They are made accessible to each application by adding the path to the bower package to the template directories list in `settings.py`.
 
