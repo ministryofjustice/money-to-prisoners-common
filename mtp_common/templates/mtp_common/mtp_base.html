@@ -57,8 +57,11 @@
 
   {% block phase_banner %}
     <div class="subheader-item phase-banner">
+      {% if ENVIRONMENT == 'prod' %}
       <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
-      {# #TODO - add current location for feedback view #}
+      {% else %}
+      <div class="phase-tag phase-tag-dev">{{ ENVIRONMENT }}</div>
+      {% endif %}
       {% url 'submit_ticket' as ticket_url %}
       <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
     </div>
