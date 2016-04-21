@@ -24,3 +24,10 @@
     }
   }
 }
+
+.phase-tag.phase-tag-dev {
+  background-color: #af8748;
+  + .phase-banner-message {
+    padding-left: 4.8em;
+  }
+}

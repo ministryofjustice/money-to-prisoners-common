@@ -41,7 +41,11 @@
 {% block global_subheader %}
   {% block phase_banner %}
     <div class="subheader-item phase-banner">
+      {% if ENVIRONMENT == 'prod' %}
       <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
+      {% else %}
+      <div class="phase-tag phase-tag-dev">{{ ENVIRONMENT }}</div>
+      {% endif %}
       {% url 'submit_ticket' as ticket_url %}
       <div class="phase-banner-message">{% blocktrans %}This is a new service - your <a href="{{ ticket_url }}">feedback</a> will help us to improve it.{% endblocktrans %}</div>
     </div>
