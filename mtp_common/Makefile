@@ -59,7 +59,7 @@ IMAGE_FILES := $(shell find $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets-sr
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
-WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON)/assets $(MTP_COMMON)/static $(MTP_COMMON)/templates $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
+WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON_PY)/assets $(MTP_COMMON_PY)/static $(MTP_COMMON_PY)/templates $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
 
 SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 
@@ -151,7 +151,8 @@ static_assets:
 update: virtual_env
 	@echo Updating node modules
 	@npm set progress=false
-	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
+	npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
+	npm install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # all the assets
 .PHONY: build
