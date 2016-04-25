@@ -60,7 +60,7 @@
       {% if ENVIRONMENT == 'prod' %}
       <div class="phase-tag phase-tag-alpha">{% trans "Alpha" %}</div>
       {% else %}
-      <div class="phase-tag phase-tag-dev">{{ ENVIRONMENT }}</div>
+      <div class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</div>
       {% endif %}
       {% url 'submit_ticket' as ticket_url %}
       <div class="phase-banner-message">{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</div>
