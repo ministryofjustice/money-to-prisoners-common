@@ -152,20 +152,19 @@ update: virtual_env
 	@echo Updating node modules
 	@npm set progress=false
 	npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
-	npm install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # copy assets from linked common
 .PHONY: pre_build
 pre_build:
-	rsync -ru --delete $(PYTHON_LIBS)/mtp_common/assets $(MTP_COMMON)
+	rsync -ru --delete $(MTP_COMMON_PY)/assets $(MTP_COMMON)
 
 # all the assets
 .PHONY: build
-build: pre_build virtual_env assets static_assets
+build: virtual_env assets static_assets
 
 # Just for browser live-reload
 .PHONY: assets
-assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
+assets: pre_build $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
 
 # remove all the assets
 .PHONY: clean
@@ -189,7 +188,7 @@ internal_watch:
 
 # monitor assets, recompile them and reload browsers when they change
 .PHONY: internal_build_and_reload
-internal_build_and_reload: pre_build assets
+internal_build_and_reload: assets
 	@$(NODE_BIN)/browser-sync reload --port=$(browsersync_port)
 
 # set an environment variable if api server is running
@@ -234,7 +233,7 @@ endif
 
 $(JS_PATH)/app.bundle.js: $(ALL_JS)
 	@echo Generating `basename $@`
-	@$(NODE_BIN)/jshint -c $(PYTHON_LIBS)/.jshintrc $(ALL_JS)
+	@$(NODE_BIN)/jshint -c $(MTP_COMMON_PY)/.jshintrc $(ALL_JS)
 	@$(NODE_BIN)/webpack >$(TASK_OUTPUT_REDIRECTION)
 
 # Make the various css files (app, app-print) from their respective sources

@@ -2,6 +2,7 @@ include LICENSE
 include README.rst
 include mtp_common/Makefile
 include mtp_common/npm_requirements.txt
+include mtp_common/.jshintrc
 recursive-include mtp_common/assets *.scss
 recursive-include mtp_common/assets *.css
 recursive-include mtp_common/assets *.js
