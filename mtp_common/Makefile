@@ -59,7 +59,7 @@ IMAGE_FILES := $(shell find $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets-sr
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
-WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON)/assets $(MTP_COMMON)/static $(MTP_COMMON)/templates $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
+WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON_PY)/assets $(MTP_COMMON_PY)/static $(MTP_COMMON_PY)/templates $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
 
 SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 
@@ -151,7 +151,12 @@ static_assets:
 update: virtual_env
 	@echo Updating node modules
 	@npm set progress=false
-	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
+	npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
+
+# copy assets from linked common
+.PHONY: pre_build
+pre_build:
+	rsync -ru --delete $(MTP_COMMON_PY)/assets $(MTP_COMMON)
 
 # all the assets
 .PHONY: build
@@ -159,7 +164,7 @@ build: virtual_env assets static_assets
 
 # Just for browser live-reload
 .PHONY: assets
-assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
+assets: pre_build $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
 
 # remove all the assets
 .PHONY: clean
@@ -228,7 +233,7 @@ endif
 
 $(JS_PATH)/app.bundle.js: $(ALL_JS)
 	@echo Generating `basename $@`
-	@$(NODE_BIN)/jshint $(ALL_JS)
+	@$(NODE_BIN)/jshint -c $(MTP_COMMON_PY)/.jshintrc $(ALL_JS)
 	@$(NODE_BIN)/webpack >$(TASK_OUTPUT_REDIRECTION)
 
 # Make the various css files (app, app-print) from their respective sources
