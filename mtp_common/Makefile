@@ -229,7 +229,7 @@ endif
 
 $(JS_PATH)/app.bundle.js: $(ALL_JS)
 	@echo Generating `basename $@`
-	@$(NODE_BIN)/jshint $(ALL_JS)
+	@$(NODE_BIN)/jshint -c $(PYTHON_LIBS)/.jshintrc $(ALL_JS)
 	@$(NODE_BIN)/webpack >$(TASK_OUTPUT_REDIRECTION)
 
 # Make the various css files (app, app-print) from their respective sources
