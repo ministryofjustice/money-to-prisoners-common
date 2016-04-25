@@ -154,9 +154,14 @@ update: virtual_env
 	npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 	npm install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
+# copy assets from linked common
+.PHONY: pre_build
+pre_build:
+	rsync -ru --delete $(PYTHON_LIBS)/mtp_common/assets $(MTP_COMMON)
+
 # all the assets
 .PHONY: build
-build: virtual_env assets static_assets
+build: pre_build virtual_env assets static_assets
 
 # Just for browser live-reload
 .PHONY: assets
@@ -184,7 +189,7 @@ internal_watch:
 
 # monitor assets, recompile them and reload browsers when they change
 .PHONY: internal_build_and_reload
-internal_build_and_reload: assets
+internal_build_and_reload: pre_build assets
 	@$(NODE_BIN)/browser-sync reload --port=$(browsersync_port)
 
 # set an environment variable if api server is running
