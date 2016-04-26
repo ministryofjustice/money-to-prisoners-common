@@ -44,7 +44,7 @@ def delete_user(request, username):
 
             return render(request, 'mtp_common/user_admin/deleted.html', {'username': username})
         except HttpClientError as e:
-            api_errors_to_messages(request, e)
+            api_errors_to_messages(request, e, gettext('This user could not be deleted'))
             return redirect(reverse('list-users'))
 
     try:
