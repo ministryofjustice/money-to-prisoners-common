@@ -31,7 +31,7 @@ class ErrorSummaryTestCase(SimpleTestCase):
     def test_field_summary_shows(self):
         form = TestForm(data={})
         response = self.load_mocked_template(template, {'form': form})
-        self.assertContains(response, 'There was a problem submitting the form')
+        self.assertContains(response, 'There was a problem')
         response_content = response.content.decode(response.charset)
         self.assertIn('Please correct the following errors', response_content)
         self.assertIn('FIELD A', response_content)
@@ -40,7 +40,7 @@ class ErrorSummaryTestCase(SimpleTestCase):
         form = TestForm(data={'test_field': 'test'})
         form.create_general_error = True
         response = self.load_mocked_template(template, {'form': form})
-        self.assertContains(response, 'There was a problem submitting the form')
+        self.assertContains(response, 'There was a problem')
         response_content = response.content.decode(response.charset)
         self.assertIn('General error', response_content)
         self.assertNotIn('Also, please correct the following errors', response_content)

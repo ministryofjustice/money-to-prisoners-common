@@ -31,3 +31,12 @@
     padding-left: 4.8em;
   }
 }
+
+// Text only for screen readers
+.screenreader-only {
+  height: 1px;
+  width: 1px;
+  position: absolute;
+  overflow: hidden;
+  top: -10px;
+}
