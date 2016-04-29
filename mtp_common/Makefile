@@ -47,13 +47,13 @@ ASSETS_SOURCE = $(MTP_APP_PATH)/assets-src
 TEMPLATES = $(MTP_APP_PATH)/templates
 
 JS_PATH = $(ASSETS_TARGET)/scripts
-ALL_JS := $(shell find -L $(ASSETS_SOURCE)/javascripts $(MTP_COMMON)/assets/javascripts -name \*.js)
+ALL_JS := $(shell find -L $(ASSETS_SOURCE)/javascripts $(MTP_COMMON)/assets/javascripts -name \*.js 2> /dev/null)
 
 CSS_PATH = $(ASSETS_TARGET)/stylesheets
 
 SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-media/dist $(NODE_MODULES)/bourbon/app/assets/stylesheets $(NODE_MODULES)/susy/sass $(ASSETS_SOURCE)/stylesheets $(GOVUK_ELEMENTS)/sass $(MOJ_ELEMENTS)/sass $(MTP_COMMON)/assets/scss $(MTP_COMMON)/assets/scss/elements $(NODE_MODULES)
 
-SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss)
+SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss 2>/dev/null)
 
 IMAGE_FILES := $(shell find $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets-src/static/images/* -type f 2>/dev/null)
 
@@ -153,18 +153,13 @@ update: virtual_env
 	@npm set progress=false
 	npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 
-# copy assets from linked common
-.PHONY: pre_build
-pre_build:
-	rsync -ru --delete $(MTP_COMMON_PY)/assets $(MTP_COMMON)
-
 # all the assets
 .PHONY: build
 build: virtual_env assets static_assets
 
 # Just for browser live-reload
 .PHONY: assets
-assets: pre_build $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
+assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
 
 # remove all the assets
 .PHONY: clean
