@@ -3,8 +3,9 @@ import logging
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from moj_auth import api_client
 from slumber.exceptions import HttpClientError
+
+from mtp_common.auth import api_client
 
 logger = logging.getLogger('mtp')
 

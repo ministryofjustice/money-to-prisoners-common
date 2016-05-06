@@ -7,11 +7,11 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext, ngettext
 from django.views.generic.edit import FormView
-from moj_auth import api_client
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
-from ..api import api_errors_to_messages, retrieve_all_pages
-from .forms import UserUpdateForm
+from mtp_common.api import api_errors_to_messages, retrieve_all_pages
+from mtp_common.auth import api_client
+from mtp_common.user_admin.forms import UserUpdateForm
 
 logger = logging.getLogger('mtp')
 

@@ -17,11 +17,15 @@ with open('README.rst') as readme:
 
 install_requires = [
     'Django>=1.9,<1.10',
-    'django-moj-auth>=1.0',
+    'django-form-error-reporting>=0.3',
+    'django-widget-tweaks>=1.4,<1.5',
+    'pytz>=2016.4',
+    'requests-oauthlib>=0.6,<0.7',
+    'slumber>=0.7,<0.8',
 ]
 extras_require = {
     'monitoring': [
-        'raven>=5.11',
+        'raven>=5.15',
     ],
     'testing': [
         'flake8>=2.5',
