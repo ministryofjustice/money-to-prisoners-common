@@ -1,34 +1,46 @@
 // UploadSubmit module
-/* globals exports, require */
+/* globals exports */
 'use strict';
 
-var bindAll = require('lodash/function/bindAll');
-
 exports.UploadSubmit = {
-  selector: '.js-uploadSubmit',
+  selector: '.upload-form',
 
   init: function () {
-    bindAll(this, 'uploadSubmit');
     this.cacheEls();
     this.bindEvents();
+    if ($('.message--success').length) {
+      this.$formGroups.hide();
+      this.$otherFileLink.show();
+    }
+    this.$submitButton.prop('disabled', true);
+    this.$uploadFilename.hide();
   },
 
   cacheEls: function () {
     this.$form = $(this.selector);
+    this.$fileChooser = $(this.selector + ' input[type=file]');
     this.$submitButton = $(this.selector + ' input[type=submit]');
+    this.$chooseButton = $(this.selector + ' .upload-choose');
+    this.$uploadFilename = $(this.selector + ' .upload-filename');
+    this.$formGroups = $(this.selector + ' .form-group');
+    this.$errorMessages = $(this.selector + ' .error-message, ' + this.selector + ' .error-summary');
+    this.$otherFileLink = $(this.selector + ' .upload-otherfilelink');
   },
 
   bindEvents: function () {
     if (this.$form.length > 0) {
-      this.$form.on('submit', this.uploadSubmit);
+      this.$fileChooser.on('change', $.proxy(this.switchToUpload, this));
     }
   },
 
-  uploadSubmit: function () {
-    var tmpButtonLabel = this.$submitButton.data('value-uploading');
-    this.$submitButton
-      .addClass('button-secondary')
-      .attr('value', tmpButtonLabel);
-    this.$submitButton.after('<div class="spinner"></div>');
+  switchToUpload: function() {
+    var filePath, filename;
+    this.$submitButton.prop('disabled', false);
+    this.$formGroups.removeClass('error');
+    this.$errorMessages.remove();
+    filePath = this.$fileChooser.val();
+    filename = filePath.replace(/^.*[\\\/]/, '');
+    this.$uploadFilename.text(filename).show();
+    this.$chooseButton.text('Change file');
   }
 };
