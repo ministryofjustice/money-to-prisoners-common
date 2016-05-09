@@ -12,7 +12,6 @@ exports.UploadSubmit = {
       this.$formGroups.hide();
       this.$otherFileLink.show();
     }
-    this.$submitButton.prop('disabled', true);
     this.$uploadFilename.hide();
   },
 
@@ -35,7 +34,6 @@ exports.UploadSubmit = {
 
   switchToUpload: function() {
     var filePath, filename;
-    this.$submitButton.prop('disabled', false);
     this.$formGroups.removeClass('error');
     this.$errorMessages.remove();
     filePath = this.$fileChooser.val();

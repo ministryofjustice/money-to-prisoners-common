@@ -5,7 +5,7 @@
 //   eg <div data-analytics="pageview,/virtual/pageview/,user clicked there"/>
 // It needs the google analytics tracking code to be enabled on the page
 
-/* globals exports, ga, $ */
+/* globals ga */
 'use strict';
 
 exports.analytics = {

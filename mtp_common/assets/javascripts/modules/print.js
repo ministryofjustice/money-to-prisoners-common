@@ -1,8 +1,7 @@
 // Print module
-/* global exports, require */
+/* global exports, require, $ */
 'use strict';
 
-var bindAll = require('lodash/function/bindAll');
 var cookie = require('js-cookie');
 
 exports.Print = {
@@ -11,7 +10,6 @@ exports.Print = {
   cookieName: 'remove-print-prompt',
 
   init: function () {
-    bindAll(this, 'render', 'onClickPrint');
     this.cacheEls();
     this.bindEvents();
     this.render();
@@ -22,8 +20,8 @@ exports.Print = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('Print.render', this.render);
-    this.$body.on('click', this.selector, this.onClickPrint);
+    this.base.Events.on('Print.render', $.proxy(this.render, this));
+    this.$body.on('click', this.selector, $.proxy(this.onClickPrint, this));
   },
 
   render: function () {

@@ -18,8 +18,8 @@
   "jquery": true,
   "strict": "global",
   "globals": {
-    "moj": true,
-    "_": true,
-    "browser": true
+    "$": true,
+    "exports": true,
+    "require": true
   }
 }

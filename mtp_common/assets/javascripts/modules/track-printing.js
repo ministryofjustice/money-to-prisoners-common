@@ -1,5 +1,5 @@
 // Focus on search input field
-/* globals exports, require  */
+
 'use strict';
 
 var analytics = require('./analytics');

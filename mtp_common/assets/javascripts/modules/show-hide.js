@@ -1,6 +1,5 @@
 // Show-hide module
 
-/* globals exports */
 'use strict';
 
 exports.ShowHide = {

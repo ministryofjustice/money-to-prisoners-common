@@ -37,6 +37,7 @@ is_port_open = $(shell nc -z $(1) $(2) >/dev/null 2>&1 && echo true)
 NODE_MODULES := node_modules
 NODE_BIN := ./$(NODE_MODULES)/.bin
 
+VIRTUAL_ENV_DIR=venv
 MTP_COMMON_PY = $(PYTHON_LIBS)/mtp_common
 MTP_COMMON = $(NODE_MODULES)/money-to-prisoners-common
 GOVUK_ELEMENTS = $(NODE_MODULES)/mojular-govuk-elements
@@ -88,7 +89,7 @@ help:
 # run the django dev server
 .PHONY: start
 start: build
-	@venv/bin/python $(PYTHON_WARNINGS) manage.py runserver 0:$(port) --verbosity=$(verbosity)
+	@$(VIRTUAL_ENV_DIR)/bin/python $(PYTHON_WARNINGS) manage.py runserver 0:$(port) --verbosity=$(verbosity)
 
 # run the django dev server and recompile assets on change
 .PHONY: watch
@@ -112,9 +113,9 @@ docker: .host_machine_ip
 	@docker-compose up
 
 # run uwsgi, this is the entry point for docker running remotely
-uwsgi: venv/bin/uwsgi static_assets
+uwsgi: $(VIRTUAL_ENV_DIR)/bin/uwsgi static_assets
 	@echo "Starting MTP $(app) in uWSGI"
-	@venv/bin/uwsgi --ini conf/uwsgi/$(subst -,_,$(app)).ini
+	@$(VIRTUAL_ENV_DIR)/bin/uwsgi --ini conf/uwsgi/$(subst -,_,$(app)).ini
 
 # run python tests
 .PHONY: test
@@ -124,34 +125,34 @@ ifdef RUN_FUNCTIONAL_TESTS
 else
 	@echo Running non-functional tests only
 endif
-	@venv/bin/python $(PYTHON_WARNINGS) manage.py test --verbosity=$(verbosity) $(tests)
+	@$(VIRTUAL_ENV_DIR)/bin/python $(PYTHON_WARNINGS) manage.py test --verbosity=$(verbosity) $(tests)
 
 # update python virtual environment
 .PHONY: virtual_env
-virtual_env: venv/bin/pip
+virtual_env: $(VIRTUAL_ENV_DIR)/bin/pip
 	@echo Updating python packages
-	@venv/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
-	@venv/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
+	@$(VIRTUAL_ENV_DIR)/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
+	@$(VIRTUAL_ENV_DIR)/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # migrate the db
 # NB: client apps do not have databases
 .PHONY: migrate_db
-migrate_db: venv/bin/python
-	@venv/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
+migrate_db: $(VIRTUAL_ENV_DIR)/bin/python
+	@$(VIRTUAL_ENV_DIR)/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # collect django static assets
 .PHONY: static_assets
 static_assets:
 	@echo Collecting static assets
 	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
-	@venv/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
+	@$(VIRTUAL_ENV_DIR)/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # update node and python packages
 .PHONY: update
 update: virtual_env
 	@echo Updating node modules
 	@npm set progress=false
-	npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
+	@npm install >$(TASK_OUTPUT_REDIRECTION)  # force update rather than require $(NODE_MODULES) file target
 
 # all the assets
 .PHONY: build
@@ -164,7 +165,7 @@ assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
 # remove all the assets
 .PHONY: clean
 clean:
-	@git clean -dfX
+	@rm -r $(VIRTUAL_ENV_DIR) $(NODE_MODULES) static mtp_$(APP)/assets
 
 ##########################
 #### INTERNAL RECIPES ####
@@ -236,12 +237,12 @@ $(CSS_PATH)/%.css: $(SASS_FILES)
 	@echo Generating `basename $@`
 	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ >$(TASK_OUTPUT_REDIRECTION) 2>&1
 
-venv/bin/python, venv/bin/pip:
+$(VIRTUAL_ENV_DIR)/bin/python, $(VIRTUAL_ENV_DIR)/bin/pip:
 	@echo Creating python virtual environment
-	@virtualenv -p python3 venv >$(TASK_OUTPUT_REDIRECTION)
+	@virtualenv -p python3 $(VIRTUAL_ENV_DIR) >$(TASK_OUTPUT_REDIRECTION)
 
-venv/bin/uwsgi: venv/bin/pip
-	@venv/bin/pip install uWSGI
+$(VIRTUAL_ENV_DIR)/bin/uwsgi: $(VIRTUAL_ENV_DIR)/bin/pip
+	@$(VIRTUAL_ENV_DIR)/bin/pip install uWSGI
 
 $(SELENIUM):
 	@echo Installing selenium binaries
