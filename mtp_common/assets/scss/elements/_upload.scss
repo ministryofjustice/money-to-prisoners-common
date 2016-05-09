@@ -1,13 +1,30 @@
-$component: Upload;
+$component: upload-form;
 
 @include screen {
-  .#{$component} {
-    label {
-      font-weight: 700;
-    }
-
+  .no-js .#{$component} {
     input[type=file] {
-      width: 100%;
+      display: inline;
+      position: static;
+      left: 0;
+    }
+    .upload-choose {
+      display: none;
+    }
+  }
+
+  .#{$component} {
+    input[type=file] {
+      position: absolute;
+      left: -100000px;
+    }
+    .upload-filename, .upload-control div {
+      display: inline-block;
+    }
+    .upload-filename {
+      margin-right: 1em;
+    }
+    .upload-otherfilelink {
+      display: none;
     }
   }
 }
