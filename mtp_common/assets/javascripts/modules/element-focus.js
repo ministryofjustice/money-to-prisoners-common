@@ -1,5 +1,5 @@
 // Element focus module - allows passing a GET parameter to focus directly on an element on page load
-/* globals exports, $ */
+
 'use strict';
 
 exports.ElementFocus = {

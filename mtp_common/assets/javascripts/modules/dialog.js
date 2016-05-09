@@ -1,15 +1,12 @@
 // Dialog module
-/* global exports, require, $ */
+/* global exports, $ */
 
 'use strict';
-
-var bindAll = require('lodash/function/bindAll');
 
 exports.Dialog = {
   selector: '.js-Dialog',
 
   init: function () {
-    bindAll(this, 'render', 'openDialog', 'closeDialog', 'onKeyUp');
     this.cacheEls();
     this.bindEvents();
   },
@@ -20,10 +17,10 @@ exports.Dialog = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('Dialog.render', this.render);
-    this.base.Events.on('Dialog.close', this.closeDialog);
-    this.$body.on('click', this.selector, this.render);
-    this.$body.on('click', '.js-Dialog-close', this.closeDialog);
+    this.base.Events.on('Dialog.render', $.proxy(this.render, this));
+    this.base.Events.on('Dialog.close', $.proxy(this.closeDialog, this));
+    this.$body.on('click', this.selector, $.proxy(this.render, this));
+    this.$body.on('click', '.js-Dialog-close', $.proxy(this.closeDialog, this));
   },
 
   render: function (e) {

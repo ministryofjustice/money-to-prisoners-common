@@ -1,5 +1,5 @@
 // Help popup module
-/* globals exports, $, require */
+
 'use strict';
 
 var analytics = require('./analytics');

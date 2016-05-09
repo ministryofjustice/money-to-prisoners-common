@@ -1,15 +1,13 @@
 // BeforeUnload module
-/* globals exports, require, $ */
+
 'use strict';
 
-var bindAll = require('lodash/function/bindAll');
 var analytics = require('./analytics');
 
 exports.BeforeUnload = {
   selector: '.js-BeforeUnload',
 
   init: function () {
-    bindAll(this, 'beforeUnload', 'formSubmit');
     this.cacheEls();
     this.bindEvents();
   },
@@ -23,8 +21,8 @@ exports.BeforeUnload = {
 
   bindEvents: function () {
     if (this.$form.length > 0) {
-      $(window).on('beforeunload', this.beforeUnload);
-      this.$form.on('click', ':submit', this.formSubmit);
+      $(window).on('beforeunload', $.proxy(this.beforeUnload, this));
+      this.$form.on('click', ':submit', $.proxy(this.formSubmit, this));
     }
   },
 

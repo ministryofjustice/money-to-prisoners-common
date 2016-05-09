@@ -1,5 +1,5 @@
 // (IE) Polyfills module
-/* globals exports, require */
+
 'use strict';
 
 require('checked-polyfill');

@@ -1,14 +1,11 @@
 // Sticky header module
-/* globals exports, require */
-'use strict';
 
-var bindAll = require('lodash/function/bindAll');
+'use strict';
 
 exports.SelectAll = {
   selector: '.js-SelectAll',
 
   init: function () {
-    bindAll(this, 'render', 'onSelectAllChange', 'onCheckChange');
     this.cacheEls();
     this.bindEvents();
     this.render();
@@ -23,11 +20,11 @@ exports.SelectAll = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('SelectAll.render', this.render);
+    this.base.Events.on('SelectAll.render', $.proxy(this.render, this));
     this.$body
-      .on('change.SelectAll', this.selector, this.onSelectAllChange)
-      .on('change.SelectAll', this.checksSelector, this.onCheckChange)
-      .on('keypress.SelectAll', this.checksSelector + ', ' + this.selector, this.onCheckKeypress);
+      .on('change.SelectAll', this.selector, $.proxy(this.onSelectAllChange, this))
+      .on('change.SelectAll', this.checksSelector, $.proxy(this.onCheckChange, this))
+      .on('keypress.SelectAll', this.checksSelector + ', ' + this.selector, $.proxy(this.onCheckKeypress, this));
   },
 
   onSelectAllChange: function (e) {
