@@ -5,6 +5,7 @@ import sys
 
 import django
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.test.runner import DiscoverRunner
 
 DEFAULT_SETTINGS = dict(
@@ -14,13 +15,15 @@ DEFAULT_SETTINGS = dict(
     INSTALLED_APPS=(
         'mtp_common',
         'django.contrib.contenttypes',
-        'django.contrib.auth',
         'django.contrib.sessions',
+        'django.contrib.auth',
         'django.contrib.messages',
     ),
     OAUTHLIB_INSECURE_TRANSPORT=True,
     API_URL='http://localhost:8000',
-    AUTHENTICATION_BACKENDS=['tests.backends.TestBackend'],
+    API_CLIENT_ID='test-client-id',
+    API_CLIENT_SECRET='test-client-secret',
+    AUTHENTICATION_BACKENDS=['mtp_common.auth.backends.MojBackend'],
     SESSION_ENGINE='django.contrib.sessions.backends.signed_cookies',
     MESSAGE_STORAGE='django.contrib.messages.storage.session.SessionStorage',
     TEMPLATES=[{
@@ -39,10 +42,14 @@ DEFAULT_SETTINGS = dict(
     MIDDLEWARE_CLASSES=(
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'mtp_common.auth.csrf.CsrfViewMiddleware',
+        'mtp_common.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
-    )
+    ),
+    CSRF_FAILURE_VIEW='mtp_common.auth.csrf.csrf_failure',
+    LOGIN_URL=reverse_lazy('login'),
+    LOGOUT_URL=reverse_lazy('logout'),
+    LOGIN_REDIRECT_URL=reverse_lazy('dummy'),
 )
 
 

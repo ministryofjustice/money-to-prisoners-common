@@ -9,6 +9,7 @@ Features
 * Reusable templates for form fields and errors
 * Base sass and static assets
 * Base templates
+* Authentication utilities and views for connecting to the MTP api
 * User account management forms and views
 * REST utilities for retrieving information from `money-to-prisoners-api`_
 * Integration and accessibility testing with selenium
@@ -23,6 +24,65 @@ There are two variations as setuptools *extras*:
 
 * Use ``money-to-prisoners-common[testing]==<version>`` for environments requiring testing
 * Use ``money-to-prisoners-common[monitoring]==<version>`` for the deployed version
+
+Add url patterns:
+
+.. code-block:: python
+
+    from django.conf.urls import url
+
+    from mtp_common.auth import views
+
+    urlpatterns = [
+        url(r'^login/$', views.login, {
+            'template_name': 'login.html',
+            }, name='login'),
+        url(
+            r'^logout/$', views.logout, {
+                'template_name': 'login.html',
+                'next_page': reverse_lazy('login'),
+            }, name='logout'
+        ),
+    ]
+
+Configure Django settings:
+
+.. code-block:: python
+
+    MIDDLEWARE_CLASSES = (
+        ...
+        # instead of django.middleware.csrf.CsrfViewMiddleware
+        'mtp_common.auth.csrf.CsrfViewMiddleware',
+        ...
+        # instead of django.contrib.auth.middleware.AuthenticationMiddleware
+        'mtp_common.auth.middleware.AuthenticationMiddleware',
+        ...
+    )
+
+    AUTHENTICATION_BACKENDS = (
+        'mtp_common.auth.backends.MojBackend',
+    )
+
+    CSRF_FAILURE_VIEW = 'mtp_common.auth.csrf.csrf_failure'
+
+If you wish for additional interface methods, you can extend ``mtp_common.auth.models.MojUser``,
+and specify your subclass as ``MOJ_USER_MODEL``. An example would be adding a property to
+access a key in the ``user_data`` dict.
+
+.. code-block:: python
+
+    MOJ_USER_MODEL = 'myapp.models.MyCustomUser'
+
+Specify the parameters of the API authentication. ``API_CLIENT_ID`` and ``API_CLIENT_SECRET``
+should be unique to your application.
+
+.. code-block:: python
+
+    API_CLIENT_ID = 'xxx'
+    API_CLIENT_SECRET = os.environ.get('API_CLIENT_SECRET', 'xxx')
+    API_URL = os.environ.get('API_URL', 'http://localhost:8000')
+
+    OAUTHLIB_INSECURE_TRANSPORT = True
 
 Developing
 ----------
