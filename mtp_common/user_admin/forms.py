@@ -13,7 +13,7 @@ logger = logging.getLogger('mtp')
 
 class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
     error_messages = {
-        'generic': _('The service is currently unavailable')
+        'generic': _('This service is currently unavailable')
     }
 
     username = forms.CharField(label=_('Username'), disabled=True)

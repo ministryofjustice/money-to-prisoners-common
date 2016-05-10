@@ -18,13 +18,12 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
     """
     Authentication form used for authenticating users during the login process.
     """
-    username = forms.CharField(label=_("Username"), max_length=254)
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    username = forms.CharField(label=_('Username'), max_length=30)
+    password = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
 
     error_messages = {
-        'invalid_login': _("Please enter a correct username and password. "
-                           "Note that both fields may be case-sensitive."),
-        'connection_error': _("The API Server seems down, please try again later."),
+        'invalid_login': _('You’ve entered an incorrect username and/or password'),
+        'connection_error': _('This service is currently unavailable'),
     }
 
     def __init__(self, request=None, *args, **kwargs):
@@ -69,8 +68,8 @@ class PasswordChangeForm(GARequestErrorReportingMixin, forms.Form):
     password.
     """
     error_messages = {
-        'password_mismatch': _('The two password fields didn’t match'),
-        'generic': _('The service is currently unavailable')
+        'password_mismatch': _('You’ve entered different passwords'),
+        'generic': _('This service is currently unavailable'),
     }
     old_password = forms.CharField(label=_('Old password'),
                                    widget=forms.PasswordInput)
@@ -116,7 +115,7 @@ class PasswordChangeForm(GARequestErrorReportingMixin, forms.Form):
 
 class ResetPasswordForm(GARequestErrorReportingMixin, forms.Form):
     error_messages = {
-        'generic': _('The service is currently unavailable')
+        'generic': _('This service is currently unavailable')
     }
     username = forms.CharField(label=_('Username'))
 

@@ -9,6 +9,8 @@ def replace_default_error_messages():
     NB: avoid trailing full stops visually, they are added for screen readers in templates
     """
     forms.Field.default_error_messages['required'] = _('This field is required')
+    forms.CharField.default_error_messages['min_length'] = _('You’ve entered too few characters')
+    forms.CharField.default_error_messages['max_length'] = _('You’ve entered too many characters')
     forms.IntegerField.default_error_messages['invalid'] = _('Enter a whole number')
     forms.FloatField.default_error_messages['invalid'] = _('Enter a number')
     forms.DecimalField.default_error_messages['invalid'] = _('Enter a number')
