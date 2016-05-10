@@ -23,5 +23,12 @@ form.admin-form {
       color: $error-colour;
       font-weight: bold;
     }
+
+    .field-specific-error {
+      li {
+        list-style-type: disc;
+        color: $error-colour;
+      }
+    }
   }
 }
