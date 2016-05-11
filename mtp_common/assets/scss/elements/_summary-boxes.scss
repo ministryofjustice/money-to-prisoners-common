@@ -4,26 +4,20 @@ $component: SummaryBoxes;
   $box-width: 210px;
   $box-height: 175px;
   $header-height: 50px;
-  $boxes-per-row: 2;
-  $box-container-width: ($box-width + ($container-h-padding*2)) * $boxes-per-row;
 
-  @include clearfix;
+
+  max-width: 60%;
   margin: 68px 0 0 0;
   padding: 0;
 
-  @include breakpoint($tablet) {
-    max-width: em($box-container-width);
-  }
 
   li {
     float: left;
-    margin: 0 $container-h-padding*2 $container-h-padding*2 0;
-    list-style: none;
+    margin: 0 27px 30px 0;
+    display: inline-block;
     background: $grey-3;
-
-    &:last-child {
-      margin-right: 0;
-    }
+    width: $box-width;
+    height: $box-height;
 
     a {
       display: block;
@@ -46,24 +40,23 @@ $component: SummaryBoxes;
       font-size: em(30);
       line-height: $header-height;
       background: $grey-1;
+      &.SummaryBoxes--small-title {
+        font-size: em(20);
+      }
     }
 
     p {
       display: table-cell;
-      width: $box-width - $container-h-padding * 2;
-      height: $box-height - $header-height;
-      padding: 0 $container-h-padding;
+      width: 80%;
+      height: $box-height - $header-height * 2;
+      padding: 1em;
+      vertical-align: middle;
       color: $black;
       text-align: center;
-      vertical-align: middle;
-
-      span {
-        display: block;
-      }
 
       strong {
         display: block;
-        font-size: em(48);
+        font-size: 2.8em;
         line-height: 1;
       }
     }
@@ -71,17 +64,23 @@ $component: SummaryBoxes;
 }
 
 // Variants
-li.#{$component}--unprocessed {
+li.#{$component}--variant-1 {
   background: $green-2;
-
   & h2 {
     background: $green-1;
   }
 }
-li.#{$component}--locked {
-  background: $orange-25;
 
+li.#{$component}--variant-2 {
+  background: $orange-25;
   & h2 {
-    background: #ed7031;
+    background: $orange;
+  }
+}
+
+li.#{$component}--variant-3 {
+  background:$light-blue-25;
+  & h2 {
+    background: $light-blue;
   }
 }
