@@ -14,33 +14,21 @@
     </h1>
     <ol class="error-summary-list">
       {% get_form_errors form as errors %}
-      {# NB: individual field errors are not repeated in the summary #}
-      {#     but non-field errors are only included in the summary #}
 
       {% for error in errors.non_field %}
         <li class="non-field-error">{{ error }}<span class="screenreader-only">.</span></li>
       {% endfor %}
 
       {% for field, field_errors in errors.field_specific.items %}
-        {% if forloop.first %}
-          <li>
-            {% if errors.non_field %}
-              {% trans 'Also, please correct the following errors' %}
-            {% else %}
-              {% trans 'Please correct the following errors' %}
-            {% endif %}
-          </li>
-        {% endif %}
-        <li>
+        <li class="field-specific-error">
           <a href="#{{ field.id_for_label }}-label">{{ field.label }}</a>
-          {% if debug %}
-          <!--
-          {{ field_errors|safeseq|join:'\n' }}
-          -->
-          {% endif %}
+          <ol>
+            {% for field_error in field_errors %}
+              <li>{{ field_error }}<span class="screenreader-only">.</span></li>
+            {% endfor %}
+          </ol>
         </li>
       {% endfor %}
-
     </ol>
   </div>
 {% endif %}
