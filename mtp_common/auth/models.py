@@ -16,6 +16,9 @@ class MojUser:
     def save(self, *args, **kwargs):
         pass
 
+    def is_anonymous(self):
+        return False
+
     def is_authenticated(self, *args, **kwargs):
         return True
 
@@ -35,6 +38,9 @@ class MojUser:
         return self.user_data.get('username')
 
     @property
+    def email(self):
+        return self.user_data.get('email')
+
     def get_full_name(self):
         if not hasattr(self, '_full_name'):
             name_parts = [
@@ -43,10 +49,6 @@ class MojUser:
             ]
             self._full_name = ' '.join(filter(None, name_parts))
         return self._full_name
-
-    @property
-    def email(self):
-        return self.user_data.get('email')
 
 
 class MojAnonymousUser:
@@ -57,6 +59,27 @@ class MojAnonymousUser:
     gives several warnings when used without a database so we had to create a
     custom one.
     """
+    pk = None
+    is_active = False
+    token = None
+    user_data = {}
+    username = ''
+    email = ''
+
+    def get_full_name(self):
+        return ''
+
+    def is_anonymous(self):
+        return True
 
     def is_authenticated(self, *args, **kwargs):
+        return False
+
+    def get_all_permissions(self, obj=None):
+        return []
+
+    def has_perm(self, perm, obj=None):
+        return False
+
+    def has_perms(self, perm_list, obj=None):
         return False
