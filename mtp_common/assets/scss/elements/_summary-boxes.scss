@@ -43,6 +43,9 @@ $component: SummaryBoxes;
       &.SummaryBoxes--small-title {
         font-size: em(20);
       }
+      &.SummaryBoxes--wrapped {
+        line-height: $header-height / 2;
+      }
     }
 
     p {
