@@ -81,7 +81,7 @@ class UserCreationView(UserFormView):
         context_data = super().get_context_data(**kwargs)
 
         # TODO: this note only applies to cashbook; we need a way to pass it in from client apps
-        prison_count = len(self.request.user.user_data.get('prisons', []))
+        prison_count = api_client.get_connection(self.request).prisons.get().get('count', 0)
         if prison_count > 0:
             context_data['permissions_note'] = ngettext(
                 'The new user will have access to the same prison as you do.',
