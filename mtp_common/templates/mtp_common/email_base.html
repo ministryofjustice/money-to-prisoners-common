@@ -5,6 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
-    {% block content %}{% endblock %}
+    <div class="container" style="margin: auto; max-width: 600px;">
+      <div class="banner" style="background: #0b0c0c;">
+        <img src="{{ static_url }}/mtp_common/images/govuk-header-logo.png" style="vertical-align: bottom;">
+      </div>
+      <div class="content" style="padding: 16px 30px 0;">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
   </body>
 </html>
