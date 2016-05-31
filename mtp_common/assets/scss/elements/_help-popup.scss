@@ -2,18 +2,17 @@
   .help-box {
     .help-box-title {
       div {
-        width: 30px;
-        height: 1em;
+        width: 22px;
+        height: 14px;
         background-image: url(../mtp_common/images/arrows.png);
         background-repeat: no-repeat;
-        background-position: -5px 3px;
+        background-position: 0;
         display: inline-block;
         vertical-align: middle;
         @media only screen and (-webkit-min-device-pixel-ratio: 2),
           only screen and (min-device-pixel-ratio: 2) {
           background-image: url(../mtp_common/images/arrows@2x.png);
-          background-size: 53px 15px;
-          background-position: -4px;
+          background-size: 42px 14px;
         }
       }
       a:visited { color: $link-colour }
@@ -31,12 +30,11 @@
 
     &.help-box-hidden {
       .help-box-title div {
-        background-position: -40px 1px;
+        background-position: -28px;
         @media only screen and (-webkit-min-device-pixel-ratio: 2),
           only screen and (min-device-pixel-ratio: 2) {
           background-image: url(../mtp_common/images/arrows@2x.png);
-          background-size: 51px 15px;
-          background-position: -32px;
+          background-size: 42px 14px;
         }
       }
       .help-box-contents {
