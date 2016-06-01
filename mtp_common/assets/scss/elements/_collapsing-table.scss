@@ -44,7 +44,7 @@ $component: CollapsingTable;
     background-size: 25px 25px;
   }
 
-  &.#{$component}-hidden {
+  &.#{$component}ShowHide-hidden {
     background-image: url(../mtp_common/images/expand-button.png);
 
     @media only screen and (-webkit-min-device-pixel-ratio: 2),
