@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import re
 
 from django import template
 try:
@@ -12,6 +13,24 @@ register = template.Library()
 @register.filter
 def to_string(value):
     return str(value)
+
+
+class StripWhitespaceNode(template.Node):
+    def __init__(self, node_list):
+        self.node_list = node_list
+
+    def render(self, context):
+        output = self.node_list.render(context)
+        return re.sub(r'\s+', '', output)
+
+
+@register.tag
+def stripwhitespace(parser, token):
+    if len(token.split_contents()) != 1:
+        raise template.TemplateSyntaxError('stripwhitespace takes no arguments')
+    node_list = parser.parse(('endstripwhitespace',))
+    parser.delete_first_token()
+    return StripWhitespaceNode(node_list)
 
 
 @register.filter
