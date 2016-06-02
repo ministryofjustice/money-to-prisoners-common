@@ -1,0 +1,24 @@
+select.form-control {
+  width: auto;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  padding-right: 35px;
+  background: #fff url('../mtp_common/images/select-dropdown.png') no-repeat right center;
+
+  &:focus {
+    background-image: url('../mtp_common/images/select-dropdown-focused.png');
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-device-pixel-ratio: 2) {
+  select.form-control {
+    background-size: 31px 100px;
+    background-image: url('../mtp_common/images/select-dropdown@2x.png');
+
+    &:focus {
+      background-image: url('../mtp_common/images/select-dropdown-focused@2x.png');
+    }
+  }
+}
