@@ -4,12 +4,17 @@
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
-  <body>
-    <div class="container" style="margin: auto; max-width: 600px;">
-      <div class="banner" style="background: #0b0c0c;">
-        <img src="{{ static_url }}/mtp_common/images/govuk-header-logo.png" style="vertical-align: bottom;">
-      </div>
-      <div class="content" style="padding: 16px 30px 0;">
+  <body style="font-family: sans-serif;">
+    <div style="margin: auto; max-width: 600px;">
+      <table style="background: #0b0c0c;">
+        <tr>
+          <td>
+            <img src="{{ static_url }}/mtp_common/images/govuk-header-logo.png" alt="GOV.UK">
+          </td>
+          <td style="padding-right: 30px; color: #fff; font-size: 20px; font-family: sans-serif;">Send money to a prisoner</td>
+        </tr>
+      </table>
+      <div style="padding: 16px 30px 0;">
         {% block content %}{% endblock %}
       </div>
     </div>
