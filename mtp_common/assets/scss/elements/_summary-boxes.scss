@@ -38,6 +38,7 @@ $component: SummaryBoxes;
       min-height: $header-height;
       text-align: center;
       font-size: em(30);
+      font-weight: bold;
       line-height: $header-height;
       background: $grey-1;
       &.SummaryBoxes--small-title {

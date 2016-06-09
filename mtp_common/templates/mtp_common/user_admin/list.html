@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block content %}
+{% block inner_content %}
 <div class="admin">
   <header class="ContentHeader">
     <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-    <h1>{% trans 'Manage user accounts' %}</h1>
+    <h1 class="heading-xlarge">{% trans 'Manage user accounts' %}</h1>
   </header>
 
   {% if messages %}

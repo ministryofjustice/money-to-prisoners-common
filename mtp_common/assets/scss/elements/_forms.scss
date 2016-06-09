@@ -3,7 +3,8 @@ input {
 }
 
 form a.cancel {
-  margin-left: 10em;
+  margin-left: 1em;
+  vertical-align: -.3em;
   &:visited {
     color: $link-colour;
   }
@@ -25,9 +26,12 @@ form.admin-form {
     }
 
     .field-specific-error {
-      li {
-        list-style-type: disc;
-        color: $error-colour;
+      ul {
+        padding-left: 1em;
+        li {
+          list-style-type: disc;
+          color: $error-colour;
+        }
       }
     }
   }
