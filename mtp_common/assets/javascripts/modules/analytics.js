@@ -8,7 +8,7 @@
 /* globals ga */
 'use strict';
 
-exports.analytics = {
+exports.Analytics = {
   attrName: 'analytics',
 
   init: function() {

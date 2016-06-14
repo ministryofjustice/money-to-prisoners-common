@@ -19,6 +19,9 @@ django_settings ?= $(MTP_APP_PATH).settings
 python_requirements ?= requirements/dev.txt
 verbosity ?= 1
 
+GOVUK_TEMPLATE_VERSION=0.17.3
+GOVUK_TEMPLATE_TGZ = https://github.com/alphagov/govuk_template/releases/download/v${GOVUK_TEMPLATE_VERSION}/django_govuk_template-$(GOVUK_TEMPLATE_VERSION).tgz
+
 ifeq ($(shell [ $(verbosity) -gt 1 ] && echo true),true)
 TASK_OUTPUT_REDIRECTION := &1
 PYTHON_WARNINGS := "-W default"
@@ -40,27 +43,28 @@ NODE_BIN := ./$(NODE_MODULES)/.bin
 VIRTUAL_ENV_DIR=venv
 MTP_COMMON_PY = $(PYTHON_LIBS)/mtp_common
 MTP_COMMON = $(NODE_MODULES)/money-to-prisoners-common
-GOVUK_ELEMENTS = $(NODE_MODULES)/mojular-govuk-elements
-MOJ_ELEMENTS = $(NODE_MODULES)/mojular-moj-elements
+GOVUK_ELEMENTS_SASS = $(NODE_MODULES)/govuk-elements-sass/public/sass
+GOVUK_FRONTEND_TOOLKIT = $(NODE_MODULES)/govuk_frontend_toolkit
+GOVUK_FRONTEND_TOOLKIT_SASS = $(GOVUK_FRONTEND_TOOLKIT)/stylesheets
 
 ASSETS_TARGET = $(MTP_APP_PATH)/assets
 ASSETS_SOURCE = $(MTP_APP_PATH)/assets-src
 TEMPLATES = $(MTP_APP_PATH)/templates
 
-JS_PATH = $(ASSETS_TARGET)/scripts
+JS_PATH = $(ASSETS_TARGET)/javascripts
 ALL_JS := $(shell find -L $(ASSETS_SOURCE)/javascripts $(MTP_COMMON)/assets/javascripts -name \*.js 2> /dev/null)
 
 CSS_PATH = $(ASSETS_TARGET)/stylesheets
 
-SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-media/dist $(NODE_MODULES)/bourbon/app/assets/stylesheets $(NODE_MODULES)/susy/sass $(ASSETS_SOURCE)/stylesheets $(GOVUK_ELEMENTS)/sass $(MOJ_ELEMENTS)/sass $(MTP_COMMON)/assets/scss $(MTP_COMMON)/assets/scss/elements $(NODE_MODULES)
+SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-media/dist $(NODE_MODULES)/bourbon/app/assets/stylesheets $(NODE_MODULES)/susy/sass $(ASSETS_SOURCE)/stylesheets $(MTP_COMMON)/assets/scss $(NODE_MODULES) $(GOVUK_ELEMENTS_SASS) $(GOVUK_FRONTEND_TOOLKIT_SASS)
 
 SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss 2>/dev/null)
 
-IMAGE_FILES := $(shell find $(GOVUK_ELEMENTS)/images/* $(MTP_APP_PATH)/assets-src/static/images/* -type f 2>/dev/null)
+IMAGE_FILES := $(shell find $(GOVUK_FRONTEND_TOOLKIT)/images $(MTP_APP_PATH)/assets-src/static/images -type f 2>/dev/null)
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
 
-WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON_PY)/assets $(MTP_COMMON_PY)/static $(MTP_COMMON_PY)/templates $(GOVUK_ELEMENTS) $(MOJ_ELEMENTS) $(TEMPLATES)
+WATCHLIST := $(ASSETS_SOURCE) $(MTP_COMMON_PY)/assets $(MTP_COMMON_PY)/static $(MTP_COMMON_PY)/templates $(GOVUK_ELEMENTS_SASS) $(MOJ_ELEMENTS) $(TEMPLATES)
 
 SELENIUM := $(NODE_MODULES)/selenium-standalone/.selenium
 
@@ -140,11 +144,18 @@ virtual_env: $(VIRTUAL_ENV_DIR)/bin/pip
 migrate_db: $(VIRTUAL_ENV_DIR)/bin/python
 	@$(VIRTUAL_ENV_DIR)/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
-# collect django static assets
+# collect static images and templates
 .PHONY: static_assets
 static_assets:
 	@echo Collecting static assets
-	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images
+	@echo Retrieving GOV.UK stylesheets
+	@curl -Ls $(GOVUK_TEMPLATE_TGZ) | tar xzf - govuk_template && \
+	  cp -r govuk_template/static/* $(ASSETS_TARGET) && \
+	  mkdir -p $(ASSETS_TARGET)/templates && \
+	  cp -r govuk_template/templates/govuk_template $(ASSETS_TARGET)/templates && \
+	  rm -rf govuk_template
+	@echo Copying images
+	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images >$(TASK_OUTPUT_REDIRECTION)
 	@$(VIRTUAL_ENV_DIR)/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # update node and python packages
@@ -158,14 +169,13 @@ update: virtual_env
 .PHONY: build
 build: virtual_env assets static_assets
 
-# Just for browser live-reload
 .PHONY: assets
-assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-print.css
+assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-ie6.css $(CSS_PATH)/app-ie7.css $(CSS_PATH)/app-ie8.css $(CSS_PATH)/app-print.css
 
 # remove all the assets
 .PHONY: clean
 clean:
-	@rm -r $(VIRTUAL_ENV_DIR) $(NODE_MODULES) static mtp_$(APP)/assets
+	@rm -r $(VIRTUAL_ENV_DIR) $(NODE_MODULES) static $(ASSETS_TARGET)
 
 ##########################
 #### INTERNAL RECIPES ####

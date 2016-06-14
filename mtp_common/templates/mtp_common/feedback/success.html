@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block content %}
+{% block inner_content %}
 <header class="ContentHeader">
   <a href="/" class="ContentHeader-back">{% trans 'Home' %}</a>
-  <h1>{% trans 'Your feedback' %}</h1>
+  <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
 </header>
 
 <div class="container">
@@ -17,4 +17,4 @@
     </div>
   </div>
 </div>
-{% endblock content %}
+{% endblock %}

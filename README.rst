@@ -100,9 +100,6 @@ All shared assets used for `money-to-prisoners-cashbook`_, `money-to-prisoners-b
 
 Each application’s build scripts install this package automatically.
 
-This repository has a dependency on `mojular/moj-elements`_, which provides the assets and scripts for MOJ sites.
-The `mojular`_ repositories are shared across multiple departments, and any change should be checked by members of the organization.
-
 Sass, javascript, images
 ------------------------
 
@@ -122,5 +119,3 @@ Common templates used by the client applications are kept in ``mtp_common/templa
 .. _money-to-prisoners-bank-admin: https://github.com/ministryofjustice/money-to-prisoners-bank-admin
 .. _money-to-prisoners-prisoner-location-admin: https://github.com/ministryofjustice/money-to-prisoners-prisoner-location-admin
 .. _money-to-prisoners-send-money: https://github.com/ministryofjustice/money-to-prisoners-send-money
-.. _mojular: https://github.com/mojular
-.. _mojular/moj-elements: https://github.com/mojular/moj-elements

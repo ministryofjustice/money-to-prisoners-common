@@ -2,7 +2,7 @@
 {% load mtp_common %}
 {% load widget_tweaks %}
 
-<h2>{{ form_title }}</h2>
+<h2 class="heading-large">{{ form_title }}</h2>
 
 <div class="container">
   <div class="grid-row">
@@ -27,7 +27,7 @@
         <div class="form-group">
           <button type="submit" class="button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
           {% if cancel_url %}
-            <a href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+            <a class="cancel" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
           {% endif %}
         </div>
       </form>

@@ -12,7 +12,7 @@
       {% trans 'There was a problem' as error_summary_title %}
       {{ form.error_summary_title|default:error_summary_title }}
     </h1>
-    <ol class="error-summary-list">
+    <ul class="error-summary-list">
       {% get_form_errors form as errors %}
 
       {% for error in errors.non_field %}
@@ -22,13 +22,13 @@
       {% for field, field_errors in errors.field_specific.items %}
         <li class="field-specific-error">
           <a href="#{{ field.id_for_label }}-label">{{ field.label }}</a>
-          <ol>
+          <ul>
             {% for field_error in field_errors %}
               <li>{{ field_error }}<span class="screenreader-only">.</span></li>
             {% endfor %}
-          </ol>
+          </ul>
         </li>
       {% endfor %}
-    </ol>
+    </ul>
   </div>
 {% endif %}
