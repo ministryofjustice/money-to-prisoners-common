@@ -149,7 +149,7 @@ migrate_db: $(VIRTUAL_ENV_DIR)/bin/python
 static_assets:
 	@echo Collecting static assets
 	@echo Retrieving GOV.UK stylesheets
-	@curl -Ls $(GOVUK_TEMPLATE_TGZ) | tar xzf - govuk_template && \
+	@curl -Ls $(GOVUK_TEMPLATE_TGZ) | tar xzf - ./govuk_template && \
 	  cp -r govuk_template/static/* $(ASSETS_TARGET) && \
 	  mkdir -p $(ASSETS_TARGET)/templates && \
 	  cp -r govuk_template/templates/govuk_template $(ASSETS_TARGET)/templates && \
