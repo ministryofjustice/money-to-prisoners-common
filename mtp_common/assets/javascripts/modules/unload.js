@@ -4,7 +4,7 @@
 
 var analytics = require('./analytics');
 
-exports.BeforeUnload = {
+exports.Unload = {
   selector: '.js-BeforeUnload',
 
   init: function () {
@@ -39,7 +39,7 @@ exports.BeforeUnload = {
 
   beforeUnload: function () {
     if (this.$form.serialize() !== this.initialData && !this.submitting) {
-      analytics.analytics.send('pageview', '/-leaving_page_dialog/');
+      analytics.Analytics.send('pageview', '/-leaving_page_dialog/');
       return this.message;
     }
   }

@@ -2,7 +2,7 @@
 /* globals exports */
 'use strict';
 
-exports.CollapsingTableShowHide = {
+exports.CollapsingTable = {
   init: function () {
     var showHideFunction = this.onShowHide;
 

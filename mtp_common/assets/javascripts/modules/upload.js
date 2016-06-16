@@ -2,7 +2,7 @@
 /* globals exports */
 'use strict';
 
-exports.UploadSubmit = {
+exports.Upload = {
   selector: '.upload-form',
 
   init: function () {

@@ -8,7 +8,7 @@ exports.trackPrinting = {
   init: function () {
     window.print = (function(printfn) {
       return function() {
-        analytics.analytics.send('event', 'print');
+        analytics.Analytics.send('event', 'print');
         printfn();
       };
     })(window.print);

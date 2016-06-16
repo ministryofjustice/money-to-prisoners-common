@@ -26,10 +26,10 @@ exports.HelpPopup = {
     $helpBox.toggleClass('help-box-hidden');
     if ($helpBox.hasClass('help-box-hidden')) {
       $helpTitle.attr('aria-expanded', 'false');
-      analytics.analytics.send('pageview', '/-help_close/');
+      analytics.Analytics.send('pageview', '/-help_close/');
     } else {
       $helpTitle.attr('aria-expanded', 'true');
-      analytics.analytics.send('pageview', '/-help_open/');
+      analytics.Analytics.send('pageview', '/-help_open/');
     }
     return false;
   }
