@@ -21,7 +21,7 @@ def send_email(to, text_template, subject, context=None,
     text_body = loader.get_template(text_template).render(template_context)
     email = EmailMultiAlternatives(
         subject=subject,
-        body=text_body,
+        body=text_body.strip('\n'),
         from_email=from_address,
         to=to
     )
