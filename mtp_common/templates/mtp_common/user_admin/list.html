@@ -37,7 +37,11 @@
           <td>{{ user.username }}</td>
           <td>{{ user.first_name }} {{ user.last_name }}</td>
           <td>{{ user.email }}</td>
-          <td>{% if user.user_admin %}✔{% else %}✘{% endif %}</td>
+          <td>
+            {% if user.user_admin %}
+              ✔ <span class="screenreader-only">{% trans 'User is an admin' %}</span>
+            {% endif %}
+          </td>
           <td class="actions">
             <div>
               <a href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
