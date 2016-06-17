@@ -1,7 +1,7 @@
 $bg-color: $white;
 $bg-color-alt: #ededed;
 $bg-color-selected: $light-blue-25;
-$border-color: $grey-1;
+$border-color: $grey-2;
 
 // Fixes
 
@@ -17,16 +17,10 @@ table {
 
   th, td {
     padding: .75em 1em;
-    border: $border-color solid;
-    border-width: 0 0 0 1px;
 
     @include print {
       padding-top: .3em;
       padding-bottom: .3em;
-    }
-
-    &:first-child {
-      border-left: none;
     }
 
     // modifiers
@@ -40,7 +34,6 @@ table {
     }
 
     &.cell--compact {
-      border-width: 0;
       padding: .75em 0;
     }
 
@@ -61,50 +54,17 @@ table {
     }
   }
 
-  th {
-    background: $bg-color;
-    border-color: $border-color;
-  }
-
-  td {
-    background: $bg-color;
-    border-color: $bg-color $border-color;
-
-    @include print {
-      border-bottom-color: $border-color;
+  .no-border {
+    > th, > td {
+      border: 0;
     }
-  }
-}
-
-thead {
-  th {
-    border-top-width: 1px;
-    border-bottom-width: 1px;
   }
 }
 
 tbody {
   tr {
-    &:last-child td {
-      border-bottom-width: 1px;
-      border-bottom-color: $border-color;
-    }
-
-    &.odd td {
-      background: $bg-color-alt;
-    }
-
     &.is-selected td {
       background: $bg-color-selected;
-    }
-  }
-}
-
-tfoot {
-  tr {
-    &:first-child td {
-      border-top-width: 1px;
-      border-top-color: $border-color;
     }
   }
 }

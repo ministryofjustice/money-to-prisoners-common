@@ -33,7 +33,7 @@
 
     <tbody>
       {% for user in users %}
-        <tr {% if not forloop.counter|divisibleby:2 %}class="odd"{% endif %}>
+        <tr {% if forloop.last %}class="no-border"{% endif %}>
           <td>{{ user.username }}</td>
           <td>{{ user.first_name }} {{ user.last_name }}</td>
           <td>{{ user.email }}</td>
