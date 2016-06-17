@@ -1,5 +1,9 @@
 $component: CollapsingTable;
 
+.#{$component} tr {
+  td, th { font-size: 1em }
+}
+
 .#{$component}Header {
   font-size: 20px;
   font-weight: bold;

@@ -5,13 +5,14 @@ button,
   font-family: inherit;
 }
 
-.button-secondary, .button-secondary:link {
-  background-color: $grey-3!important;
-  color: $text-colour!important;
+.button-secondary{
+  @include button($grey-3);
+  color: black!important; // IE8 bug
 }
 
 .button + .button {
   margin-top: 0;
+  margin-left: .5em;
 }
 
 // App specific

@@ -17,10 +17,11 @@ exports.Dialog = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('Dialog.render', $.proxy(this.render, this));
-    this.base.Events.on('Dialog.close', $.proxy(this.closeDialog, this));
-    this.$body.on('click', this.selector, $.proxy(this.render, this));
-    this.$body.on('click', '.js-Dialog-close', $.proxy(this.closeDialog, this));
+    this.$body
+      .on('Dialog.render', $.proxy(this.render, this))
+      .on('Dialog.close', $.proxy(this.closeDialog, this))
+      .on('click', this.selector, $.proxy(this.render, this))
+      .on('click', '.js-Dialog-close', $.proxy(this.closeDialog, this));
   },
 
   render: function (e) {
@@ -78,7 +79,7 @@ exports.Dialog = {
   },
 
   closeDialog: function (e) {
-    var $dialog = this.$body.find('dialog[open]');
+    var $dialog = this.$body.find('div.Dialog[open]');
     var $close = $dialog.find('.Dialog-close');
 
     if (e) {
