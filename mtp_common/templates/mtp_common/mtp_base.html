@@ -6,7 +6,11 @@
 {% block header_class %}with-proposition{% endblock %}
 
 {% block cookie_message %}
-  <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a></p>
+  <p>
+    {% blocktrans trimmed with url='https://www.gov.uk/help/cookies' %}
+      GOV.UK uses cookies to make the site simpler. <a href="{{ url }}">Find out more about cookies</a>
+    {% endblocktrans %}
+  </p>
 {% endblock %}
 
 {% block proposition_header %}
@@ -41,7 +45,7 @@
   <main role="main" id="content" tabindex="-1">
     {% if request.user.is_authenticated %}
       <div class="user-details">
-        {% blocktrans with full_name=request.user.get_full_name|default:request.user.username %}
+        {% blocktrans trimmed with full_name=request.user.get_full_name|default:request.user.username %}
           Logged in as {{ full_name }}
         {% endblocktrans %}
         <span>
@@ -51,17 +55,23 @@
         {% block user_menu %}{% endblock %}
       </div>
     {% endif %}
-    <div class="phase-banner-alpha">
-      <p>
-        {% if ENVIRONMENT == 'prod' %}
-        <strong class="phase-tag">{% trans "Alpha" %}</strong>
-        {% else %}
-        <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
-        {% endif %}
-        {% url 'submit_ticket' as ticket_url %}
-        <span>{% blocktrans %}This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.{% endblocktrans %}</span>
-      </p>
-    </div>
+    {% block phase_banner %}
+      <div class="phase-banner-alpha">
+        <p>
+          {% if ENVIRONMENT == 'prod' %}
+          <strong class="phase-tag">{% trans "Alpha" %}</strong>
+          {% else %}
+          <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
+          {% endif %}
+          {% url 'submit_ticket' as ticket_url %}
+          <span>
+            {% blocktrans trimmed %}
+              This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.
+            {% endblocktrans %}
+          </span>
+        </p>
+      </div>
+    {% endblock %}
 
     {% block inner_content %}{% endblock %}
   </main>
