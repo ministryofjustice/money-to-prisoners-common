@@ -12,15 +12,36 @@
 }
 
 .admin {
+  // user account management pages
+
   ul {
     padding-left: 0;
     li {
       list-style-type: none;
     }
   }
-  a.action {
-    &:visited {
+
+  td {
+    font-size: 0.8em;
+  }
+
+  td.actions {
+    width: 8em;
+
+    div {
+      display: inline-block;
+
+      &.delete-action {
+        margin-left: 2em;
+      }
+    }
+
+    a:visited {
       color: $link-colour;
+    }
+
+    @include print {
+      display: none;
     }
   }
 }

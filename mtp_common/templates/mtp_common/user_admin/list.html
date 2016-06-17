@@ -40,11 +40,11 @@
           <td>{% if user.user_admin %}✔{% else %}✘{% endif %}</td>
           <td class="actions">
             <div>
-              <a class="action" href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
+              <a href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
             </div>
             {% if request.user.username != user.username %}
-              <div>
-                <a class="action" href="{% url "delete-user" username=user.username %}">
+              <div class="delete-action">
+                <a href="{% url "delete-user" username=user.username %}">
                   <div class="delete-icon"></div>{% trans 'Delete' %}
                 </a>
               </div>
