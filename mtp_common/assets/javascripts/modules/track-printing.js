@@ -4,7 +4,7 @@
 
 var analytics = require('./analytics');
 
-exports.trackPrinting = {
+exports.TrackPrinting = {
   init: function () {
     window.print = (function(printfn) {
       return function() {

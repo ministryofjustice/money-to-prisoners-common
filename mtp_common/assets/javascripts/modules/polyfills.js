@@ -11,7 +11,7 @@ exports.Polyfills = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('Polyfills.render', this.render);
+    $('body').on('Polyfills.render', this.render);
   },
 
   render: function () {

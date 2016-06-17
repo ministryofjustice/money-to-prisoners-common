@@ -33,3 +33,8 @@
 @import 'elements/help-popup';
 @import 'elements/important';
 @import 'elements/pagination';
+
+// GOV.UK Overrides
+strong {
+  font-weight: bold;
+}

@@ -10,7 +10,7 @@ exports.Messages = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('Messages.render', $.proxy(this.render, this));
+    $('body').on('Messages.render', $.proxy(this.render, this));
   },
 
   render: function (e, params) {

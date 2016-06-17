@@ -20,8 +20,9 @@ exports.Print = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('Print.render', $.proxy(this.render, this));
-    this.$body.on('click', this.selector, $.proxy(this.onClickPrint, this));
+    this.$body
+      .on('Print.render', $.proxy(this.render, this))
+      .on('click', this.selector, $.proxy(this.onClickPrint, this));
   },
 
   render: function () {
@@ -49,10 +50,10 @@ exports.Print = {
     }
 
     // close dialog if open
-    this.base.Events.trigger('Dialog.close');
+    this.$body.trigger('Dialog.close');
 
     // trigger a render of this object to check if the cookie is set
-    this.base.Events.trigger('Print.render');
+    this.$body.trigger('Print.render');
 
     window.print();
   }

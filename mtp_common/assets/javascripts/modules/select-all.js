@@ -20,8 +20,8 @@ exports.SelectAll = {
   },
 
   bindEvents: function () {
-    this.base.Events.on('SelectAll.render', $.proxy(this.render, this));
     this.$body
+      .on('SelectAll.render', $.proxy(this.render, this))
       .on('change.SelectAll', this.selector, $.proxy(this.onSelectAllChange, this))
       .on('change.SelectAll', this.checksSelector, $.proxy(this.onCheckChange, this))
       .on('keypress.SelectAll', this.checksSelector + ', ' + this.selector, $.proxy(this.onCheckKeypress, this));
