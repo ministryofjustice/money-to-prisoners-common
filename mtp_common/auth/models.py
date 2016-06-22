@@ -22,6 +22,9 @@ class MojUser:
     def is_authenticated(self, *args, **kwargs):
         return True
 
+    def get_applications(self):
+        return self.user_data.get('applications', [])
+
     def get_all_permissions(self, obj=None):
         return self.user_data.get('permissions', [])
 
@@ -74,6 +77,9 @@ class MojAnonymousUser:
 
     def is_authenticated(self, *args, **kwargs):
         return False
+
+    def get_applications(self):
+        return []
 
     def get_all_permissions(self, obj=None):
         return []

@@ -23,13 +23,15 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
 
     error_messages = {
         'invalid_login': _('You’ve entered an incorrect username and/or password'),
+        'application_inaccessible': _('You don’t have access to this application'),
         'connection_error': _('This service is currently unavailable'),
     }
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, request=None, restrict_applications=(), **kwargs):
         self.request = request
+        self.restrict_applications = restrict_applications
         self.user_cache = None
-        super(AuthenticationForm, self).__init__(*args, **kwargs)
+        super(AuthenticationForm, self).__init__(**kwargs)
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -44,6 +46,13 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
                 # credentials were wrong
                 if self.user_cache is None:
                     raise Unauthorized
+
+                applications = self.user_cache.user_data.get('applications', [])
+                if not all(application in applications for application in self.restrict_applications):
+                    raise forms.ValidationError(
+                        self.error_messages['application_inaccessible'],
+                        code='application_inaccessible',
+                    )
             except ConnectionError:
                 # in case of problems connecting to the api server
                 raise forms.ValidationError(
