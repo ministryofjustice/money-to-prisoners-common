@@ -22,7 +22,6 @@ from .forms import AuthenticationForm, PasswordChangeForm, ResetPasswordForm
 def login(request, template_name=None,
           redirect_field_name=REDIRECT_FIELD_NAME,
           authentication_form=AuthenticationForm,
-          restrict_applications=(),
           current_app=None, extra_context=None):
     """
     Displays the login form and handles the login action.
@@ -42,8 +41,7 @@ def login(request, template_name=None,
         return HttpResponseRedirect(get_redirect_to())
 
     if request.method == "POST":
-        form = authentication_form(request=request, restrict_applications=restrict_applications,
-                                   data=request.POST)
+        form = authentication_form(request=request, data=request.POST)
         if form.is_valid():
 
             # Okay, security check complete. Log the user in.
@@ -51,7 +49,7 @@ def login(request, template_name=None,
 
             return HttpResponseRedirect(get_redirect_to())
     else:
-        form = authentication_form(request=request, restrict_applications=restrict_applications)
+        form = authentication_form(request=request)
 
     current_site = get_current_site(request)
 

@@ -11,6 +11,7 @@ from slumber.exceptions import HttpClientError
 from mtp_common.auth import SESSION_KEY, BACKEND_SESSION_KEY, \
     AUTH_TOKEN_SESSION_KEY, USER_DATA_SESSION_KEY
 from mtp_common.auth import api_client
+from mtp_common.auth.exceptions import Forbidden
 from mtp_common.auth.test_utils import generate_tokens
 
 
@@ -85,80 +86,27 @@ class LoginViewTestCase(SimpleTestCase):
         )
         self.assertEqual(len(self.client.session.items()), 0)  # nothing in the session
 
-    def test_login_succeeds_with_application_access(self, mocked_api_client):
-        """
-        If the view restricts to a subset of applications,
-        the user must have access to the same to log in – this one does
-        """
-        from tests.urls import restrict_applications
-
-        # user only has access to app-2
-        credentials = {
-            'username': 'my-username',
-            'password': 'my-password'
-        }
-        mocked_api_client.authenticate.return_value = {
-            'pk': 1,
-            'token': generate_tokens(),
-            'user_data': {
-                'first_name': 'My First Name',
-                'last_name': 'My Last Name',
-                'username': credentials['username'],
-                'applications': ['app-2'],
-            }
-        }
-
-        try:
-            # login requires app-2 access which the user has
-            restrict_applications.append('app-2')
-            response = self.client.post(
-                self.login_url, data=credentials
-            )
-        finally:
-            restrict_applications.clear()
-
-        self.assertEqual(response.status_code, 302,
-                         msg='user should be able to log in if their application access '
-                             'meets restrictions specified in the view')
-
     def test_login_fails_without_application_access(self, mocked_api_client):
         """
-        If the view restricts to a subset of applications,
-        the user must have access to the same to log in – this one doesn't
+        The user should be presented with an aproppriate error message if they
+        received a forbidden repsonse.
         """
-        from tests.urls import restrict_applications
-
-        # user only has access to app-2
         credentials = {
             'username': 'my-username',
             'password': 'my-password'
         }
-        mocked_api_client.authenticate.return_value = {
-            'pk': 1,
-            'token': generate_tokens(),
-            'user_data': {
-                'first_name': 'My First Name',
-                'last_name': 'My Last Name',
-                'username': credentials['username'],
-                'applications': ['app-2'],
-            }
-        }
+        mocked_api_client.authenticate.side_effect = Forbidden
 
-        try:
-            # login requires missing app-1 access
-            restrict_applications.append('app-1')
-            response = self.client.post(
-                self.login_url, data=credentials
-            )
-        finally:
-            restrict_applications.clear()
+        response = self.client.post(
+            self.login_url, data=credentials
+        )
 
         form = response.context_data['form']
-        self.assertFalse(form.is_valid(), msg='user should not be able to log in if their application access '
-                                              'does not match the restriction specified in the view')
+        self.assertFalse(form.is_valid(), msg='user should not be able to log in if they are'
+                                              'forbidden from accessing that application')
         self.assertEqual(form.errors['__all__'], [force_text(form.error_messages['application_inaccessible'])],
-                         msg='user should see error message if their application access '
-                             'does not match the restriction specified in the view')
+                         msg='user should see error message if they are forbidden'
+                             'from accessing that application')
 
 
 class AuthenticatedTestCase(SimpleTestCase):
