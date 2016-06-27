@@ -1,12 +1,9 @@
-import functools
 from unittest import mock
 
-from django.core.exceptions import NON_FIELD_ERRORS
 from django.test.testcases import SimpleTestCase
 from django.utils.encoding import force_text
 
 from mtp_common.auth.forms import AuthenticationForm, PasswordChangeForm, ResetPasswordForm
-from mtp_common.auth.models import MojUser
 
 
 @mock.patch('mtp_common.auth.forms.authenticate')
@@ -57,74 +54,6 @@ class AuthenticationFormTestCase(SimpleTestCase):
         self.assertEqual(form.non_field_errors(), [])
 
         mocked_authenticate.assert_called_with(**self.credentials)
-
-    def test_user_with_no_application_access(self, mocked_authenticate):
-        """
-        If the form restricts to a subset of applications,
-        the user must have access to the same.
-        This user has no application access.
-        """
-        mocked_authenticate.return_value = MojUser(1, 'abc', {})
-
-        partial_form = functools.partial(AuthenticationForm, data=self.credentials)
-        form = partial_form(restrict_applications=[])
-        self.assertTrue(form.is_valid(),
-                        msg='user with no app access should '
-                            'be able to log in when unrestricted')
-        self.assertEqual(form.errors.as_data(), {},
-                         msg='user with no app access should '
-                             'not see form errors if unrestricted')
-        form = partial_form(restrict_applications=['app-1'])
-        self.assertFalse(form.is_valid(),
-                         msg='user with no app access should '
-                             'not be able to log in if restricted')
-        self.assertEqual(form.errors.as_data()[NON_FIELD_ERRORS][0].code, 'application_inaccessible',
-                         msg='user with no app access should '
-                             'see an error message if restricted')
-
-    def test_user_with_access_to_one_app(self, mocked_authenticate):
-        """
-        If the form restricts to a subset of applications,
-        the user must have access to the same.
-        This user has access to one application.
-        """
-        mocked_authenticate.return_value = MojUser(1, 'abc', {'applications': ['app-1']})
-
-        partial_form = functools.partial(AuthenticationForm, data=self.credentials)
-        self.assertTrue(partial_form(restrict_applications=[]).is_valid(),
-                        msg='user with access to one app should '
-                            'be able to log in when unrestricted')
-        self.assertTrue(partial_form(restrict_applications=['app-1']).is_valid(),
-                        msg='user with access to one app should '
-                            'be able to log in if restriction is met')
-        self.assertFalse(partial_form(restrict_applications=['app-2']).is_valid(),
-                         msg='user with access to one app should '
-                             'not be able to log in if restriction not met')
-
-    def test_user_with_access_to_several_apps(self, mocked_authenticate):
-        """
-        If the form restricts to a subset of applications,
-        the user must have access to the same.
-        This user has access to several applications.
-        """
-        mocked_authenticate.return_value = MojUser(1, 'abc', {'applications': ['app-2', 'app-3']})
-
-        partial_form = functools.partial(AuthenticationForm, data=self.credentials)
-        self.assertTrue(partial_form(restrict_applications=[]).is_valid(),
-                        msg='user with access to several apps should '
-                            'be able to log in when unrestricted')
-        self.assertFalse(partial_form(restrict_applications=['app-1']).is_valid(),
-                         msg='user with access to several apps should '
-                             'not be able to log in if restriction is not met')
-        self.assertTrue(partial_form(restrict_applications=['app-2']).is_valid(),
-                        msg='user with access to several apps should '
-                            'be able to log in if restriction is met')
-        self.assertTrue(partial_form(restrict_applications=['app-2', 'app-3']).is_valid(),
-                        msg='user with access to several apps should '
-                            'be able to log in if all restrictions are met')
-        self.assertFalse(partial_form(restrict_applications=['app-1', 'app-2', 'app-3']).is_valid(),
-                         msg='user with access to several apps should '
-                             'not be able to log in if some restrictions are not met')
 
 
 @mock.patch('mtp_common.auth.forms.api_client')

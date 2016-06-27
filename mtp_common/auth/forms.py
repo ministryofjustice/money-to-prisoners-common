@@ -9,7 +9,7 @@ from requests.exceptions import ConnectionError
 from slumber.exceptions import HttpClientError
 
 from . import api_client
-from .exceptions import Unauthorized
+from .exceptions import Unauthorized, Forbidden
 
 logger = logging.getLogger('mtp')
 
@@ -27,9 +27,8 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
         'connection_error': _('This service is currently unavailable'),
     }
 
-    def __init__(self, request=None, restrict_applications=(), **kwargs):
+    def __init__(self, request=None, **kwargs):
         self.request = request
-        self.restrict_applications = restrict_applications
         self.user_cache = None
         super(AuthenticationForm, self).__init__(**kwargs)
 
@@ -47,18 +46,17 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
                 if self.user_cache is None:
                     raise Unauthorized
 
-                applications = self.user_cache.user_data.get('applications', [])
-                if not all(application in applications for application in self.restrict_applications):
-                    raise forms.ValidationError(
-                        self.error_messages['application_inaccessible'],
-                        code='application_inaccessible',
-                    )
             except ConnectionError:
                 # in case of problems connecting to the api server
                 raise forms.ValidationError(
                     self.error_messages['connection_error'],
                     code='connection_error',
                 )
+            except Forbidden:
+                raise forms.ValidationError(
+                        self.error_messages['application_inaccessible'],
+                        code='application_inaccessible',
+                    )
             except Unauthorized:
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],

@@ -13,7 +13,6 @@ def dummy_view(request):
     return render(request, 'dummy', context=get_context())
 
 
-restrict_applications = []  # mocked in place
 urlpatterns = [
     # dummy/mocked template
     url(r'^dummy$', dummy_view, name='dummy'),
@@ -21,7 +20,6 @@ urlpatterns = [
     # authentication views
     url(r'^login/$', views.login, {
         'template_name': 'login.html',
-        'restrict_applications': restrict_applications,
     }, name='login'),
     url(
         r'^logout/$', views.logout, {

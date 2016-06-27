@@ -4,12 +4,13 @@ import os
 from django.conf import settings
 from oauthlib.oauth2 import LegacyApplicationClient
 import requests
+from requests.auth import HTTPBasicAuth
 from requests.exceptions import HTTPError
 from requests_oauthlib import OAuth2Session
 import slumber
 
 from . import update_token_in_session, urljoin
-from .exceptions import Unauthorized
+from .exceptions import Unauthorized, Forbidden
 
 
 # set insecure transport depending on settings val
@@ -23,6 +24,8 @@ REVOKE_TOKEN_URL = urljoin(settings.API_URL, '/oauth2/revoke_token/')
 def response_hook(response, *args, **kwargs):
     if response.status_code == 401:
         raise Unauthorized()
+    if response.status_code == 403:
+        raise Forbidden
     return response
 
 
@@ -61,8 +64,7 @@ def authenticate(username, password):
             token_url=REQUEST_TOKEN_URL,
             username=username,
             password=password,
-            client_id=settings.API_CLIENT_ID,
-            client_secret=settings.API_CLIENT_SECRET,
+            auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
             encoding='utf-8'
         )
 
@@ -145,8 +147,7 @@ def get_authenticated_connection(username, password):
         token_url=REQUEST_TOKEN_URL,
         username=username,
         password=password,
-        client_id=settings.API_CLIENT_ID,
-        client_secret=settings.API_CLIENT_SECRET,
+        auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
         encoding='utf-8'
     )
 
