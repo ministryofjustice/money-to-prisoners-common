@@ -237,15 +237,22 @@ endif
 #### FILE TARGETS ####
 ######################
 
+OS = $(shell uname)
+ifeq ($(OS),Darwin)
+  alert = osascript -e 'display notification "$@" with title "Error compiling asset"'
+else
+  alert = echo Error compiling asset $@
+endif
+
 $(JS_PATH)/app.bundle.js: $(ALL_JS)
-	@echo Generating `basename $@`
-	@$(NODE_BIN)/jshint -c $(MTP_COMMON_PY)/.jshintrc $(ALL_JS)
-	@$(NODE_BIN)/webpack >$(TASK_OUTPUT_REDIRECTION)
+	@echo Generating `basename $@` $(UNAME)
+	$(NODE_BIN)/jshint -c $(MTP_COMMON_PY)/.jshintrc $(ALL_JS) || $(call alert)
+	$(NODE_BIN)/webpack --bail >$(TASK_OUTPUT_REDIRECTION) || $(call alert)
 
 # Make the various css files (app, app-print) from their respective sources
 $(CSS_PATH)/%.css: $(SASS_FILES)
 	@echo Generating `basename $@`
-	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ >$(TASK_OUTPUT_REDIRECTION) 2>&1
+	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ >$(TASK_OUTPUT_REDIRECTION) 2>&1 || $(call alert)
 
 $(VIRTUAL_ENV_DIR)/bin/python, $(VIRTUAL_ENV_DIR)/bin/pip:
 	@echo Creating python virtual environment
