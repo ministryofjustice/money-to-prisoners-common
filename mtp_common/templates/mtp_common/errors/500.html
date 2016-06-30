@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{% block phase_banner %}{% endblock %}
+
 {% block inner_content %}
   <h1 class="heading-xlarge">{% trans 'Sorry, something went wrong' %}</h1>
   <div class="container">
     <div class="grid-row">
       <div class="column-two-thirds">
         <p>
-          {% trans 'Try again later.' %}
+          {% trans 'Please try again later.' %}
         </p>
         <p><a href="/">{% trans 'Return to the home page' %}</a></p>
       </div>
