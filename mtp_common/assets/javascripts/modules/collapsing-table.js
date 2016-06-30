@@ -15,11 +15,20 @@ exports.CollapsingTable = {
       $button.text(collapseText);
       $button.on('click', $.proxy(showHideFunction, {
         $button: $button,
-        $collapseElements: $header.closest('table').find('tbody,thead'),
+        $collapseElements: $header.closest('table').find('tbody, thead'),
         collapseText: collapseText,
         expandText: expandText
       }));
       $header.append($button);
+    });
+  },
+
+  collapseAll: function() {
+    $('.CollapsingTableShowHide').each(function() {
+      var $header = $(this).parent('.CollapsingTableHeader');
+      $(this).text($header.data('expand-text'));
+      $(this).addClass('CollapsingTableShowHide-hidden');
+      $(this).closest('table').find('tbody, thead').hide();
     });
   },
 
