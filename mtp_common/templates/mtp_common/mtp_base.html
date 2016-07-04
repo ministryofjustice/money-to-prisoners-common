@@ -16,7 +16,19 @@
 {% block proposition_header %}
   <div class="header-proposition">
     <div class="content">
-      <a href="/" id="proposition-name">{% block proposition %}{% trans "Send money to a prisoner" %}{% endblock %}</a>
+      <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
+      <nav id="proposition-menu">
+        <a href="/" id="proposition-name">{% block proposition %}{% trans "Send money to a prisoner" %}{% endblock %}</a>
+        {% if request.user.is_authenticated %}
+        <ul id="proposition-links">
+          {% blocktrans trimmed with full_name=request.user.get_full_name|default:request.user.username %}
+          <li>Logged in as {{ full_name }}</li>
+          {% endblocktrans %}
+          <li><a href="{% url 'logout' %}">{% trans "Sign out" %}</a></li>
+          {% block user_menu %}{% endblock %}
+        </ul>
+        {% endif %}
+      </nav>
     </div>
   </div>
 {% endblock %}
@@ -49,18 +61,6 @@
 
 {% block content %}
   <main role="main" id="content" tabindex="-1">
-    {% if request.user.is_authenticated %}
-      <div class="user-details print-hidden">
-        {% blocktrans trimmed with full_name=request.user.get_full_name|default:request.user.username %}
-          Logged in as {{ full_name }}
-        {% endblocktrans %}
-        <span>
-          <a href="{% url 'logout' %}">{% trans "Sign out" %}</a>
-        </span>
-
-        {% block user_menu %}{% endblock %}
-      </div>
-    {% endif %}
     {% block phase_banner %}
       <div class="phase-banner-alpha">
         <p>
