@@ -61,8 +61,8 @@ exports.Dialog = {
     }
 
     // bind close events
-    this.$body.on('click.Dialog', closeSelector, this.closeDialog);
-    this.$body.on('keyup.Dialog', this.onKeyUp);
+    this.$body.on('click.Dialog', closeSelector, $.proxy(this.closeDialog, this));
+    this.$body.on('keyup.Dialog', $.proxy(this.onKeyUp, this));
 
     // show dialog and backdrop
     $dialog
