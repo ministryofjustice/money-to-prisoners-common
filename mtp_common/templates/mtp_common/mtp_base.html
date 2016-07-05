@@ -16,11 +16,11 @@
 {% block proposition_header %}
   <div class="header-proposition">
     <div class="content">
-      <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
+      <a href="#proposition-links" class="js-header-toggle menu print-hidden">Menu</a>
       <nav id="proposition-menu">
         <a href="/" id="proposition-name">{% block proposition %}{% trans "Send money to a prisoner" %}{% endblock %}</a>
         {% if request.user.is_authenticated %}
-        <ul id="proposition-links">
+        <ul id="proposition-links" class="print-hidden">
           {% blocktrans trimmed with full_name=request.user.get_full_name|default:request.user.username %}
           <li>Logged in as {{ full_name }}</li>
           {% endblocktrans %}
