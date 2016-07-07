@@ -53,8 +53,11 @@
   }
 }
 
-#proposition-links {
-  color: $page-colour;
+#proposition-links li {
+  color: $text-colour;
+  span {
+    color: $page-colour;
+  }
 }
 
 // Text only for screen readers
