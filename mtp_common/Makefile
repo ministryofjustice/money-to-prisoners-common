@@ -117,13 +117,13 @@ docker: .host_machine_ip
 	@docker-compose up
 
 # run uwsgi, this is the entry point for docker running remotely
-uwsgi: $(VIRTUAL_ENV_DIR)/bin/uwsgi static_assets
+uwsgi: $(VIRTUAL_ENV_DIR)/bin/uwsgi collect_static_assets
 	@echo "Starting MTP $(app) in uWSGI"
 	@$(VIRTUAL_ENV_DIR)/bin/uwsgi --ini conf/uwsgi/$(subst -,_,$(app)).ini
 
 # run python tests
 .PHONY: test
-test: $(SELENIUM) .api_running build
+test: $(SELENIUM) .api_running virtual_env assets
 ifdef RUN_FUNCTIONAL_TESTS
 	@echo Running all tests
 else
@@ -145,8 +145,8 @@ migrate_db: $(VIRTUAL_ENV_DIR)/bin/python
 	@$(VIRTUAL_ENV_DIR)/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
 # collect static images and templates
-.PHONY: static_assets
-static_assets:
+.PHONY: collect_static_assets
+collect_static_assets:
 	@echo Collecting static assets
 	@echo Retrieving GOV.UK stylesheets
 	@curl -Ls $(GOVUK_TEMPLATE_TGZ) | tar xzf - ./govuk_template && \
@@ -167,7 +167,7 @@ update: virtual_env
 
 # all the assets
 .PHONY: build
-build: virtual_env assets static_assets
+build: virtual_env assets collect_static_assets
 
 .PHONY: assets
 assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-ie6.css $(CSS_PATH)/app-ie7.css $(CSS_PATH)/app-ie8.css $(CSS_PATH)/app-print.css
