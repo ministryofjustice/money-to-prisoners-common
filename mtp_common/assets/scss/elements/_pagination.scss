@@ -18,3 +18,8 @@ $component: Pagination;
     display: none;
   }
 }
+
+a.#{$component}-current-page {
+  text-decoration: none;
+  color: $text-colour;
+}
