@@ -43,11 +43,11 @@
             {% endif %}
           </td>
           <td class="actions">
-            <div>
+            <div class="edit-action">
               <a href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
             </div>
             {% if request.user.username != user.username %}
-              <div class="delete-action">
+              <div>
                 <a href="{% url "delete-user" username=user.username %}">
                   <div class="delete-icon"></div>{% trans 'Delete' %}
                 </a>

@@ -3,7 +3,9 @@ input {
 }
 
 form a.cancel {
-  margin-left: 1em;
+  @include breakpoint($tablet) {
+    margin-left: 1em;
+  }
   vertical-align: -.3em;
   &:visited {
     color: $link-colour;
