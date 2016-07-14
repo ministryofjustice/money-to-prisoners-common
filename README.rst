@@ -108,12 +108,15 @@ The base sass file, ``_mtp.scss``, is used to include the sass includes from thi
 
 Static assets are in ``mtp_common/static/(images|javascripts|css)``.
 
+There is a `separate guide to the various visual elements`_
+defined in this repository and used by the various MTP apps.
+
 Django templates
 ----------------
 
 Common templates used by the client applications are kept in ``mtp_common/templates``.
 
-
+.. _separate guide to the various visual elements: mtp_common/assets/docs/README.md
 .. _money-to-prisoners-api: https://github.com/ministryofjustice/money-to-prisoners-api
 .. _money-to-prisoners-cashbook: https://github.com/ministryofjustice/money-to-prisoners-cashbook
 .. _money-to-prisoners-bank-admin: https://github.com/ministryofjustice/money-to-prisoners-bank-admin
