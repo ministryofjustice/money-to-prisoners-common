@@ -1,11 +1,9 @@
 // A block box that's only visible when printing a page
 
 .print-box {
-  @include screen {
-    display: none;
-  }
+  display: none;
 
-  @include print {
+  @media print {
     p {
       margin: 1em .7em
     }

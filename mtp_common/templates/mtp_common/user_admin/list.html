@@ -37,7 +37,7 @@
           <td>{{ user.username }}</td>
           <td>{{ user.first_name }} {{ user.last_name }}</td>
           <td>{{ user.email }}</td>
-          <td>
+          <td class="user-admin">
             {% if user.user_admin %}
               ✔ <span class="screenreader-only">{% trans 'User is an admin' %}</span>
             {% endif %}

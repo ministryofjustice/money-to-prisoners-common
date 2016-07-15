@@ -18,7 +18,7 @@ table {
   th, td {
     padding: .75em 1em;
 
-    @include print {
+    @media print {
       padding-top: .3em;
       padding-bottom: .3em;
     }

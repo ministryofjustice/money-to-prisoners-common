@@ -1,71 +1,70 @@
 $component: Checkbox;
 
-@include screen {
-  input[type=checkbox].#{$component} {
-    $checkbox-size: 50px;
+input[type=checkbox].#{$component} {
+  $checkbox-size: 50px;
 
-    clip: rect(0, 0, 0, 0);
-    overflow: hidden !important;
-    position: absolute !important;
-    opacity: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 1px;
-    height: 1px;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden !important;
+  position: absolute !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 1px;
+  height: 1px;
 
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 
+  + label {
+    cursor: pointer;
+    margin: 0;
+    padding-left: 30px;
+    background: url(../mtp_common/images/box.png) center center no-repeat;
+  }
+
+  &:checked + label {
+    background-image: url(../mtp_common/images/tickbox.png);
+  }
+  &.checked + label {
+    background-image: url(../mtp_common/images/tickbox.png);
+  }
+
+  &:focus + label {
+    outline: 3px solid $yellow;
+  }
+
+  // Variants
+
+  &.#{$component}--right + label {
+    padding: 0 30px 1px 0;
+    background-position: 100% 10%;
+  }
+
+  &.#{$component}--left + label {
+    padding: 0 0 1px 30px;
+    background-position: 0px 10%;
+  }
+
+  &.#{$component}--no-text + label {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: $checkbox-size;
+    height: $checkbox-size;
+    padding: 0;
+  }
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min-device-pixel-ratio: 2) {
     + label {
-      cursor: pointer;
-      margin: 0;
-      padding-left: 30px;
-      background: url(../mtp_common/images/box.png) center center no-repeat;
+      background-image: url(../mtp_common/images/box@2x.png);
+      background-size: 20px 20px;
     }
 
     &:checked + label {
-      background-image: url(../mtp_common/images/tickbox.png);
-    }
-    &.checked + label {
-      background-image: url(../mtp_common/images/tickbox.png);
-    }
-
-    &:focus + label {
-      outline: 3px solid $yellow;
-    }
-
-    // Variants
-
-    &.#{$component}--right + label {
-      padding: 0 30px 1px 0;
-      background-position: 100% 10%;
-    }
-
-    &.#{$component}--left + label {
-      padding: 0 0 1px 30px;
-      background-position: 0px 10%;
-    }
-
-    &.#{$component}--no-text + label {
-      text-indent: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      display: inline-block;
-      width: $checkbox-size;
-      height: $checkbox-size;
-      padding: 0;
-    }
-
-    @media only screen and (-webkit-min-device-pixel-ratio: 2),
-    only screen and (min-device-pixel-ratio: 2) {
-      + label {
-        background-image: url(../mtp_common/images/box@2x.png);
-        background-size: 20px 20px;
-      }
-
-      &:checked + label {
-        background-image: url(../mtp_common/images/tickbox@2x.png);
-        background-size: 20px 20px;
-      }
+      background-image: url(../mtp_common/images/tickbox@2x.png);
+      background-size: 20px 20px;
     }
   }
 }
+

@@ -68,7 +68,7 @@ $dialog-padding: 30px;
       padding: $dialog-padding;
     }
 
-    @include print {
+    @media print {
       display: none;
     }
   }
@@ -84,5 +84,11 @@ $dialog-padding: 30px;
       top: $dialog-padding;
       right: $dialog-padding;
     }
+  }
+}
+
+@media print {
+  .js-#{$component} {
+    display: none;
   }
 }

@@ -8,6 +8,9 @@ $component: Pagination;
       padding-left: .5em;
     }
   }
+  @media print {
+    display: none;
+  }
 }
 
 .#{$component}-print-description {
