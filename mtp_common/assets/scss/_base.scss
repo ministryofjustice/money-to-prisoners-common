@@ -25,7 +25,11 @@
     font-size: 0.8em;
   }
 
-  td.actions {
+  .user-admin {
+    text-align: center;
+  }
+
+  .actions {
     width: 8em;
 
     div {
@@ -40,7 +44,7 @@
       color: $link-colour;
     }
 
-    @include print {
+    @media print {
       display: none;
     }
   }

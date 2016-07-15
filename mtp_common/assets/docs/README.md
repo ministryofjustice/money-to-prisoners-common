@@ -93,7 +93,7 @@ but works in IE8 and also triggers analytics event when used.
 ![Help popup open](./help-popup-open.png)
 
 ```
-<div class="help-box print-hidden help-box-hidden">
+<div class="help-box print-hidden help-box-collapsed">
   <p>Before text</p>
 
   <div class="help-box-title"
