@@ -64,10 +64,10 @@
 {% block content %}
   <main role="main" id="content" tabindex="-1">
     {% block phase_banner %}
-      <div class="phase-banner-alpha">
+      <div class="phase-banner-beta">
         <p>
           {% if ENVIRONMENT == 'prod' %}
-          <strong class="phase-tag">{% trans "Alpha" %}</strong>
+          <strong class="phase-tag">{% trans "Beta" %}</strong>
           {% else %}
           <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
           {% endif %}
