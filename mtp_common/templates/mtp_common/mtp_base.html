@@ -3,7 +3,31 @@
 
 {% block page_title %}{% trans 'Send money to a prisoner' %}{% endblock %}
 
-{% block header_class %}with-proposition{% endblock %}
+{% block head %}
+  {{ block.super }}
+  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}"  rel="stylesheet" type="text/css"><!--<![endif]-->
+  <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}" media="print"/>
+  <style media="print">
+    a[href^="/"]:after {
+      content: " ({{ request.scheme }}://{{ request.get_host }}" attr(href) ")";
+    }
+  </style>
+
+  {% if GOOGLE_ANALYTICS_ID %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', '{{ GOOGLE_ANALYTICS_ID }}', 'auto');
+      ga('send', 'pageview');
+    </script>
+  {% endif %}
+{% endblock %}
 
 {% block cookie_message %}
   <p>
@@ -12,6 +36,8 @@
     {% endblocktrans %}
   </p>
 {% endblock %}
+
+{% block header_class %}with-proposition{% endblock %}
 
 {% block proposition_header %}
   <div class="header-proposition">
@@ -37,32 +63,6 @@
       </nav>
     </div>
   </div>
-{% endblock %}
-
-{% block head %}
-  {{ block.super }}
-  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}"  rel="stylesheet" type="text/css"><!--<![endif]-->
-  <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
-
-  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}" media="print"/>
-  <style media="print">
-    a[href^="/"]:after {
-      content: " ({{ request.scheme }}://{{ request.get_host }}" attr(href) ")";
-    }
-  </style>
-
-  {% if GOOGLE_ANALYTICS_ID %}
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', '{{ GOOGLE_ANALYTICS_ID }}', 'auto');
-      ga('send', 'pageview');
-    </script>
-  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -96,5 +96,3 @@
   {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
   -->
 {% endblock %}
-
-{% block template_type %}internal{% endblock %}
