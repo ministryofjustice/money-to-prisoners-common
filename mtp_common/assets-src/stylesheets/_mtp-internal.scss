@@ -1,0 +1,63 @@
+@charset 'UTF-8';
+
+@import 'mtp';
+
+$header-logo-breakpoint: 880px;
+
+
+#global-header.with-proposition.mtp-internal-site {
+  .header-logo {
+    display: none;
+  }
+
+  .header-moj-logo {
+    display: block;
+    margin-left: 15px;
+
+    a {
+      background: url('../mtp_common/images/moj-crest.png') no-repeat 50% 50%;
+      display: block;
+      font-size: 1px;
+      height: 36px;
+      padding: 0 5px 5px 0;
+      text-indent: -500px;
+      width: 254px;
+
+      @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+        background-image: url('../mtp_common/images/moj-crest@2x.png');
+        background-size: 254px 36px;
+      }
+    }
+  }
+
+  @include breakpoint(max-width $header-logo-breakpoint) {
+    .header-wrapper .header-global {
+      float: none;
+      width: auto;
+    }
+  }
+
+  .header-proposition #proposition-menu {
+    margin-bottom: 6px;
+    margin-top: 11px;
+
+    @include breakpoint(max-width $header-logo-breakpoint) {
+      margin-bottom: 0;
+      margin-top: 5px;
+    }
+  }
+
+  .header-wrapper .header-proposition {
+    @include breakpoint($desktop) {
+      clear: left;
+      float: none;
+      width: auto;
+    }
+
+    @include breakpoint($header-logo-breakpoint) {
+      clear: none;
+      float: left;
+      width: 66%;
+    }
+  }
+}

@@ -1,11 +1,12 @@
 {% extends 'govuk_template/base.html' %}
-{% load i18n staticfiles %}
+{% load i18n %}
+{% load static %}
 
 {% block page_title %}{% trans 'Send money to a prisoner' %}{% endblock %}
 
 {% block head %}
   {{ block.super }}
-  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}"  rel="stylesheet" type="text/css"><!--<![endif]-->
+  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css"><!--<![endif]-->
   <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
   <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
   <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
@@ -38,7 +39,15 @@
   </p>
 {% endblock %}
 
-{% block header_class %}with-proposition{% endblock %}
+{% block header_class %}with-proposition {% if moj_internal_site %}mtp-internal-site{% endif %}{% endblock %}
+
+{% if moj_internal_site %}
+  {% block inside_header %}
+    <div class="header-logo header-moj-logo">
+      <a href="{{ home_url }}">{{ global_header_text }}</a>
+    </div>
+  {% endblock %}
+{% endif %}
 
 {% block proposition_header %}
   <div class="header-proposition">
