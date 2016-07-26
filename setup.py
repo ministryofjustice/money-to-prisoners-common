@@ -28,7 +28,7 @@ extras_require = {
         'raven>=5.15',
     ],
     'testing': [
-        'flake8>=2.5',
+        'flake8>=2.5,<3.0',
         'pep8-naming>=0.3',
         'responses>=0.5',
         'selenium>=2.53',
