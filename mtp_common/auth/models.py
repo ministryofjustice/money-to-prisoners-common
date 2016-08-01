@@ -53,6 +53,16 @@ class MojUser:
             self._full_name = ' '.join(filter(None, name_parts))
         return self._full_name
 
+    def get_initials(self):
+        if self.get_full_name():
+            return ''.join(
+                filter(
+                    None,
+                    map(lambda name: name[0].upper() if name else None,
+                        self.get_full_name().split(' '))
+                )
+            )
+
 
 class MojAnonymousUser:
     """
