@@ -60,6 +60,8 @@ SASS_DIRS = $(NODE_MODULES)/breakpoint-sass/stylesheets $(NODE_MODULES)/include-
 
 SASS_FILES := $(shell find -L $(SASS_DIRS) -name \*.scss 2>/dev/null)
 
+IMAGE_PATH = $(ASSETS_TARGET)/images
+
 IMAGE_FILES := $(shell find $(GOVUK_FRONTEND_TOOLKIT)/images $(MTP_APP_PATH)/assets-src/static/images -type f 2>/dev/null)
 
 SASS_LOAD_PATH := $(patsubst %,--include-path %, $(SASS_DIRS))
@@ -144,16 +146,25 @@ virtual_env: $(VIRTUAL_ENV_DIR)/bin/pip
 migrate_db: $(VIRTUAL_ENV_DIR)/bin/python
 	@$(VIRTUAL_ENV_DIR)/bin/python manage.py migrate --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
-# collect static images and templates
-.PHONY: collect_static_assets
-collect_static_assets:
-	@echo Collecting static assets
+.PHONY: generate_screenshots
+generate_screenshots:
+	@echo Generating screenshots
+	@mkdir -p $(IMAGE_PATH)/screenshots
+	@$(VIRTUAL_ENV_DIR)/bin/python manage.py takescreenshots
+
+.PHONY: retrieve_govuk_templates
+retrieve_govuk_templates:
 	@echo Retrieving GOV.UK stylesheets
 	@curl -Ls $(GOVUK_TEMPLATE_TGZ) | tar xzf - ./govuk_template && \
 	  cp -r govuk_template/static/* $(ASSETS_TARGET) && \
 	  mkdir -p $(ASSETS_TARGET)/templates && \
 	  cp -r govuk_template/templates/govuk_template $(ASSETS_TARGET)/templates && \
 	  rm -rf govuk_template
+
+# collect static images and templates
+.PHONY: collect_static_assets
+collect_static_assets:
+	@echo Collecting static assets
 	@echo Copying images
 	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images >$(TASK_OUTPUT_REDIRECTION)
 	@$(VIRTUAL_ENV_DIR)/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
@@ -167,7 +178,7 @@ update: virtual_env
 
 # all the assets
 .PHONY: build
-build: virtual_env assets collect_static_assets
+build: virtual_env assets retrieve_govuk_templates generate_screenshots collect_static_assets
 
 .PHONY: assets
 assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-ie6.css $(CSS_PATH)/app-ie7.css $(CSS_PATH)/app-ie8.css $(CSS_PATH)/app-print.css
