@@ -1,0 +1,65 @@
+// Large links styled similarly to radio boxes for making choices within a tree of options
+
+.large-link-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    position: relative;
+    max-width: 600px;
+    margin-bottom: 10px;
+    padding: 0;
+    background-color: $grey-3;
+  }
+
+  .large-link-list--link {
+    display: block;
+    padding: 13px 60px 10px 25px;
+    border: 1px solid transparent;
+    color: $text-colour;
+    text-decoration: none;
+
+    &:before {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 20px;
+      width: 22px;
+      height: 22px;
+      margin: auto;
+      background: url(../mtp_common/images/large-link-arrow.png) 95%/22px no-repeat;
+      opacity: 0.5;
+
+      @media only screen and (-webkit-min-device-pixel-ratio: 2),
+          only screen and (min-device-pixel-ratio: 2) {
+        background-image: url(../mtp_common/images/large-link-arrow@2x.png);
+        background-size: 22px 22px;
+      }
+    }
+
+    &:link {
+      color: $text-colour;
+    }
+
+    &:hover,
+    &:active,
+    &:focus,
+    &:visited {
+      border: 1px solid $grey-1;
+      background: inherit;
+      color: $text-colour;
+    }
+
+    &:active {
+      background-color: $page-colour;
+    }
+
+    span {
+      display: block;
+      font-size: .9em;
+      color: $grey-1;
+    }
+  }
+}
+
