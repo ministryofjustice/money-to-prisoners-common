@@ -7,35 +7,23 @@
   li {
     position: relative;
     max-width: 600px;
-    margin-bottom: 10px;
+    margin-bottom: 0.8em;
     padding: 0;
     background-color: $grey-3;
   }
 
   .large-link-list--link {
     display: block;
-    padding: 13px 60px 10px 25px;
+    padding: 0.7em 40px 0.6em 1.3em;
     border: 1px solid transparent;
+    background: transparent url(../mtp_common/images/large-link-arrow.png) 98% no-repeat;
     color: $text-colour;
     text-decoration: none;
 
-    &:before {
-      content: ' ';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 20px;
-      width: 22px;
-      height: 22px;
-      margin: auto;
-      background: url(../mtp_common/images/large-link-arrow.png) 95%/22px no-repeat;
-      opacity: 0.5;
-
-      @media only screen and (-webkit-min-device-pixel-ratio: 2),
-          only screen and (min-device-pixel-ratio: 2) {
-        background-image: url(../mtp_common/images/large-link-arrow@2x.png);
-        background-size: 22px 22px;
-      }
+    @media only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (min-device-pixel-ratio: 2) {
+      background-image: url(../mtp_common/images/large-link-arrow@2x.png);
+      background-size: 22px 22px;
     }
 
     &:link {
@@ -47,7 +35,7 @@
     &:focus,
     &:visited {
       border: 1px solid $grey-1;
-      background: inherit;
+      background-color: inherit;
       color: $text-colour;
     }
 
