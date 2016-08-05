@@ -18,14 +18,11 @@ input[type=checkbox].#{$component} {
     cursor: pointer;
     margin: 0;
     padding-left: 30px;
-    background: url(../mtp_common/images/box.png) center center no-repeat;
+    background: url(../mtp_common/images/checkbox.png) center center no-repeat;
   }
 
-  &:checked + label {
-    background-image: url(../mtp_common/images/tickbox.png);
-  }
-  &.checked + label {
-    background-image: url(../mtp_common/images/tickbox.png);
+  &:checked + label, &.checked + label {
+    background-image: url(../mtp_common/images/checkbox-checked.png);
   }
 
   &:focus + label {
@@ -41,7 +38,7 @@ input[type=checkbox].#{$component} {
 
   &.#{$component}--left + label {
     padding: 0 0 1px 30px;
-    background-position: 0px 10%;
+    background-position: 0 10%;
   }
 
   &.#{$component}--no-text + label {
@@ -57,14 +54,13 @@ input[type=checkbox].#{$component} {
   @media only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (min-device-pixel-ratio: 2) {
     + label {
-      background-image: url(../mtp_common/images/box@2x.png);
+      background-image: url(../mtp_common/images/checkbox@2x.png);
       background-size: 20px 20px;
     }
 
-    &:checked + label {
-      background-image: url(../mtp_common/images/tickbox@2x.png);
+    &:checked + label, &.checked + label {
+      background-image: url(../mtp_common/images/checkbox-checked@2x.png);
       background-size: 20px 20px;
     }
   }
 }
-
