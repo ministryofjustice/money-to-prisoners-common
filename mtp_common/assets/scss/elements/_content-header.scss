@@ -17,13 +17,13 @@ $component: ContentHeader;
 .#{$component}-back {
 
   &.#{$component}-arrow {
-    background: url(../mtp_common/images/left-arrow.png) left .25em no-repeat;
+    background: url(../mtp_common/images/header-back-arrow.png) left .25em no-repeat;
     padding-left: 1em;
 
     @media only screen and (-webkit-min-device-pixel-ratio: 2),
       only screen and (min-device-pixel-ratio: 2) {
           padding-left: 1.2em;
-          background-image: url(../mtp_common/images/left-arrow@2x.png);
+          background-image: url(../mtp_common/images/header-back-arrow@2x.png);
           background-size: 8px 12px;
           background-position: 6px 6px;
       }
