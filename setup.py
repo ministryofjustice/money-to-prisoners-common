@@ -22,6 +22,7 @@ install_requires = [
     'pytz>=2016.4',
     'requests-oauthlib>=0.6,<0.7',
     'slumber>=0.7,<0.8',
+    'selenium>=2.53',
 ]
 extras_require = {
     'monitoring': [
@@ -31,7 +32,6 @@ extras_require = {
         'flake8>=2.5,<3.0',
         'pep8-naming>=0.3',
         'responses>=0.5',
-        'selenium>=2.53',
     ],
 }
 

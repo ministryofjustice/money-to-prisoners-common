@@ -19,8 +19,72 @@ from selenium.webdriver.remote.webelement import WebElement
 logger = logging.getLogger('mtp')
 
 
+class WebDriverControlMixin:
+
+    def scroll_to_top(self):
+        """
+        Scrolls the page to the top
+        """
+        self.driver.execute_script('window.scrollTo(0, 0);')
+
+    def scroll_to_bottom(self):
+        """
+        Scrolls the page to the bottom
+        """
+        self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+
+    def get_element(self, specifier):
+        """
+        Returns a single element specified by xpath, css selector or id
+        """
+        if not specifier or isinstance(specifier, WebElement):
+            return specifier
+        if any(char in specifier for char in ['/', '@']):
+            # assume specifer is xpath
+            return self.driver.find_element_by_xpath(specifier)
+        if any(char in specifier for char in ['.', '#']):
+            # assume specifier is css selector
+            return self.driver.find_element_by_css_selector(specifier)
+        return self.driver.find_element_by_id(specifier)
+
+    def type_in(self, specifier, text, send_return=False):
+        """
+        Enter text into an element specified by xpath, css selector or id
+        """
+        element = self.get_element(specifier)
+        if send_return:
+            text += Keys.RETURN
+        element.send_keys(text)
+
+    def click_on_text(self, text):
+        """
+        Click on an input or element containing specified text
+        """
+        self.driver.find_element_by_xpath(
+            '//*[text() = "' + text + '"] | '
+            '//*[@type="submit" and @value="' + text + '"]'
+        ).click()
+
+    def login(self, username, password, url=None,
+              username_field='id_username', password_field='id_password'):
+        """
+        Fill in login form
+        """
+        self.driver.get(url or self.live_server_url)
+        self.type_in(username_field, username)
+        self.type_in(password_field, password, send_return=True)
+
+    def fill_in_form(self, data):
+        """
+        Fill in a form with keys being used as element specifiers and values as the text
+        NB: currently not set up to work with check boxes or radio inputs
+        """
+        for specifier, text in data.items():
+            self.type_in(specifier, text)
+
+
 @unittest.skipUnless('RUN_FUNCTIONAL_TESTS' in os.environ, 'functional tests are disabled')
-class FunctionalTestCase(LiveServerTestCase):
+class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
     """
     Used for integration/functional testing of MTP client applications
     """
@@ -256,69 +320,6 @@ class FunctionalTestCase(LiveServerTestCase):
             messages.append(message)
         if messages:
             self.fail('\n\n'.join(messages))
-
-    # Helper methods
-
-    def scroll_to_top(self):
-        """
-        Scrolls the page to the top
-        """
-        self.driver.execute_script('window.scrollTo(0, 0);')
-
-    def scroll_to_bottom(self):
-        """
-        Scrolls the page to the bottom
-        """
-        self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-
-    def get_element(self, specifier):
-        """
-        Returns a single element specified by xpath, css selector or id
-        """
-        if not specifier or isinstance(specifier, WebElement):
-            return specifier
-        if any(char in specifier for char in ['/', '@']):
-            # assume specifer is xpath
-            return self.driver.find_element_by_xpath(specifier)
-        if any(char in specifier for char in ['.', '#']):
-            # assume specifier is css selector
-            return self.driver.find_element_by_css_selector(specifier)
-        return self.driver.find_element_by_id(specifier)
-
-    def type_in(self, specifier, text, send_return=False):
-        """
-        Enter text into an element specified by xpath, css selector or id
-        """
-        element = self.get_element(specifier)
-        if send_return:
-            text += Keys.RETURN
-        element.send_keys(text)
-
-    def click_on_text(self, text):
-        """
-        Click on an input or element containing specified text
-        """
-        self.driver.find_element_by_xpath(
-            '//*[text() = "' + text + '"] | '
-            '//*[@type="submit" and @value="' + text + '"]'
-        ).click()
-
-    def login(self, username, password, url=None,
-              username_field='id_username', password_field='id_password'):
-        """
-        Fill in login form
-        """
-        self.driver.get(url or self.live_server_url)
-        self.type_in(username_field, username)
-        self.type_in(password_field, password, send_return=True)
-
-    def fill_in_form(self, data):
-        """
-        Fill in a form with keys being used as element specifiers and values as the text
-        NB: currently not set up to work with check boxes or radio inputs
-        """
-        for specifier, text in data.items():
-            self.type_in(specifier, text)
 
 
 def enable_accessibility(suite):
