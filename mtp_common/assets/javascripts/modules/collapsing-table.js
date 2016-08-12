@@ -10,7 +10,7 @@ exports.CollapsingTable = {
       var $header = $(this),
         collapseText = $header.data('collapse-text'),
         expandText = $header.data('expand-text'),
-        $button = $('<span class="CollapsingTableShowHide CollapsingTableHeader-aside print-hidden"></span>');
+        $button = $('<a href="#" class="CollapsingTableShowHide CollapsingTableHeader-aside print-hidden"></a>');
 
       $button.text(collapseText);
       $button.on('click', $.proxy(showHideFunction, {
