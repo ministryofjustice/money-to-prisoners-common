@@ -1,17 +1,15 @@
-{% extends "base.html" %}
+{% extends 'mtp_common/user_admin/base.html' %}
 {% load i18n %}
 
-{% block inner_content %}
-<div class="admin">
-  <header class="ContentHeader">
-    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-    <h1 class="heading-xlarge">
-      {% blocktrans trimmed with username=user.username %}
-        Delete user ‘{{ username }}’
-      {% endblocktrans %}
-    </h1>
-  </header>
+{% block admin_header %}
+  <h1 class="heading-xlarge">
+    {% blocktrans trimmed with username=user.username %}
+      Delete user ‘{{ username }}’
+    {% endblocktrans %}
+  </h1>
+{% endblock %}
 
+{% block admin_content %}
   <ul>
     <li>{% blocktrans with username=user.username %}Username: {{ username }}{% endblocktrans %}</li>
     <li>{% blocktrans with first_name=user.first_name %}First name: {{ first_name }}{% endblocktrans %}</li>
@@ -28,5 +26,4 @@
     <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete user account' %}</button>
     <a class="cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
   </form>
-</div>
 {% endblock %}
