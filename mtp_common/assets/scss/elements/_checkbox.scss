@@ -11,6 +11,7 @@ input[type=checkbox].#{$component} {
   margin: 0 !important;
   width: 1px;
   height: 1px;
+  outline: none;
 
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 
@@ -21,7 +22,11 @@ input[type=checkbox].#{$component} {
     background: url(../mtp_common/images/checkbox.png) center center no-repeat;
   }
 
-  &:checked + label, &.checked + label {
+  &:checked + label {
+    background-image: url(../mtp_common/images/checkbox-checked.png);
+  }
+  &.checked + label {
+    // NB: cannot combine with previous rule else fails in IE8
     background-image: url(../mtp_common/images/checkbox-checked.png);
   }
 
@@ -60,7 +65,6 @@ input[type=checkbox].#{$component} {
 
     &:checked + label, &.checked + label {
       background-image: url(../mtp_common/images/checkbox-checked@2x.png);
-      background-size: 20px 20px;
     }
   }
 }
