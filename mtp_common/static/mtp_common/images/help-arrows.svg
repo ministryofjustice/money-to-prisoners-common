@@ -15,9 +15,9 @@
    id="svg4161"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="arrows.svg"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   sodipodi:docname="help-arrows.svg"
+   inkscape:export-xdpi="45"
+   inkscape:export-ydpi="45">
   <defs
      id="defs4163" />
   <sodipodi:namedview
@@ -27,7 +27,7 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="9.952381"
+     inkscape:zoom="4.9880952"
      inkscape:cx="42"
      inkscape:cy="14"
      inkscape:document-units="px"
@@ -57,39 +57,20 @@
      id="layer1"
      transform="translate(0,-1024.3622)">
     <path
-       sodipodi:type="star"
        style="fill:#005ea5;fill-opacity:1;stroke:none"
-       id="path4856"
-       sodipodi:sides="3"
-       sodipodi:cx="8.1561947"
-       sodipodi:cy="1042.2377"
-       sodipodi:r1="8"
-       sodipodi:r2="4"
-       sodipodi:arg1="-0.52359878"
-       sodipodi:arg2="0.52359878"
-       inkscape:flatsided="false"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 15.084398,1038.2377 -3.464102,6 -3.4641013,6 -3.4641016,-6 -3.4641017,-6 6.9282033,0 z"
        inkscape:transform-center-y="4.6665794"
-       transform="matrix(1.7320508,0,0,2.3333333,-0.12694355,-1398.1923)" />
+       d="m 27.000001,1024.3623 -14.000001,28 -12,-28 z"
+       id="path4856"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
     <path
-       d="m 41.335739,1039.21 -3.464102,6 -3.464101,6 -3.464102,-6 -3.464102,-6 6.928204,0 z"
-       inkscape:randomized="0"
-       inkscape:rounded="0"
-       inkscape:flatsided="false"
-       sodipodi:arg2="0.52359878"
-       sodipodi:arg1="-0.52359878"
-       sodipodi:r2="4"
-       sodipodi:r1="8"
-       sodipodi:cy="1043.21"
-       sodipodi:cx="34.407536"
-       sodipodi:sides="3"
-       id="path4858"
-       style="fill:#005ea5;fill-opacity:1;stroke:none"
-       sodipodi:type="star"
        transform="matrix(0,-1.7320508,2.3333333,0,-2368.8232,1097.9578)"
+       style="fill:#005ea5;fill-opacity:1;stroke:none"
        inkscape:transform-center-x="-4.6667125"
-       inkscape:transform-center-y="5.5086878e-05" />
+       inkscape:transform-center-y="5.5086878e-05"
+       d="m 41.913089,1039.21 -7.505553,12 -7.505554,-12 z"
+       id="path4858"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>
