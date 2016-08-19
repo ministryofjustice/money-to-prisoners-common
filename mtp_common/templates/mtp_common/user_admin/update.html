@@ -1,21 +1,19 @@
-{% extends "base.html" %}
+{% extends 'mtp_common/user_admin/base.html' %}
 {% load i18n %}
 
-{% block inner_content %}
-<div class="admin">
-  <header class="ContentHeader">
-    <a href="{% url 'dashboard' %}" class="ContentHeader-back">{% trans 'Home' %}</a>
-    <h1 class="heading-xlarge">
-      {% if form.create %}
-        {% trans 'Create a new user' %}
-      {% else %}
-        {% blocktrans trimmed with username=form.username.value %}
-          Edit user ‘{{ username }}’
-        {% endblocktrans %}
-      {% endif %}
-    </h1>
-  </header>
+{% block admin_header %}
+  <h1 class="heading-xlarge">
+    {% if form.create %}
+      {% trans 'Create a new user' %}
+    {% else %}
+      {% blocktrans trimmed with username=form.username.value %}
+        Edit user ‘{{ username }}’
+      {% endblocktrans %}
+    {% endif %}
+  </h1>
+{% endblock %}
 
+{% block admin_content %}
   {% if form.create %}
     <p>{% trans 'Fill in a user’s details to allow them access. You can give them a general user or admin role.' %}</p>
     {% if permissions_note %}
@@ -63,5 +61,4 @@
       <a href="{% url 'list-users' %}" class="cancel">{% trans 'Cancel' %}</a>
     </div>
   </form>
-</div>
 {% endblock %}
