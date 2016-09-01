@@ -14,11 +14,11 @@ $component: Pagination;
 }
 
 .#{$component}-print-description {
-  @if $is-print {
+  display: none;
+
+  @media print {
     display: block;
     font-size: 0.75em;
-  } @else {
-    display: none;
   }
 }
 
