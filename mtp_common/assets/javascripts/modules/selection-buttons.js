@@ -1,5 +1,5 @@
 // Taken from govuk_frontend_toolkit
-/* globals exports, $ */
+/* globals exports, GOVUK, $ */
 'use strict';
 
 (function (global) {
