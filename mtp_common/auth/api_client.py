@@ -65,6 +65,7 @@ def authenticate(username, password):
             username=username,
             password=password,
             auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
+            timeout=15,
             encoding='utf-8'
         )
 
@@ -95,7 +96,8 @@ def revoke_token(access_token):
             'token': access_token,
             'client_id': settings.API_CLIENT_ID,
             'client_secret': settings.API_CLIENT_SECRET,
-        }
+        },
+        timeout=15
     )
     return response.status_code == 200
 
@@ -148,6 +150,7 @@ def get_authenticated_connection(username, password):
         username=username,
         password=password,
         auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
+        timeout=15,
         encoding='utf-8'
     )
 
