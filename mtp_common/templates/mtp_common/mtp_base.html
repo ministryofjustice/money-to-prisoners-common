@@ -5,12 +5,12 @@
 
 {% block head %}
   {{ block.super }}
-  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}"  rel="stylesheet" type="text/css"><!--<![endif]-->
-  <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}"  rel="stylesheet" type="text/css"><!--<![endif]-->
+  <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" rel="stylesheet" type="text/css" /><![endif]-->
 
-  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}" media="print"/>
+  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" media="print"/>
   <style media="print">
     a[href^="/"]:after {
       content: " ({{ request.scheme }}://{{ request.get_host }}" attr(href) ")";
@@ -90,7 +90,7 @@
 {% endblock %}
 
 {% block body_end %}
-  <script src="{% static 'javascripts/app.bundle.js' %}"></script>
+  <script src="{% static 'javascripts/app.bundle.js' %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}"></script>
   <!--
   {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}
   {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
