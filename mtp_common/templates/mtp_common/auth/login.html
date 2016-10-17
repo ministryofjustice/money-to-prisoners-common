@@ -33,10 +33,13 @@
           </div>
         </form>
 
-        {% url 'reset_password' as reset_password_url %}
-        {% if reset_password_url %}
-          <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
+        {% if ENVIRONMENT != 'test' %}
+          {% url 'reset_password' as reset_password_url %}
+          {% if reset_password_url %}
+            <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
+          {% endif %}
         {% endif %}
+
       </div>
     </div>
   </div>
