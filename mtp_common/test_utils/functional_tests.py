@@ -89,7 +89,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
     Used for integration/functional testing of MTP client applications
     """
     auto_load_test_data = False
-    required_webdriver = None
+    required_webdrivers = None
     test_accessibility = False
     accessibility_scope_selector = None
     accessibility_standard = None
@@ -116,14 +116,18 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
             self.load_test_data()
 
         web_driver = os.environ.get('WEBDRIVER', 'phantomjs')
-        if self.required_webdriver and web_driver != self.required_webdriver:
-            raise unittest.SkipTest('%s webdriver required for this test' % self.required_webdriver)
+        if self.required_webdrivers and web_driver not in self.required_webdrivers:
+            raise unittest.SkipTest('this test requires %s' % ' or '.join(self.required_webdrivers))
+
         if web_driver == 'firefox':
-            fp = webdriver.FirefoxProfile()
-            fp.set_preference('browser.startup.homepage', 'about:blank')
-            fp.set_preference('startup.homepage_welcome_url', 'about:blank')
-            fp.set_preference('startup.homepage_welcome_url.additional', 'about:blank')
-            self.driver = webdriver.Firefox(firefox_profile=fp)
+            paths = glob.glob('./node_modules/selenium-standalone/.selenium/geckodriver/*-geckodriver')
+            paths = filter(lambda _path: os.path.isfile(_path) and os.access(_path, os.X_OK),
+                           paths)
+            try:
+                self.driver = webdriver.Firefox(executable_path=next(paths))
+            except StopIteration:
+                self.fail('Cannot find Firefox driver')
+
         elif web_driver == 'chrome':
             paths = glob.glob('./node_modules/selenium-standalone/.selenium/chromedriver/*-chromedriver')
             paths = filter(lambda _path: os.path.isfile(_path) and os.access(_path, os.X_OK),
@@ -132,16 +136,19 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
                 self.driver = webdriver.Chrome(executable_path=next(paths))
             except StopIteration:
                 self.fail('Cannot find Chrome driver')
+
         elif web_driver == 'phantomjs':
             path = './node_modules/phantomjs/lib/phantom/bin/phantomjs'
             self.driver = webdriver.PhantomJS(executable_path=path)
+
         else:
             self.fail('Unknown webdriver %s' % web_driver)
 
         if self.test_accessibility:
             self.setup_accessibility_run()
 
-        self.driver.set_window_position(0, 0)
+        if web_driver != 'firefox':
+            self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1000, 1000)
 
     def tearDown(self):
