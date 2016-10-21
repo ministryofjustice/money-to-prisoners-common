@@ -16,7 +16,7 @@ q@^1.4.1
 request@^2.63.0
 require-dir@^0.3.0
 sanitize-filename@^1.4.3
-selenium-standalone@^4.6.0
+selenium-standalone@^5.7.2
 webdriverio@^3.2.4
 webpack@^1.12.3
 yargs@^3.24.0
