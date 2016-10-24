@@ -6,7 +6,7 @@ checked-polyfill@ministryofjustice/checked-polyfill#1.0.0
 cucumber@^0.5.3
 del@^2.0.2
 globule@^0.2.0
-govuk-elements-sass@~1.2.1
+govuk-elements-sass@~2.0.0
 imports-loader@^0.6.5
 jquery@~1.11
 js-cookie@~2.0.3
