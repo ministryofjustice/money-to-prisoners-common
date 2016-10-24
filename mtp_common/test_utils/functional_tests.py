@@ -115,6 +115,16 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         if self.auto_load_test_data:
             self.load_test_data()
 
+        self.select_web_driver()
+
+        if self.test_accessibility:
+            self.setup_accessibility_run()
+
+        if not isinstance(self.driver, webdriver.Firefox):
+            self.driver.set_window_position(0, 0)
+        self.driver.set_window_size(1000, 1000)
+
+    def select_web_driver(self):
         web_driver = os.environ.get('WEBDRIVER', 'phantomjs')
         if self.required_webdrivers and web_driver not in self.required_webdrivers:
             raise unittest.SkipTest('this test requires %s' % ' or '.join(self.required_webdrivers))
@@ -143,13 +153,6 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
 
         else:
             self.fail('Unknown webdriver %s' % web_driver)
-
-        if self.test_accessibility:
-            self.setup_accessibility_run()
-
-        if web_driver != 'firefox':
-            self.driver.set_window_position(0, 0)
-        self.driver.set_window_size(1000, 1000)
 
     def tearDown(self):
         self.driver.quit()

@@ -5,12 +5,12 @@
 
 {% block head %}
   {{ block.super }}
-  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}"  rel="stylesheet" type="text/css"><!--<![endif]-->
-  <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" rel="stylesheet" type="text/css" /><![endif]-->
-  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}"  rel="stylesheet" type="text/css"><!--<![endif]-->
+  <!--[if IE 6]><link href="{% static "stylesheets/app-ie6.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 7]><link href="{% static "stylesheets/app-ie7.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
+  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
 
-  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}" media="print"/>
+  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}?{{ APP_GIT_COMMIT_SHORT }}" media="print"/>
   <style media="print">
     a[href^="/"]:after {
       content: " ({{ request.scheme }}://{{ request.get_host }}" attr(href) ")";
@@ -73,7 +73,7 @@
           {% if ENVIRONMENT == 'prod' %}
           <strong class="phase-tag">{% trans 'Beta' %}</strong>
           {% else %}
-          <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
+          <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT_SHORT }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
           {% endif %}
           {% url 'submit_ticket' as ticket_url %}
           <span>
@@ -85,14 +85,30 @@
       </div>
     {% endblock %}
 
+    {% block breadcrumbs %}
+      {% if breadcrumbs %}
+        <div class="breadcrumbs">
+          <ol>
+            {% for breadcrumb in breadcrumbs %}
+              {% if breadcrumb.url %}
+                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>
+              {% else %}
+                <li><a>{{ breadcrumb.name }}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ol>
+        </div>
+      {% endif %}
+    {% endblock %}
+
     {% block inner_content %}{% endblock %}
   </main>
 {% endblock %}
 
 {% block body_end %}
-  <script src="{% static 'javascripts/app.bundle.js' %}?{{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}"></script>
+  <script src="{% static 'javascripts/app.bundle.js' %}?{{ APP_GIT_COMMIT_SHORT }}"></script>
   <!--
-  {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT|default:'unknown'|truncatechars:7 }}
+  {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }}
   {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
   -->
 {% endblock %}

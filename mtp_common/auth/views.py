@@ -16,6 +16,13 @@ from . import login as auth_login, logout as auth_logout
 from .forms import AuthenticationForm, PasswordChangeForm, ResetPasswordForm
 
 
+def make_breadcrumbs(section_title):
+    return [
+        {'name': _('Home'), 'url': '/'},
+        {'name': section_title},
+    ]
+
+
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -130,6 +137,7 @@ def password_change(request,
     context = {
         'form': form,
         'cancel_url': cancel_url,
+        'breadcrumbs': make_breadcrumbs(_('Change password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -143,6 +151,7 @@ def password_change_done(request,
     cancel_url = resolve_url(cancel_url or '/')
     context = {
         'cancel_url': cancel_url,
+        'breadcrumbs': make_breadcrumbs(_('Change password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -171,6 +180,7 @@ def reset_password(request,
     context = {
         'form': form,
         'cancel_url': cancel_url,
+        'breadcrumbs': make_breadcrumbs(_('Reset password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -185,6 +195,7 @@ def reset_password_done(request,
         return HttpResponseRedirect(cancel_url)
     context = {
         'cancel_url': cancel_url,
+        'breadcrumbs': make_breadcrumbs(_('Reset password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)

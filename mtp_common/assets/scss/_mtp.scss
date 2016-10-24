@@ -1,5 +1,9 @@
 @charset 'UTF-8';
 
+@function image-url($file) {
+  @return url('/static/images/' + $file);
+}
+
 @import 'govuk-elements';
 
 // App extensions

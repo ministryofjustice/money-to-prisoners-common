@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext, ngettext
+from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views.generic.edit import FormView
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
@@ -16,18 +16,32 @@ from mtp_common.user_admin.forms import UserUpdateForm
 logger = logging.getLogger('mtp')
 
 
+def make_breadcrumbs(section_title, include_user_admin_root=True):
+    breadcrumbs = [{'name': _('Home'), 'url': '/'}]
+    if include_user_admin_root:
+        breadcrumbs += [{'name': _('Manage user accounts'), 'url': reverse('list-users')}]
+    return breadcrumbs + [{'name': section_title}]
+
+
 @login_required
 @permission_required('auth.change_user', raise_exception=True)
 def list_users(request):
     users = retrieve_all_pages(
         api_client.get_connection(request).users.get
     )
-    return render(request, 'mtp_common/user_admin/list.html', {'users': users})
+    context = {
+        'users': users,
+        'breadcrumbs': make_breadcrumbs(_('Manage user accounts'), False),
+    }
+    return render(request, 'mtp_common/user_admin/list.html', context=context)
 
 
 @login_required
 @permission_required('auth.delete_user', raise_exception=True)
 def delete_user(request, username):
+    context = {
+        'breadcrumbs': make_breadcrumbs(_('Delete user')),
+    }
     if request.method == 'POST':
         try:
             api_client.get_connection(request).users(username).delete()
@@ -41,22 +55,29 @@ def delete_user(request, username):
                     '@fields.username': admin_username,
                 }
             })
-
-            return render(request, 'mtp_common/user_admin/deleted.html', {'username': username})
+            context['username'] = username
+            return render(request, 'mtp_common/user_admin/deleted.html', context=context)
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be deleted'))
             return redirect(reverse('list-users'))
 
     try:
         user = api_client.get_connection(request).users(username).get()
-        return render(request, 'mtp_common/user_admin/delete.html', {'user': user})
+        context['user'] = user
+        return render(request, 'mtp_common/user_admin/delete.html', context=context)
     except HttpNotFoundError:
         raise Http404
 
 
 class UserFormView(FormView):
+    title = _('Edit user')
     template_name = 'mtp_common/user_admin/update.html'
     form_class = UserUpdateForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['breadcrumbs'] = make_breadcrumbs(self.title)
+        return context_data
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -64,13 +85,18 @@ class UserFormView(FormView):
         return form_kwargs
 
     def form_valid(self, form):
-        return render(self.request, 'mtp_common/user_admin/saved.html',
-                      {'user': form.cleaned_data, 'create': form.create})
+        context = {
+            'user': form.cleaned_data,
+            'create': form.create,
+            'breadcrumbs': make_breadcrumbs(self.title),
+        }
+        return render(self.request, 'mtp_common/user_admin/saved.html', context=context)
 
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('auth.add_user', raise_exception=True), name='dispatch')
 class UserCreationView(UserFormView):
+    title = _('Add user')
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
