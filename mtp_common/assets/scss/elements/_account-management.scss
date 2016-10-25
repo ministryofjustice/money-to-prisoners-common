@@ -1,0 +1,38 @@
+// user account management pages
+.admin {
+  ul {
+    padding-left: 0;
+
+    li {
+      list-style-type: none;
+    }
+  }
+
+  td {
+    font-size: 0.8em;
+  }
+
+  .user-admin {
+    text-align: center;
+  }
+
+  .actions {
+    width: 8em;
+
+    div {
+      display: inline-block;
+
+      &.edit-action {
+        margin-right: 2em;
+      }
+    }
+
+    a:visited {
+      color: $link-colour;
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+}

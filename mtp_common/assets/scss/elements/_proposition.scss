@@ -1,0 +1,42 @@
+// mtp overrides to navigation links, most notably for mobile layout
+
+#global-header .header-proposition {
+  a.menu:after {
+    content: " \25C0\FE0E";
+  }
+  a.menu.js-mtp-header-open:after {
+    content: " \25BC\FE0E";
+  }
+
+  #proposition-links {
+    li span {
+      color: $page-colour;
+    }
+
+    @media (max-width: 769px){
+      margin-top: 1em;
+
+      li {
+        border-bottom: none;
+        border-top: 1px solid $grey-1;
+        padding: 0.6em;
+        width: 95%;
+      }
+      a {
+        display: block;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.5;
+        padding: 0.2em;
+      }
+    }
+  }
+}
+
+.phase-tag.phase-tag-dev {
+  background-color: $brown;
+
+  + .phase-banner-message {
+    padding-left: 4.8em;
+  }
+}
