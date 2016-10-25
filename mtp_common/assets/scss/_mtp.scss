@@ -15,6 +15,7 @@
 
 // App overrides
 @import 'colours';
+@import 'elements/proposition';
 @import 'elements/buttons';
 @import 'elements/forms';
 @import 'elements/table';
@@ -23,8 +24,8 @@
 @import 'elements/upload';
 @import 'elements/checkbox';
 
-
 // App elements
+@import 'elements/account-management';
 @import 'elements/user-details';
 @import 'elements/dashboard-links';
 @import 'elements/summary-boxes';
@@ -38,12 +39,3 @@
 @import 'elements/important';
 @import 'elements/pagination';
 @import 'elements/large-link';
-
-// GOV.UK Overrides
-strong {
-  font-weight: bold;
-}
-
-#content {
-  outline: none;
-}
