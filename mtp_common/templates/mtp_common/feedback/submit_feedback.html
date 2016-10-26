@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block inner_content %}
+  <header class="ContentHeader">
+    <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
+  </header>
+
+  <form action="." method="post" id="send-feedback">
+    {% csrf_token %}
+
+    {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+
+    {{ form.referer }}
+
+    <fieldset>
+      {% with field=form.ticket_content %}
+        <div class="form-group {% if field.errors %}error{% endif %}">
+          {% include 'mtp_common/forms/field-label.html' with field=field only %}
+          <p class="panel panel-border-wide">
+            {% trans 'Please don’t include bank details or any other personal information.' %}
+          </p>
+          {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+          <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:'' }}</textarea>
+        </div>
+      {% endwith %}
+
+      <h2 class="heading-large">{% trans 'Do you want a reply?' %}</h2>
+      <p>{% trans 'Enter your email address if you’d like a reply. We won’t use it for anything else.' %}</p>
+
+      {% include 'mtp_common/forms/field.html' with field=form.contact_email only %}
+
+      <div class="form-group">
+        <button type="submit" class="button" name="submit-feedback">{% trans 'Send feedback' %}</button>
+      </div>
+    </fieldset>
+  </form>
+{% endblock %}
