@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load mtp_common %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/checkbox-field.html' with field=<field variable> only %}
+  optional parameters:
+    input_classes - classes to add to the input element
+    value - input element value override instead of default filtered field value (ignored if None)
+
+  TODO: the widget is not currently configurable
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="form-group {% if field.errors %}error{% endif %}">
+  {% include 'mtp_common/forms/field-label.html' with field=field only %}
+  {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+  {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+
+  {% with checked=value|default:field.value|default:field.field.initial %}
+  <input id="{{ field.id_for_label }}" class="checkbox {{ input_classes }}" name="{{ field.html_name }}" type="checkbox" {% if checked %}checked{% endif %}/>
+  {% endwith %}
+</div>
