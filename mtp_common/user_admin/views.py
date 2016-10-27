@@ -16,11 +16,12 @@ from mtp_common.user_admin.forms import UserUpdateForm
 logger = logging.getLogger('mtp')
 
 
-def make_breadcrumbs(section_title, include_user_admin_root=True):
-    breadcrumbs = [{'name': _('Home'), 'url': '/'}]
-    if include_user_admin_root:
-        breadcrumbs += [{'name': _('Manage user accounts'), 'url': reverse('list-users')}]
-    return breadcrumbs + [{'name': section_title}]
+def make_breadcrumbs(section_title):
+    return [
+        {'name': _('Home'), 'url': '/'},
+        {'name': _('Manage user accounts'), 'url': reverse('list-users')},
+        {'name': section_title}
+    ]
 
 
 @login_required
@@ -31,7 +32,6 @@ def list_users(request):
     )
     context = {
         'users': users,
-        'breadcrumbs': make_breadcrumbs(_('Manage user accounts'), False),
     }
     return render(request, 'mtp_common/user_admin/list.html', context=context)
 
