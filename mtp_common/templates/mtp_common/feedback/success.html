@@ -2,16 +2,14 @@
 {% load i18n %}
 
 {% block inner_content %}
-  <header class="ContentHeader">
-    <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
-  </header>
+  <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
 
   <div class="container">
     <div class="grid-row">
       <div class="column-two-thirds">
         <p>{% trans 'Thank you for submitting feedback about the service.' %}</p>
         {% if return_to %}
-          <p class="ContentHeader-back ContentHeader-arrow"><a href="{{ return_to }}">{% trans 'Back' %}</a></p>
+          <p><a href="{{ return_to }}" class="link-back">{% trans 'Back' %}</a></p>
         {% endif %}
       </div>
     </div>

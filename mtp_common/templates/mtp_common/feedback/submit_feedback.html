@@ -2,9 +2,7 @@
 {% load i18n %}
 
 {% block inner_content %}
-  <header class="ContentHeader">
-    <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
-  </header>
+  <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
 
   <form action="." method="post" id="send-feedback">
     {% csrf_token %}
