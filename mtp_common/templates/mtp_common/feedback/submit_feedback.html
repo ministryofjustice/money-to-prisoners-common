@@ -2,6 +2,10 @@
 {% load i18n %}
 
 {% block inner_content %}
+  {% if return_to %}
+    <a class="link-back" href="{{ return_to }}">{% trans 'Back' %}</a>
+  {% endif %}
+
   <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
 
   <form action="." method="post" id="send-feedback">
