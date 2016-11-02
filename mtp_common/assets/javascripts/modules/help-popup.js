@@ -8,7 +8,7 @@ exports.HelpPopup = {
 
   init: function () {
     var $helpBoxes = $('.help-box');
-    var $helpTitles = $('.help-box-title');
+    var $helpTitles = $('.help-box-title a');
     if ($helpBoxes.length) {
       $helpBoxes.addClass('help-box-collapsed');
       $helpTitles
