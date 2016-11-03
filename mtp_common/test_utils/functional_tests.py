@@ -65,6 +65,15 @@ class WebDriverControlMixin:
             '//*[@type="submit" and @value="' + text + '"]'
         ).click()
 
+    def click_on_text_substring(self, text):
+        """
+        Click on an input or element containing specified text
+        """
+        self.driver.find_element_by_xpath(
+            '//*[text()[contains(.,"' + text + '")]] | '
+            '//*[@type="submit" and @value[contains(.,"' + text + '")]]'
+        ).click()
+
     def login(self, username, password, url=None,
               username_field='id_username', password_field='id_password'):
         """
