@@ -90,10 +90,21 @@ Developing
 * Test using ``python setup.py test`` or ``./run_tests.py [arguments]``
 * Update VERSION tuple in ``mtp_common/__init__.py``
 * Git tag with version
-* Submit to PyPi with ``python setup.py sdist bdist_wheel upload``
+* Submit to PyPi with ``python setup.py sdist bdist_wheel upload``, ensure messages are compiled first!
+
+Translating
+-----------
+
+Update translation files with ``cd mtp_common; django-admin.py makemessages --all --keep-pot --no-wrap``.
+
+Compile messages ``cd mtp_common; django-admin.py compilemessages``.
+
+Pull updates from Transifex with ``tx pull``. You'll need to update translation files afterwards.
+
+Push latest English to Transifex with ``tx push -s``. NB: you should pull updates before pushing to merge correctly.
 
 Common assets
-=============
+-------------
 
 All shared assets used for `money-to-prisoners-cashbook`_, `money-to-prisoners-bank-admin`_,
 `money-to-prisoners-prisoner-location-admin`_ and `money-to-prisoners-send-money`_ are kept in this package.

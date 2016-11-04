@@ -23,6 +23,7 @@ install_requires = [
     'requests-oauthlib>=0.6,<0.7',
     'slumber>=0.7,<0.8',
     'selenium>=3.0',
+    'transifex-client>=0.12',
 ]
 extras_require = {
     'monitoring': [

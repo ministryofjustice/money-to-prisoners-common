@@ -15,7 +15,10 @@
 
 {% block admin_content %}
   {% if form.create %}
-    <p>{% trans 'Fill in a user’s details to allow them access. You can give them a general user or admin role.' %}</p>
+    <p>
+      {% trans 'Fill in a user’s details to allow them access.' %}
+      {% trans 'You can give them a general user or admin role.' %}
+    </p>
     {% if permissions_note %}
       <p>{{ permissions_note }}</p>
     {% endif %}
