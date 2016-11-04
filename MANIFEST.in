@@ -13,4 +13,6 @@ recursive-include mtp_common/static *.css
 recursive-include mtp_common/static *.js
 recursive-include mtp_common/static *.jpg
 recursive-include mtp_common/static *.png
+recursive-include mtp_common/locale *.po
+recursive-include mtp_common/locale *.mo
 recursive-include mtp_common/templates *.html

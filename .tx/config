@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[mtp.common]
+file_filter = mtp_common/locale/<lang>/LC_MESSAGES/django.po
+source_file = mtp_common/locale/django.pot
+source_lang = en_GB
+type = PO

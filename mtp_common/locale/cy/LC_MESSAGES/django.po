@@ -1,0 +1,470 @@
+# MTP common
+msgid ""
+msgstr ""
+"Project-Id-Version: MTP common\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-04 14:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2016\n"
+"Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
+
+#: app.py:9
+msgid "MTP Common"
+msgstr ""
+
+#: auth/csrf.py:27 auth/csrf.py:30 auth/csrf.py:35
+msgid "Please try again."
+msgstr ""
+
+#: auth/csrf.py:28
+msgid "Make sure you haven’t disabled cookies."
+msgstr ""
+
+#: auth/csrf.py:31
+msgid "Make sure you are using a modern web browser such as Firefox or Google Chrome."
+msgstr ""
+
+#: auth/csrf.py:34
+msgid "Your browser failed a security check."
+msgstr ""
+
+#: auth/forms.py:21 auth/forms.py:127
+#: templates/mtp_common/user_admin/list.html:24 user_admin/forms.py:19
+msgid "Username"
+msgstr ""
+
+#: auth/forms.py:22
+msgid "Password"
+msgstr ""
+
+#: auth/forms.py:25
+msgid "You’ve entered an incorrect username and/or password"
+msgstr ""
+
+#: auth/forms.py:26
+msgid "You don’t have access to this application"
+msgstr ""
+
+#: auth/forms.py:27 auth/forms.py:79 auth/forms.py:125 user_admin/forms.py:16
+msgid "This service is currently unavailable"
+msgstr ""
+
+#: auth/forms.py:78
+msgid "You’ve entered different passwords"
+msgstr ""
+
+#: auth/forms.py:81
+msgid "Old password"
+msgstr ""
+
+#: auth/forms.py:83
+msgid "New password"
+msgstr ""
+
+#: auth/forms.py:85
+msgid "New password confirmation"
+msgstr ""
+
+#: auth/views.py:21 user_admin/views.py:21
+msgid "Home"
+msgstr ""
+
+#: auth/views.py:106
+msgid "Logged out"
+msgstr ""
+
+#: auth/views.py:140 auth/views.py:154
+msgid "Change password"
+msgstr ""
+
+#: auth/views.py:183 auth/views.py:198
+msgid "Reset password"
+msgstr ""
+
+#: forms/__init__.py:11
+msgid "This field is required"
+msgstr ""
+
+#: forms/__init__.py:12
+msgid "You’ve entered too few characters"
+msgstr ""
+
+#: forms/__init__.py:13
+msgid "You’ve entered too many characters"
+msgstr ""
+
+#: forms/__init__.py:14
+msgid "Enter a whole number"
+msgstr ""
+
+#: forms/__init__.py:15 forms/__init__.py:16
+msgid "Enter a number"
+msgstr ""
+
+#: forms/__init__.py:17 forms/__init__.py:25 forms/fields.py:69
+msgid "Enter a valid date"
+msgstr ""
+
+#: forms/__init__.py:18 forms/__init__.py:26
+msgid "Enter a valid time"
+msgstr ""
+
+#: forms/__init__.py:19
+msgid "Enter a valid date and time"
+msgstr ""
+
+#: forms/__init__.py:21 forms/__init__.py:22
+msgid "No file was submitted"
+msgstr ""
+
+#: forms/__init__.py:23
+msgid "The submitted file is empty"
+msgstr ""
+
+#: forms/__init__.py:27
+msgid "Enter a valid email address"
+msgstr ""
+
+#: forms/fields.py:42
+#, python-format
+msgid "‘Year’ should be between 1900 and %(current_year)s"
+msgstr ""
+
+#: forms/fields.py:49
+msgid "Enter ‘year’ as a number"
+msgstr ""
+
+#: forms/fields.py:73
+msgid "‘Day’ should be between 1 and 31"
+msgstr ""
+
+#: forms/fields.py:74
+msgid "‘Month’ should be between 1 and 12"
+msgstr ""
+
+#: forms/fields.py:80
+msgid "Enter ‘day’ as a number"
+msgstr ""
+
+#: forms/fields.py:85
+msgid "Enter ‘month’ as a number"
+msgstr ""
+
+#: templates/mtp_common/auth/login.html:9
+#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:4
+#: templates/mtp_common/mtp_base.html:50
+msgid "Send money to a prisoner"
+msgstr ""
+
+#: templates/mtp_common/auth/login.html:12
+#: templates/mtp_common/auth/login.html:32
+msgid "Sign in"
+msgstr ""
+
+#: templates/mtp_common/auth/login.html:39
+msgid "Forgotten your password?"
+msgstr ""
+
+#: templates/mtp_common/auth/password_change.html:5
+msgid "Change your password"
+msgstr ""
+
+#: templates/mtp_common/auth/password_change.html:6
+#: templates/mtp_common/auth/reset-password.html:6
+msgid "Submit"
+msgstr ""
+
+#: templates/mtp_common/auth/password_change_done.html:5
+msgid "Password change successful"
+msgstr ""
+
+#: templates/mtp_common/auth/password_change_done.html:9
+msgid "Your password has been changed."
+msgstr ""
+
+#: templates/mtp_common/auth/password_change_done.html:10
+#: templates/mtp_common/auth/reset-password-done.html:12
+#: templates/mtp_common/errors/400.html:14
+#: templates/mtp_common/errors/404.html:12
+#: templates/mtp_common/errors/500.html:14
+msgid "Return to the home page"
+msgstr ""
+
+#: templates/mtp_common/auth/reset-password-done.html:5
+msgid "Your password was reset successfully"
+msgstr ""
+
+#: templates/mtp_common/auth/reset-password-done.html:10
+msgid "You will get an email with your new password."
+msgstr ""
+
+#: templates/mtp_common/auth/reset-password.html:5
+msgid "Reset your password"
+msgstr ""
+
+#: templates/mtp_common/errors/400.html:7
+#: templates/mtp_common/errors/500.html:7
+msgid "Sorry, something went wrong"
+msgstr ""
+
+#: templates/mtp_common/errors/400.html:12
+msgid "There was a problem with your request."
+msgstr ""
+
+#: templates/mtp_common/errors/404.html:5
+msgid "Page not found"
+msgstr ""
+
+#: templates/mtp_common/errors/404.html:10
+msgid "If you entered a web address please check it was correct."
+msgstr ""
+
+#: templates/mtp_common/errors/500.html:12
+msgid "Please try again later."
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:6
+#: templates/mtp_common/feedback/success.html:12
+msgid "Back"
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:9
+#: templates/mtp_common/feedback/success.html:5
+msgid "Your feedback"
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:23
+msgid "Please don’t include bank details or any other personal information."
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:30
+msgid "Do you want a reply?"
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:31
+msgid "Enter your email address if you’d like a reply. We won’t use it for anything else."
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:36
+msgid "Send feedback"
+msgstr ""
+
+#: templates/mtp_common/feedback/success.html:10
+msgid "Thank you for submitting feedback about the service."
+msgstr ""
+
+#: templates/mtp_common/forms/error-summary.html:12
+msgid "There was a problem"
+msgstr ""
+
+#: templates/mtp_common/forms/generic.html:30
+#: templates/mtp_common/user_admin/delete.html:27
+#: templates/mtp_common/user_admin/update.html:64
+msgid "Cancel"
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:34
+msgid "GOV.UK uses cookies to make the site simpler."
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:35
+#, python-format
+msgid "<a href=\"%(url)s\">Find out more about cookies</a>"
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:47
+msgid "Menu"
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:63
+msgid "Beta"
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:69
+msgid "This is a new service."
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:70
+#, python-format
+msgid "If you have any comments or need help please <a href=\"%(ticket_url)s\">contact us</a>."
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:6
+#, python-format
+msgid "Delete user ‘%(username)s’"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:14
+#: templates/mtp_common/user_admin/saved.html:20
+#, python-format
+msgid "Username: %(username)s"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:15
+#: templates/mtp_common/user_admin/saved.html:21
+#, python-format
+msgid "First name: %(first_name)s"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:16
+#: templates/mtp_common/user_admin/saved.html:22
+#, python-format
+msgid "Last name: %(last_name)s"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:17
+#: templates/mtp_common/user_admin/saved.html:23
+#, python-format
+msgid "Email: %(email)s"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:19
+#: templates/mtp_common/user_admin/saved.html:25
+msgid "Can manage other users:"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:20
+#: templates/mtp_common/user_admin/saved.html:26
+msgid "Yes"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:20
+#: templates/mtp_common/user_admin/saved.html:26
+msgid "No"
+msgstr ""
+
+#: templates/mtp_common/user_admin/delete.html:26
+msgid "Delete user account"
+msgstr ""
+
+#: templates/mtp_common/user_admin/deleted.html:6
+#, python-format
+msgid "User account ‘%(username)s’ deleted"
+msgstr ""
+
+#: templates/mtp_common/user_admin/deleted.html:9
+#: templates/mtp_common/user_admin/saved.html:31
+msgid "Return to user management"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:5 user_admin/views.py:22
+msgid "Manage user accounts"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:17
+msgid "Add, view, edit or delete user accounts."
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:19
+msgid "Add a new user"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:25
+msgid "Name"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:26 user_admin/forms.py:22
+msgid "Email"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:27
+msgid "Admin"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:28
+msgid "Actions"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:40
+msgid "User is an admin"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:45
+msgid "Edit"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:50
+msgid "Delete"
+msgstr ""
+
+#: templates/mtp_common/user_admin/saved.html:8
+#, python-format
+msgid "User account ‘%(username)s’ created"
+msgstr ""
+
+#: templates/mtp_common/user_admin/saved.html:12
+#, python-format
+msgid "User account ‘%(username)s’ edited"
+msgstr ""
+
+#: templates/mtp_common/user_admin/saved.html:30
+msgid "Edit this user account"
+msgstr ""
+
+#: templates/mtp_common/user_admin/update.html:7
+msgid "Create a new user"
+msgstr ""
+
+#: templates/mtp_common/user_admin/update.html:9
+#, python-format
+msgid "Edit user ‘%(username)s’"
+msgstr ""
+
+#: templates/mtp_common/user_admin/update.html:19
+msgid "Fill in a user’s details to allow them access."
+msgstr ""
+
+#: templates/mtp_common/user_admin/update.html:20
+msgid "You can give them a general user or admin role."
+msgstr ""
+
+#: templates/mtp_common/user_admin/update.html:59
+msgid "Create"
+msgstr ""
+
+#: templates/mtp_common/user_admin/update.html:61
+msgid "Save"
+msgstr ""
+
+#: user_admin/forms.py:20
+msgid "First name"
+msgstr ""
+
+#: user_admin/forms.py:21
+msgid "Last name"
+msgstr ""
+
+#: user_admin/forms.py:23
+msgid "Give access to manage other users (admin)"
+msgstr ""
+
+#: user_admin/views.py:43
+msgid "Delete user"
+msgstr ""
+
+#: user_admin/views.py:61
+msgid "This user could not be deleted"
+msgstr ""
+
+#: user_admin/views.py:73
+msgid "Edit user"
+msgstr ""
+
+#: user_admin/views.py:99
+msgid "Add user"
+msgstr ""
+
+#: user_admin/views.py:113
+msgid "The new user will have access to the same prison as you do."
+msgid_plural "The new user will have access to the same prisons as you do."
+msgstr[0] ""
+msgstr[1] ""
+
+#: user_admin/views.py:120
+msgid "The new user will not have access to manage any prisons."
+msgstr ""

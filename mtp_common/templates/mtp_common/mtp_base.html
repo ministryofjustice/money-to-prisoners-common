@@ -31,8 +31,9 @@
 
 {% block cookie_message %}
   <p>
+    {% trans 'GOV.UK uses cookies to make the site simpler.' %}
     {% blocktrans trimmed with url='https://www.gov.uk/help/cookies' %}
-      GOV.UK uses cookies to make the site simpler. <a href="{{ url }}">Find out more about cookies</a>
+      <a href="{{ url }}">Find out more about cookies</a>
     {% endblocktrans %}
   </p>
 {% endblock %}
@@ -65,8 +66,9 @@
           {% endif %}
           {% url 'submit_ticket' as ticket_url %}
           <span>
+            {% trans 'This is a new service.' %}
             {% blocktrans trimmed %}
-              This is a new service. If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.
+              If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.
             {% endblocktrans %}
           </span>
         </p>

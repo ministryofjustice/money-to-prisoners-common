@@ -19,6 +19,10 @@ DEFAULT_SETTINGS = dict(
         'django.contrib.auth',
         'django.contrib.messages',
     ),
+    LANGUAGES=(
+        ('en-gb', 'English'),
+        ('cy', 'Cymraeg'),
+    ),
     OAUTHLIB_INSECURE_TRANSPORT=True,
     API_URL='http://localhost:8000',
     SITE_URL='http://localhost:8001',
