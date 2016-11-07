@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-07 11:15+0000\n"
+"POT-Creation-Date: 2016-11-07 12:52+0000\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
@@ -13,8 +13,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: app.py:9
-msgid "MTP Common"
+#: app.py:9 templates/mtp_common/auth/login.html:9
+#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:4
+#: templates/mtp_common/mtp_base.html:50
+msgid "Send money to a prisoner"
 msgstr ""
 
 #: auth/csrf.py:27 auth/csrf.py:30 auth/csrf.py:35
@@ -165,12 +167,6 @@ msgstr ""
 
 #: forms/fields.py:85
 msgid "Enter ‘month’ as a number"
-msgstr ""
-
-#: templates/mtp_common/auth/login.html:9
-#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:4
-#: templates/mtp_common/mtp_base.html:50
-msgid "Send money to a prisoner"
 msgstr ""
 
 #: templates/mtp_common/auth/login.html:12
