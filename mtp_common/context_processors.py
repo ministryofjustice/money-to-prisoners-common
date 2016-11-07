@@ -1,11 +1,12 @@
 from django.conf import settings
+from django.utils.translation import get_language, gettext
 
 
-def analytics(request):
+def analytics(_):
     return {'GOOGLE_ANALYTICS_ID': getattr(settings, 'GOOGLE_ANALYTICS_ID', None)}
 
 
-def app_environment(request):
+def app_environment(_):
     app_git_commit = getattr(settings, 'APP_GIT_COMMIT', None)
     return {
         'APP': getattr(settings, 'APP', None),
@@ -13,4 +14,15 @@ def app_environment(request):
         'APP_BUILD_DATE': getattr(settings, 'APP_BUILD_DATE', None),
         'APP_GIT_COMMIT': app_git_commit,
         'APP_GIT_COMMIT_SHORT': (app_git_commit or 'unknown')[:7],
+    }
+
+
+def govuk_localisation(_):
+    return {
+        'html_lang': get_language() or settings.LANGUAGE_CODE,
+        'skip_link_message': gettext('Skip to main content'),
+        'homepage_url': 'https://www.gov.uk/',
+        'logo_link_title': gettext('Go to the GOV.UK homepage'),
+        'global_header_text': 'GOV.UK',
+        'crown_copyright_message': gettext('© Crown copyright'),
     }
