@@ -169,6 +169,12 @@ collect_static_assets:
 	@rsync -ru --delete $(IMAGE_FILES) $(MTP_APP_PATH)/assets/images >$(TASK_OUTPUT_REDIRECTION)
 	@$(VIRTUAL_ENV_DIR)/bin/python manage.py collectstatic --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
 
+# compile translation messages
+.PHONY: makemessages
+makemessages:
+	@echo Compiling translation strings
+	@cd $(MTP_APP_PATH) && ../$(VIRTUAL_ENV_DIR)/bin/python ../manage.py compilemessages --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
+
 # update node and python packages
 .PHONY: update
 update: virtual_env
@@ -178,7 +184,7 @@ update: virtual_env
 
 # all the assets
 .PHONY: build
-build: virtual_env assets retrieve_govuk_templates generate_screenshots collect_static_assets
+build: virtual_env assets retrieve_govuk_templates generate_screenshots collect_static_assets makemessages
 
 .PHONY: assets
 assets: $(JS_PATH)/app.bundle.js $(CSS_PATH)/app.css $(CSS_PATH)/app-ie6.css $(CSS_PATH)/app-ie7.css $(CSS_PATH)/app-ie8.css $(CSS_PATH)/app-print.css
