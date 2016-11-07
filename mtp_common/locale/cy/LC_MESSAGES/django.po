@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-04 14:38+0000\n"
+"POT-Creation-Date: 2016-11-07 11:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2016\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -84,6 +84,18 @@ msgstr ""
 
 #: auth/views.py:183 auth/views.py:198
 msgid "Reset password"
+msgstr ""
+
+#: context_processors.py:23
+msgid "Skip to main content"
+msgstr ""
+
+#: context_processors.py:25
+msgid "Go to the GOV.UK homepage"
+msgstr ""
+
+#: context_processors.py:27
+msgid "© Crown copyright"
 msgstr ""
 
 #: forms/__init__.py:11
@@ -272,9 +284,8 @@ msgstr ""
 msgid "GOV.UK uses cookies to make the site simpler."
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:35
-#, python-format
-msgid "<a href=\"%(url)s\">Find out more about cookies</a>"
+#: templates/mtp_common/mtp_base.html:36
+msgid "Find out more about cookies"
 msgstr ""
 
 #: templates/mtp_common/mtp_base.html:47
@@ -292,6 +303,11 @@ msgstr ""
 #: templates/mtp_common/mtp_base.html:70
 #, python-format
 msgid "If you have any comments or need help please <a href=\"%(ticket_url)s\">contact us</a>."
+msgstr ""
+
+#: templates/mtp_common/mtp_base.html:108
+#, python-format
+msgid "All content is available under the <a href=\"%(url)s\" rel=\"license\">Open Government Licence v3.0</a>, except where otherwise stated"
 msgstr ""
 
 #: templates/mtp_common/user_admin/delete.html:6

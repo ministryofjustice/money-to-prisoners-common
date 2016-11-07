@@ -32,9 +32,9 @@
 {% block cookie_message %}
   <p>
     {% trans 'GOV.UK uses cookies to make the site simpler.' %}
-    {% blocktrans trimmed with url='https://www.gov.uk/help/cookies' %}
-      <a href="{{ url }}">Find out more about cookies</a>
-    {% endblocktrans %}
+    <a href="https://www.gov.uk/help/cookies">
+      {% trans 'Find out more about cookies' %}
+    </a>
   </p>
 {% endblock %}
 
@@ -101,4 +101,12 @@
   {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }}
   {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
   -->
+{% endblock %}
+
+{% block licence_message %}
+  <p>
+    {% blocktrans trimmed with url='https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/' %}
+      All content is available under the <a href="{{ url }}" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+    {% endblocktrans %}
+  </p>
 {% endblock %}
