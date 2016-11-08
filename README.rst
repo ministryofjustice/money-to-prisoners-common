@@ -90,7 +90,7 @@ Developing
 * Test using ``python setup.py test`` or ``./run_tests.py [arguments]``
 * Update VERSION tuple in ``mtp_common/__init__.py``
 * Git tag with version
-* Submit to PyPi with ``python setup.py sdist bdist_wheel upload``, ensure messages are compiled first!
+* Submit to PyPi with ``python setup.py sdist bdist_wheel upload``
 
 Translating
 -----------
