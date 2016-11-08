@@ -2,6 +2,7 @@ from functools import partial
 import os
 
 from django.conf import settings
+from django.utils.translation import get_language
 from oauthlib.oauth2 import LegacyApplicationClient
 import requests
 from requests.auth import HTTPBasicAuth
@@ -21,6 +22,13 @@ REQUEST_TOKEN_URL = urljoin(settings.API_URL, '/oauth2/token/')
 REVOKE_TOKEN_URL = urljoin(settings.API_URL, '/oauth2/revoke_token/')
 
 
+class LocalisedOAuth2Session(OAuth2Session):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'Accept-Language' not in self.headers:
+            self.headers['Accept-Language'] = get_language() or settings.LANGUAGE_CODE
+
+
 def response_hook(response, *args, **kwargs):
     if response.status_code == 401:
         raise Unauthorized()
@@ -29,16 +37,14 @@ def response_hook(response, *args, **kwargs):
     return response
 
 
-class MoJOAuth2Session(OAuth2Session):
+class MoJOAuth2Session(LocalisedOAuth2Session):
     def request(self, method, url, data=None, headers=None, **kwargs):
         hooks = kwargs.get('hooks', {})
         if 'response' not in hooks:
             hooks['response'] = response_hook
         kwargs['hooks'] = hooks
 
-        return super(MoJOAuth2Session, self).request(
-            method, url, data=data, headers=headers, **kwargs
-        )
+        return super().request(method, url, data=data, headers=headers, **kwargs)
 
 
 def authenticate(username, password):
@@ -139,7 +145,7 @@ def get_authenticated_connection(username, password):
     Returns:
         an authenticated slumber connection
     """
-    session = OAuth2Session(
+    session = LocalisedOAuth2Session(
         client=LegacyApplicationClient(
             client_id=settings.API_CLIENT_ID
         )
