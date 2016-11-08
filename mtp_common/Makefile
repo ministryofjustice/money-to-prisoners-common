@@ -173,7 +173,7 @@ collect_static_assets:
 .PHONY: makemessages
 makemessages:
 	@echo Compiling translation strings
-	@cd $(MTP_APP_PATH) && ../$(VIRTUAL_ENV_DIR)/bin/python ../manage.py compilemessages --verbosity=$(verbosity) --noinput >$(TASK_OUTPUT_REDIRECTION)
+	@cd $(MTP_APP_PATH) && ../$(VIRTUAL_ENV_DIR)/bin/python ../manage.py compilemessages --verbosity=$(verbosity) >$(TASK_OUTPUT_REDIRECTION)
 
 # update node and python packages
 .PHONY: update
