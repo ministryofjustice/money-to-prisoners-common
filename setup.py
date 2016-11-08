@@ -36,12 +36,15 @@ extras_require = {
     ],
 }
 
+setup_extensions = importlib.import_module('setup_extensions')
+
 setup(
     name='money-to-prisoners-common',
     version=__version__,
     author='Ministry of Justice Digital Services',
     url='https://github.com/ministryofjustice/money-to-prisoners-common',
     packages=find_packages(exclude=['tests']),
+    py_modules=['setup_extensions'],
     include_package_data=True,
     license='MIT',
     description='Django app with common code and assets for Money to Prisoners serivces',
@@ -58,4 +61,5 @@ setup(
     extras_require=extras_require,
     tests_require=extras_require['testing'],
     test_suite='run_tests.run_tests',
+    cmdclass=setup_extensions.command_classes,
 )
