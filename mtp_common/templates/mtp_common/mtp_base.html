@@ -47,7 +47,7 @@
         <a href="#proposition-links" class="js-mtp-header-toggle menu print-hidden">{% trans 'Menu' %}</a>
       {% endif %}
       <nav id="proposition-menu">
-        <a href="/" id="proposition-name">{% block proposition %}{% trans 'Send money to a prisoner' %}{% endblock %}</a>
+        <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to a prisoner' %}{% endblock %}</a>
         {% block proposition_menu %}{% endblock %}
       </nav>
     </div>
