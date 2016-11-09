@@ -18,8 +18,10 @@ def app_environment(_):
 
 
 def govuk_localisation(_):
+    html_lang = get_language()
     return {
-        'html_lang': get_language() or settings.LANGUAGE_CODE,
+        'html_lang': html_lang or settings.LANGUAGE_CODE,
+        'home_url': '/%s/' % html_lang if html_lang else '/',
         'skip_link_message': gettext('Skip to main content'),
         'homepage_url': 'https://www.gov.uk/',
         'logo_link_title': gettext('Go to the GOV.UK homepage'),
