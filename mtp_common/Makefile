@@ -135,10 +135,10 @@ endif
 
 # update python virtual environment
 .PHONY: virtual_env
-virtual_env: $(VIRTUAL_ENV_DIR)/bin/pip
+virtual_env: $(VIRTUAL_ENV_DIR)/bin/pip3
 	@echo Updating python packages
-	@$(VIRTUAL_ENV_DIR)/bin/pip install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
-	@$(VIRTUAL_ENV_DIR)/bin/pip install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
+	@$(VIRTUAL_ENV_DIR)/bin/pip3 install -U setuptools pip wheel ipython ipdb >$(TASK_OUTPUT_REDIRECTION)
+	@$(VIRTUAL_ENV_DIR)/bin/pip3 install -r $(python_requirements) >$(TASK_OUTPUT_REDIRECTION)
 
 # migrate the db
 # NB: client apps do not have databases
@@ -271,12 +271,12 @@ $(CSS_PATH)/%.css: $(SASS_FILES)
 	@echo Generating `basename $@`
 	@$(NODE_BIN)/node-sass $(SASS_LOAD_PATH) $(ASSETS_SOURCE)/stylesheets/$*.scss $@ >$(TASK_OUTPUT_REDIRECTION) 2>&1 || $(call alert)
 
-$(VIRTUAL_ENV_DIR)/bin/python, $(VIRTUAL_ENV_DIR)/bin/pip:
+$(VIRTUAL_ENV_DIR)/bin/python, $(VIRTUAL_ENV_DIR)/bin/pip3:
 	@echo Creating python virtual environment
 	@virtualenv -p python3 $(VIRTUAL_ENV_DIR) >$(TASK_OUTPUT_REDIRECTION)
 
-$(VIRTUAL_ENV_DIR)/bin/uwsgi: $(VIRTUAL_ENV_DIR)/bin/pip
-	@$(VIRTUAL_ENV_DIR)/bin/pip install uWSGI
+$(VIRTUAL_ENV_DIR)/bin/uwsgi: $(VIRTUAL_ENV_DIR)/bin/pip3
+	@$(VIRTUAL_ENV_DIR)/bin/pip3 install uWSGI
 
 $(SELENIUM):
 	@echo Installing selenium binaries
