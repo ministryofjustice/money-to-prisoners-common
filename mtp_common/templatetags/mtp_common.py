@@ -2,6 +2,9 @@ from collections import OrderedDict
 import re
 
 from django import template
+from django.conf import settings
+from django.core.urlresolvers import NoReverseMatch, reverse
+from django.utils.translation import override
 try:
     from raven.contrib.django.models import client as sentry_client
 except ImportError:
@@ -64,3 +67,21 @@ def sentry_js():
     return {
         'sentry_dsn': sentry_dsn
     }
+
+
+@register.inclusion_tag('mtp_common/language-switch.html', takes_context=True)
+def language_switch(context):
+    request = context.get('request')
+    urls = []
+    try:
+        if not settings.SHOW_LANGUAGE_SWITCH:
+            raise NoReverseMatch
+        view_name = request.resolver_match.view_name
+        url_args = request.resolver_match.args
+        url_kwargs = request.resolver_match.kwargs
+        for lang_code, lang_name in settings.LANGUAGES:
+            with override(lang_code):
+                urls.append((lang_code, lang_name, reverse(view_name, args=url_args, kwargs=url_kwargs)))
+    except (AttributeError, NoReverseMatch):
+        urls = []
+    return {'urls': urls}

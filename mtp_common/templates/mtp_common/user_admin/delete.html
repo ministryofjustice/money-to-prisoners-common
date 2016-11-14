@@ -1,12 +1,16 @@
 {% extends 'mtp_common/user_admin/base.html' %}
 {% load i18n %}
+{% load mtp_common %}
 
 {% block admin_header %}
-  <h1 class="heading-xlarge">
-    {% blocktrans trimmed with username=user.username %}
-      Delete user ‘{{ username }}’
-    {% endblocktrans %}
-  </h1>
+  <header>
+    {% language_switch %}
+    <h1 class="heading-xlarge">
+      {% blocktrans trimmed with username=user.username %}
+        Delete user ‘{{ username }}’
+      {% endblocktrans %}
+    </h1>
+  </header>
 {% endblock %}
 
 {% block admin_content %}
