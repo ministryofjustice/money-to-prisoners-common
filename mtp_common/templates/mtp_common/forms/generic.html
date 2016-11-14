@@ -2,7 +2,10 @@
 {% load mtp_common %}
 {% load widget_tweaks %}
 
-<h1 class="heading-xlarge">{{ form_title }}</h1>
+<header>
+  {% language_switch %}
+  <h1 class="heading-xlarge">{{ form_title }}</h1>
+</header>
 
 <div class="container">
   <div class="grid-row">

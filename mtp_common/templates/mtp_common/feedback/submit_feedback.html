@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load mtp_common %}
 
 {% block inner_content %}
   {% if return_to %}
     <a class="link-back" href="{{ return_to }}">{% trans 'Back' %}</a>
   {% endif %}
 
-  <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
+  <header>
+    {% language_switch %}
+    <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
+  </header>
 
   <form action="." method="post" id="send-feedback">
     {% csrf_token %}

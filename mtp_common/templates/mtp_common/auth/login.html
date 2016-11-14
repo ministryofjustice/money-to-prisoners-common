@@ -4,12 +4,15 @@
 {% load widget_tweaks %}
 
 {% block inner_content %}
-  <h1 class="heading-xlarge">
-    {% block auth_title %}
-      {% trans 'Send money to a prisoner' %}
-    {% endblock %}
-  </h1>
-  <h2 class="heading-large">{%trans 'Sign in' %}</h2>
+  <header>
+    {% language_switch %}
+    <h1 class="heading-xlarge">
+      <span class="heading-secondary">
+        {% block auth_title %}{% trans 'Send money to a prisoner' %}{% endblock %}
+      </span>
+      {%trans 'Sign in' %}
+    </h1>
+  </header>
 
   <div class="container">
     <div class="grid-row">
