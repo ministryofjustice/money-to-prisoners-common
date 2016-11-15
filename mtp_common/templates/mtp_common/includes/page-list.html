@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% if page_count > 1 %}
+  {% spaceless %}
+    <ul class="mtp-page-list">
+      {% for page_index in page_range %}
+        <li>
+          {% if not page_index %}
+            …
+          {% else %}
+            <a href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page_index }}" {% if page == page_index %}class="mtp-page-list__current-page"{% endif %}>
+              <span class="screenreader-only">{% trans 'Page' %} </span>
+              <span>{{ page_index }}</span>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endspaceless %}
+{% endif %}
+
+<p class="mtp-page-list__description">
+  {% blocktrans %}Page {{ page }} of {{ page_count }}.{% endblocktrans %}
+</p>

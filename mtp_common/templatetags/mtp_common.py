@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from itertools import chain
 import re
 
 from django import template
@@ -85,3 +86,30 @@ def language_switch(context):
     except (AttributeError, NoReverseMatch):
         urls = []
     return {'urls': urls}
+
+
+@register.inclusion_tag('mtp_common/includes/page-list.html')
+def page_list(page, page_count, query_string=None, end_padding=2, page_padding=2):
+    if page_count < 7:
+        pages_with_ellipses = range(1, page_count + 1)
+    else:
+        pages = sorted(set(chain(
+            range(1, end_padding + 2),
+            range(page - page_padding, page + page_padding + 1),
+            range(page_count - end_padding, page_count + 1),
+        )))
+        pages_with_ellipses = []
+        last_page = 0
+        for index in pages:
+            if index < 1 or index > page_count:
+                continue
+            if last_page + 1 < index:
+                pages_with_ellipses.append(None)
+            pages_with_ellipses.append(index)
+            last_page = index
+    return {
+        'page': page,
+        'page_count': page_count,
+        'page_range': pages_with_ellipses,
+        'query_string': query_string,
+    }

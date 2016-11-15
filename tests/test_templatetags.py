@@ -64,3 +64,35 @@ class TemplateTagTestCase(SimpleTestCase):
         response = self.load_mocked_template(template, {})
         html = response.content.decode('utf-8')
         self.assertIn("<script>Raven.config('%s').install()</script>" % sentry_dsn, html)
+
+    def test_page_list(self):
+        template = '''
+        {% load mtp_common %}
+        {% page_list page=current_page page_count=pages query_string=query_string %}
+        '''
+
+        def render(current_page, pages, query_string=''):
+            context = {
+                'current_page': current_page,
+                'pages': pages,
+                'query_string': query_string,
+            }
+            response = self.load_mocked_template(template, context)
+            return response.content.decode('utf-8').strip()
+
+        self.assertNotIn('?page=1', render(1, 1))
+        self.assertIn('?page=2', render(1, 2))
+        self.assertIn('?page=2', render(2, 2))
+
+        self.assertIn('?a=b&amp;page=2', render(1, 2, 'a=b'))
+
+        many_pages = render(7, 100)
+        self.assertIn('…', many_pages)
+        expected_pages = (1, 2, 3, 5, 6, 7, 8, 9, 98, 99, 100)
+        for page in range(100):
+            page += 1
+            page_link = 'href="?page=%d"' % page
+            if page in expected_pages:
+                self.assertIn(page_link, many_pages)
+            else:
+                self.assertNotIn(page_link, many_pages)
