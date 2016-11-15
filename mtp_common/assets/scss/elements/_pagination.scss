@@ -1,19 +1,22 @@
-$component: Pagination;
+// page lists
 
-.#{$component} {
+.mtp-page-list {
   padding-left: 0;
+
   li {
     display: inline;
+
     + li {
       padding-left: .5em;
     }
   }
+
   @media print {
     display: none;
   }
 }
 
-.#{$component}-print-description {
+.mtp-page-list__description {
   display: none;
 
   @media print {
@@ -22,7 +25,126 @@ $component: Pagination;
   }
 }
 
-a.#{$component}-current-page {
-  text-decoration: none;
+a.mtp-page-list__current-page {
   color: $text-colour;
+  text-decoration: none;
+}
+
+// next/previous page links
+
+.mtp-pagination {
+  border-bottom: 1px solid $border-colour;
+  display: block;
+  margin: 2em 0 0;
+
+  @media (max-width: 640px) {
+    margin: 2em 0 0;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    float: left;
+    font-family: "nta", Arial, sans-serif;
+    font-size: 14px;
+    font-size-adjust: .5;
+    font-weight: 400;
+    line-height: 1.14286;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    text-transform: none;
+    width: 49%;
+
+    @media (min-width: 641px) {
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    a {
+      background-color: transparent;
+      color: $link-colour;
+      display: block;
+      text-decoration: none;
+
+      &:hover,
+      &:active {
+        background-color: $highlight-colour;
+      }
+    }
+
+    &.next {
+      float: right;
+      text-align: right;
+
+      a {
+        padding: .75em 3em .75em 0;
+
+        &:before {
+          background: transparent url('/static/images/arrow-sprite.png') no-repeat -102px -11px;
+          content: ' ';
+          display: block;
+          float: right;
+          height: 38px;
+          margin: -4px -32px 0 0;
+          width: 30px;
+        }
+      }
+    }
+
+    &.previous {
+      float: left;
+      text-align: left;
+
+      a {
+        padding: .75em 0 .75em 3em;
+
+        &:before {
+          background: transparent url('/static/images/arrow-sprite.png') no-repeat -20px -11px;
+          content: ' ';
+          display: block;
+          float: left;
+          height: 38px;
+          margin: -4px 0 0 -32px;
+          width: 30px;
+        }
+      }
+    }
+
+    @media (max-width: 640px) {
+      &.previous,
+      &.next {
+        float: none;
+        width: 100%;
+      }
+
+      &.next a {
+        text-align: right;
+      }
+    }
+  }
+}
+
+.mtp-pagination__label {
+  display: block;
+  font-family: "nta", Arial, sans-serif;
+  font-size: 20px;
+  font-size-adjust: .5;
+  font-weight: 400;
+  line-height: 1.11111;
+  margin-bottom: .1em;
+  text-transform: none;
+
+  @media (min-width: 641px) {
+    font-size: 27px;
+    line-height: 1.25;
+  }
+}
+
+.mtp-pagination__part-title {
+  text-decoration: underline;
 }
