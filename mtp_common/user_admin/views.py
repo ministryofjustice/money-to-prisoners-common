@@ -1,5 +1,7 @@
 import logging
+import math
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -9,7 +11,7 @@ from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views.generic.edit import FormView
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
-from mtp_common.api import api_errors_to_messages, retrieve_all_pages
+from mtp_common.api import api_errors_to_messages
 from mtp_common.auth import api_client
 from mtp_common.user_admin.forms import UserUpdateForm
 
@@ -27,11 +29,18 @@ def make_breadcrumbs(section_title):
 @login_required
 @permission_required('auth.change_user', raise_exception=True)
 def list_users(request):
-    users = retrieve_all_pages(
-        api_client.get_connection(request).users.get
-    )
+    page_size = 20
+    try:
+        page = int(request.GET['page'])
+        if page < 1:
+            raise ValueError
+    except (KeyError, ValueError):
+        page = 1
+    response = api_client.get_connection(request).users.get(limit=page_size, offset=(page - 1) * page_size)
     context = {
-        'users': users,
+        'users': response.get('results', []),
+        'page': page,
+        'page_count': int(math.ceil(response.get('count', 0) / page_size)),
     }
     return render(request, 'mtp_common/user_admin/list.html', context=context)
 

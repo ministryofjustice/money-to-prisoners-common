@@ -30,9 +30,9 @@
     a:visited {
       color: $link-colour;
     }
+  }
 
-    @media print {
-      display: none;
-    }
+  .mtp-page-list {
+    margin-top: 1em;
   }
 }
