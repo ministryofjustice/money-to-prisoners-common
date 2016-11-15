@@ -31,7 +31,7 @@
         <th>{% trans 'Name' %}</th>
         <th>{% trans 'Email' %}</th>
         <th>{% trans 'Can manage accounts' %}</th>
-        <th class="actions print-hidden">{% trans 'Actions' %}</th>
+        <th class="mtp-account-management__actions print-hidden">{% trans 'Actions' %}</th>
       </tr>
     </thead>
 
@@ -41,13 +41,13 @@
           <td>{{ user.username }}</td>
           <td>{{ user.first_name }} {{ user.last_name }}</td>
           <td>{{ user.email }}</td>
-          <td class="user-admin">
+          <td class="mtp-account-management__can_manage">
             {% if user.user_admin %}
               ✔ <span class="screenreader-only">{% trans 'User can manage other accounts' %}</span>
             {% endif %}
           </td>
-          <td class="actions print-hidden">
-            <div class="edit-action">
+          <td class="mtp-account-management__actions print-hidden">
+            <div class="mtp-account-management__edit-action">
               <a href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
             </div>
             {% if request.user.username != user.username %}
