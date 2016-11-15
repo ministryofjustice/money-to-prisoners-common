@@ -6,5 +6,5 @@
     <h1 class="bold-large">{% blocktrans %}User account ‘{{ username }}’ deleted{% endblocktrans %}</h1>
   </div>
 
-  <a class="action" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a>
+  <p><a class="link-back" href="{% url 'list-users' %}">{% trans 'Return to user management' %}</a></p>
 {% endblock %}

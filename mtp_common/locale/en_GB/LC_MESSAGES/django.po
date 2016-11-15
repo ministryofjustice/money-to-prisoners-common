@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 15:27+0000\n"
+"POT-Creation-Date: 2016-11-15 15:32+0000\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
@@ -445,7 +445,7 @@ msgid "Fill in a user’s details to allow them access."
 msgstr ""
 
 #: templates/mtp_common/user_admin/update.html:24
-msgid "You can give them a general user or admin role."
+msgid "You can give them a general user or an account management role."
 msgstr ""
 
 #: templates/mtp_common/user_admin/update.html:63

@@ -1,5 +1,5 @@
 // user account management pages
-.admin {
+.mtp-account-management {
   ul {
     padding-left: 0;
 
@@ -12,17 +12,17 @@
     font-size: 0.8em;
   }
 
-  .user-admin {
+  .mtp-account-management__can_manage {
     text-align: center;
   }
 
-  .actions {
+  .mtp-account-management__actions {
     width: 8em;
 
     div {
       display: inline-block;
 
-      &.edit-action {
+      &.mtp-account-management__edit-action {
         margin-right: 2em;
       }
     }
@@ -35,4 +35,8 @@
   .mtp-page-list {
     margin-top: 1em;
   }
+}
+
+form.mtp-account-management__user-form {
+  width: 70%;
 }

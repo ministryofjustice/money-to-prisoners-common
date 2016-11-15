@@ -21,14 +21,14 @@
   {% if form.create %}
     <p>
       {% trans 'Fill in a user’s details to allow them access.' %}
-      {% trans 'You can give them a general user or admin role.' %}
+      {% trans 'You can give them a general user or an account management role.' %}
     </p>
     {% if permissions_note %}
       <p>{{ permissions_note }}</p>
     {% endif %}
   {% endif %}
 
-  <form action="." method="post" class="admin-form">
+  <form action="." method="post" class="mtp-account-management__user-form">
     {% csrf_token %}
 
     {% include 'mtp_common/forms/error-summary.html' with form=form only %}
