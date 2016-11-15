@@ -20,7 +20,9 @@
 
   <p>{% trans 'Add, view, edit or delete user accounts.' %}</p>
 
-  <p><a class="button button-secondary" href="{% url "new-user" %}">{% trans 'Add a new user' %}</a></p>
+  <p class="print-hidden">
+    <a class="button button-secondary" href="{% url "new-user" %}">{% trans 'Add a new user' %}</a>
+  </p>
 
   <table>
     <thead>
@@ -28,8 +30,8 @@
         <th>{% trans 'Username' %}</th>
         <th>{% trans 'Name' %}</th>
         <th>{% trans 'Email' %}</th>
-        <th>{% trans 'Admin' %}</th>
-        <th class="actions">{% trans 'Actions' %}</th>
+        <th>{% trans 'Can manage accounts' %}</th>
+        <th class="actions print-hidden">{% trans 'Actions' %}</th>
       </tr>
     </thead>
 
@@ -41,10 +43,10 @@
           <td>{{ user.email }}</td>
           <td class="user-admin">
             {% if user.user_admin %}
-              ✔ <span class="screenreader-only">{% trans 'User is an admin' %}</span>
+              ✔ <span class="screenreader-only">{% trans 'User can manage other accounts' %}</span>
             {% endif %}
           </td>
-          <td class="actions">
+          <td class="actions print-hidden">
             <div class="edit-action">
               <a href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
             </div>
@@ -60,4 +62,6 @@
       {% endfor %}
     </tbody>
   </table>
+
+  {% page_list page=page page_count=page_count %}
 {% endblock %}
