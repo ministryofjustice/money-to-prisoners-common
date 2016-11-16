@@ -124,7 +124,7 @@ class ResetPasswordForm(GARequestErrorReportingMixin, forms.Form):
     error_messages = {
         'generic': _('This service is currently unavailable')
     }
-    username = forms.CharField(label=_('Username'))
+    username = forms.CharField(label=_('Username or email address'))
 
     def __init__(self, request=None, *args, **kwargs):
         self.request = request

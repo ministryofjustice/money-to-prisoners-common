@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 15:32+0000\n"
+"POT-Creation-Date: 2016-11-16 14:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2016\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -35,8 +35,8 @@ msgstr ""
 msgid "Your browser failed a security check."
 msgstr ""
 
-#: auth/forms.py:21 auth/forms.py:127
-#: templates/mtp_common/user_admin/list.html:30 user_admin/forms.py:19
+#: auth/forms.py:21 templates/mtp_common/user_admin/list.html:30
+#: user_admin/forms.py:19
 msgid "Username"
 msgstr ""
 
@@ -70,6 +70,10 @@ msgstr ""
 
 #: auth/forms.py:85
 msgid "New password confirmation"
+msgstr ""
+
+#: auth/forms.py:127
+msgid "Username or email address"
 msgstr ""
 
 #: auth/views.py:21 user_admin/views.py:23
@@ -276,7 +280,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: templates/mtp_common/includes/page-list.html:14
+#: templates/mtp_common/includes/page-list.html:12
 msgid "Page"
 msgstr ""
 
