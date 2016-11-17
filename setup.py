@@ -17,7 +17,7 @@ with open('README.rst') as readme:
 
 install_requires = [
     'Django>=1.9,<1.10',
-    'django-form-error-reporting>=0.3',
+    'django-form-error-reporting>=0.4',
     'django-widget-tweaks>=1.4,<1.5',
     'pytz>=2016.4',
     'requests-oauthlib>=0.6,<0.7',
