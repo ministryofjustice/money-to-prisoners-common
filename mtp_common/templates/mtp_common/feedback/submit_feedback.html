@@ -20,6 +20,7 @@
     {{ form.referer }}
 
     <fieldset>
+      <legend class="visually-hidden">{% trans 'Feedback details' %}</legend>
       {% with field=form.ticket_content %}
         <div class="form-group {% if field.errors %}error{% endif %}">
           {% include 'mtp_common/forms/field-label.html' with field=field only %}
