@@ -19,20 +19,20 @@ install_requires = [
     'Django>=1.9,<1.10',
     'django-form-error-reporting>=0.4',
     'django-widget-tweaks>=1.4,<1.5',
-    'pytz>=2016.4',
+    'pytz>=2016.7',
     'requests-oauthlib>=0.6,<0.7',
     'slumber>=0.7,<0.8',
-    'selenium>=3.0',
-    'transifex-client>=0.12',
+    'selenium>=3.0,<3.1',
+    'transifex-client>=0.12,<0.13',
 ]
 extras_require = {
     'monitoring': [
-        'raven>=5.15',
+        'raven>=5.32,<6',
     ],
     'testing': [
         'flake8>=2.5,<3.0',
-        'pep8-naming>=0.3',
-        'responses>=0.5',
+        'pep8-naming>=0.4,<0.5',
+        'responses>=0.5,<0.6',
     ],
 }
 
