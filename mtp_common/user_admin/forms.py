@@ -12,15 +12,16 @@ logger = logging.getLogger('mtp')
 
 
 class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
-    error_messages = {
-        'generic': _('This service is currently unavailable')
-    }
-
-    username = forms.CharField(label=_('Username'), disabled=True)
+    username = forms.CharField(label=_('Username'), disabled=True,
+                               help_text=_('Enter the user’s Quantum ID'))
     first_name = forms.CharField(label=_('First name'))
     last_name = forms.CharField(label=_('Last name'))
     email = forms.EmailField(label=_('Email'))
     user_admin = forms.BooleanField(label=_('Give access to manage other users'), required=False)
+
+    error_messages = {
+        'generic': _('This service is currently unavailable')
+    }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
