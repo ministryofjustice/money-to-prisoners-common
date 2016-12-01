@@ -1,0 +1,28 @@
+.important {
+  margin-bottom: 1em;
+
+  div.icon {
+    width: 43px;
+    height: 50px;
+    background-image: url(../mtp_common/images/important.png);
+    background-repeat: no-repeat;
+    background-position: 2px 0;
+    display: inline-block;
+    vertical-align: top;
+
+    @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+      background-image: url(../mtp_common/images/important@2x.png);
+      background-size: 30px 30px;
+      background-position: 4px;
+    }
+  }
+  div.message {
+    width: 90%;
+    padding-top: .3em;
+    display: inline-block;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "money-to-prisoners-common",
+  "description": "Money to Prisoners - Common",
+  "version": "5.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ministryofjustice/money-to-prisoners-common"
+  },
+  "bugs": {
+    "url": "https://github.com/ministryofjustice/money-to-prisoners-common/issues"
+  },
+  "config": {
+    "unsafe-perm": true
+  },
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^3.11.1",
+    "sass-lint": "^1.10.2"
+  }
+}

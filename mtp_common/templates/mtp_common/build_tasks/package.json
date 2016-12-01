@@ -1,0 +1,43 @@
+{
+  "name": "{{ app.complete_hyphenated_name }}",
+  "description": "Money to Prisoners - {{ app.title }}",
+  "version": "{{ app.common_version }}",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ministryofjustice/{{ app.complete_hyphenated_name }}"
+  },
+  "bugs": {
+    "url": "https://github.com/ministryofjustice/{{ app.complete_hyphenated_name }}/issues"
+  },
+  "config": {
+    "unsafe-perm": true
+  },
+  "license": "MIT",
+  "dependencies": {
+    "breakpoint-sass": "^2.6.1",
+    "browser-sync": "^2.18.2",
+    "chai": "^3.2.0", {# check if needed #}
+    "chai-as-promised": "^5.1.0", {# check if needed #}
+    "checked-polyfill": "ministryofjustice/checked-polyfill#1.0.0", {# check if needed #}
+    "cucumber": "^0.5.3", {# check if needed #}
+    "del": "^2.0.2", {# check if needed #}
+    "eslint": "^3.11.1",
+    "globule": "^0.2.0", {# check if needed #}
+    "govuk-elements-sass": "~2.0.0",
+    "imports-loader": "^0.6.5", {# check if needed #}
+    "jquery": "~1.11",
+    "js-cookie": "~2.0.3",
+    "node-sass": "^3.4.2",
+    "phantomjs-prebuilt": "^2.1.13",
+    "q": "^1.4.1", {# check if needed #}
+    "request": "^2.63.0", {# check if needed #}
+    "require-dir": "^0.3.0", {# check if needed #}
+    "sanitize-filename": "^1.4.3", {# check if needed #}
+    "sass-lint": "^1.10.2",
+    "selenium-standalone": "^5.7.2",
+    "webdriverio": "^3.2.4", {# check if needed #}
+    "webpack": "^1.13.3",
+    "yargs": "^3.24.0" {# check if needed #}
+  }
+}

@@ -1,7 +1,6 @@
 import logging
 import math
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.http import Http404
