@@ -30,7 +30,7 @@ class ScreenshotGenerator(StaticLiveServerTestCase, WebDriverControlMixin):
         )
 
     def setUp(self):
-        path = './node_modules/phantomjs/lib/phantom/bin/phantomjs'
+        path = './node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
         self.driver = webdriver.PhantomJS(executable_path=path)
         self.driver.command_executor._commands['executePhantom'] = (
             'POST', '/session/$sessionId/phantom/execute'

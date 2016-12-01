@@ -1,0 +1,32 @@
+.DashboardLinks {
+  li {
+    margin-bottom: 1em;
+
+    a {
+      border: 1px solid $panel-colour;
+      color: $black;
+      display: block;
+      padding: $gutter-half;
+      text-decoration: none;
+
+      .DashboardLinks--title {
+        @extend .bold-medium;
+        color: $link-colour;
+      }
+
+      &:hover, &:active, &:focus {
+        background-color: $panel-colour;
+      }
+
+      &:hover {
+        .DashboardLinks--title {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 70%;
+    }
+  }
+}

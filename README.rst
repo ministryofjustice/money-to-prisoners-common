@@ -88,8 +88,7 @@ Developing
 ----------
 
 * Test using ``python setup.py test`` or ``./run_tests.py [arguments]``
-* Update VERSION tuple in ``mtp_common/__init__.py``
-* Git tag with version
+* Update the version with ``python setup.py set_version --version [?.?.?]``
 * Submit to PyPi with ``python setup.py sdist bdist_wheel upload``
 
 Translating
@@ -111,10 +110,10 @@ All shared assets used for `money-to-prisoners-cashbook`_, `money-to-prisoners-b
 
 Each application’s build scripts install this package automatically.
 
-Sass, javascript, images
+SCSS, JavaScript, images
 ------------------------
 
-Assets that need compiling are in ``mtp_common/assets/(images|javascripts|scss)``.
+Assets that need compiling are in ``mtp_common/assets-src/(images|javascripts|scss)``.
 The base sass file, ``_mtp.scss``, is used to include the sass includes from this packge into each frontend app.
 
 Static assets are in ``mtp_common/static/(images|javascripts|css)``.
@@ -127,7 +126,7 @@ Django templates
 
 Common templates used by the client applications are kept in ``mtp_common/templates``.
 
-.. _separate guide to the various visual elements: mtp_common/assets/docs/README.md
+.. _separate guide to the various visual elements: mtp_common/docs/README.md
 .. _money-to-prisoners-api: https://github.com/ministryofjustice/money-to-prisoners-api
 .. _money-to-prisoners-cashbook: https://github.com/ministryofjustice/money-to-prisoners-cashbook
 .. _money-to-prisoners-bank-admin: https://github.com/ministryofjustice/money-to-prisoners-bank-admin

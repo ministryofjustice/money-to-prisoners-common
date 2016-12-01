@@ -1,18 +1,16 @@
 include LICENSE
+include MANIFEST.in
 include README.rst
-include mtp_common/Makefile
-include mtp_common/npm_requirements.txt
-include mtp_common/.jshintrc
-recursive-include mtp_common/assets *.scss
-recursive-include mtp_common/assets *.css
-recursive-include mtp_common/assets *.js
-recursive-include mtp_common/assets *.png
-recursive-include mtp_common/assets *.gif
-recursive-include mtp_common/assets *.jpg
+recursive-include mtp_common/assets-src *.scss
+recursive-include mtp_common/assets-src *.css
+recursive-include mtp_common/assets-src *.js
+recursive-include mtp_common/assets-src *.png
+recursive-include mtp_common/assets-src *.gif
+recursive-include mtp_common/assets-src *.jpg
 recursive-include mtp_common/static *.css
 recursive-include mtp_common/static *.js
 recursive-include mtp_common/static *.jpg
 recursive-include mtp_common/static *.png
 recursive-include mtp_common/locale *.po
 recursive-include mtp_common/locale *.mo
-recursive-include mtp_common/templates *.html
+recursive-include mtp_common/templates *

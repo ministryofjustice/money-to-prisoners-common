@@ -1,0 +1,15 @@
+# do not run docker-compose directly, see README.md
+
+# NB: this is only used for *local development*
+# see Dockerfile for deployed version
+
+django:
+  build: .
+  expose: []
+  ports:
+    - "{{ port }}:8080"
+  environment:
+    ENV: "local"
+    DEBUG: "True"
+    DJANGO_SECRET_KEY: "CHANGE_ME"
+    API_URL: "http://${HOST_MACHINE_IP}:8000"

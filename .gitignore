@@ -1,46 +1,23 @@
-node_modules
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
+*.DS_Store
 *.py[cod]
-
-# Distribution / packaging
-.Python
-env/
-venv/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*,cover
-.hypothesis/
-
-# Translations
 *.mo
 *.pot
+*.egg-info/
+.eggs/
+build/
+dist/
+env/
+venv/
 
-# Sphinx documentation
+# sass & node.js
+*.sass-cache/
+.eslintcache/
+node_modules/
+npm-debug.log
+
+# app-specific
 docs/_build/
+
+# selenium
+geckodriver.log
+ghostdriver.log

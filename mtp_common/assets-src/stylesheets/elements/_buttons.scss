@@ -1,0 +1,20 @@
+// Fixes
+
+.button-secondary {
+  @include button($grey-3);
+  color: #000 !important; // IE8 bug
+}
+
+.button + .button {
+  margin-top: 0;
+  margin-left: .5em;
+}
+
+// App specific
+
+button, .button {
+  font-family: inherit;
+  padding-top: .3em;
+  padding-bottom: .3em;
+}
+

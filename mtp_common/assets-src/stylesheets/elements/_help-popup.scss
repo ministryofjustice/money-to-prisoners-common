@@ -1,0 +1,46 @@
+.help-box {
+  .help-box-title {
+    div {
+      width: 22px;
+      height: 14px;
+      background-image: url(../mtp_common/images/help-arrows.png);
+      background-repeat: no-repeat;
+      background-position: 0;
+      display: inline-block;
+      vertical-align: middle;
+      @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+        background-image: url(../mtp_common/images/help-arrows@2x.png);
+        background-size: 42px 14px;
+      }
+    }
+    a:visited { color: $link-colour }
+  }
+
+  .help-box-contents {
+    margin-top: 1em;
+    ul {
+      margin: 0 0 0 2em;
+      li {
+        list-style-type: disc;
+        padding-bottom: .4em;
+      }
+    }
+  }
+
+  &.help-box-collapsed {
+    .help-box-title div {
+      background-position: -28px;
+      @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+        background-image: url(../mtp_common/images/help-arrows@2x.png);
+        background-size: 42px 14px;
+      }
+    }
+    .help-box-contents {
+      display: none;
+    }
+  }
+}
+
+@media print {
+  .help-box { display: none }
+}

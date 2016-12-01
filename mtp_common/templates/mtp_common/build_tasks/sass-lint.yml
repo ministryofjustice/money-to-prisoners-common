@@ -1,0 +1,11 @@
+rules:
+  class-name-format:
+    - 1
+    - convention: hyphenatedbem
+  force-attribute-nesting: 0
+  force-element-nesting: 0
+  force-pseudo-nesting: 0
+  leading-zero: 0
+  no-important: 0
+  property-sort-order: 0
+  single-line-per-selector: 0
