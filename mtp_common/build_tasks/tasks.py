@@ -326,7 +326,7 @@ def take_screenshots(context: Context):
     """
     Takes screenshots if special test cases are defined
     """
-    context.management_command('takescreenshots')
+    context.management_command('takescreenshots', interactive=False)
     collect_static_files(context)
 
 

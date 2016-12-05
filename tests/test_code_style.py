@@ -23,7 +23,7 @@ class CommonCodeStyleTestCase(CodeStyleTestCase):
             self.fail('Code style checks failed\n\n%s' % e.output.decode('utf-8'))
 
     def get_config_file(self, file_name):
-        return os.path.join(self.app.common_templates_path, 'mtp_common', 'build_tasks', file_name)
+        return os.path.join(self.app.templates_path, 'mtp_common', 'build_tasks', file_name)
 
     def test_javascript_code_style(self):
         self.run_node_tool('eslint',

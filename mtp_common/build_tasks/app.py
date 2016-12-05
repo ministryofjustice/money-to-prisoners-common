@@ -43,56 +43,40 @@ class App:
 
     @property
     def asset_source_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.django_app_name, 'assets-src')
 
     @property
     def javascript_source_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.asset_source_path, 'javascripts')
 
     @property
     def javascript_source_file_set(self):
-        if self.name == 'api':
-            return FileSet()
         return FileSet('**/*.js', root=self.javascript_source_path)
 
     @property
     def scss_source_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.asset_source_path, 'stylesheets')
 
     @property
     def scss_source_file_set(self):
         if self.name == 'api':
-            return FileSet()
+            return FileSet('*.scss', root=self.scss_source_path)
         return FileSet('app*.scss', root=self.scss_source_path)
 
     @property
     def asset_build_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.django_app_name, 'assets')
 
     @property
     def images_build_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.asset_build_path, 'images')
 
     @property
     def screenshots_build_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.images_build_path, 'screenshots')
 
     @property
     def javascript_build_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.asset_build_path, 'javascripts')
 
     @property
@@ -103,15 +87,13 @@ class App:
 
     @property
     def scss_build_path(self):
-        if self.name == 'api':
-            return None
         return os.path.join(self.asset_build_path, 'stylesheets')
 
     @property
     def scss_build_file_set(self):
-        if self.name == 'api':
-            return FileSet()
         # TODO: should be based on source fileset instead?
+        if self.name == 'api':
+            return FileSet('*.css', root=self.scss_build_path)
         return FileSet('app*.css', root=self.scss_build_path)
 
     @property
@@ -126,7 +108,7 @@ class App:
     def common_path(self):
         try:
             path = pkg_resources.get_distribution('money-to-prisoners-common').location
-        except AttributeError:
+        except (AttributeError, pkg_resources.DistributionNotFound):
             return None
         return os.path.relpath(os.path.join(path, 'mtp_common'), self.root_path)
 
