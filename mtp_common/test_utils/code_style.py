@@ -26,6 +26,7 @@ class CodeStyleTestCase(unittest.TestCase):
 
     def test_app_python_code_style(self):
         try:
-            subprocess.check_output(['flake8'], cwd=self.root_path)
+            command = './venv/bin/flake8' if os.path.exists(os.path.join(self.root_path, 'venv')) else 'flake8'
+            subprocess.check_output([command], cwd=self.root_path)
         except subprocess.CalledProcessError as e:
             self.fail('Code style checks failed\n\n%s' % e.output.decode('utf-8'))
