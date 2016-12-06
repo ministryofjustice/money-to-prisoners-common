@@ -1,9 +1,12 @@
+import logging
 from unittest import mock
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.http.response import HttpResponseForbidden
 from django.test import SimpleTestCase
+
+from mtp_common.test_utils import silence_logger
 
 
 class CsrfTestCase(SimpleTestCase):
@@ -34,19 +37,21 @@ class CsrfTestCase(SimpleTestCase):
         self.assertTrue(response.has_header('location'))
 
     def test_missing_csrf_cookie(self):
-        response = self.client.post(self.login_url, data={
-            'username': 'test',
-            'password': '1234',
-        })
+        with silence_logger('django.request', level=logging.ERROR):
+            response = self.client.post(self.login_url, data={
+                'username': 'test',
+                'password': '1234',
+            })
         self.assertInvalidCsrfResponse(response)
 
     def test_invalid_csrf_token(self):
         self.client.get(self.login_url)
-        response = self.client.post(self.login_url, data={
-            'username': 'test',
-            'password': '1234',
-            'csrfmiddlewaretoken': 'invalid',
-        })
+        with silence_logger('django.request', level=logging.ERROR):
+            response = self.client.post(self.login_url, data={
+                'username': 'test',
+                'password': '1234',
+                'csrfmiddlewaretoken': 'invalid',
+            })
         self.assertInvalidCsrfResponse(response)
 
     @mock.patch('tests.utils.get_template_source')
@@ -68,10 +73,11 @@ class CsrfTestCase(SimpleTestCase):
 
         default_csrf_behaviour(login)
         mocked_csrf_failure.return_value = HttpResponseForbidden(b'Django CSRF response')
-        response = self.client.post(self.login_url, data={
-            'username': 'test',
-            'password': '1234',
-        })
+        with silence_logger('django.request', level=logging.ERROR):
+            response = self.client.post(self.login_url, data={
+                'username': 'test',
+                'password': '1234',
+            })
         self.assertTrue(mocked_csrf_failure.called)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content, b'Django CSRF response')
