@@ -6,7 +6,7 @@ import socket
 import sys
 import threading
 
-from .executor import Context, Tasks
+from .executor import Context, Tasks, TaskError
 from .paths import FileSet, in_dir, paths_for_shell
 
 tasks = Tasks()
@@ -351,13 +351,35 @@ def precompile_python_code(context: Context):
     compile_dir(context.app.django_app_name, **kwargs)
 
 
-@tasks.register(hidden=True)
+@tasks.register('python_dependencies')
+def make_messages(context: Context):
+    """
+    Collects text into translation source files
+    """
+    with in_dir(context.app.django_app_name):
+        return context.management_command('makemessages', all=True, keep_pot=True, no_wrap=True)
+
+
+@tasks.register('python_dependencies', hidden=True)
 def compile_messages(context: Context):
     """
     Compiles translation messages
     """
     with in_dir(context.app.django_app_name):
         return context.management_command('compilemessages')
+
+
+@tasks.register('python_dependencies')
+def translations(context: Context, pull=False, push=False):
+    """
+    Synchronises translations with transifex.com
+    """
+    if not (pull or push):
+        raise TaskError('Specify whether to push or pull translations')
+    if pull:
+        context.shell('tx', 'pull')
+    if push:
+        context.shell('tx', 'push', '--source', '--no-interactive')
 
 
 @tasks.register()

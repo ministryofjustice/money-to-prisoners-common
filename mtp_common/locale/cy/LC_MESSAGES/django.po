@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-16 14:12+0000\n"
+"POT-Creation-Date: 2016-12-07 11:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2016\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Username or email address"
 msgstr ""
 
-#: auth/views.py:21 user_admin/views.py:23
+#: auth/views.py:21 user_admin/views.py:22
 msgid "Home"
 msgstr ""
 
@@ -250,19 +250,23 @@ msgstr ""
 msgid "Your feedback"
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:27
+#: templates/mtp_common/feedback/submit_feedback.html:23
+msgid "Feedback details"
+msgstr ""
+
+#: templates/mtp_common/feedback/submit_feedback.html:28
 msgid "Please don’t include bank details or any other personal information."
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:34
+#: templates/mtp_common/feedback/submit_feedback.html:35
 msgid "Do you want a reply?"
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:35
+#: templates/mtp_common/feedback/submit_feedback.html:36
 msgid "Enter your email address if you’d like a reply. We won’t use it for anything else."
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:40
+#: templates/mtp_common/feedback/submit_feedback.html:41
 msgid "Send feedback"
 msgstr ""
 
@@ -381,7 +385,7 @@ msgstr ""
 msgid "Return to user management"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:24
+#: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:23
 msgid "Manage user accounts"
 msgstr ""
 
@@ -472,28 +476,28 @@ msgstr ""
 msgid "Give access to manage other users"
 msgstr ""
 
-#: user_admin/views.py:52
+#: user_admin/views.py:51
 msgid "Delete user"
 msgstr ""
 
-#: user_admin/views.py:70
+#: user_admin/views.py:69
 msgid "This user could not be deleted"
 msgstr ""
 
-#: user_admin/views.py:82
+#: user_admin/views.py:81
 msgid "Edit user"
 msgstr ""
 
-#: user_admin/views.py:108
+#: user_admin/views.py:107
 msgid "Add user"
 msgstr ""
 
-#: user_admin/views.py:122
+#: user_admin/views.py:121
 msgid "The new user will have access to the same prison as you do."
 msgid_plural "The new user will have access to the same prisons as you do."
 msgstr[0] ""
 msgstr[1] ""
 
-#: user_admin/views.py:129
+#: user_admin/views.py:128
 msgid "The new user will not have access to manage any prisons."
 msgstr ""

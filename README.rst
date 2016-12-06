@@ -87,20 +87,21 @@ should be unique to your application.
 Developing
 ----------
 
-* Test using ``python setup.py test`` or ``./run_tests.py [arguments]``
-* Update the version with ``python setup.py set_version --version [?.?.?]``
-* Submit to PyPi with ``python setup.py sdist bdist_wheel upload``
+* Test using ``./run.py test`` or ``python setup.py test``
+* Update the version with ``./run.py set_version --version [?.?.?]``
+* Commit and push changes to github
+* Submit to PyPi with ``./run.py upload``
 
 Translating
 -----------
 
-Update translation files with ``cd mtp_common; django-admin.py makemessages --all --keep-pot --no-wrap``.
+Update translation files with ``./run.py make_messages`` – you need to do this every time any translatable text is updated.
 
-Compile messages ``cd mtp_common; django-admin.py compilemessages``.
+Compile messages ``./run.py compile_messages`` – only needed during local testing or development, it happens automatically during build or upload.
 
-Pull updates from Transifex with ``tx pull``. You'll need to update translation files afterwards.
+Pull updates from Transifex with ``./run.py translations --pull``. You'll need to update translation files afterwards and manually check that the merges occurred correctly.
 
-Push latest English to Transifex with ``tx push -s``. NB: you should pull updates before pushing to merge correctly.
+Push latest English to Transifex with ``./run.py translations --push``. NB: you should pull updates before pushing to merge correctly.
 
 Common assets
 -------------

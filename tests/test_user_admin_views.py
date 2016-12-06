@@ -1,9 +1,11 @@
+import logging
 from unittest import mock
 
 from django.core.urlresolvers import reverse
 from slumber.exceptions import HttpClientError, HttpNotFoundError
 
 from mtp_common.auth import login
+from mtp_common.test_utils import silence_logger
 from .utils import SimpleTestCase
 
 
@@ -67,7 +69,8 @@ class NewUserTestCase(UserAdminTestCase):
             'user_admin': False,
         }
         self.mocked_login()
-        self.client.post(reverse('new-user'), data=new_user_data)
+        with silence_logger('mtp', level=logging.WARNING):
+            self.client.post(reverse('new-user'), data=new_user_data)
 
         mock_api_client.get_connection().users().post.assert_called_with(new_user_data)
 
@@ -97,10 +100,11 @@ class EditUserTestCase(UserAdminTestCase):
             'user_admin': True,
         }
         self.mocked_login()
-        self.client.post(
-            reverse('edit-user', args={'username': 'current_user'}),
-            data=updated_user_data
-        )
+        with silence_logger('mtp', level=logging.WARNING):
+            self.client.post(
+                reverse('edit-user', args={'username': 'current_user'}),
+                data=updated_user_data
+            )
 
         conn = mock_form_api_client.get_connection()
         conn.users().patch.assert_called_with(updated_user_data)
@@ -116,10 +120,11 @@ class EditUserTestCase(UserAdminTestCase):
             'user_admin': False,
         }
         self.mocked_login()
-        self.client.post(
-            reverse('edit-user', args={'username': 'current_user'}),
-            data=updated_user_data
-        )
+        with silence_logger('mtp', level=logging.WARNING):
+            self.client.post(
+                reverse('edit-user', args={'username': 'current_user'}),
+                data=updated_user_data
+            )
 
         del updated_user_data['username']
 
