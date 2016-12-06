@@ -92,7 +92,6 @@ class WebDriverControlMixin:
             self.type_in(specifier, text)
 
 
-@unittest.skipUnless('RUN_FUNCTIONAL_TESTS' in os.environ, 'functional tests are disabled')
 class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
     """
     Used for integration/functional testing of MTP client applications
@@ -112,6 +111,9 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
 
     @classmethod
     def setUpClass(cls):
+        if 'RUN_FUNCTIONAL_TESTS' not in os.environ:
+            raise unittest.SkipTest('functional tests are disabled')
+
         remote_url = os.environ.get('DJANGO_TEST_REMOTE_INTEGRATION_URL', None)
         if remote_url:
             # do not start separate LiveServerThread
@@ -136,7 +138,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
     def select_web_driver(self):
         web_driver = os.environ.get('WEBDRIVER', 'phantomjs')
         if self.required_webdrivers and web_driver not in self.required_webdrivers:
-            raise unittest.SkipTest('this test requires %s' % ' or '.join(self.required_webdrivers))
+            self.skipTest('this test requires %s' % ' or '.join(self.required_webdrivers))
 
         if web_driver == 'firefox':
             paths = glob.glob('./node_modules/selenium-standalone/.selenium/geckodriver/*-geckodriver')
