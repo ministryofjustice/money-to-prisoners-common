@@ -63,7 +63,8 @@ class TemplateTagTestCase(SimpleTestCase):
         '''
         response = self.load_mocked_template(template, {})
         html = response.content.decode('utf-8')
-        self.assertIn("<script>Raven.config('%s').install()</script>" % sentry_dsn, html)
+        self.assertIn(sentry_dsn, html)
+        self.assertIn('Raven.config', html)
 
     def test_page_list(self):
         template = '''
