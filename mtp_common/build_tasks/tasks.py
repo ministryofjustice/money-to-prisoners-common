@@ -102,7 +102,7 @@ def serve(context: Context, port=8000, browsersync_port=3000, browsersync_ui_por
 
 
 @tasks.register('build', 'lint')
-def test(context: Context, functional_tests=False, accessibility_tests=False, webdriver=None):
+def test(context: Context, test_labels=None, functional_tests=False, accessibility_tests=False, webdriver=None):
     """
     Tests the app
     """
@@ -114,7 +114,8 @@ def test(context: Context, functional_tests=False, accessibility_tests=False, we
         os.environ['RUN_FUNCTIONAL_TESTS'] = '1'
     if webdriver:
         os.environ['WEBDRIVER'] = webdriver
-    return context.management_command('test', interactive=False)
+    test_labels = (test_labels or '').split()
+    return context.management_command('test', args=test_labels, interactive=False)
 
 
 @tasks.register(hidden=True)
