@@ -5,41 +5,6 @@ This lists the design components that were designed specifically for the Money
 to Prisoners services, and explains why we created them on top of
 `GOV.UK Elements <http://govuk-elements.herokuapp.com/>`_.
 
-Summary boxes
--------------
-
-.. image:: static/summary-boxes.png
-
-.. code-block:: html
-
-  <ul class="SummaryBoxes">
-    <li class="SummaryBoxes--variant-1">
-      <a href="/batch/">
-        <h2>New</h2>
-        <p>
-          <strong>0</strong> Credits to process
-        </p>
-      </a>
-    </li>
-
-    <li>
-      <a href="/history/">
-        <h2>History</h2>
-        <p>Credits processed by the team</p>
-      </a>
-    </li>
-
-    <li class="SummaryBoxes--variant-2">
-      <a href="/locked/">
-        <h2>In progress</h2>
-        <p>
-          <strong>12</strong> Credits in progress
-        </p>
-      </a>
-    </li>
-  </ul>
-
-
 Collapsing Tables
 -----------------
 
@@ -157,7 +122,6 @@ Hides the default upload file control and shows something more inline with GOV.U
   <label for="id_location_file" id="id_location_file-label" class="upload-choose button button-secondary">
     Choose file
   </label>
-
 
 Year field completion
 ---------------------
