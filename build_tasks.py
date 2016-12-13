@@ -149,6 +149,23 @@ def set_version(context: Context, version=None, bump=False):
     context.debug('Updated version to %s' % dotted_version)
 
 
+@tasks.register('setup_django_for_testing', hidden=True)
+def docs(context: Context):
+    """
+    Generates static documentation
+    """
+    try:
+        from sphinx.application import Sphinx
+    except ImportError:
+        context.pip_command('install', 'Sphinx')
+        from sphinx.application import Sphinx
+
+    context.shell('cp', 'README.rst', 'docs/README.rst')
+    app = Sphinx('docs', 'docs', 'docs/build', 'docs/build/.doctrees', buildername='html', parallel=True,
+                 verbosity=context.verbosity)
+    app.build()
+
+
 @tasks.register('clean', 'build')
 def upload(context: Context):
     """
@@ -162,7 +179,7 @@ def clean(context: Context, delete_dependencies: bool = False):
     """
     Deletes build outputs
     """
-    paths = ['build', 'dist', '.eggs'] + glob.glob('*.egg-info')
+    paths = ['docs/build', 'build', 'dist', '.eggs'] + glob.glob('*.egg-info')
     context.shell('rm -rf %s' % paths_for_shell(paths))
     context.shell('find %s -name "*.pyc" -or -name __pycache__ -delete' % context.app.django_app_name)
 
