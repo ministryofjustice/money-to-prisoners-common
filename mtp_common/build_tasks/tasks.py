@@ -189,14 +189,19 @@ def docker_compose_config(context: Context, port=8000):
 def local_docker(context: Context):
     """
     Runs the app in a docker container; for local development only!
+    Once performed, `docker-compose up` can be used directly
     """
     output = io.StringIO()
     with contextlib.redirect_stdout(output):
         context.shell('docker-machine', 'ip', 'default')
     host_machine_ip = output.getvalue().strip() or socket.gethostbyname(socket.gethostname())
-    context.shell('docker-compose', 'build', '--force-rm')
-    context.shell('docker-compose', 'up', '' if context.use_colour else '--no-color',
-                  environment={'HOST_MACHINE_IP': host_machine_ip})
+    args = ()
+    if context.verbosity > 1:
+        args += ('--verbose',)
+    args += ('up', '--build', '--remove-orphans')
+    if not context.use_colour:
+        args += ('--no-color',)
+    context.shell('docker-compose', *args, environment={'HOST_MACHINE_IP': host_machine_ip})
 
 
 @tasks.register(hidden=True)
