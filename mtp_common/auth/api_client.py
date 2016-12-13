@@ -93,8 +93,7 @@ def authenticate(username, password):
 
 def revoke_token(access_token):
     """
-    Instructs the API to delete this access token
-    and associated refresh token
+    Instructs the API to delete this access token and associated refresh token
     """
     response = requests.post(
         REVOKE_TOKEN_URL,
@@ -110,13 +109,13 @@ def revoke_token(access_token):
 
 def get_connection(request):
     """
-    Returns a slumber connection configured using the token of the
-    logged-in user.
+    Returns a slumber connection configured using the token of the logged-in user.
 
-    It raises `Unauthorized` if the user
-    is not authenticated.
+    It raises `Unauthorized` if the user is not authenticated.
 
-        response = get_connection(request).my_endpoint.get()
+    ```
+    response = get_connection(request).my_endpoint.get()
+    ```
     """
     user = request.user
     if not user:
@@ -142,8 +141,7 @@ def get_connection(request):
 
 def get_authenticated_connection(username, password):
     """
-    Returns:
-        an authenticated slumber connection
+    :return: an authenticated slumber connection
     """
     session = LocalisedOAuth2Session(
         client=LegacyApplicationClient(
@@ -165,8 +163,7 @@ def get_authenticated_connection(username, password):
 
 def get_unauthenticated_connection():
     """
-    Returns:
-        an unauthenticated slumber connection
+    :return: an unauthenticated slumber connection
     """
     return slumber.API(base_url=settings.API_URL)
 

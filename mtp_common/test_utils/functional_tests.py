@@ -249,7 +249,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         """
         Turns on accessibility testing for each test run enabling web driver to run additional javascript.
         NB: currently, only some explicit calls to the web driver (e.g. get) will cause accessibility checks,
-            so call self.assertAccessible() at strategic locations to force accessibility testing
+        so call self.assertAccessible() at strategic locations to force accessibility testing
         """
         self.audits = collections.OrderedDict()
 

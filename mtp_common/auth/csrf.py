@@ -62,6 +62,7 @@ class CsrfViewMiddleware(DjangoCsrfViewMiddleware):
     request into a GET and showing a sensible error message
 
     Usage:
+
     * Replace django.middleware.csrf.CsrfViewMiddleware with mtp_common.auth.csrf.CsrfViewMiddleware
       in `settings.MIDDLEWARE_CLASSES`
     * Add `CSRF_FAILURE_VIEW = 'mtp_common.auth.csrf.csrf_failure'` to `settings`
