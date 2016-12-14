@@ -54,6 +54,8 @@ exports.Print = {
     // trigger a render of this object to check if the cookie is set
     this.$body.trigger('Print.render');
 
-    window.print();
+    try {
+      window.print();
+    } catch (e) {}  // eslint-disable-line
   }
 };
