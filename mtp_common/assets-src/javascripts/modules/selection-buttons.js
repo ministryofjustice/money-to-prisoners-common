@@ -51,10 +51,8 @@
     }
   };
   SelectionButtons.prototype.markSelected = function ($elm) {
-    var radioName;
-
     if ($elm.attr('type') === 'radio') {
-      radioName = $elm.attr('name');
+      var radioName = $elm.attr('name');
       $($elm[0].form).find('input[name="' + radioName + '"]')
         .parent('label')
         .removeClass(this.selectedClass);

@@ -14,7 +14,7 @@
     "unsafe-perm": true
   },
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "eslint": "^3.11.1",
     "sass-lint": "^1.10.2"
   }

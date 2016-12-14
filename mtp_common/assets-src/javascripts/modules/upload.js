@@ -32,11 +32,10 @@ exports.Upload = {
   },
 
   switchToUpload: function () {
-    var filePath, filename;
+    var filePath = this.$fileChooser.val();
+    var filename = filePath.replace(/^.*[\\\/]/, '');
     this.$formGroups.removeClass('error');
     this.$errorMessages.remove();
-    filePath = this.$fileChooser.val();
-    filename = filePath.replace(/^.*[\\\/]/, '');
     this.$uploadFilename.text(filename).show();
     this.$chooseButton.text('Change file');
   }
