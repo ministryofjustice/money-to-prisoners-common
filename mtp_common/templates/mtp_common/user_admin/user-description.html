@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<ul>
+  <li>{% blocktrans with username=user.username %}Username: {{ username }}{% endblocktrans %}</li>
+  <li>{% blocktrans with first_name=user.first_name %}First name: {{ first_name }}{% endblocktrans %}</li>
+  <li>{% blocktrans with last_name=user.last_name %}Last name: {{ last_name }}{% endblocktrans %}</li>
+  <li>{% blocktrans with email=user.email %}Email: {{ email }}{% endblocktrans %}</li>
+  <li>{% blocktrans with yes_or_no=user.user_admin|yesno %}Can manage other users: {{ yes_or_no }}{% endblocktrans %}</li>
+</ul>

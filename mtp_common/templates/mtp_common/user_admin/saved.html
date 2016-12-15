@@ -16,16 +16,7 @@
     </h1>
   </div>
 
-  <ul>
-    <li>{% blocktrans with username=user.username %}Username: {{ username }}{% endblocktrans %}</li>
-    <li>{% blocktrans with first_name=user.first_name %}First name: {{ first_name }}{% endblocktrans %}</li>
-    <li>{% blocktrans with last_name=user.last_name %}Last name: {{ last_name }}{% endblocktrans %}</li>
-    <li>{% blocktrans with email=user.email %}Email: {{ email }}{% endblocktrans %}</li>
-    <li>
-        {% trans 'Can manage other users:' %}
-        {% if user.user_admin %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}
-    </li>
-  </ul>
+  {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
 
   <p><a href="{% url "edit-user" username=user.username %}">{% trans 'Edit this user account' %}</a></p>
   <p><a class="link-back" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a></p>
