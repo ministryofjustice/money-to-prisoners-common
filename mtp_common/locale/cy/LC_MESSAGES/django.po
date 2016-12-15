@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-15 17:30+0000\n"
+"POT-Creation-Date: 2016-12-16 14:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2016\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -380,20 +380,20 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:46
+#: templates/mtp_common/user_admin/list.html:47
 msgid "User can manage other accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:51
+#: templates/mtp_common/user_admin/list.html:52
 msgid "Edit"
 msgstr ""
 
 #: templates/mtp_common/user_admin/list.html:57
-msgid "Disable"
+msgid "Enable"
 msgstr ""
 
 #: templates/mtp_common/user_admin/list.html:61
-msgid "Enable"
+msgid "Disable"
 msgstr ""
 
 #: templates/mtp_common/user_admin/saved.html:8
@@ -499,36 +499,36 @@ msgstr ""
 msgid "Give access to manage other users"
 msgstr ""
 
-#: user_admin/views.py:51
+#: user_admin/views.py:52
 msgid "Disable user"
 msgstr ""
 
-#: user_admin/views.py:69
+#: user_admin/views.py:70
 msgid "This user could not be disabled"
 msgstr ""
 
-#: user_admin/views.py:84
+#: user_admin/views.py:85
 msgid "Enable user"
 msgstr ""
 
-#: user_admin/views.py:104
+#: user_admin/views.py:105
 msgid "This user could not be enabled"
 msgstr ""
 
-#: user_admin/views.py:116
+#: user_admin/views.py:117
 msgid "Edit user"
 msgstr ""
 
-#: user_admin/views.py:142
+#: user_admin/views.py:143
 msgid "Add user"
 msgstr ""
 
-#: user_admin/views.py:156
+#: user_admin/views.py:157
 msgid "The new user will have access to the same prison as you do."
 msgid_plural "The new user will have access to the same prisons as you do."
 msgstr[0] ""
 msgstr[1] ""
 
-#: user_admin/views.py:163
+#: user_admin/views.py:164
 msgid "The new user will not have access to manage any prisons."
 msgstr ""

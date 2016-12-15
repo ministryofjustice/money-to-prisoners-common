@@ -12,6 +12,12 @@
     font-size: 0.8em;
   }
 
+  table tr.mtp-inactive-user {
+    td, a, a:visited {
+      color: $secondary-text-colour;
+    }
+  }
+
   .mtp-account-management__can_manage {
     text-align: center;
   }
@@ -19,11 +25,12 @@
   .mtp-account-management__actions {
     width: 8em;
 
-    div {
+    .mtp-account-management__action {
       display: inline-block;
+      margin-right: 1em;
 
-      &.mtp-account-management__edit-action {
-        margin-right: 2em;
+      &:last-child {
+        margin-right: 0;
       }
     }
 

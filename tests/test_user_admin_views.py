@@ -31,6 +31,16 @@ class UserAdminTestCase(SimpleTestCase):
                                               password='blank'))
 
 
+class UserListTestCase(UserAdminTestCase):
+    @mock.patch('mtp_common.user_admin.views.api_client')
+    def test_delete_user_permission_propagates(self, mock_api_client):
+        conn = mock_api_client.get_connection()
+        conn.users.get.return_value = {'results': []}
+        self.mocked_login()
+        response = self.client.get(reverse('list-users'))
+        self.assertTrue(response.context['can_delete'])
+
+
 @mock.patch('mtp_common.user_admin.views.api_client')
 class DeleteUserTestCase(UserAdminTestCase):
     def test_user_not_found(self, mock_api_client):
@@ -48,14 +58,14 @@ class DeleteUserTestCase(UserAdminTestCase):
     def test_cannot_delete_self(self, mock_api_client):
         conn = mock_api_client.get_connection()
         conn.users.get.return_value = {}
-        conn.users().delete.side_effect = HttpClientError(content=b'{"__all__": ["You cannot delete yourself"]}')
+        conn.users().delete.side_effect = HttpClientError(content=b'{"__all__": ["You cannot disable yourself"]}')
 
         self.mocked_login()
         response = self.client.post(reverse('delete-user', args={'username': 'test-user'}),
                                     follow=True)
         messages = response.context['messages']
         messages = [str(m) for m in messages]
-        self.assertIn('You cannot delete yourself', messages)
+        self.assertIn('You cannot disable yourself', messages)
 
 
 @mock.patch('mtp_common.user_admin.forms.api_client')
