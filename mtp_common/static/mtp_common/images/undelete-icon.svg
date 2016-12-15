@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="delete-icon.svg"
+   sodipodi:docname="undelete-icon.svg"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -27,8 +27,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="29.5"
-     inkscape:cx="13.949153"
+     inkscape:zoom="1"
+     inkscape:cx="13.915254"
      inkscape:cy="11"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -58,30 +58,30 @@
      id="layer1"
      transform="translate(0,-1030.3622)">
     <circle
-       style="fill:#b10e1e;fill-opacity:1;stroke:none"
+       style="fill:#006435;fill-opacity:1;stroke:none"
        id="path4198"
        cx="11"
        cy="1041.3622"
        r="11" />
     <g
-       id="g4266"
-       transform="matrix(2,0,0,2,-1.8467341,-1052.5029)">
+       id="g4153"
+       transform="translate(0.27646003,0.53033431)">
       <rect
-         transform="matrix(0.67438558,0.73837937,-0.73837937,0.67438558,0,0)"
-         y="700.29333"
-         x="773.86523"
-         height="2"
-         width="7"
-         id="rect4262"
-         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         y="743.1377"
+         x="-734.4375"
+         height="4"
+         width="14"
+         id="rect4149"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <rect
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         id="rect4264"
-         width="7"
-         height="2"
-         x="765.2016"
-         y="709.77911"
-         transform="matrix(-0.67438558,0.73837937,0.73837937,0.67438558,0,0)" />
+         transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect4151"
+         width="8"
+         height="4"
+         x="-747.1377"
+         y="-734.4375" />
     </g>
   </g>
 </svg>
