@@ -52,9 +52,15 @@
             </div>
             {% if request.user.username.lower != user.username.lower %}
               <div>
-                <a href="{% url 'delete-user' username=user.username %}">
-                  <div class="mtp-delete-icon"></div>{% trans 'Disable' %}
-                </a>
+                {% if user.is_active %}
+                  <a href="{% url 'delete-user' username=user.username %}">
+                    <div class="mtp-delete-icon"></div>{% trans 'Disable' %}
+                  </a>
+                {% else %}
+                  <a href="{% url 'undelete-user' username=user.username %}">
+                    <div class="mtp-undelete-icon"></div>{% trans 'Enable' %}
+                  </a>
+                {% endif %}
               </div>
             {% endif %}
           </td>
