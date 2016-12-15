@@ -37,6 +37,7 @@ def list_users(request):
         page = 1
     response = api_client.get_connection(request).users.get(limit=page_size, offset=(page - 1) * page_size)
     context = {
+        'can_delete': request.user.has_perm('auth.delete_user'),
         'users': response.get('results', []),
         'page': page,
         'page_count': int(math.ceil(response.get('count', 0) / page_size)),
