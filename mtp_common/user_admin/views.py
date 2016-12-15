@@ -77,6 +77,41 @@ def delete_user(request, username):
         raise Http404
 
 
+@login_required
+@permission_required('auth.delete_user', raise_exception=True)
+def undelete_user(request, username):
+    context = {
+        'breadcrumbs': make_breadcrumbs(_('Enable user')),
+    }
+    if request.method == 'POST':
+        try:
+            api_client.get_connection(request).users(username).patch({
+                'is_active': True,
+            })
+
+            admin_username = request.user.user_data.get('username', 'Unknown')
+            logger.info('Admin %(admin_username)s enabled user %(username)s' % {
+                'admin_username': admin_username,
+                'username': username,
+            }, extra={
+                'elk_fields': {
+                    '@fields.username': admin_username,
+                }
+            })
+            context['username'] = username
+            return render(request, 'mtp_common/user_admin/undeleted.html', context=context)
+        except HttpClientError as e:
+            api_errors_to_messages(request, e, gettext('This user could not be enabled'))
+            return redirect(reverse('list-users'))
+
+    try:
+        user = api_client.get_connection(request).users(username).get()
+        context['user'] = user
+        return render(request, 'mtp_common/user_admin/undelete.html', context=context)
+    except HttpNotFoundError:
+        raise Http404
+
+
 class UserFormView(FormView):
     title = _('Edit user')
     template_name = 'mtp_common/user_admin/update.html'
