@@ -48,14 +48,14 @@ def list_users(request):
 @permission_required('auth.delete_user', raise_exception=True)
 def delete_user(request, username):
     context = {
-        'breadcrumbs': make_breadcrumbs(_('Delete user')),
+        'breadcrumbs': make_breadcrumbs(_('Disable user')),
     }
     if request.method == 'POST':
         try:
             api_client.get_connection(request).users(username).delete()
 
             admin_username = request.user.user_data.get('username', 'Unknown')
-            logger.info('Admin %(admin_username)s deleted user %(username)s' % {
+            logger.info('Admin %(admin_username)s disabled user %(username)s' % {
                 'admin_username': admin_username,
                 'username': username,
             }, extra={
@@ -66,7 +66,7 @@ def delete_user(request, username):
             context['username'] = username
             return render(request, 'mtp_common/user_admin/deleted.html', context=context)
         except HttpClientError as e:
-            api_errors_to_messages(request, e, gettext('This user could not be deleted'))
+            api_errors_to_messages(request, e, gettext('This user could not be disabled'))
             return redirect(reverse('list-users'))
 
     try:

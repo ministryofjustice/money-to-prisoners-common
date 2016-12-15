@@ -13,12 +13,12 @@
   {% if messages %}
     <ul class="messages" role="alert" tabindex="-1">
       {% for message in messages %}
-        <li{% if message.tags %} class="message--{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <li {% if message.tags %}class="message--{{ message.tags }}"{% endif %}>{{ message }}</li>
       {% endfor %}
     </ul>
   {% endif %}
 
-  <p>{% trans 'Add, view, edit or delete user accounts.' %}</p>
+  <p>{% trans 'Add, view, edit or disable user accounts.' %}</p>
 
   <p class="print-hidden">
     <a class="button button-secondary" href="{% url "new-user" %}">{% trans 'Add a new user' %}</a>
@@ -48,12 +48,12 @@
           </td>
           <td class="mtp-account-management__actions print-hidden">
             <div class="mtp-account-management__edit-action">
-              <a href="{% url "edit-user" username=user.username %}">{% trans 'Edit' %}</a>
+              <a href="{% url 'edit-user' username=user.username %}">{% trans 'Edit' %}</a>
             </div>
             {% if request.user.username != user.username %}
               <div>
-                <a href="{% url "delete-user" username=user.username %}">
-                  <div class="delete-icon"></div>{% trans 'Delete' %}
+                <a href="{% url 'delete-user' username=user.username %}">
+                  <div class="delete-icon"></div>{% trans 'Disable' %}
                 </a>
               </div>
             {% endif %}

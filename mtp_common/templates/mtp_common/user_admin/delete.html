@@ -7,27 +7,19 @@
     {% language_switch %}
     <h1 class="heading-xlarge">
       {% blocktrans trimmed with username=user.username %}
-        Delete user ‘{{ username }}’
+        Disable user account ‘{{ username }}’
       {% endblocktrans %}
     </h1>
   </header>
 {% endblock %}
 
 {% block admin_content %}
-  <ul>
-    <li>{% blocktrans with username=user.username %}Username: {{ username }}{% endblocktrans %}</li>
-    <li>{% blocktrans with first_name=user.first_name %}First name: {{ first_name }}{% endblocktrans %}</li>
-    <li>{% blocktrans with last_name=user.last_name %}Last name: {{ last_name }}{% endblocktrans %}</li>
-    <li>{% blocktrans with email=user.email %}Email: {{ email }}{% endblocktrans %}</li>
-    <li>
-        {% trans 'Can manage other users:' %}
-        {% if user.user_admin %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}
-    </li>
-  </ul>
+  <p>{% trans 'When you disable a user account, that user will be unable to log in.' %}</p>
+  {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
 
   <form method="post" action=".">
     {% csrf_token %}
-    <button type="submit" name="submit" value="submit" class="button">{% trans 'Delete user account' %}</button>
+    <button type="submit" name="submit" value="submit" class="button">{% trans 'Disable user account' %}</button>
     <a class="cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
   </form>
 {% endblock %}
