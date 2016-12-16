@@ -18,7 +18,16 @@
     </ul>
   {% endif %}
 
-  <p>{% trans 'Add, view, edit or disable user accounts.' %}</p>
+  <p>
+    {% trans 'Add, view, edit or disable user accounts.' %}
+    {% trans 'When you disable a user account, that user will be unable to log in.' %}
+  </p>
+  {% if locked_users_exist %}
+    <p>
+      {% trans 'If a user enters a wrong password too many times, they are locked out for a short period.' %}
+      {% trans 'You can allow them to log in now by clicking ‘Unlock’.' %}
+    </p>
+  {% endif %}
 
   <p class="print-hidden">
     <a class="button button-secondary" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
@@ -55,6 +64,10 @@
                 {% if not user.is_active %}
                   <a class="mtp-account-management__action" href="{% url 'undelete-user' username=user.username %}">
                     <span class="mtp-undelete-icon"></span>{% trans 'Enable' %}
+                  </a>
+                {% elif user.is_locked_out %}
+                  <a class="mtp-account-management__action" href="{% url 'unlock-user' username=user.username %}">
+                    <span class="mtp-undelete-icon"></span>{% trans 'Unlock' %}
                   </a>
                 {% else %}
                   <a class="mtp-account-management__action" href="{% url 'delete-user' username=user.username %}">

@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^users/(?P<username>[^/]+)/edit/$', views.UserUpdateView.as_view(), name='edit-user'),
     url(r'^users/(?P<username>[^/]+)/delete/$', views.delete_user, name='delete-user'),
     url(r'^users/(?P<username>[^/]+)/undelete/$', views.undelete_user, name='undelete-user'),
+    url(r'^users/(?P<username>[^/]+)/unlock/$', views.unlock_user, name='unlock-user'),
 ]

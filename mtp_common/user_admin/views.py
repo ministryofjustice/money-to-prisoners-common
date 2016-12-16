@@ -1,6 +1,7 @@
 import logging
 import math
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -36,9 +37,11 @@ def list_users(request):
     except (KeyError, ValueError):
         page = 1
     response = api_client.get_connection(request).users.get(limit=page_size, offset=(page - 1) * page_size)
+    users = response.get('results', [])
     context = {
         'can_delete': request.user.has_perm('auth.delete_user'),
-        'users': response.get('results', []),
+        'locked_users_exist': any(user['is_locked_out'] for user in users),
+        'users': users,
         'page': page,
         'page_count': int(math.ceil(response.get('count', 0) / page_size)),
     }
@@ -111,6 +114,31 @@ def undelete_user(request, username):
         return render(request, 'mtp_common/user_admin/undelete.html', context=context)
     except HttpNotFoundError:
         raise Http404
+
+
+@login_required
+@permission_required('auth.change_user', raise_exception=True)
+def unlock_user(request, username):
+    try:
+        api_client.get_connection(request).users(username).patch({
+            'is_locked_out': False,
+        })
+
+        admin_username = request.user.user_data.get('username', 'Unknown')
+        logger.info('Admin %(admin_username)s removed lock-out for user %(username)s' % {
+            'admin_username': admin_username,
+            'username': username,
+        }, extra={
+            'elk_fields': {
+                '@fields.username': admin_username,
+            }
+        })
+        messages.success(request, gettext('Unlocked user ‘%(username)s’, they can now log in again') % {
+            'username': username,
+        })
+    except HttpClientError as e:
+        api_errors_to_messages(request, e, gettext('This user could not be enabled'))
+    return redirect(reverse('list-users'))
 
 
 class UserFormView(FormView):
