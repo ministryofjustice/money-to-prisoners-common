@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 14:49+0000\n"
+"POT-Creation-Date: 2016-12-19 11:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2016\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Your browser failed a security check."
 msgstr ""
 
-#: auth/forms.py:21 templates/mtp_common/user_admin/list.html:30
+#: auth/forms.py:21 templates/mtp_common/user_admin/list.html:39
 #: user_admin/forms.py:15
 msgid "Username"
 msgstr ""
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Username or email address"
 msgstr ""
 
-#: auth/views.py:21 user_admin/views.py:22
+#: auth/views.py:21 user_admin/views.py:23
 msgid "Home"
 msgstr ""
 
@@ -334,6 +334,7 @@ msgid "Disable user account ‘%(username)s’"
 msgstr ""
 
 #: templates/mtp_common/user_admin/delete.html:17
+#: templates/mtp_common/user_admin/list.html:23
 msgid "When you disable a user account, that user will be unable to log in."
 msgstr ""
 
@@ -352,47 +353,59 @@ msgstr ""
 msgid "Return to user management"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:23
+#: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:24
 msgid "Manage user accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:21
+#: templates/mtp_common/user_admin/list.html:22
 msgid "Add, view, edit or disable user accounts."
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:24
-msgid "Add a new user"
+#: templates/mtp_common/user_admin/list.html:27
+msgid "If a user enters a wrong password too many times, they are locked out for a short period."
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:31
-msgid "Name"
-msgstr ""
-
-#: templates/mtp_common/user_admin/list.html:32 user_admin/forms.py:19
-msgid "Email"
+#: templates/mtp_common/user_admin/list.html:28
+msgid "You can allow them to log in now by clicking ‘Unlock’."
 msgstr ""
 
 #: templates/mtp_common/user_admin/list.html:33
+msgid "Add a new user"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:40
+msgid "Name"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:41 user_admin/forms.py:19
+msgid "Email"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:42
 msgid "Can manage accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:34
+#: templates/mtp_common/user_admin/list.html:43
 msgid "Actions"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:47
+#: templates/mtp_common/user_admin/list.html:56
 msgid "User can manage other accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:52
+#: templates/mtp_common/user_admin/list.html:61
 msgid "Edit"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:57
+#: templates/mtp_common/user_admin/list.html:66
 msgid "Enable"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:61
+#: templates/mtp_common/user_admin/list.html:70
+msgid "Unlock"
+msgstr ""
+
+#: templates/mtp_common/user_admin/list.html:74
 msgid "Disable"
 msgstr ""
 
@@ -499,36 +512,41 @@ msgstr ""
 msgid "Give access to manage other users"
 msgstr ""
 
-#: user_admin/views.py:52
+#: user_admin/views.py:55
 msgid "Disable user"
 msgstr ""
 
-#: user_admin/views.py:70
+#: user_admin/views.py:73
 msgid "This user could not be disabled"
 msgstr ""
 
-#: user_admin/views.py:85
+#: user_admin/views.py:88
 msgid "Enable user"
 msgstr ""
 
-#: user_admin/views.py:105
+#: user_admin/views.py:108 user_admin/views.py:140
 msgid "This user could not be enabled"
 msgstr ""
 
-#: user_admin/views.py:117
+#: user_admin/views.py:136
+#, python-format
+msgid "Unlocked user ‘%(username)s’, they can now log in again"
+msgstr ""
+
+#: user_admin/views.py:145
 msgid "Edit user"
 msgstr ""
 
-#: user_admin/views.py:143
+#: user_admin/views.py:171
 msgid "Add user"
 msgstr ""
 
-#: user_admin/views.py:157
+#: user_admin/views.py:185
 msgid "The new user will have access to the same prison as you do."
 msgid_plural "The new user will have access to the same prisons as you do."
 msgstr[0] ""
 msgstr[1] ""
 
-#: user_admin/views.py:164
+#: user_admin/views.py:192
 msgid "The new user will not have access to manage any prisons."
 msgstr ""
