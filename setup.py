@@ -24,6 +24,7 @@ install_requires = [
     'slumber>=0.7,<0.8',
     'selenium>=3.0,<3.1',
     'transifex-client>=0.12,<0.13',
+    'govuk-bank-holidays==0.1',
 ]
 extras_require = {
     'monitoring': [
