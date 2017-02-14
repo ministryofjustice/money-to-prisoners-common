@@ -3,6 +3,10 @@ strong {
   font-weight: bold;
 }
 
+.breadcrumbs {
+  padding-bottom: 0;
+}
+
 .breadcrumbs li a:after {
   content: '';
 }
