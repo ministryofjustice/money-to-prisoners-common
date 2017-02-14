@@ -25,6 +25,8 @@ install_requires = [
     'selenium>=3.0,<3.1',
     'transifex-client>=0.12,<0.13',
     'govuk-bank-holidays==0.1',
+    'cryptography==1.7.2',
+    'PyJWT==1.4.2',
 ]
 extras_require = {
     'monitoring': [
