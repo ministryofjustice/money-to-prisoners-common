@@ -8,11 +8,11 @@ import requests
 
 
 def convert_date_param(param):
-        if isinstance(param, date):
-            return param.isoformat()
-        elif isinstance(param, str):
-            return param
-        return ''
+    if isinstance(param, date):
+        return param.isoformat()
+    elif isinstance(param, str):
+        return param
+    return None
 
 
 class NomisClient():
@@ -32,32 +32,40 @@ class NomisClient():
         return urljoin(settings.NOMIS_API_BASE_URL, path)
 
     def regenerate_token(self):
-        with open(settings.NOMIS_API_TOKEN_FILE) as f:
-            client_token = f.read()
-
-        with open(settings.NOMIS_API_PRIVATE_KEY) as f:
-            secret_key = f.read()
-
         encoded = jwt.encode(
-            {'iat': int(time.time()), 'token': client_token}, secret_key, 'ES256'
+            {'iat': int(time.time()), 'token': settings.NOMIS_API_CLIENT_TOKEN},
+            settings.NOMIS_API_PRIVATE_KEY, 'ES256'
         )
         self.bearer_token = encoded.decode('utf8')
 
-    def get(self, path, params={}, timeout=15):
-        return requests.post(
+    def get(self, path, params=None, timeout=15):
+        if params:
+            params = {
+                param: params[param] for param in params
+                if params[param] is not None
+            }
+        response = requests.get(
             self._build_url(path),
             params=params,
             headers=self._headers,
             timeout=timeout
         )
+        response.raise_for_status()
+        if response.status_code != requests.codes.no_content:
+            return response.json()
+        return {'status_code': response.status_code}
 
-    def post(self, path, data, timeout=15):
-        return requests.post(
+    def post(self, path, data=None, timeout=15):
+        response = requests.post(
             self._build_url(path),
             json=data,
             headers=self._headers,
             timeout=timeout
         )
+        response.raise_for_status()
+        if response.status_code != requests.codes.no_content:
+            return response.json()
+        return {'status_code': response.status_code}
 
     def get_account_balances(self, prison_id, prisoner_number):
         return self.get(
@@ -67,7 +75,7 @@ class NomisClient():
         )
 
     def get_transaction_history(self, prison_id, prisoner_number, account_code,
-                                from_date=None, to_date=None):
+                                from_date, to_date=None):
         params = {
             'from_date': convert_date_param(from_date),
             'to_date': convert_date_param(to_date),
