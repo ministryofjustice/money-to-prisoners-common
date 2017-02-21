@@ -5,11 +5,11 @@
   vertical-align: bottom;
   width: 40px;
   height: 40px;
-  background: url(../mtp_common/images/spinner.gif) 0 0 no-repeat;
+  background: url('../mtp_common/images/spinner.gif') 0 0 no-repeat;
 
-  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+  @include device-pixel-ratio {
     margin-top: .2em;
-    background-image: url(../mtp_common/images/spinner@2x.gif);
+    background-image: url('../mtp_common/images/spinner@2x.gif');
     background-size: 40px 40px;
   }
 }

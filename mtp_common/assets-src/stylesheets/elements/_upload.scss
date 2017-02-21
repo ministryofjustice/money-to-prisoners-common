@@ -6,6 +6,7 @@ $component: upload-form;
     position: static;
     left: 0;
   }
+
   .upload-choose {
     display: none;
   }
@@ -16,12 +17,15 @@ $component: upload-form;
     position: absolute;
     left: -100000px;
   }
+
   .upload-filename, .upload-control div {
     display: inline-block;
   }
+
   .upload-filename {
     margin: .3em 1em 0 0;
   }
+
   .upload-otherfilelink {
     display: none;
   }

@@ -25,7 +25,7 @@
       }
     }
 
-    @include breakpoint($desktop) {
+    @include media(desktop) {
       width: 70%;
     }
   }

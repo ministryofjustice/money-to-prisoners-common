@@ -23,14 +23,14 @@ $header-logo-breakpoint: 880px;
       text-indent: -500px;
       width: 254px;
 
-      @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+      @include device-pixel-ratio {
         background-image: url('../mtp_common/images/moj-crest@2x.png');
         background-size: 254px 36px;
       }
     }
   }
 
-  @include breakpoint(max-width $header-logo-breakpoint) {
+  @include media($max-width: $header-logo-breakpoint, $ignore-for-ie: true) {
     .header-wrapper .header-global {
       float: none;
       width: auto;
@@ -41,20 +41,20 @@ $header-logo-breakpoint: 880px;
     margin-bottom: 6px;
     margin-top: 11px;
 
-    @include breakpoint(max-width $header-logo-breakpoint) {
+    @include media($max-width: $header-logo-breakpoint, $ignore-for-ie: true) {
       margin-bottom: 0;
       margin-top: 5px;
     }
   }
 
   .header-wrapper .header-proposition {
-    @include breakpoint($desktop) {
+    @include media(desktop, $ignore-for-ie: true) {
       clear: left;
       float: none;
       width: auto;
     }
 
-    @include breakpoint($header-logo-breakpoint) {
+    @include media($header-logo-breakpoint) {
       clear: none;
       float: left;
       width: 66%;

@@ -2,10 +2,11 @@
 
 #global-header .header-proposition {
   a.menu:after {
-    content: " \25C0\FE0E";
+    content: ' \25C0\FE0E';
   }
+
   a.menu.js-mtp-header-open:after {
-    content: " \25BC\FE0E";
+    content: ' \25BC\FE0E';
   }
 
   #proposition-links {
@@ -17,11 +18,12 @@
       margin-top: 1em;
 
       li {
-        border-bottom: none;
+        border-bottom: 0;
         border-top: 1px solid $grey-1;
         padding: 0.6em;
         width: 95%;
       }
+
       a {
         display: block;
         font-size: 16px;

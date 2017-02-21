@@ -22,7 +22,6 @@
     "selenium-standalone": "^5.7.2"
   },
   "dependencies": {
-    "breakpoint-sass": "^2.6.1",
     "checked-polyfill": "ministryofjustice/checked-polyfill#1.0.0",
     "govuk-elements-sass": "~2.2.1",
     "jquery": "~1.11",

@@ -16,12 +16,15 @@
     &.message--success {
       background-color: $green-3;
     }
+
     &.message--info {
       background-color: $light-blue-50;
     }
+
     &.message--warning {
       background-color: $orange-50;
     }
+
     &.message--error {
       background-color: $mellow-red-50;
     }
