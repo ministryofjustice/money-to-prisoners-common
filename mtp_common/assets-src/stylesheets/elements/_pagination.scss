@@ -77,6 +77,21 @@ a.mtp-page-list__current-page {
       }
     }
 
+    &.next, &.previous {
+      a:before {
+        background: transparent file-url('../mtp_common/images/arrow-sprite.png') no-repeat;
+        content: ' ';
+        display: block;
+        height: 38px;
+        width: 30px;
+
+        @include device-pixel-ratio {
+          background-image: file-url('../mtp_common/images/arrow-sprite@2x.png');
+          background-size: 150px 60px;
+        }
+      }
+    }
+
     &.next {
       float: right;
       text-align: right;
@@ -85,13 +100,10 @@ a.mtp-page-list__current-page {
         padding: .75em 3em .75em 0;
 
         &:before {
-          background: transparent file-url('arrow-sprite.png') no-repeat -102px -11px;
-          content: ' ';
-          display: block;
+          background-position: -102px -11px;
           float: right;
-          height: 38px;
           margin: -4px -32px 0 0;
-          width: 30px;
+
         }
       }
     }
@@ -104,13 +116,9 @@ a.mtp-page-list__current-page {
         padding: .75em 0 .75em 3em;
 
         &:before {
-          background: transparent file-url('arrow-sprite.png') no-repeat -20px -11px;
-          content: ' ';
-          display: block;
+          background-position: -20px -11px;
           float: left;
-          height: 38px;
           margin: -4px 0 0 -32px;
-          width: 30px;
         }
       }
     }
