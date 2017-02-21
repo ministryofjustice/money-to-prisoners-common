@@ -9,7 +9,7 @@
             …
           {% else %}
             <a href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page_index }}" {% if page == page_index %}class="mtp-page-list__current-page"{% endif %}>
-              <span class="screenreader-only">{% trans 'Page' %} </span>
+              <span class="visually-hidden">{% trans 'Page' %} </span>
               <span>{{ page_index }}</span>
             </a>
           {% endif %}

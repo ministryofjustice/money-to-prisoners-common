@@ -16,7 +16,7 @@
       {% get_form_errors form as errors %}
 
       {% for error in errors.non_field %}
-        <li class="non-field-error">{{ error }}<span class="screenreader-only">.</span></li>
+        <li class="non-field-error">{{ error }}<span class="visually-hidden">.</span></li>
       {% endfor %}
 
       {% for field, field_errors in errors.field_specific.items %}
@@ -24,7 +24,7 @@
           <a href="#{{ field.id_for_label }}-label">{{ field.label }}</a>
           <ul>
             {% for field_error in field_errors %}
-              <li>{{ field_error }}<span class="screenreader-only">.</span></li>
+              <li>{{ field_error }}<span class="visually-hidden">.</span></li>
             {% endfor %}
           </ul>
         </li>
