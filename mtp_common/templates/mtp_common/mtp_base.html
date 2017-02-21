@@ -41,13 +41,13 @@
 
 {% block header_class %}with-proposition {% if moj_internal_site %}mtp-internal-site{% endif %}{% endblock %}
 
-{% if moj_internal_site %}
-  {% block inside_header %}
+{% block inside_header %}
+  {% if moj_internal_site %}
     <div class="header-logo header-moj-logo">
       <a href="{{ home_url }}">{{ global_header_text }}</a>
     </div>
-  {% endblock %}
-{% endif %}
+  {% endif %}
+{% endblock %}
 
 {% block proposition_header %}
   <div class="header-proposition">
