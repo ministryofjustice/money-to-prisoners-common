@@ -16,12 +16,12 @@
     display: block;
     padding: 0.7em 40px 0.6em 1.3em;
     border: 1px solid transparent;
-    background: transparent url('../mtp_common/images/large-link-arrow.png') 98% no-repeat;
+    background: transparent file-url('../mtp_common/images/large-link-arrow.png') 98% no-repeat;
     color: $text-colour;
     text-decoration: none;
 
     @include device-pixel-ratio {
-      background-image: url('../mtp_common/images/large-link-arrow@2x.png');
+      background-image: file-url('../mtp_common/images/large-link-arrow@2x.png');
       background-size: 22px 22px;
     }
 

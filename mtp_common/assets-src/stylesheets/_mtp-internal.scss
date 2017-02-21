@@ -15,7 +15,7 @@ $header-logo-breakpoint: 880px;
     margin-left: 15px;
 
     a {
-      background: url('../mtp_common/images/moj-crest.png') no-repeat 50% 50%;
+      background: file-url('../mtp_common/images/moj-crest.png') no-repeat 50% 50%;
       display: block;
       font-size: 1px;
       height: 36px;
@@ -24,7 +24,7 @@ $header-logo-breakpoint: 880px;
       width: 254px;
 
       @include device-pixel-ratio {
-        background-image: url('../mtp_common/images/moj-crest@2x.png');
+        background-image: file-url('../mtp_common/images/moj-crest@2x.png');
         background-size: 254px 36px;
       }
     }

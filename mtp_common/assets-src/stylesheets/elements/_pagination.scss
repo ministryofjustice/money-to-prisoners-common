@@ -85,7 +85,7 @@ a.mtp-page-list__current-page {
         padding: .75em 3em .75em 0;
 
         &:before {
-          background: transparent url('../images/arrow-sprite.png') no-repeat -102px -11px;
+          background: transparent file-url('arrow-sprite.png') no-repeat -102px -11px;
           content: ' ';
           display: block;
           float: right;
@@ -104,7 +104,7 @@ a.mtp-page-list__current-page {
         padding: .75em 0 .75em 3em;
 
         &:before {
-          background: transparent url('../images/arrow-sprite.png') no-repeat -20px -11px;
+          background: transparent file-url('arrow-sprite.png') no-repeat -20px -11px;
           content: ' ';
           display: block;
           float: left;
