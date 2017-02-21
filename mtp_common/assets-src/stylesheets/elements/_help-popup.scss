@@ -3,14 +3,14 @@
     div {
       width: 22px;
       height: 14px;
-      background-image: url('../mtp_common/images/help-arrows.png');
+      background-image: file-url('../mtp_common/images/help-arrows.png');
       background-repeat: no-repeat;
       background-position: 0;
       display: inline-block;
       vertical-align: middle;
 
       @include device-pixel-ratio {
-        background-image: url('../mtp_common/images/help-arrows@2x.png');
+        background-image: file-url('../mtp_common/images/help-arrows@2x.png');
         background-size: 42px 14px;
       }
     }
@@ -38,7 +38,7 @@
       background-position: -28px;
 
       @include device-pixel-ratio {
-        background-image: url('../mtp_common/images/help-arrows@2x.png');
+        background-image: file-url('../mtp_common/images/help-arrows@2x.png');
         background-size: 42px 14px;
       }
     }

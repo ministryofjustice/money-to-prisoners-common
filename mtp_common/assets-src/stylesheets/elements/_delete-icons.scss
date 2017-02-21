@@ -4,20 +4,20 @@
   vertical-align: -.3em;
   width: 1em;
   height: 1em;
-  background: url('../mtp_common/images/delete-icon.png') 0 0 no-repeat;
+  background: file-url('../mtp_common/images/delete-icon.png') 0 0 no-repeat;
 
   @include device-pixel-ratio {
     margin-top: .2em;
-    background-image: url('../mtp_common/images/delete-icon@2x.png');
+    background-image: file-url('../mtp_common/images/delete-icon@2x.png');
     background-size: 11px 11px;
   }
 }
 
 .mtp-undelete-icon {
-  background: url('../mtp_common/images/undelete-icon.png') 0 0 no-repeat;
+  background: file-url('../mtp_common/images/undelete-icon.png') 0 0 no-repeat;
 
   @include device-pixel-ratio {
-    background-image: url('../mtp_common/images/undelete-icon@2x.png');
+    background-image: file-url('../mtp_common/images/undelete-icon@2x.png');
     background-size: 11px 11px;
   }
 }

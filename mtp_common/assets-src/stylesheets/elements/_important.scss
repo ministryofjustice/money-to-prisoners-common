@@ -4,14 +4,14 @@
   div.icon {
     width: 43px;
     height: 50px;
-    background-image: url('../mtp_common/images/important.png');
+    background-image: file-url('../mtp_common/images/important.png');
     background-repeat: no-repeat;
     background-position: 2px 0;
     display: inline-block;
     vertical-align: top;
 
     @include device-pixel-ratio {
-      background-image: url('../mtp_common/images/important@2x.png');
+      background-image: file-url('../mtp_common/images/important@2x.png');
       background-size: 30px 30px;
       background-position: 4px;
     }
