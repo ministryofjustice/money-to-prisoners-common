@@ -37,7 +37,7 @@ a.mtp-page-list__current-page {
   display: block;
   margin: 2em 0 0;
 
-  @media (max-width: 640px) {
+  @include media(mobile) {
     margin: 2em 0 0;
   }
 
@@ -48,7 +48,7 @@ a.mtp-page-list__current-page {
 
   li {
     float: left;
-    font-family: "nta", Arial, sans-serif;
+    font-family: 'nta', Arial, sans-serif;
     font-size: 14px;
     font-size-adjust: .5;
     font-weight: 400;
@@ -60,7 +60,7 @@ a.mtp-page-list__current-page {
     text-transform: none;
     width: 49%;
 
-    @media (min-width: 641px) {
+    @include media(tablet) {
       font-size: 16px;
       line-height: 1.25;
     }
@@ -85,7 +85,7 @@ a.mtp-page-list__current-page {
         padding: .75em 3em .75em 0;
 
         &:before {
-          background: transparent url('/static/images/arrow-sprite.png') no-repeat -102px -11px;
+          background: transparent url('../images/arrow-sprite.png') no-repeat -102px -11px;
           content: ' ';
           display: block;
           float: right;
@@ -104,7 +104,7 @@ a.mtp-page-list__current-page {
         padding: .75em 0 .75em 3em;
 
         &:before {
-          background: transparent url('/static/images/arrow-sprite.png') no-repeat -20px -11px;
+          background: transparent url('../images/arrow-sprite.png') no-repeat -20px -11px;
           content: ' ';
           display: block;
           float: left;
@@ -115,7 +115,7 @@ a.mtp-page-list__current-page {
       }
     }
 
-    @media (max-width: 640px) {
+    @include media(mobile) {
       &.previous,
       &.next {
         float: none;
@@ -131,7 +131,7 @@ a.mtp-page-list__current-page {
 
 .mtp-pagination__label {
   display: block;
-  font-family: "nta", Arial, sans-serif;
+  font-family: 'nta', Arial, sans-serif;
   font-size: 20px;
   font-size-adjust: .5;
   font-weight: 400;
@@ -139,7 +139,7 @@ a.mtp-page-list__current-page {
   margin-bottom: .1em;
   text-transform: none;
 
-  @media (min-width: 641px) {
+  @include media(tablet) {
     font-size: 27px;
     line-height: 1.25;
   }

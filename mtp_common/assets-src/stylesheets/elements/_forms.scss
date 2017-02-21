@@ -3,10 +3,12 @@ input {
 }
 
 form a.cancel {
-  @include breakpoint($tablet) {
+  vertical-align: -.3em;
+
+  @include media(tablet) {
     margin-left: 1em;
   }
-  vertical-align: -.3em;
+
   &:visited {
     color: $link-colour;
   }
@@ -23,13 +25,12 @@ form a.cancel {
       font-weight: bold;
     }
 
-    .field-specific-error {
-      ul {
-        padding-left: 1em;
-        li {
-          list-style-type: disc;
-          color: $error-colour;
-        }
+    .field-specific-error ul {
+      padding-left: 1em;
+
+      li {
+        list-style-type: disc;
+        color: $error-colour;
       }
     }
   }

@@ -140,7 +140,6 @@ class App:
     @property
     def scss_include_paths(self):
         paths = [
-            'breakpoint-sass/stylesheets',
             'govuk_frontend_toolkit/stylesheets',
             'govuk-elements-sass/public/sass',
         ]

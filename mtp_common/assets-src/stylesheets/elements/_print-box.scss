@@ -4,10 +4,11 @@
   display: none;
 
   @media print {
-    p {
-      margin: 1em .7em
-    }
     width: 93.5%;
     border: 2px solid $grey-1;
+
+    p {
+      margin: 1em .7em;
+    }
   }
 }

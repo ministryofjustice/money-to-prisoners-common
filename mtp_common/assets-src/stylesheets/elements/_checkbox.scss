@@ -13,21 +13,22 @@ input[type=checkbox].#{$component} {
   height: 1px;
   outline: none;
 
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)';
 
   + label {
     cursor: pointer;
     margin: 0;
     padding-left: 30px;
-    background: url(../mtp_common/images/checkbox.png) center center no-repeat;
+    background: url('../mtp_common/images/checkbox.png') center center no-repeat;
   }
 
   &:checked + label {
-    background-image: url(../mtp_common/images/checkbox-checked.png);
+    background-image: url('../mtp_common/images/checkbox-checked.png');
   }
+
   &.checked + label {
     // NB: cannot combine with previous rule else fails in IE8
-    background-image: url(../mtp_common/images/checkbox-checked.png);
+    background-image: url('../mtp_common/images/checkbox-checked.png');
   }
 
   &:focus + label {
@@ -56,14 +57,14 @@ input[type=checkbox].#{$component} {
     padding: 0;
   }
 
-  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+  @include device-pixel-ratio {
     + label {
-      background-image: url(../mtp_common/images/checkbox@2x.png);
+      background-image: url('../mtp_common/images/checkbox@2x.png');
       background-size: 20px 20px;
     }
 
     &:checked + label, &.checked + label {
-      background-image: url(../mtp_common/images/checkbox-checked@2x.png);
+      background-image: url('../mtp_common/images/checkbox-checked@2x.png');
     }
   }
 }

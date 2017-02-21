@@ -3,7 +3,7 @@ $component: CollapsingTable;
 
 .#{$component} tr {
   td, th {
-    font-size: 0.85em
+    font-size: 0.85em;
   }
 }
 
@@ -12,7 +12,7 @@ $component: CollapsingTable;
   font-weight: bold;
   position: relative;
   margin: 0;
-  padding: 0.5em 0.5em 0.5em 0.5em;
+  padding: 0.5em;
   border-bottom: 1px solid $grey-1;
   text-align: center;
   line-height: 1em;
@@ -44,19 +44,19 @@ $component: CollapsingTable;
   padding-left: 30px;
   float: left;
   cursor: pointer;
-  background-image: url(../mtp_common/images/collapse-button.png);
+  background-image: url('../mtp_common/images/collapse-button.png');
   background-repeat: no-repeat;
 
-  @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
-    background-image: url(../mtp_common/images/collapse-button@2x.png);
+  @include device-pixel-ratio {
+    background-image: url('../mtp_common/images/collapse-button@2x.png');
     background-size: 25px 25px;
   }
 
   &.#{$component}ShowHide-hidden {
-    background-image: url(../mtp_common/images/expand-button.png);
+    background-image: url('../mtp_common/images/expand-button.png');
 
-    @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
-      background-image: url(../mtp_common/images/expand-button@2x.png);
+    @include device-pixel-ratio {
+      background-image: url('../mtp_common/images/expand-button@2x.png');
       background-size: 25px 25px;
     }
   }
