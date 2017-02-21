@@ -53,7 +53,7 @@
             <td>{{ user.email }}</td>
             <td class="mtp-account-management__can_manage">
               {% if user.user_admin %}
-                ✔ <span class="screenreader-only">{% trans 'User can manage other accounts' %}</span>
+                ✔ <span class="visually-hidden">{% trans 'User can manage other accounts' %}</span>
               {% endif %}
             </td>
             <td class="mtp-account-management__actions print-hidden">
