@@ -295,7 +295,7 @@ def lint(_: Context):
 
 
 @tasks.register('create_build_paths', hidden=True)
-def govuk_template(context: Context, govuk_template_version='0.19.1'):
+def govuk_template(context: Context, version='0.19.2', replace_fonts=True):
     """
     Installs GOV.UK template
     """
@@ -303,7 +303,7 @@ def govuk_template(context: Context, govuk_template_version='0.19.1'):
         # NB: check is only on main template and not the assets included
         return
     url = 'https://github.com/alphagov/govuk_template/releases' \
-          '/download/v{0}/django_govuk_template-{0}.tgz'.format(govuk_template_version)
+          '/download/v{0}/django_govuk_template-{0}.tgz'.format(version)
     try:
         context.shell('curl --location %(silent)s --output govuk_template.tgz %(url)s' % {
             'silent': '--silent' if context.verbosity == 0 else '',
@@ -315,6 +315,11 @@ def govuk_template(context: Context, govuk_template_version='0.19.1'):
         context.shell('rsync %s govuk_template/templates/ %s/' % (rsync_flags, context.app.templates_path))
     finally:
         context.shell('rm -rf govuk_template.tgz ./govuk_template')
+    if replace_fonts:
+        # govuk_template includes .eot font files for IE, but they load relative to current URL not the stylesheet
+        # this option removes these files so common's fonts-ie8.css override is used
+        context.shell('rm -rf %s/stylesheets/fonts-ie8.css'
+                      ' %s/stylesheets/fonts/' % (context.app.asset_build_path, context.app.asset_build_path))
 
 
 @tasks.register('create_build_paths', hidden=True)
