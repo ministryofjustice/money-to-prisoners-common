@@ -1,3 +1,6 @@
+from django.utils.deprecation import CallableFalse, CallableTrue
+
+
 class MojUser:
     """
     Authenticated user, similar to the Django one.
@@ -16,11 +19,13 @@ class MojUser:
     def save(self, *args, **kwargs):
         pass
 
+    @property
     def is_anonymous(self):
-        return False
+        return CallableFalse
 
-    def is_authenticated(self, *args, **kwargs):
-        return True
+    @property
+    def is_authenticated(self):
+        return CallableTrue
 
     def get_applications(self):
         return self.user_data.get('applications', [])
@@ -82,11 +87,13 @@ class MojAnonymousUser:
     def get_full_name(self):
         return ''
 
+    @property
     def is_anonymous(self):
-        return True
+        return CallableTrue
 
-    def is_authenticated(self, *args, **kwargs):
-        return False
+    @property
+    def is_authenticated(self):
+        return CallableFalse
 
     def get_applications(self):
         return []
