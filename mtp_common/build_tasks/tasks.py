@@ -346,7 +346,7 @@ def collect_static_files(context: Context):
     """
     Collects assets for serving from single root
     """
-    return context.management_command('collectstatic', interactive=False)
+    context.management_command('collectstatic', interactive=False)
 
 
 @tasks.register(hidden=True)
