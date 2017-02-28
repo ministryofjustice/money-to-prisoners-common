@@ -100,3 +100,10 @@ class NomisClient():
             ),
             data
         )
+
+    def get_photograph_data(self, prisoner_number):
+        result = self.get(
+            '/offenders/{prisoner_number}/image'.format(prisoner_number=prisoner_number)
+        )
+        if result.get('image'):
+            return result['image']
