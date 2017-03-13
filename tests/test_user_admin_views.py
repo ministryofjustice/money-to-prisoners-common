@@ -13,7 +13,7 @@ class UserAdminTestCase(SimpleTestCase):
     def mocked_login(self):
         with mock.patch('django.contrib.auth.login') as mock_login, \
                 mock.patch('mtp_common.auth.backends.api_client') as mock_api_client:
-            mock_login.side_effect = login
+            mock_login.side_effect = lambda request, user, *args: login(request, user)
             mock_api_client.authenticate.return_value = {
                 'pk': 1,
                 'token': 'xxx',
@@ -25,6 +25,7 @@ class UserAdminTestCase(SimpleTestCase):
                     'permissions': [
                         'auth.add_user', 'auth.change_user', 'auth.delete_user',
                     ],
+                    'prisons': [{'nomis_id': 'AAI', 'name': 'Prison 1', 'pre_approval_required': False}],
                 }
             }
             self.assertTrue(self.client.login(username='test-user',
