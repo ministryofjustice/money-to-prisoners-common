@@ -1,0 +1,15 @@
+{% extends 'mtp_common/user_admin/list.html' %}
+{% load i18n %}
+
+{% block admin_content %}
+  <p>
+    {% blocktrans trimmed %}
+      You cannot edit the user account for ‘{{ target_username }}’.
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% blocktrans trimmed %}
+      Please contact <a href="{{ email_link }}">{{ email }}</a> if you need to change it.
+    {% endblocktrans %}
+  </p>
+{% endblock %}

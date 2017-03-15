@@ -2,6 +2,7 @@ import json
 import logging
 
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from form_error_reporting import GARequestErrorReportingMixin
 from slumber.exceptions import HttpClientError
@@ -17,6 +18,9 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
     first_name = forms.CharField(label=_('First name'))
     last_name = forms.CharField(label=_('Last name'))
     email = forms.EmailField(label=_('Email'))
+    role = forms.ChoiceField(label=_('Role'), error_messages={
+        'required': _('Please choose user’s role'),
+    })
     user_admin = forms.BooleanField(label=_('Give access to manage other users'), required=False)
 
     error_messages = {
@@ -27,6 +31,20 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
         self.request = kwargs.pop('request', None)
         self.create = kwargs.pop('create', False)
         super().__init__(*args, **kwargs)
+        if self.request.user.username.lower() == kwargs.get('initial', {}).get('username', '').lower():
+            del self.fields['role']
+            del self.fields['user_admin']
+        else:
+            managed_roles = api_client.get_connection(self.request).roles.get(managed=1).get('results', [])
+            initial_role = None
+            role_choices = []
+            for role in managed_roles:
+                role_choices.append((role['name'], role['application']['name']))
+                if role['application']['client_id'] == settings.API_CLIENT_ID:
+                    initial_role = role['name']
+            role_field = self.fields['role']
+            role_field.initial = initial_role
+            role_field.choices = role_choices
         if self.create:
             self.fields['username'].disabled = False
 
@@ -37,6 +55,7 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
                 'last_name': self.cleaned_data['last_name'],
                 'email': self.cleaned_data['email'],
                 'user_admin': self.cleaned_data['user_admin'],
+                'role': self.cleaned_data['role'],
             }
             try:
                 admin_username = self.request.user.user_data.get('username', 'Unknown')

@@ -27,9 +27,6 @@ class MojUser:
     def is_authenticated(self):
         return CallableTrue
 
-    def get_applications(self):
-        return self.user_data.get('applications', [])
-
     def get_all_permissions(self, obj=None):
         return self.user_data.get('permissions', [])
 
@@ -94,9 +91,6 @@ class MojAnonymousUser:
     @property
     def is_authenticated(self):
         return CallableFalse
-
-    def get_applications(self):
-        return []
 
     def get_all_permissions(self, obj=None):
         return []

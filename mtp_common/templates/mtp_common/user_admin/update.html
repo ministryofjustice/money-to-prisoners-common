@@ -48,14 +48,31 @@
     {% include 'mtp_common/forms/field.html' with field=form.last_name only %}
     {% include 'mtp_common/forms/field.html' with field=form.email only %}
 
+    {% with field=form.role %}
+      {% if field.field.choices %}
+        <fieldset class="form-group {% if field.errors %}error{% endif %}">
+          {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+          <span id="{{ field.id_for_label }}-label" class="form-label">{% trans 'Give the user access to:' %}</span>
+          {% for choice_value, choice_description in field.field.choices %}
+            <label class="block-label" for="id_{{ choice_value }}">
+              <input id="id_{{ choice_value }}" type="radio" name="{{ field.html_name }}" value="{{ choice_value }}" {% if field.value == choice_value %}checked{% endif %}>
+              {{ choice_description }}
+            </label>
+          {% endfor %}
+        </fieldset>
+      {% endif %}
+    {% endwith %}
+
     {% with field=form.user_admin %}
-      <div class="form-group {% if field.errors %}error{% endif %}">
-        <label id="{{ field.id_for_label }}-label" class="block-label {% if field.value %}selected{% endif %}">
-          <input id="{{ field.id_for_label }}" name="{{ field.html_name }}" {% if field.value %}checked="checked"{% endif %} type="checkbox" />
-          {{ field.label }}
-        </label>
-        {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-      </div>
+      {% if field %}
+        <div class="form-group {% if field.errors %}error{% endif %}">
+          <label id="{{ field.id_for_label }}-label" class="block-label {% if field.value %}selected{% endif %}">
+            <input id="{{ field.id_for_label }}" name="{{ field.html_name }}" {% if field.value %}checked="checked"{% endif %} type="checkbox" />
+            {{ field.label }}
+          </label>
+          {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+        </div>
+      {% endif %}
     {% endwith %}
 
     <div class="form-group">
