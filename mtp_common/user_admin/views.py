@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext, gettext_lazy as _, ngettext
+from django.utils.http import urlencode
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic.edit import FormView
 from slumber.exceptions import HttpNotFoundError, HttpClientError
 
@@ -16,6 +17,15 @@ from mtp_common.auth import api_client
 from mtp_common.user_admin.forms import UserUpdateForm
 
 logger = logging.getLogger('mtp')
+
+support_email = 'money-to-prisoners@digital.justice.gov.uk'
+
+
+def make_email_link(email, subject, message):
+    return 'mailto:%s?%s' % (email, urlencode({
+        'Subject': subject,
+        'Body': message,
+    }))
 
 
 def make_breadcrumbs(section_title):
@@ -26,8 +36,32 @@ def make_breadcrumbs(section_title):
     ]
 
 
+def ensure_compatible_admin(view):
+    """
+    Ensures that the user is in exactly one role.
+    Other checks could be added, such as requiring one prison if in prison-clerk role.
+    """
+
+    def wrapper(request, *args, **kwargs):
+        user_roles = request.user.user_data.get('roles', [])
+        if len(user_roles) != 1:
+            context = {
+                'email': support_email,
+                'email_link': make_email_link(
+                    support_email,
+                    'Prisoner money admin account problem',
+                    'I need to be able to manage user accounts. My username is %s' % request.user.username,
+                ),
+            }
+            return render(request, 'mtp_common/user_admin/incompatible-admin.html', context=context)
+        return view(request, *args, **kwargs)
+
+    return wrapper
+
+
 @login_required
 @permission_required('auth.change_user', raise_exception=True)
+@ensure_compatible_admin
 def list_users(request):
     page_size = 20
     try:
@@ -50,6 +84,7 @@ def list_users(request):
 
 @login_required
 @permission_required('auth.delete_user', raise_exception=True)
+@ensure_compatible_admin
 def delete_user(request, username):
     context = {
         'breadcrumbs': make_breadcrumbs(_('Disable user')),
@@ -83,6 +118,7 @@ def delete_user(request, username):
 
 @login_required
 @permission_required('auth.delete_user', raise_exception=True)
+@ensure_compatible_admin
 def undelete_user(request, username):
     context = {
         'breadcrumbs': make_breadcrumbs(_('Enable user')),
@@ -118,6 +154,7 @@ def undelete_user(request, username):
 
 @login_required
 @permission_required('auth.change_user', raise_exception=True)
+@ensure_compatible_admin
 def unlock_user(request, username):
     try:
         api_client.get_connection(request).users(username).patch({
@@ -167,6 +204,7 @@ class UserFormView(FormView):
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('auth.add_user', raise_exception=True), name='dispatch')
+@method_decorator(ensure_compatible_admin, name='dispatch')
 class UserCreationView(UserFormView):
     title = _('Add user')
 
@@ -178,36 +216,69 @@ class UserCreationView(UserFormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
 
-        # TODO: this note only applies to cashbook; we need a way to pass it in from client apps
-        prison_count = len(self.request.user.user_data.get('prisons', []))
-        if prison_count > 0:
-            context_data['permissions_note'] = ngettext(
-                'The new user will have access to the same prison as you do.',
-                'The new user will have access to the same prisons as you do.',
-                prison_count
-            ) % {
-                'prison_count': prison_count
+        prisons = self.request.user.user_data.get('prisons', [])
+        if prisons:
+            prisons = [prison['name'] for prison in prisons]
+            if len(prisons) > 1:
+                prisons = gettext('%(prison_list)s and %(prison)s') % {
+                    'prison_list': ', '.join(prisons[:-1]),
+                    'prison': prisons[-1],
+                }
+            else:
+                prisons = prisons[0]
+            permissions_note = gettext('The new user will be based at %(prison_list)s.') % {
+                'prison_list': prisons,
             }
         else:
-            context_data['permissions_note'] = gettext('The new user will not have access to manage any prisons.')
+            permissions_note = gettext('The new user will not be based at a specific prison.')
+        context_data['permissions_note'] = permissions_note
 
         return context_data
 
 
+class IncompatibleUser(Exception):
+    pass
+
+
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('auth.change_user', raise_exception=True), name='dispatch')
+@method_decorator(ensure_compatible_admin, name='dispatch')
 class UserUpdateView(UserFormView):
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except IncompatibleUser:
+            admin_username = request.user.username
+            target_username = self.kwargs.get('username')
+            context = {
+                'target_username': target_username,
+                'email': support_email,
+                'email_link': make_email_link(
+                    support_email,
+                    'Prisoner money user account problem',
+                    'My username is %s. I need to be able to edit the account for %s' % (
+                        admin_username, target_username,
+                    ),
+                ),
+            }
+            return render(request, 'mtp_common/user_admin/incompatible-user.html', context=context)
 
     def get_initial(self):
         username = self.kwargs['username']
         try:
             response = api_client.get_connection(self.request).users(username).get()
-            return {
+            initial = {
                 'username': response.get('username', ''),
                 'first_name': response.get('first_name', ''),
                 'last_name': response.get('last_name', ''),
                 'email': response.get('email', ''),
                 'user_admin': response.get('user_admin', False),
             }
+            roles = response.get('roles', [])
+            if len(roles) == 1:
+                initial['role'] = roles[0]
+            else:
+                raise IncompatibleUser
+            return initial
         except HttpNotFoundError:
             raise Http404

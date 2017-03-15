@@ -1,0 +1,11 @@
+{% extends 'mtp_common/user_admin/list.html' %}
+{% load i18n %}
+
+{% block admin_content %}
+  <p>{% trans 'Your account is not correctly set up to manage other users.' %}</p>
+  <p>
+    {% blocktrans trimmed %}
+      Please contact <a href="{{ email_link }}">{{ email }}</a>.
+    {% endblocktrans %}
+  </p>
+{% endblock %}
