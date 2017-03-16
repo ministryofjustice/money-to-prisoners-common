@@ -3,7 +3,7 @@ from django.test import SimpleTestCase
 import responses
 
 from mtp_common.auth import urljoin
-from mtp_common.nomis import NomisClient
+from mtp_common import nomis
 
 
 class NomisApiTestCase(SimpleTestCase):
@@ -21,6 +21,5 @@ class NomisApiTestCase(SimpleTestCase):
                 status=200,
             )
 
-            client = NomisClient()
-            balances = client.get_account_balances('BMI', 'A1471AE')
+            balances = nomis.get_account_balances('BMI', 'A1471AE')
             self.assertEqual(balances, {'cash': 500, 'savings': 0, 'spends': 25})
