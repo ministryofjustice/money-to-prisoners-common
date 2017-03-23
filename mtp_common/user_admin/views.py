@@ -7,7 +7,6 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.http import urlencode
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic.edit import FormView
 from slumber.exceptions import HttpNotFoundError, HttpClientError
@@ -17,15 +16,6 @@ from mtp_common.auth import api_client
 from mtp_common.user_admin.forms import UserUpdateForm
 
 logger = logging.getLogger('mtp')
-
-support_email = 'money-to-prisoners@digital.justice.gov.uk'
-
-
-def make_email_link(email, subject, message):
-    return 'mailto:%s?%s' % (email, urlencode({
-        'Subject': subject,
-        'Body': message,
-    }))
 
 
 def make_breadcrumbs(section_title):
@@ -46,12 +36,8 @@ def ensure_compatible_admin(view):
         user_roles = request.user.user_data.get('roles', [])
         if len(user_roles) != 1:
             context = {
-                'email': support_email,
-                'email_link': make_email_link(
-                    support_email,
-                    'Prisoner money admin account problem',
-                    'I need to be able to manage user accounts. My username is %s' % request.user.username,
-                ),
+                'message': 'I need to be able to manage user accounts. '
+                           'My username is %s' % request.user.username
             }
             return render(request, 'mtp_common/user_admin/incompatible-admin.html', context=context)
         return view(request, *args, **kwargs)
@@ -252,14 +238,8 @@ class UserUpdateView(UserFormView):
             target_username = self.kwargs.get('username')
             context = {
                 'target_username': target_username,
-                'email': support_email,
-                'email_link': make_email_link(
-                    support_email,
-                    'Prisoner money user account problem',
-                    'My username is %s. I need to be able to edit the account for %s' % (
-                        admin_username, target_username,
-                    ),
-                ),
+                'message': 'My username is %s. '
+                           'I need to be able to edit the account for %s' % (admin_username, target_username),
             }
             return render(request, 'mtp_common/user_admin/incompatible-user.html', context=context)
 
