@@ -28,7 +28,7 @@
             {% trans 'Please don’t include bank details or any other personal information.' %}
           </p>
           {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-          <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:'' }}</textarea>
+          <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:request.GET.message|default:'' }}</textarea>
         </div>
       {% endwith %}
 
