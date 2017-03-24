@@ -8,7 +8,7 @@
     {% endblocktrans %}
   </p>
   <p>
-    <a href="{% url 'submit_ticket' %}?message={{ message|urlencode }}">
+    <a href="{% url 'submit_ticket' %}?message={{ message|urlencode }}&amp;email={{ request.user.email|urlencode }}">
       {% trans 'Please contact us if you need to change it.' %}
     </a>
   </p>
