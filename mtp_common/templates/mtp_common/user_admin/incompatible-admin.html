@@ -4,7 +4,7 @@
 {% block admin_content %}
   <p>{% trans 'Your account is not correctly set up to manage other users.' %}</p>
   <p>
-    <a href="{% url 'submit_ticket' %}?message={{ message|urlencode }}">
+    <a href="{% url 'submit_ticket' %}?message={{ message|urlencode }}&amp;email={{ request.user.email|urlencode }}">
       {% trans 'Please contact us to request your account to be changed.' %}
     </a>
   </p>
