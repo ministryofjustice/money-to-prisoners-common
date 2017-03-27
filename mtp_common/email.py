@@ -35,7 +35,7 @@ def send_email(to, text_template, subject, context=None,
                 address = parseaddr(force_text(address))[1]
                 return any(
                     address.endswith(domain)
-                    for domain in ('@local', '@mtp.local', '@outside.local')
+                    for domain in ('@local', '.local')
                 )
             except ValueError:
                 pass
