@@ -98,7 +98,8 @@ def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description, 
         'type': 'MRPR',
         'description': description,
         'amount': amount,
-        'client_transaction_id': str(credit_id)
+        'client_transaction_id': str(credit_id),
+        'client_unique_ref': str(credit_id)
     }
     return post(
         '/prison/{prison_id}/offenders/{prisoner_number}/transactions'.format(
