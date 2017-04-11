@@ -5,7 +5,9 @@
   <li>{% blocktrans with first_name=user.first_name %}First name: {{ first_name }}{% endblocktrans %}</li>
   <li>{% blocktrans with last_name=user.last_name %}Last name: {{ last_name }}{% endblocktrans %}</li>
   <li>{% blocktrans with email=user.email %}Email: {{ email }}{% endblocktrans %}</li>
-  <li>{% blocktrans with yes_or_no=user.user_admin|yesno|capfirst %}Can manage other users: {{ yes_or_no }}{% endblocktrans %}</li>
+  {% if 'user_admin' in user %}
+    <li>{% blocktrans with yes_or_no=user.user_admin|yesno|capfirst %}Can manage other users: {{ yes_or_no }}{% endblocktrans %}</li>
+  {% endif %}
   {% if 'is_active' in user %}
     <li>{% blocktrans with yes_or_no=user.is_active|yesno|capfirst %}Can log in: {{ yes_or_no }}{% endblocktrans %}</li>
   {% endif %}
