@@ -54,9 +54,11 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
                 'first_name': self.cleaned_data['first_name'],
                 'last_name': self.cleaned_data['last_name'],
                 'email': self.cleaned_data['email'],
-                'user_admin': self.cleaned_data['user_admin'],
-                'role': self.cleaned_data['role'],
             }
+            if 'user_admin' in self.cleaned_data:
+                data['user_admin'] = self.cleaned_data['user_admin']
+            if 'role' in self.cleaned_data:
+                data['role'] = self.cleaned_data['role']
             try:
                 admin_username = self.request.user.user_data.get('username', 'Unknown')
 
