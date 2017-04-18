@@ -1,8 +1,10 @@
 {% if sentry_dsn %}
-  <script src="https://cdn.ravenjs.com/3.8.1/raven.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.ravenjs.com/3.14.2/raven.min.js" crossorigin="anonymous"></script>
   <script>
-    Raven.config('{{ sentry_dsn }}', {
-      whitelistUrls: [/app\.bundle\.js/]
-    }).install()
+    if (Raven) {
+      Raven.config('{{ sentry_dsn }}', {
+        whitelistUrls: [/app\.bundle\.js/]
+      }).install();
+    }
   </script>
 {% endif %}
