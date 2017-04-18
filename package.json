@@ -1,7 +1,7 @@
 {
   "name": "money-to-prisoners-common",
   "description": "Money to Prisoners - Common",
-  "version": "5.9.3",
+  "version": "5.10.0",
   "private": true,
   "repository": {
     "type": "git",
