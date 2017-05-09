@@ -15,8 +15,8 @@ BACKEND_SESSION_KEY = '_auth_user_backend'
 HASH_SESSION_KEY = '_auth_user_hash'
 
 
-def update_token_in_session(request, token):
-    request.session[AUTH_TOKEN_SESSION_KEY] = token
+def update_token_in_session(session, token):
+    session[AUTH_TOKEN_SESSION_KEY] = token
 
 
 def login(request, user):
@@ -47,7 +47,7 @@ def login(request, user):
     request.session[USER_DATA_SESSION_KEY] = user.user_data
     request.session[HASH_SESSION_KEY] = session_auth_hash
 
-    update_token_in_session(request, user.token)
+    update_token_in_session(request.session, user.token)
 
     if hasattr(request, 'user'):
         request.user = user
