@@ -117,13 +117,24 @@ def get_connection(request):
     response = get_connection(request).my_endpoint.get()
     ```
     """
-    user = request.user
+    return get_connection_with_session(request.user, request.session)
+
+
+def get_connection_with_session(user, session):
+    """
+    Returns a slumber connection configured using the token of the user.
+
+    It raises `Unauthorized` if the user is not authenticated.
+
+    ```
+    response = get_connection(user, session).my_endpoint.get()
+    ```
+    """
     if not user:
         raise Unauthorized(u'no such user')
 
-    def token_saver(token, request, user):
-        user.token = token
-        update_token_in_session(request, token)
+    def token_saver(token, session, user):
+        update_token_in_session(session, user.token)
 
     session = MoJOAuth2Session(
         settings.API_CLIENT_ID,
@@ -133,7 +144,7 @@ def get_connection(request):
             'client_id': settings.API_CLIENT_ID,
             'client_secret': settings.API_CLIENT_SECRET
         },
-        token_updater=partial(token_saver, request=request, user=user)
+        token_updater=partial(token_saver, session=session, user=user)
     )
 
     return _get_slumber_connection(session)
