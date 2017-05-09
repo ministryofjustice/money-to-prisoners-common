@@ -134,7 +134,8 @@ def get_connection_with_session(user, session):
         raise Unauthorized(u'no such user')
 
     def token_saver(token, session, user):
-        update_token_in_session(session, user.token)
+        user.token = token
+        update_token_in_session(session, token)
 
     session = MoJOAuth2Session(
         settings.API_CLIENT_ID,
