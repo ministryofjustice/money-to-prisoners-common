@@ -17,9 +17,22 @@ except ImportError:
     uwsgidecorators = None
 
 
+class Context:
+    __slots__ = ('async', 'retries')
+
+    def __init__(self, async, retries=None):
+        """
+        Defines the context in which a spoolable task is running
+        :param async: whether it is running in the spooler asynchronously
+        :param retries: number of times the task will be rescheduled if it fails, 0 means this is the last try;
+            None implies that retrying was not enabled
+        """
+        self.async = async
+        self.retries = retries
+
+
 class Spooler:
     identifier = b'_mtp'
-    task_arguments = ('spoolable_async', 'spoolable_retries')
     spooler_period = 30
 
     def __init__(self):
@@ -91,8 +104,6 @@ class Spooler:
         if args:
             job[b'args'] = pickle.dumps(args)
         if kwargs:
-            for arg in self.task_arguments:
-                kwargs.pop(arg, None)
             job[b'kwargs'] = pickle.dumps(kwargs)
         if body:
             job[b'body'] = pickle.dumps(body)
@@ -101,10 +112,10 @@ class Spooler:
         uwsgi.spool(job)
 
     def run(self, task, args, kwargs, retries):
-        kwargs['spoolable_async'] = True
         if retries is not None:
             retries = int(retries)
-            kwargs['spoolable_retries'] = retries
+            if task.context_name:
+                kwargs[task.context_name] = Context(async=True, retries=retries)
             try:
                 task.func(*args, **kwargs)
             except task.retry_on_errors:
@@ -117,6 +128,8 @@ class Spooler:
                     delay = (task.retries - retries + 1) * self.spooler_period + 2
                     self.schedule(task, args, kwargs, retries=retries, at=int(time.time()) + delay)
         else:
+            if task.context_name:
+                kwargs[task.context_name] = Context(async=True)
             task.func(*args, **kwargs)
 
 
@@ -125,9 +138,10 @@ spooler.install()
 
 
 class Task:
-    def __init__(self, func, pre_condition=True, retries=None, retry_on_errors=(), body_params=()):
+    def __init__(self, func, context_name=None, pre_condition=True, retries=None, retry_on_errors=(), body_params=()):
         self.func = func
         self.name = func.__name__.encode('utf8')
+        self.context_name = context_name
         self.pre_condition = pre_condition
         self.retries = retries
         self.retry_on_errors = retry_on_errors
@@ -151,27 +165,28 @@ class Task:
             raise
 
     def run(self, args, kwargs):
-        kwargs['spoolable_async'] = False
         if self.retries:
             for retries_left in range(self.retries, -1, -1):
                 try:
-                    kwargs['spoolable_retries'] = retries_left
+                    if self.context_name:
+                        kwargs[self.context_name] = Context(async=False, retries=retries_left)
                     self.func(*args, **kwargs)
                     return
                 except self.retry_on_errors:
                     time.sleep(0.001)
             logger.exception('Spooler task %s failed after %d tries' % (self.name, self.retries + 1))
         else:
+            if self.context_name:
+                kwargs[self.context_name] = Context(async=False)
             self.func(*args, **kwargs)
 
 
 def spoolable(*, pre_condition=True, retries=None, retry_on_errors=(), body_params=()):
     """
-    Decorates a function to make it spoolable if possible and registers it with the spooler.
-    All decorated function parameters must be picklable and the function must accept the arguments 
-    that define the context in which it is being run, which can be done with a **kwargs catch-all argument:
-    - spoolable_async: whether the task is being run asynchronously
-    - spoolable_retries: number of retries left before giving up, if any
+    Decorates a function to make it spoolable using uWSGI, but if no spooling mechanism is available,
+    the function is called synchronously. All decorated function arguments must be picklable and
+    the first annotated with `Context` will receive an object that defines the current execution state.
+    Return values are always ignored.
     :param pre_condition: additional condition needed to use spooler
     :param retries: number of times to retry if `retry_on_errors` trapped
     :param retry_on_errors: errors to trap and retry
@@ -181,25 +196,21 @@ def spoolable(*, pre_condition=True, retries=None, retry_on_errors=(), body_para
     """
 
     def decorator(func):
+        context_name = None
         keyword_kinds = {inspect.Parameter.POSITIONAL_OR_KEYWORD, inspect.Parameter.KEYWORD_ONLY}
-        var_keyword_found = False
-        task_arguments_missing = set(Spooler.task_arguments)
         invalid_body_params = set(body_params)
         for name, parameter in inspect.signature(func).parameters.items():
-            if parameter.kind == inspect.Parameter.VAR_KEYWORD:
-                var_keyword_found = True
-            elif name in task_arguments_missing:
-                if parameter.kind not in keyword_kinds:
-                    raise TypeError('Spoolable task function must accept %s as a keyword argument' % name)
-                task_arguments_missing.remove(name)
-            elif name in invalid_body_params and parameter.kind in keyword_kinds:
+            if parameter.kind not in keyword_kinds:
+                continue
+            if not context_name and parameter.annotation is Context:
+                context_name = name
+            elif name in invalid_body_params:
                 invalid_body_params.remove(name)
-        if task_arguments_missing and not var_keyword_found:
-            raise TypeError('Spoolable task function accepts all spooler task arguments')
         if invalid_body_params:
             raise TypeError('Spoolable task body_params must be keyword arguments')
 
-        task = Task(func, pre_condition=pre_condition, retries=retries, retry_on_errors=retry_on_errors,
+        task = Task(func, context_name=context_name, pre_condition=pre_condition,
+                    retries=retries, retry_on_errors=retry_on_errors,
                     body_params=body_params)
         spooler.register(task)
         return task

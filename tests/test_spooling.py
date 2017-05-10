@@ -6,7 +6,7 @@ from unittest import mock
 from django.core import mail
 from django.test.utils import override_settings
 
-from mtp_common.spooling import spoolable, spooler
+from mtp_common.spooling import Context, Task, spoolable, spooler
 from tests.utils import SimpleTestCase
 
 
@@ -19,40 +19,47 @@ class SpoolableTestCase(unittest.TestCase):
     def setUp(self):
         spooler.registry = {}
 
-    def test_must_accept_all_task_arguments(self):
-        with self.assertRaises(TypeError):
-            @spoolable()
-            def fails():
-                pass
+    def test_context_argument(self):
+        @spoolable()
+        def passes():
+            pass
 
-        with self.assertRaises(TypeError):
-            @spoolable()  # noqa
-            def fails(a):
-                pass
+        self.assertIsInstance(passes, Task)
+        self.assertIsNone(passes.context_name)
 
-        with self.assertRaises(TypeError):
-            @spoolable()  # noqa
-            def fails(a, *b, c=None):
-                pass
-
-        with self.assertRaises(TypeError):
-            @spoolable()  # noqa
-            def fails(spoolable_async, *spoolable_retries, **kwargs):
-                pass
+        state = {'runs': 0}
 
         @spoolable()
-        def passes1(**kwargs):
-            pass
+        def passes1(ctx: Context):
+            self.assertIsInstance(ctx, Context)
+            state['runs'] += 1
 
         @spoolable()  # noqa
-        def passes2(spoolable_async=False, spoolable_retries=0):
-            pass
+        def passes2(a, b, context: Context = None):
+            self.assertIsInstance(context, Context)
+            state['runs'] += 1
 
         @spoolable()  # noqa
-        def passes3(spoolable_async, spoolable_retries, *, a=None, **kwargs):
-            pass
+        def passes3(*, context: Context, **kwargs):
+            self.assertIsInstance(context, Context)
+            state['runs'] += 1
 
-        spooler.registry = {}
+        @spoolable()  # noqa
+        def passes4(*args, context: Context, **kwargs):
+            self.assertIsInstance(context, Context)
+            state['runs'] += 1
+
+        @spoolable()  # noqa
+        def passes5(*args, context: Context = None, **kwargs):
+            self.assertIsInstance(context, Context)
+            state['runs'] += 1
+
+        passes1()
+        passes2(1, b=2)
+        passes3()
+        passes4()
+        passes5()
+        self.assertEqual(state['runs'], 5)
 
     def test_must_accept_body_params_as_keyword_arguments(self):
         with self.assertRaises(TypeError):
@@ -71,7 +78,7 @@ class SpoolableTestCase(unittest.TestCase):
                 pass
 
         @spoolable(body_params=('a',))  # noqa
-        def passes4(a, **kwargs):
+        def passes4(a):
             pass
 
         @spoolable(body_params=('a', 'b'))  # noqa
@@ -84,23 +91,23 @@ class SpoolableTestCase(unittest.TestCase):
 
     @mock.patch('mtp_common.spooling.logger')
     def test_warning_if_task_name_reused(self, logger):
-        @spoolable()  # noqa
-        def func(**kwargs):
+        @spoolable()
+        def func():
             pass
 
         @spoolable()  # noqa
-        def func(**kwargs):
+        def func():
             pass
 
         self.assertTrue(logger.warning.called)
 
     def test_task_register(self):
         @spoolable()
-        def func(**kwargs):
+        def func():
             pass
 
         @spoolable()
-        def func2(**kwargs):
+        def func2():
             pass
 
         self.assertIn(b'func', spooler.registry)
@@ -110,10 +117,10 @@ class SpoolableTestCase(unittest.TestCase):
         state = {'run': False}
 
         @spoolable()
-        def func(a, b, **kwargs):
+        def func(a, b, context: Context):
             self.assertEqual(a, 1)
             self.assertEqual(b, 2)
-            self.assertFalse(kwargs['spoolable_async'])
+            self.assertFalse(context.async)
             state['run'] = True
             return 321
 
@@ -124,8 +131,8 @@ class SpoolableTestCase(unittest.TestCase):
     def test_synchronous_retries(self, logger):
         state = {'runs': 0}
 
-        @spoolable(retries=2, retry_on_errors=(CustomError,))  # noqa
-        def func(**kwargs):
+        @spoolable(retries=2, retry_on_errors=(CustomError,))
+        def func():
             state['runs'] += 1
             raise CustomError()
 
@@ -138,8 +145,8 @@ class SpoolableTestCase(unittest.TestCase):
         state = {'runs': 0}
 
         @spoolable(retries=2, retry_on_errors=(CustomError,))
-        def func(**kwargs):
-            self.assertEqual(kwargs['spoolable_retries'], 2 - state['runs'])
+        def func(context: Context):
+            self.assertEqual(context.retries, 2 - state['runs'])
             state['runs'] += 1
             raise CustomError()
 
@@ -151,8 +158,8 @@ class SpoolableTestCase(unittest.TestCase):
     def test_synchronous_retries_raising_unknown_error(self, logger):
         state = {'runs': 0}
 
-        @spoolable(retries=10, retry_on_errors=(CustomError,))  # noqa
-        def func(**kwargs):
+        @spoolable(retries=10, retry_on_errors=(CustomError,))
+        def func():
             state['runs'] += 1
             raise ValueError()
 
@@ -167,10 +174,10 @@ class SpoolableTestCase(unittest.TestCase):
         state = {'run': False}
 
         @spoolable()
-        def func(a, b, **kwargs):
+        def func(a, b, context: Context):
             self.assertEqual(a, 1)
             self.assertEqual(b, 2)
-            self.assertTrue(kwargs['spoolable_async'])
+            self.assertTrue(context.async)
             state['run'] = True
             return 321
 
@@ -191,13 +198,13 @@ class SpoolableTestCase(unittest.TestCase):
         state = {'runs': 0}
 
         @spoolable(pre_condition=True)
-        def async(**kwargs):
-            self.assertTrue(kwargs['spoolable_async'])
+        def async(context: Context):
+            self.assertTrue(context.async)
             state['runs'] += 1
 
         @spoolable(pre_condition=False)
-        def sync(**kwargs):
-            self.assertFalse(kwargs['spoolable_async'])
+        def sync(context: Context):
+            self.assertFalse(context.async)
             state['runs'] += 1
 
         async()
@@ -213,9 +220,9 @@ class SpoolableTestCase(unittest.TestCase):
         state = {'runs': 0}
 
         @spoolable(retries=2, retry_on_errors=(CustomError,))
-        def func(**kwargs):
-            self.assertTrue(kwargs['spoolable_async'])
-            self.assertEqual(kwargs['spoolable_retries'], 2 - state['runs'])
+        def func(context: Context):
+            self.assertTrue(context.async)
+            self.assertEqual(context.retries, 2 - state['runs'])
             state['runs'] += 1
             raise CustomError()
 

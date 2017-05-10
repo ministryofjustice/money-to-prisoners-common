@@ -22,7 +22,7 @@ else:
 
 @spoolable(retries=3, retry_on_errors=mail_errors)
 def send_email(to, text_template, subject, context=None,
-               html_template=None, from_address=None, **kwargs):
+               html_template=None, from_address=None):
     if not from_address:
         from_address = getattr(settings, 'MAILGUN_FROM_ADDRESS', '') or settings.DEFAULT_FROM_EMAIL
     if not isinstance(to, (list, tuple)):
