@@ -12,7 +12,7 @@ try:
 except ImportError:
     MailgunAPIError = None
 
-from mtp_common.spooling import spoolable
+from mtp_common.spooling import Context, spoolable
 
 if MailgunAPIError:
     mail_errors = (MailgunAPIError,)
@@ -20,11 +20,10 @@ else:
     mail_errors = (smtplib.SMTPException,)
 
 
-@spoolable(retries=3, retry_on_errors=mail_errors)
-def send_email(to, text_template, subject, context=None,
-               html_template=None, from_address=None):
-    if not from_address:
-        from_address = getattr(settings, 'MAILGUN_FROM_ADDRESS', '') or settings.DEFAULT_FROM_EMAIL
+@spoolable()
+def send_email(to, text_template, subject, context=None, html_template=None, from_address=None,
+               retry_attempts=2, spoolable_ctx: Context = None):
+    default_from_address = getattr(settings, 'MAILGUN_FROM_ADDRESS', '') or settings.DEFAULT_FROM_EMAIL
     if not isinstance(to, (list, tuple)):
         to = [to]
     template_context = {'static_url': urljoin(settings.SITE_URL, settings.STATIC_URL)}
@@ -35,7 +34,7 @@ def send_email(to, text_template, subject, context=None,
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_body.strip('\n'),
-        from_email=from_address,
+        from_email=from_address or default_from_address,
         to=to
     )
     if html_template:
@@ -57,4 +56,10 @@ def send_email(to, text_template, subject, context=None,
             ConsoleEmailBackend(fail_silently=False).write_message(email)
             return
 
-    email.send()
+    try:
+        email.send()
+    except mail_errors:
+        if not spoolable_ctx.async or retry_attempts <= 0:
+            raise
+        send_email(to, text_template, subject, context=context,
+                   html_template=html_template, from_address=from_address, retry_attempts=retry_attempts - 1)
