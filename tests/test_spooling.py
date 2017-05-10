@@ -10,10 +10,6 @@ from mtp_common.spooling import Context, Task, spoolable, spooler
 from tests.utils import SimpleTestCase
 
 
-class CustomError(Exception):
-    pass
-
-
 @unittest.skipIf(spooler.installed, 'Cannot test spoolable tasks under uWSGI')
 class SpoolableTestCase(unittest.TestCase):
     def setUp(self):
@@ -128,37 +124,10 @@ class SpoolableTestCase(unittest.TestCase):
         self.assertTrue(state['run'], 'spooler task did not run')
 
     @mock.patch('mtp_common.spooling.logger')
-    def test_synchronous_retries(self, logger):
+    def test_synchronous_raising_unknown_error(self, logger):
         state = {'runs': 0}
 
-        @spoolable(retries=2, retry_on_errors=(CustomError,))
-        def func():
-            state['runs'] += 1
-            raise CustomError()
-
-        func()
-        self.assertTrue(logger.exception.called)
-        self.assertEqual(state['runs'], 3)
-
-    @mock.patch('mtp_common.spooling.logger')
-    def test_synchronous_retries_retry_count(self, logger):
-        state = {'runs': 0}
-
-        @spoolable(retries=2, retry_on_errors=(CustomError,))
-        def func(context: Context):
-            self.assertEqual(context.retries, 2 - state['runs'])
-            state['runs'] += 1
-            raise CustomError()
-
-        func()
-        self.assertTrue(logger.exception.called)
-        self.assertEqual(state['runs'], 3)
-
-    @mock.patch('mtp_common.spooling.logger')
-    def test_synchronous_retries_raising_unknown_error(self, logger):
-        state = {'runs': 0}
-
-        @spoolable(retries=10, retry_on_errors=(CustomError,))
+        @spoolable()
         def func():
             state['runs'] += 1
             raise ValueError()
@@ -214,38 +183,6 @@ class SpoolableTestCase(unittest.TestCase):
         self.assertEqual(state['runs'], 2)
 
     @mock.patch.object(spooler, 'installed', True)
-    @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.spooling.uwsgi')
-    def test_asynchronous_retries(self, uwsgi, logger):
-        state = {'runs': 0}
-
-        @spoolable(retries=2, retry_on_errors=(CustomError,))
-        def func(context: Context):
-            self.assertTrue(context.async)
-            self.assertEqual(context.retries, 2 - state['runs'])
-            state['runs'] += 1
-            raise CustomError()
-
-        self.assertIsNone(func(), 'spooler tasks cannot return values')
-        self.assertEqual(state['runs'], 0)
-        self.assertTrue(uwsgi.spool.called)
-        # simulate spooler:
-        self.assertEqual(spooler({
-            spooler.identifier: b'func',
-            b'retries': b'2',
-        }), uwsgi.SPOOL_OK)
-        self.assertEqual(spooler({
-            spooler.identifier: b'func',
-            b'retries': b'1',
-        }), uwsgi.SPOOL_OK)
-        self.assertEqual(spooler({
-            spooler.identifier: b'func',
-            b'retries': b'0',
-        }), uwsgi.SPOOL_OK)
-        self.assertEqual(state['runs'], 3)
-        self.assertTrue(logger.exception.called)
-
-    @mock.patch.object(spooler, 'installed', True)
     @mock.patch.object(spooler, 'fallback')
     @mock.patch('mtp_common.spooling.uwsgi')
     def test_asynchronous_fallback(self, uwsgi, fallback):
@@ -288,7 +225,6 @@ class SendEmailTestCase(SimpleTestCase):
         email_kwargs = dict(context={'abc': '321'}, html_template='tpl.html')
         job = {
             spooler.identifier: b'send_email',
-            b'retries': b'3',
             b'args': pickle.dumps(email_args),
             b'kwargs': pickle.dumps(email_kwargs),
         }
@@ -305,3 +241,43 @@ class SendEmailTestCase(SimpleTestCase):
         self.assertEqual(email.subject, '890')
         self.assertEqual(email.body, 'abc-321')
         self.assertSequenceEqual(email.recipients(), ['test1@example.com'])
+
+    @override_settings(ENVIRONMENT='prod')
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.spoolable_tasks.EmailMultiAlternatives')
+    def test_synchronous_send_email_does_not_retry(self, mocked_email, logger):
+        from mtp_common.spoolable_tasks import mail_errors, send_email
+
+        mail_error = mail_errors[0]
+        state = {'calls': 0}
+
+        def mock_send_email():
+            state['calls'] += 1
+            raise mail_error
+
+        mocked_email().send = mock_send_email
+        with self.assertRaises(mail_error):
+            send_email('admin@mtp.local', 'dummy', 'email subject', retry_attempts=10)
+        self.assertEqual(state['calls'], 1)
+        self.assertTrue(logger.exception.called, True)
+
+    @override_settings(ENVIRONMENT='prod')
+    @mock.patch.object(spooler, 'installed', True)
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.spoolable_tasks.EmailMultiAlternatives')
+    @mock.patch('mtp_common.spooling.uwsgi')
+    def test_asynchronous_send_email_retries(self, uwsgi, mocked_email, logger):
+        from mtp_common.spoolable_tasks import mail_errors, send_email
+
+        mail_error = mail_errors[0]
+        state = {'calls': 0}
+
+        def mock_send_email():
+            state['calls'] += 1
+            raise mail_error
+
+        mocked_email().send = mock_send_email
+        uwsgi.spool = spooler.__call__
+        send_email('admin@mtp.local', 'dummy', 'email subject', retry_attempts=3)
+        self.assertEqual(state['calls'], 4)
+        self.assertTrue(logger.exception.called, True)
