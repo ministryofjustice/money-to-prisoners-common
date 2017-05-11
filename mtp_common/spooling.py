@@ -2,6 +2,8 @@ import inspect
 import logging
 import pickle
 
+from django.utils.module_loading import autodiscover_modules
+
 logger = logging.getLogger('mtp')
 
 try:
@@ -32,7 +34,7 @@ class Spooler:
     spooler_period = 30
 
     def __init__(self):
-        self.registry = {}
+        self._registry = {}
         self.installed = False
         self.fallback = None
 
@@ -45,11 +47,11 @@ class Spooler:
             return uwsgi.SPOOL_IGNORE
 
         task_name = env[self.identifier]
-        if task_name not in self.registry:
+        if task_name not in self._registry:
             logger.error('Spooler task `%s` not registered' % task_name)
             return uwsgi.SPOOL_IGNORE
 
-        task = self.registry[task_name]
+        task = self._registry[task_name]
 
         args, kwargs = (), {}
         try:
@@ -85,9 +87,9 @@ class Spooler:
             self.installed = True
 
     def register(self, task):
-        if task.name in self.registry:
+        if task.name in self._registry:
             logger.warning('%s is already registered as a spooler task' % task.name)
-        self.registry[task.name] = task
+        self._registry[task.name] = task
 
     def schedule(self, task, args, kwargs, **spool_kwargs):
         body = {}
@@ -147,8 +149,6 @@ def spoolable(*, pre_condition=True, body_params=()):
     Return values are always ignored and all exceptions are caught in spooled mode.
     :param pre_condition: additional condition needed to use spooler
     :param body_params: parameter names that can have large values and should use spooler body
-
-    NB: client apps should import `from mtp_common.spoolable_tasks import spoolable` to also register mtp-common tasks
     """
 
     def decorator(func):
@@ -170,3 +170,10 @@ def spoolable(*, pre_condition=True, body_params=()):
         return task
 
     return decorator
+
+
+def autodiscover_tasks():
+    """
+    Call this from the file imported by the uWSGI spooler
+    """
+    autodiscover_modules('tasks', register_to=spooler)
