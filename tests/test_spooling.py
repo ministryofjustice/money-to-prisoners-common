@@ -13,7 +13,7 @@ from tests.utils import SimpleTestCase
 @unittest.skipIf(spooler.installed, 'Cannot test spoolable tasks under uWSGI')
 class SpoolableTestCase(unittest.TestCase):
     def setUp(self):
-        spooler.registry = {}
+        spooler._registry = {}
 
     def test_context_argument(self):
         @spoolable()
@@ -106,8 +106,8 @@ class SpoolableTestCase(unittest.TestCase):
         def func2():
             pass
 
-        self.assertIn(b'func', spooler.registry)
-        self.assertIn(b'func2', spooler.registry)
+        self.assertIn(b'func', spooler._registry)
+        self.assertIn(b'func2', spooler._registry)
 
     def test_synchronous_run(self):
         state = {'run': False}
@@ -209,13 +209,13 @@ class SendEmailTestCase(SimpleTestCase):
     @mock.patch('tests.utils.get_template_source')
     @mock.patch('mtp_common.spooling.uwsgi')
     def test_asynchronous_send_email_task(self, uwsgi, get_template_source):
-        import mtp_common.spoolable_tasks
+        import mtp_common.tasks
 
-        if b'send_email' not in spooler.registry:
+        if b'send_email' not in spooler._registry:
             # other tests had already loaded the module and then cleared the registry
-            importlib.reload(mtp_common.spoolable_tasks)
+            importlib.reload(mtp_common.tasks)
 
-        self.assertIn(b'send_email', spooler.registry)
+        self.assertIn(b'send_email', spooler._registry)
 
         # template setup
         email_body = 'abc-{{ abc }}'
@@ -230,7 +230,7 @@ class SendEmailTestCase(SimpleTestCase):
         }
 
         # schedule call
-        self.assertIsNone(mtp_common.spoolable_tasks.send_email(*email_args, **email_kwargs))
+        self.assertIsNone(mtp_common.tasks.send_email(*email_args, **email_kwargs))
         self.assertEqual(len(mail.outbox), 0)
         uwsgi.spool.assert_called_with(job)
 
@@ -244,9 +244,9 @@ class SendEmailTestCase(SimpleTestCase):
 
     @override_settings(ENVIRONMENT='prod')
     @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.spoolable_tasks.EmailMultiAlternatives')
+    @mock.patch('mtp_common.tasks.EmailMultiAlternatives')
     def test_synchronous_send_email_does_not_retry(self, mocked_email, logger):
-        from mtp_common.spoolable_tasks import mail_errors, send_email
+        from mtp_common.tasks import mail_errors, send_email
 
         mail_error = mail_errors[0]
         state = {'calls': 0}
@@ -264,10 +264,10 @@ class SendEmailTestCase(SimpleTestCase):
     @override_settings(ENVIRONMENT='prod')
     @mock.patch.object(spooler, 'installed', True)
     @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.spoolable_tasks.EmailMultiAlternatives')
+    @mock.patch('mtp_common.tasks.EmailMultiAlternatives')
     @mock.patch('mtp_common.spooling.uwsgi')
     def test_asynchronous_send_email_retries(self, uwsgi, mocked_email, logger):
-        from mtp_common.spoolable_tasks import mail_errors, send_email
+        from mtp_common.tasks import mail_errors, send_email
 
         mail_error = mail_errors[0]
         state = {'calls': 0}
