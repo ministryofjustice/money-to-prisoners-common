@@ -116,7 +116,7 @@ class SpoolableTestCase(unittest.TestCase):
         def func(a, b, context: Context):
             self.assertEqual(a, 1)
             self.assertEqual(b, 2)
-            self.assertFalse(context.async)
+            self.assertFalse(context.spooled)
             state['run'] = True
             return 321
 
@@ -146,7 +146,7 @@ class SpoolableTestCase(unittest.TestCase):
         def func(a, b, context: Context):
             self.assertEqual(a, 1)
             self.assertEqual(b, 2)
-            self.assertTrue(context.async)
+            self.assertTrue(context.spooled)
             state['run'] = True
             return 321
 
@@ -168,12 +168,12 @@ class SpoolableTestCase(unittest.TestCase):
 
         @spoolable(pre_condition=True)
         def async(context: Context):
-            self.assertTrue(context.async)
+            self.assertTrue(context.spooled)
             state['runs'] += 1
 
         @spoolable(pre_condition=False)
         def sync(context: Context):
-            self.assertFalse(context.async)
+            self.assertFalse(context.spooled)
             state['runs'] += 1
 
         async()

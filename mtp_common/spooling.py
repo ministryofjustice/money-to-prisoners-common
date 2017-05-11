@@ -19,14 +19,14 @@ except ImportError:
 
 
 class Context:
-    __slots__ = ('async',)
+    __slots__ = ('spooled',)
 
-    def __init__(self, async):
+    def __init__(self, spooled):
         """
         Defines the context in which a spoolable task is running
-        :param async: whether it is running in the spooler asynchronously
+        :param spooled: whether it is running in the spooler asynchronously
         """
-        self.async = async
+        self.spooled = spooled
 
 
 class Spooler:
@@ -70,7 +70,7 @@ class Spooler:
 
         try:
             if task.context_name:
-                kwargs[task.context_name] = Context(async=True)
+                kwargs[task.context_name] = Context(spooled=True)
             task.func(*args, **kwargs)
         except:
             logger.exception('Spooler task %s failed with uncaught exception' % task.name)
@@ -134,7 +134,7 @@ class Task:
         # call synchronously
         try:
             if self.context_name:
-                kwargs[self.context_name] = Context(async=False)
+                kwargs[self.context_name] = Context(spooled=False)
             self.func(*args, **kwargs)
         except:
             logger.exception('Spooler task %s failed with uncaught exception' % self.name)
