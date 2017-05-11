@@ -59,7 +59,7 @@ def send_email(to, text_template, subject, context=None, html_template=None, fro
     try:
         email.send()
     except mail_errors:
-        if not spoolable_ctx.async or retry_attempts <= 0:
+        if not spoolable_ctx.spooled or not retry_attempts:
             raise
         send_email(to, text_template, subject, context=context,
                    html_template=html_template, from_address=from_address, retry_attempts=retry_attempts - 1)
