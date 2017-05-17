@@ -2,12 +2,13 @@
 
 .mtp-page-list {
   padding-left: 0;
+  text-align: center;
 
   li {
     display: inline;
 
     + li {
-      padding-left: .5em;
+      padding-left: 1em;
     }
   }
 
