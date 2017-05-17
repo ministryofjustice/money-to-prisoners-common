@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "checked-polyfill": "ministryofjustice/checked-polyfill#1.0.0",
-    "govuk-elements-sass": "~2.2.1",
+    "govuk-elements-sass": "~3.0",
     "jquery": "~1.11",
     "js-cookie": "~2.0.3",
     "node-sass": "^3.4.2",
