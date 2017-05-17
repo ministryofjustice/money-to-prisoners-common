@@ -15,6 +15,13 @@ register = template.Library()
 
 
 @register.filter
+def separate_thousands(value):
+    if not isinstance(value, int):
+        return value
+    return '{:,}'.format(value)
+
+
+@register.filter
 def to_string(value):
     return str(value)
 
@@ -89,7 +96,7 @@ def language_switch(context):
 
 
 @register.inclusion_tag('mtp_common/includes/page-list.html')
-def page_list(page, page_count, query_string=None, end_padding=2, page_padding=2):
+def page_list(page, page_count, query_string=None, end_padding=1, page_padding=2):
     if page_count < 7:
         pages_with_ellipses = range(1, page_count + 1)
     else:
