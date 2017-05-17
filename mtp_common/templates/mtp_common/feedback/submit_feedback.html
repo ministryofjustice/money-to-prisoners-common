@@ -23,13 +23,13 @@
       <legend class="visually-hidden">{% trans 'Feedback details' %}</legend>
 
       {% with field=form.ticket_content value=request.GET.message|default:'' %}
-        <div class="form-group {% if field.errors %}error{% endif %}">
+        <div class="form-group {% if field.errors %}form-group-error{% endif %}">
           {% include 'mtp_common/forms/field-label.html' with field=field only %}
           <p class="panel panel-border-wide">
             {% trans 'Please don’t include bank details or any other personal information.' %}
           </p>
           {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-          <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
+          <textarea class="form-control {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
         </div>
       {% endwith %}
 

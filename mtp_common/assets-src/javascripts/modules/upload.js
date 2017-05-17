@@ -17,7 +17,6 @@ exports.Upload = {
   cacheEls: function () {
     this.$form = $(this.selector);
     this.$fileChooser = $(this.selector + ' input[type=file]');
-    this.$submitButton = $(this.selector + ' input[type=submit]');
     this.$chooseButton = $(this.selector + ' .upload-choose');
     this.$uploadFilename = $(this.selector + ' .upload-filename');
     this.$formGroups = $(this.selector + ' .form-group');
@@ -34,7 +33,7 @@ exports.Upload = {
   switchToUpload: function () {
     var filePath = this.$fileChooser.val();
     var filename = filePath.replace(/^.*[\\\/]/, '');
-    this.$formGroups.removeClass('error');
+    this.$formGroups.removeClass('form-group-error');
     this.$errorMessages.remove();
     this.$uploadFilename.text(filename).show();
     this.$chooseButton.text('Change file');

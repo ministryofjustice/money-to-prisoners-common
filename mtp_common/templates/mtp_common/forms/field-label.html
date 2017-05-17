@@ -5,4 +5,5 @@
 
 <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
   {{ field.label }}
+  {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
 </label>

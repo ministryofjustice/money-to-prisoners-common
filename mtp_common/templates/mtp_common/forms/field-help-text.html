@@ -1,3 +1,3 @@
 {% if field.help_text %}
-  <div class="form-hint">{{ field.help_text }}</div>
+  <span id="{{ field.id_for_label }}-hint" class="form-hint">{{ field.help_text }}</span>
 {% endif %}
