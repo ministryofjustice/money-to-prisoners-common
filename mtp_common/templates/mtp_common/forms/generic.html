@@ -20,10 +20,10 @@
         {% endfor %}
 
         {% for field in form.visible_fields %}
-          <div class="form-group {% if field.errors %}error{% endif %}">
+          <div class="form-group {% if field.errors %}form-group-error{% endif %}">
             {% include 'mtp_common/forms/field-label.html' with field=field only %}
             {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-            {{ field|add_class:'form-control' }}  {# add class form-control #}
+            {{ field|add_class:'form-control'|add_error_class:'form-control-error' }}
           </div>
         {% endfor %}
 

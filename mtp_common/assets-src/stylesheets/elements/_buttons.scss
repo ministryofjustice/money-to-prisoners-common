@@ -2,7 +2,12 @@
 
 .button-secondary {
   @include button($grey-3);
-  color: #000 !important; // IE8 bug
+  color: #000 !important;  // IE8 bug, not $text-colour or $black since they're lighter
+}
+
+.button-footer {
+  @include button($govuk-blue);
+  color: $white !important;  // IE8 bug
 }
 
 .button + .button {
