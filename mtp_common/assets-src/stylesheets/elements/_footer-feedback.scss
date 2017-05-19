@@ -1,0 +1,34 @@
+.without-footer-padding #footer .footer-wrapper {
+  padding-top: 0;
+}
+
+.mtp-footer-feedback {
+  // undo govuk_template `#footer .footer-meta` setting `font-size: 0`
+  @include core-19;
+  float: left;
+
+  textarea {
+    max-width: 100%;
+
+    @include ie-lte(8) {
+      width: 100%;
+    }
+
+    @include media(mobile) {
+      width: 100%;
+    }
+  }
+
+  .form-group .form-hint {
+    margin-top: 1em;
+    margin-bottom: 0;
+  }
+}
+
+.mtp-footer-feedback__success {
+  color: $green;
+}
+
+.mtp-footer-feedback__error {
+  color: $error-colour;
+}

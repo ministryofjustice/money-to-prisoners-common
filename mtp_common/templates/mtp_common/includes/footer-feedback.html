@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load mtp_common %}
+
+<form action="{{ submit_url }}" method="post" class="mtp-footer-feedback" data-return-errors-param="{{ return_errors_param }}">
+  <div class="form-group {% if errors.ticket_content %}form-group-error{% endif %}">
+    {% random_string as input_id %}
+    <label for="ticket_content-{{ input_id }}" class="form-label">{{ label|default:_('How could we improve this page?') }}</label>
+    <textarea name="ticket_content" id="ticket_content-{{ input_id }}" class="form-control {% if errors.ticket_content %}form-control-error{% endif %}" rows="3" cols="100" required></textarea>
+    <p class="form-hint mtp-footer-feedback__success" style="display:none">{{ success_message|default:_('Thanks for your feedback') }}</p>
+    <p class="form-hint mtp-footer-feedback__error" style="display:none">{{ error_message|default:_('Sorry, your message could not be sent. Please try again later') }}</p>
+  </div>
+  <div class="form-group">
+    {% csrf_token %}
+    <input type="submit" value="{% trans 'Send' %}" class="button-footer">
+    <input type="hidden" name="contact_email" value="{{ request.user.email }}">
+    <input type="hidden" name="referer" value="{{ request.get_full_path }}">
+  </div>
+</form>
