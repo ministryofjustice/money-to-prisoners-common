@@ -19,6 +19,7 @@ install_requires = [
     'Django>=1.10,<1.11',
     'django-form-error-reporting>=0.6',
     'django-widget-tweaks>=1.4,<1.5',
+    'django-zendesk-tickets>=0.10',
     'pytz>=2016.7',
     'requests-oauthlib>=0.6,<0.7',
     'slumber>=0.7,<0.8',

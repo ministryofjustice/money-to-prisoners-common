@@ -1,6 +1,7 @@
 {% extends 'govuk_template/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load mtp_common %}
 
 {% block page_title %}{% trans 'Send money to a prisoner' %}{% endblock %}
 
@@ -29,6 +30,8 @@
     </script>
   {% endif %}
 {% endblock %}
+
+{% block body_classes %}{{ block.super }} {% if footer_feedback_context %}without-footer-padding{% endif %}{% endblock %}
 
 {% block cookie_message %}
   <p>
@@ -118,4 +121,10 @@
       All content is available under the <a href="{{ url }}" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
     {% endblocktrans %}
   </p>
+{% endblock %}
+
+{% block footer_support_links %}
+  {% if footer_feedback_context %}
+    {% footer_feedback_form request footer_feedback_context %}
+  {% endif %}
 {% endblock %}
