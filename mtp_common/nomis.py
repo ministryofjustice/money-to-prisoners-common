@@ -117,3 +117,15 @@ def get_photograph_data(prisoner_number, retries=0):
     )
     if result.get('image'):
         return result['image']
+
+
+def get_location(prisoner_number, retries=0):
+    result = get(
+        '/offenders/{prisoner_number}/location'.format(prisoner_number=prisoner_number),
+        retries=retries
+    )
+    if 'establishment' in result:
+        return {
+            'nomis_id': result['establishment']['code'],
+            'name': result['establishment']['desc'],
+        }
