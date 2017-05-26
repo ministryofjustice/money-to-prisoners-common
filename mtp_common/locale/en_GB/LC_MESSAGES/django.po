@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MTP common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-22 14:41+0000\n"
+"POT-Creation-Date: 2017-05-26 14:32+0100\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
@@ -14,8 +14,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: app.py:9 templates/mtp_common/auth/login.html:11
-#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:5
-#: templates/mtp_common/mtp_base.html:59
+#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
+#: templates/mtp_common/mtp_base.html:62
 msgid "Send money to a prisoner"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Username or email address"
 msgstr ""
 
-#: auth/views.py:21 user_admin/views.py:33
+#: auth/views.py:21 user_admin/views.py:23
 msgid "Home"
 msgstr ""
 
@@ -110,6 +110,10 @@ msgstr ""
 
 #: context_processors.py:39
 msgid "© Crown copyright"
+msgstr ""
+
+#: feedback/views.py:48 feedback/views.py:59
+msgid "Your feedback could not be sent, please try again later"
 msgstr ""
 
 #: forms/__init__.py:11
@@ -262,15 +266,15 @@ msgstr ""
 msgid "Feedback details"
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:28
+#: templates/mtp_common/feedback/submit_feedback.html:29
 msgid "Please don’t include bank details or any other personal information."
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:35
+#: templates/mtp_common/feedback/submit_feedback.html:36
 msgid "Do you want a reply?"
 msgstr ""
 
-#: templates/mtp_common/feedback/submit_feedback.html:36
+#: templates/mtp_common/feedback/submit_feedback.html:37
 msgid "Enter your email address if you’d like a reply. We won’t use it for anything else."
 msgstr ""
 
@@ -289,15 +293,32 @@ msgstr ""
 #: templates/mtp_common/forms/generic.html:33
 #: templates/mtp_common/user_admin/delete.html:23
 #: templates/mtp_common/user_admin/undelete.html:23
-#: templates/mtp_common/user_admin/update.html:86
+#: templates/mtp_common/user_admin/update.html:82
 msgid "Cancel"
 msgstr ""
 
-#: templates/mtp_common/includes/page-list.html:12
+#: templates/mtp_common/includes/footer-feedback.html:7
+msgid "How could we improve this page?"
+msgstr ""
+
+#: templates/mtp_common/includes/footer-feedback.html:9
+msgid "Thanks for your feedback"
+msgstr ""
+
+#: templates/mtp_common/includes/footer-feedback.html:10
+msgid "Sorry, your message could not be sent. Please try again later"
+msgstr ""
+
+#: templates/mtp_common/includes/footer-feedback.html:14
+msgid "Send"
+msgstr ""
+
+#: templates/mtp_common/includes/page-list.html:7
+#: templates/mtp_common/includes/page-list.html:15
 msgid "Page"
 msgstr ""
 
-#: templates/mtp_common/includes/page-list.html:23
+#: templates/mtp_common/includes/page-list.html:27
 #, python-format
 msgid "Page %(page)s of %(page_count)s."
 msgstr ""
@@ -306,32 +327,32 @@ msgstr ""
 msgid "Switch language"
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:35
+#: templates/mtp_common/mtp_base.html:38
 msgid "GOV.UK uses cookies to make the site simpler."
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:37
+#: templates/mtp_common/mtp_base.html:40
 msgid "Find out more about cookies"
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:56
+#: templates/mtp_common/mtp_base.html:59
 msgid "Menu"
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:72
+#: templates/mtp_common/mtp_base.html:75
 msgid "Beta"
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:78
+#: templates/mtp_common/mtp_base.html:81
 msgid "This is a new service."
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:79
+#: templates/mtp_common/mtp_base.html:82
 #, python-format
 msgid "If you have any comments or need help please <a href=\"%(ticket_url)s\">contact us</a>."
 msgstr ""
 
-#: templates/mtp_common/mtp_base.html:117
+#: templates/mtp_common/mtp_base.html:120
 #, python-format
 msgid "All content is available under the <a href=\"%(url)s\" rel=\"license\">Open Government Licence v3.0</a>, except where otherwise stated"
 msgstr ""
@@ -365,9 +386,8 @@ msgstr ""
 msgid "Your account is not correctly set up to manage other users."
 msgstr ""
 
-#: templates/mtp_common/user_admin/incompatible-admin.html:7
-#, python-format
-msgid "Please contact <a href=\"%(email_link)s\">%(email)s</a>."
+#: templates/mtp_common/user_admin/incompatible-admin.html:8
+msgid "Please contact us to request your account to be changed."
 msgstr ""
 
 #: templates/mtp_common/user_admin/incompatible-user.html:6
@@ -375,12 +395,11 @@ msgstr ""
 msgid "You cannot edit the user account for ‘%(target_username)s’."
 msgstr ""
 
-#: templates/mtp_common/user_admin/incompatible-user.html:11
-#, python-format
-msgid "Please contact <a href=\"%(email_link)s\">%(email)s</a> if you need to change it."
+#: templates/mtp_common/user_admin/incompatible-user.html:12
+msgid "Please contact us if you need to change it."
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:34
+#: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:24
 msgid "Manage user accounts"
 msgstr ""
 
@@ -485,15 +504,15 @@ msgstr ""
 msgid "You can give them a general user or an account management role."
 msgstr ""
 
-#: templates/mtp_common/user_admin/update.html:55
+#: templates/mtp_common/user_admin/update.html:53
 msgid "Give the user access to:"
 msgstr ""
 
-#: templates/mtp_common/user_admin/update.html:81
+#: templates/mtp_common/user_admin/update.html:77
 msgid "Create"
 msgstr ""
 
-#: templates/mtp_common/user_admin/update.html:83
+#: templates/mtp_common/user_admin/update.html:79
 msgid "Save"
 msgstr ""
 
@@ -517,12 +536,12 @@ msgstr ""
 msgid "Email: %(email)s"
 msgstr ""
 
-#: templates/mtp_common/user_admin/user-description.html:8
+#: templates/mtp_common/user_admin/user-description.html:9
 #, python-format
 msgid "Can manage other users: %(yes_or_no)s"
 msgstr ""
 
-#: templates/mtp_common/user_admin/user-description.html:10
+#: templates/mtp_common/user_admin/user-description.html:12
 #, python-format
 msgid "Can log in: %(yes_or_no)s"
 msgstr ""
@@ -551,45 +570,45 @@ msgstr ""
 msgid "Give access to manage other users"
 msgstr ""
 
-#: user_admin/views.py:90
+#: user_admin/views.py:76
 msgid "Disable user"
 msgstr ""
 
-#: user_admin/views.py:108
+#: user_admin/views.py:94
 msgid "This user could not be disabled"
 msgstr ""
 
-#: user_admin/views.py:124
+#: user_admin/views.py:110
 msgid "Enable user"
 msgstr ""
 
-#: user_admin/views.py:144 user_admin/views.py:177
+#: user_admin/views.py:130 user_admin/views.py:163
 msgid "This user could not be enabled"
 msgstr ""
 
-#: user_admin/views.py:173
+#: user_admin/views.py:159
 #, python-format
 msgid "Unlocked user ‘%(username)s’, they can now log in again"
 msgstr ""
 
-#: user_admin/views.py:182
+#: user_admin/views.py:168
 msgid "Edit user"
 msgstr ""
 
-#: user_admin/views.py:209
+#: user_admin/views.py:195
 msgid "Add user"
 msgstr ""
 
-#: user_admin/views.py:223
+#: user_admin/views.py:209
 #, python-format
 msgid "%(prison_list)s and %(prison)s"
 msgstr ""
 
-#: user_admin/views.py:229
+#: user_admin/views.py:215
 #, python-format
 msgid "The new user will be based at %(prison_list)s."
 msgstr ""
 
-#: user_admin/views.py:233
+#: user_admin/views.py:219
 msgid "The new user will not be based at a specific prison."
 msgstr ""
