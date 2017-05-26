@@ -54,8 +54,15 @@ exports.Print = {
     // trigger a render of this object to check if the cookie is set
     this.$body.trigger('Print.render');
 
+    // hide additional element
+    var $el = $(e.target);
+    var $toHide = $($el.data('do-not-print')).not('.print-hidden');
+    $toHide.addClass('print-hidden');
+
     try {
       window.print();
     } catch (e) {}  // eslint-disable-line
+
+    $toHide.removeClass('print-hidden');
   }
 };
