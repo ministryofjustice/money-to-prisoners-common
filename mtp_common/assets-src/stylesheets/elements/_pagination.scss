@@ -32,15 +32,11 @@ a.mtp-page-list__current-page {
 }
 
 // next/previous page links
+// largely taken from https://github.com/alphagov/static/blob/f2e91ac25c095f2510b850ae8350c95ec857b548/app/assets/stylesheets/govuk-component/_previous-and-next-navigation.scss
 
 .mtp-pagination {
-  border-bottom: 1px solid $border-colour;
   display: block;
-  margin: 2em 0 0;
-
-  @include media(mobile) {
-    margin: 2em 0 0;
-  }
+  margin: ($gutter) (-$gutter-half);
 
   ul {
     margin: 0;
@@ -48,110 +44,75 @@ a.mtp-page-list__current-page {
   }
 
   li {
+    @include core-16($line-height: (20 / 16));
     float: left;
-    font-family: 'nta', Arial, sans-serif;
-    font-size: 14px;
-    font-size-adjust: .5;
-    font-weight: 400;
-    line-height: 1.14286;
     list-style: none;
     margin: 0;
     padding: 0;
-    text-align: right;
-    text-transform: none;
-    width: 49%;
-
-    @include media(tablet) {
-      font-size: 16px;
-      line-height: 1.25;
-    }
+    width: 50%;
 
     a {
-      background-color: transparent;
-      color: $link-colour;
       display: block;
+      padding: $gutter-half;
       text-decoration: none;
 
-      &:hover,
-      &:active {
-        background-color: $highlight-colour;
+      &:visited {
+        color: $link-colour;
       }
-    }
 
-    &.next, &.previous {
-      a:before {
-        background: transparent file-url('../mtp_common/images/arrow-sprite.png') no-repeat;
-        content: ' ';
-        display: block;
-        height: 38px;
-        width: 30px;
-
-        @include device-pixel-ratio {
-          background-image: file-url('../mtp_common/images/arrow-sprite@2x.png');
-          background-size: 150px 60px;
-        }
-      }
-    }
-
-    &.next {
-      float: right;
-      text-align: right;
-
-      a {
-        padding: .75em 3em .75em 0;
-
-        &:before {
-          background-position: -102px -11px;
-          float: right;
-          margin: -4px -32px 0 0;
-
-        }
+      &:hover, &:active {
+        background-color: $canvas-colour;
       }
     }
 
     &.previous {
       float: left;
       text-align: left;
+    }
 
-      a {
-        padding: .75em 0 .75em 3em;
-
-        &:before {
-          background-position: -20px -11px;
-          float: left;
-          margin: -4px 0 0 -32px;
-        }
-      }
+    &.next {
+      float: right;
+      text-align: right;
     }
 
     @include media(mobile) {
-      &.previous,
-      &.next {
-        float: none;
-        width: 100%;
-      }
-
-      &.next a {
-        text-align: right;
-      }
+      float: none;
+      width: 100%;
     }
+
   }
 }
 
-.mtp-pagination__label {
-  display: block;
-  font-family: 'nta', Arial, sans-serif;
-  font-size: 20px;
-  font-size-adjust: .5;
-  font-weight: 400;
-  line-height: 1.11111;
-  margin-bottom: .1em;
-  text-transform: none;
+.previous .mtp-pagination__label:before, .next .mtp-pagination__label:after {
+  display: inline-block;
+  width: 17px;
+  height: 14px;
+  margin-bottom: 1px;
+  content: ' ';
+  background: transparent file-url('../mtp_common/images/pagination-sprite.png') no-repeat;
 
-  @include media(tablet) {
-    font-size: 27px;
-    line-height: 1.25;
+  @include device-pixel-ratio {
+    background-image: file-url('../mtp_common/images/pagination-sprite@2x.png');
+    background-size: 34px 14px;
   }
+
+  @include media(mobile) {
+    margin-bottom: 0;
+  }
+}
+
+.previous .mtp-pagination__label:before {
+  margin-right: 5px;
+}
+
+.next .mtp-pagination__label:after {
+  margin-left: 5px;
+  background-position: -17px;
+}
+
+.mtp-pagination__label {
+  @include core-27($line-height: (33.75 / 27));
+  display: block;
 }
 
 .mtp-pagination__part-title {
