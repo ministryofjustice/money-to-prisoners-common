@@ -56,10 +56,10 @@ link:
 
   <a href="#some-dialog" class="js-Dialog">Print</a>
 
-Help popup
-~~~~~~~~~~
+Disclosure box
+~~~~~~~~~~~~~~
 
-Does what `<details>` does in modern browsers but works in IE8 and also triggers analytics event when used.
+Does what `<details>` does in modern browsers but works in IE8.
 C.f. `progressive disclosure <http://govuk-elements.herokuapp.com/typography/#typography-hidden-text>`_
 
 .. image:: static/help-popup-closed.png
@@ -70,12 +70,11 @@ C.f. `progressive disclosure <http://govuk-elements.herokuapp.com/typography/#ty
 
 .. code-block:: html
 
-  <div class="help-box help-box-collapsed">
-    <div class="help-box-title" aria-controls="help-box-contents" aria-expanded="false" role="heading">
-      <div></div><a href="#">Which is right for me?</a>
-    </div>
-    <div class="panel panel-border-narrow help-box-contents" id="help-box-contents">
-      ...
+  <a class="mtp-disclosure" href="#" aria-controls="id-of-container" aria-expanded="false" role="button">
+    <span></span>Help
+  </a>
+  ...
+  <div id="id-of-container" class="mtp-disclosure__contents"></div>
 
 Check boxes
 -----------
