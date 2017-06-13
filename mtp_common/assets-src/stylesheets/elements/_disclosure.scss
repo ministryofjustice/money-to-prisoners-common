@@ -1,0 +1,25 @@
+.mtp-disclosure {
+  &, &:visited {
+    color: $link-colour;
+  }
+
+  span {
+    display: inline-block;
+    width: 22px;
+    height: 14px;
+    background: file-url('../mtp_common/images/help-arrows.png') no-repeat -28px;
+
+    @include device-pixel-ratio {
+      background-image: file-url('../mtp_common/images/help-arrows@2x.png');
+      background-size: 42px 14px;
+    }
+  }
+}
+
+.mtp-disclosure--expanded span {
+  background-position: 0;
+}
+
+.mtp-disclosure__contents {
+  display: none;
+}
