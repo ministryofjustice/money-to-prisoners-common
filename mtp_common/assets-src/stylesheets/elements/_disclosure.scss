@@ -14,10 +14,26 @@
       background-size: 42px 14px;
     }
   }
+
+  @media print {
+    display: none;
+  }
 }
 
-.mtp-disclosure--expanded span {
-  background-position: 0;
+.mtp-disclosure--expanded {
+  span {
+    background-position: 0;
+  }
+
+  @media print {
+    display: block;
+    color: $text-colour;
+    text-decoration: none;
+
+    span {
+      display: none;
+    }
+  }
 }
 
 .mtp-disclosure__contents {
