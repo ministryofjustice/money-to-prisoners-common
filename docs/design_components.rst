@@ -139,28 +139,43 @@ as it doesn't flush the page links to the right. This was found to be an accessi
 users with screen magnifiers, who don't scroll horizontally much and often miss
 links that are on the right hand side of a page.
 
+.. image:: static/page-list.png
+  :align: center
+
+.. code-block:: html
+
+  <ul class="mtp-page-list">
+    <li>Page</li>
+    <li><a href="..." class="mtp-page-list__current-page"><span>1</span></a></li>
+    <li><a href="..."><span class="visually-hidden">Page </span><span>2</span></a></li>
+  </ul>
+  <p class="mtp-page-list__description">Page 1 of 2.</p>
+
+Another pagination method is implemented (absent in toolkits provided by GOV.UK) following the style of previous/next
+buttons seen in sub-pages of
+`Staying in touch with someone in prison <https://www.gov.uk/staying-in-touch-with-someone-in-prison>`_
+
 .. image:: static/pagination.png
   :align: center
 
 .. code-block:: html
 
-  <ul class="Pagination print-hidden">
-    <li>
-      <a href="?page=1" class="Pagination-current-page">
-        <span class="screenreader-only">Page </span><span>1</span>
-      </a>
-    </li>
-    <li>
-      <a href="?page=2">
-        <span class="screenreader-only">Page </span><span>2</span>
-      </a>
-    </li>
-    <li>
-      <a href="?page=3">
-        <span class="screenreader-only">Page </span><span>3</span>
-      </a>
-    </li>
-    ...
+  <nav class="mtp-pagination" role="navigation" aria-label="Pagination">
+    <ul class="group">
+      <li class="previous">
+        <a title="Navigate to previous page" rel="prev" href="...">
+          <span class="mtp-pagination__label">Previous</span>
+          <span class="mtp-pagination__part-title">Page title...</span>
+        </a>
+      </li>
+      <li class="next">
+        <a title="Navigate to next page" rel="next" href="...">
+          <span class="mtp-pagination__label">Next</span>
+          <span class="mtp-pagination__part-title">Page title...</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
 Sticky header
 -------------
