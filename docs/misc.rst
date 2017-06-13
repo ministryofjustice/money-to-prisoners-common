@@ -4,7 +4,7 @@ Miscellaneous
 .. automodule:: mtp_common.views
    :members:
 
-.. automodule:: mtp_common.email
+.. automodule:: mtp_common.spooling
    :members:
 
 .. automodule:: mtp_common.screenshots
