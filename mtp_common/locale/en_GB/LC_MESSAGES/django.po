@@ -1,9 +1,10 @@
-# MTP common
+# Send money to a prisoner
+# Copyright (C) Crown copyright (Ministry of Justice)
 msgid ""
 msgstr ""
-"Project-Id-Version: MTP common\n"
+"Project-Id-Version: mtp-common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-26 14:32+0100\n"
+"POT-Creation-Date: 2017-06-21 14:25+0100\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
