@@ -2,10 +2,11 @@
 # Copyright (C) Crown copyright (Ministry of Justice)
 msgid ""
 msgstr ""
-"Project-Id-Version: mtp-common\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-21 14:25+0100\n"
+"POT-Creation-Date: 2017-06-27 18:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2017\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
 "Language: cy\n"
 "MIME-Version: 1.0\n"
@@ -17,199 +18,199 @@ msgstr ""
 #: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
 #: templates/mtp_common/mtp_base.html:62
 msgid "Send money to a prisoner"
-msgstr ""
+msgstr "Anfon arian at garcharor"
 
 #: auth/csrf.py:27 auth/csrf.py:30 auth/csrf.py:35
 msgid "Please try again."
-msgstr ""
+msgstr "Rhowch gynnig arall arni."
 
 #: auth/csrf.py:28
 msgid "Make sure you haven’t disabled cookies."
-msgstr ""
+msgstr "Gwnewch yn siŵr nad ydych wedi analluogi cwcis."
 
 #: auth/csrf.py:31
 msgid "Make sure you are using a modern web browser such as Firefox or Google Chrome."
-msgstr ""
+msgstr "Gwnewch yn siŵr eich bod yn defnyddio porwr gwe modern megis Firefox neu Google Chrome."
 
 #: auth/csrf.py:34
 msgid "Your browser failed a security check."
-msgstr ""
+msgstr "Mi wnaeth eich porwr fethu gwiriad diogelwch."
 
 #: auth/forms.py:21 templates/mtp_common/user_admin/list.html:39
 #: user_admin/forms.py:16
 msgid "Username"
-msgstr ""
+msgstr "Enw defnyddiwr"
 
 #: auth/forms.py:22
 msgid "Password"
-msgstr ""
+msgstr "Cyfrinair"
 
 #: auth/forms.py:25
 msgid "You’ve entered an incorrect username and/or password"
-msgstr ""
+msgstr "Rydych wedi nodi enw defnyddiwr a/neu gyfrinair anghywir"
 
 #: auth/forms.py:26
 msgid "You don’t have access to this application"
-msgstr ""
+msgstr "Nid oes gennych fynediad i'r adnodd hwn"
 
 #: auth/forms.py:27 auth/forms.py:79 auth/forms.py:125 user_admin/forms.py:27
 msgid "This service is currently unavailable"
-msgstr ""
+msgstr "Nid yw'r gwasanaeth hwn ar gael ar hyn o bryd"
 
 #: auth/forms.py:78
 msgid "You’ve entered different passwords"
-msgstr ""
+msgstr "Rydych wedi nodi cyfrineiriau gwahanol"
 
 #: auth/forms.py:81
 msgid "Old password"
-msgstr ""
+msgstr "Hen gyfrinair"
 
 #: auth/forms.py:83
 msgid "New password"
-msgstr ""
+msgstr "Cyfrinair newydd"
 
 #: auth/forms.py:85
 msgid "New password confirmation"
-msgstr ""
+msgstr "Cadarnhau eich cyfrinair newydd"
 
 #: auth/forms.py:127
 msgid "Username or email address"
-msgstr ""
+msgstr "Enw defnyddiwr neu gyfeiriad e-bost"
 
 #: auth/views.py:21 user_admin/views.py:23
 msgid "Home"
-msgstr ""
+msgstr "Cartref"
 
 #: auth/views.py:106
 msgid "Logged out"
-msgstr ""
+msgstr "Rydych wedi allgofnodi"
 
 #: auth/views.py:140 auth/views.py:154
 msgid "Change password"
-msgstr ""
+msgstr "Newid cyfrinair"
 
 #: auth/views.py:183 auth/views.py:198
 msgid "Reset password"
-msgstr ""
+msgstr "Ailosod cyfrinair"
 
 #: context_processors.py:24
 msgid "Go to the Ministry of Justice homepage"
-msgstr ""
+msgstr "Ewch i dudalen gartref y Weinyddiaeth Cyfiawnder"
 
 #: context_processors.py:25
 msgid "Ministry of Justice"
-msgstr ""
+msgstr "Y Weinyddiaeth Cyfiawnder"
 
 #: context_processors.py:28
 msgid "Go to the GOV.UK homepage"
-msgstr ""
+msgstr "Ewch i dudalen gartref GOV.UK"
 
 #: context_processors.py:35
 msgid "Skip to main content"
-msgstr ""
+msgstr "Neidio i'r prif gynnwys"
 
 #: context_processors.py:39
 msgid "© Crown copyright"
-msgstr ""
+msgstr "© Hawlfraint y Goron"
 
 #: feedback/views.py:48 feedback/views.py:59
 msgid "Your feedback could not be sent, please try again later"
-msgstr ""
+msgstr "Nid oedd yn bosib anfon eich adborth, rhowch gynnig arall arni hwyrach ymlaen"
 
 #: forms/__init__.py:11
 msgid "This field is required"
-msgstr ""
+msgstr "Rhaid llenwi’r maes hwn"
 
 #: forms/__init__.py:12
 msgid "You’ve entered too few characters"
-msgstr ""
+msgstr "Nid ydych wedi nodi digon o nodau"
 
 #: forms/__init__.py:13
 msgid "You’ve entered too many characters"
-msgstr ""
+msgstr "Rydych wedi nodi gormod o nodau"
 
 #: forms/__init__.py:14
 msgid "Enter a whole number"
-msgstr ""
+msgstr "Nodwch gyfanrif"
 
 #: forms/__init__.py:15 forms/__init__.py:16
 msgid "Enter a number"
-msgstr ""
+msgstr "Nodwch rif"
 
 #: forms/__init__.py:17 forms/__init__.py:25 forms/fields.py:69
 msgid "Enter a valid date"
-msgstr ""
+msgstr "Nodwch ddyddiad dilys"
 
 #: forms/__init__.py:18 forms/__init__.py:26
 msgid "Enter a valid time"
-msgstr ""
+msgstr "Nodwch amser dilys"
 
 #: forms/__init__.py:19
 msgid "Enter a valid date and time"
-msgstr ""
+msgstr "Nodwch ddyddiad ac amser dilys"
 
 #: forms/__init__.py:21 forms/__init__.py:22
 msgid "No file was submitted"
-msgstr ""
+msgstr "Ni anfonwyd ffeil"
 
 #: forms/__init__.py:23
 msgid "The submitted file is empty"
-msgstr ""
+msgstr "Mae'r ffeil a anfonwyd yn wag"
 
 #: forms/__init__.py:27
 msgid "Enter a valid email address"
-msgstr ""
+msgstr "Nodwch gyfeiriad e-bost dilys"
 
 #: forms/fields.py:42
 #, python-format
 msgid "‘Year’ should be between 1900 and %(current_year)s"
-msgstr ""
+msgstr "Dylai ‘Blwyddyn’ fod rhwng 1900 ac %(current_year)s"
 
 #: forms/fields.py:49
 msgid "Enter ‘year’ as a number"
-msgstr ""
+msgstr "Nodwch ‘blwyddyn’ fel rhif"
 
 #: forms/fields.py:73
 msgid "‘Day’ should be between 1 and 31"
-msgstr ""
+msgstr "Dylai 'Diwrnod' fod rhwng 1 ac 31"
 
 #: forms/fields.py:74
 msgid "‘Month’ should be between 1 and 12"
-msgstr ""
+msgstr "Dylai 'Mis' fod rhwng 1 a 12"
 
 #: forms/fields.py:80
 msgid "Enter ‘day’ as a number"
-msgstr ""
+msgstr "Nodwch 'diwrnod' fel rhif"
 
 #: forms/fields.py:85
 msgid "Enter ‘month’ as a number"
-msgstr ""
+msgstr "Nodwch 'mis' fel rhif"
 
 #: templates/mtp_common/auth/login.html:13
 #: templates/mtp_common/auth/login.html:35
 msgid "Sign in"
-msgstr ""
+msgstr "Mewngofnodi"
 
 #: templates/mtp_common/auth/login.html:42
 msgid "Forgotten your password?"
-msgstr ""
+msgstr "Wedi anghofio eich cyfrinair?"
 
 #: templates/mtp_common/auth/password_change.html:5
 msgid "Change your password"
-msgstr ""
+msgstr "Newid eich cyfrinair"
 
 #: templates/mtp_common/auth/password_change.html:6
 #: templates/mtp_common/auth/reset-password.html:6
 msgid "Submit"
-msgstr ""
+msgstr "Anfon"
 
 #: templates/mtp_common/auth/password_change_done.html:5
 msgid "Password change successful"
-msgstr ""
+msgstr "Rydych wedi llwyddo i newid eich cyfrinair"
 
 #: templates/mtp_common/auth/password_change_done.html:9
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Mae eich cyfrinair wedi cael ei newid."
 
 #: templates/mtp_common/auth/password_change_done.html:10
 #: templates/mtp_common/auth/reset-password-done.html:12
@@ -217,398 +218,398 @@ msgstr ""
 #: templates/mtp_common/errors/404.html:12
 #: templates/mtp_common/errors/500.html:14
 msgid "Return to the home page"
-msgstr ""
+msgstr "Dychwelyd i'r dudalen gartref"
 
 #: templates/mtp_common/auth/reset-password-done.html:5
 msgid "Your password was reset successfully"
-msgstr ""
+msgstr "Cafodd eich cyfrinair ei ailosod yn llwyddiannus"
 
 #: templates/mtp_common/auth/reset-password-done.html:10
 msgid "You will get an email with your new password."
-msgstr ""
+msgstr "Fe gewch e-bost gyda'ch cyfrinair newydd."
 
 #: templates/mtp_common/auth/reset-password.html:5
 msgid "Reset your password"
-msgstr ""
+msgstr "Ailosod eich cyfrinair"
 
 #: templates/mtp_common/errors/400.html:7
 #: templates/mtp_common/errors/500.html:7
 msgid "Sorry, something went wrong"
-msgstr ""
+msgstr "Mae'n ddrwg iawn gennym, aeth rhywbeth o'i le"
 
 #: templates/mtp_common/errors/400.html:12
 msgid "There was a problem with your request."
-msgstr ""
+msgstr "Roedd yna broblem gyda'ch cais."
 
 #: templates/mtp_common/errors/404.html:5
 msgid "Page not found"
-msgstr ""
+msgstr "Ni ellir dod o hyd i’r dudalen"
 
 #: templates/mtp_common/errors/404.html:10
 msgid "If you entered a web address please check it was correct."
-msgstr ""
+msgstr "Os gwnaethoch nodi gyfeiriad gwefan yna gwiriwch ei fod yn gywir."
 
 #: templates/mtp_common/errors/500.html:12
 msgid "Please try again later."
-msgstr ""
+msgstr "Rhowch gynnig arall arni hwyrach ymlaen."
 
 #: templates/mtp_common/feedback/submit_feedback.html:7
 #: templates/mtp_common/feedback/success.html:12
 msgid "Back"
-msgstr ""
+msgstr "Yn ôl"
 
 #: templates/mtp_common/feedback/submit_feedback.html:12
 #: templates/mtp_common/feedback/success.html:5
 msgid "Your feedback"
-msgstr ""
+msgstr "Eich adborth"
 
 #: templates/mtp_common/feedback/submit_feedback.html:23
 msgid "Feedback details"
-msgstr ""
+msgstr "Manylion yr adborth"
 
 #: templates/mtp_common/feedback/submit_feedback.html:29
 msgid "Please don’t include bank details or any other personal information."
-msgstr ""
+msgstr "Peidiwch â chynnwys manylion banc nac unrhyw wybodaeth bersonol arall."
 
 #: templates/mtp_common/feedback/submit_feedback.html:36
 msgid "Do you want a reply?"
-msgstr ""
+msgstr "Ydych chi eisiau ateb?"
 
 #: templates/mtp_common/feedback/submit_feedback.html:37
 msgid "Enter your email address if you’d like a reply. We won’t use it for anything else."
-msgstr ""
+msgstr "Nodwch eich cyfeiriad e-bost os hoffech i ni eich ateb. Ni fyddwn yn ei ddefnyddio ar gyfer unrhyw beth arall."
 
 #: templates/mtp_common/feedback/submit_feedback.html:41
 msgid "Send feedback"
-msgstr ""
+msgstr "Anfon adborth"
 
 #: templates/mtp_common/feedback/success.html:10
 msgid "Thank you for submitting feedback about the service."
-msgstr ""
+msgstr "Diolch yn fawr i chi am roi adborth am y gwasanaeth."
 
 #: templates/mtp_common/forms/error-summary.html:12
 msgid "There was a problem"
-msgstr ""
+msgstr "Roedd yna broblem"
 
 #: templates/mtp_common/forms/generic.html:33
 #: templates/mtp_common/user_admin/delete.html:23
 #: templates/mtp_common/user_admin/undelete.html:23
 #: templates/mtp_common/user_admin/update.html:82
 msgid "Cancel"
-msgstr ""
+msgstr "Canslo"
 
 #: templates/mtp_common/includes/footer-feedback.html:7
 msgid "How could we improve this page?"
-msgstr ""
+msgstr "Sut allwn ni wella'r dudalen hon?"
 
 #: templates/mtp_common/includes/footer-feedback.html:9
 msgid "Thanks for your feedback"
-msgstr ""
+msgstr "Diolch am eich adborth"
 
 #: templates/mtp_common/includes/footer-feedback.html:10
 msgid "Sorry, your message could not be sent. Please try again later"
-msgstr ""
+msgstr "Mae'n ddrwg gennym, nid oedd yn bosib anfon eich neges. Rhowch gynnig arall arni hwyrach ymlaen."
 
 #: templates/mtp_common/includes/footer-feedback.html:14
 msgid "Send"
-msgstr ""
+msgstr "Anfon"
 
 #: templates/mtp_common/includes/page-list.html:7
 #: templates/mtp_common/includes/page-list.html:15
 msgid "Page"
-msgstr ""
+msgstr "Tudalen"
 
 #: templates/mtp_common/includes/page-list.html:27
 #, python-format
 msgid "Page %(page)s of %(page_count)s."
-msgstr ""
+msgstr "Tudalen %(page)s o %(page_count)s."
 
 #: templates/mtp_common/language-switch.html:7
 msgid "Switch language"
-msgstr ""
+msgstr "Newid iaith"
 
 #: templates/mtp_common/mtp_base.html:38
 msgid "GOV.UK uses cookies to make the site simpler."
-msgstr ""
+msgstr "Mae GOV.UK yn defnyddio cwcis i wneud y safle’n symlach."
 
 #: templates/mtp_common/mtp_base.html:40
 msgid "Find out more about cookies"
-msgstr ""
+msgstr "Mwy o wybodaeth am cwcis"
 
 #: templates/mtp_common/mtp_base.html:59
 msgid "Menu"
-msgstr ""
+msgstr "Dewislen"
 
 #: templates/mtp_common/mtp_base.html:75
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #: templates/mtp_common/mtp_base.html:81
 msgid "This is a new service."
-msgstr ""
+msgstr "Mae hwn yn wasanaeth newydd."
 
 #: templates/mtp_common/mtp_base.html:82
 #, python-format
 msgid "If you have any comments or need help please <a href=\"%(ticket_url)s\">contact us</a>."
-msgstr ""
+msgstr "Os os gennych unrhyw sylwadau neu angen cymorth plîs <a href=\"%(ticket_url)s\">cysylltwch â ni</a>."
 
 #: templates/mtp_common/mtp_base.html:120
 #, python-format
 msgid "All content is available under the <a href=\"%(url)s\" rel=\"license\">Open Government Licence v3.0</a>, except where otherwise stated"
-msgstr ""
+msgstr "Mae'r holl gynnwys ar gael dan delerau'r <a href=\"%(url)s\" rel=\"license\">Drwydded Llywodraeth Agored f3.0</a>, heblaw lle nodir yn wahanol"
 
 #: templates/mtp_common/user_admin/delete.html:9
 #, python-format
 msgid "Disable user account ‘%(username)s’"
-msgstr ""
+msgstr "Analluogi cyfrif defnyddiwr ‘%(username)s’"
 
 #: templates/mtp_common/user_admin/delete.html:17
 #: templates/mtp_common/user_admin/list.html:23
 msgid "When you disable a user account, that user will be unable to log in."
-msgstr ""
+msgstr "Pan fyddwch yn analluogi cyfrif defnyddiwr, ni fydd y defnyddiwr hwnnw yn gallu mewngofnodi."
 
 #: templates/mtp_common/user_admin/delete.html:22
 msgid "Disable user account"
-msgstr ""
+msgstr "Analluogi cyfrif defnyddiwr"
 
 #: templates/mtp_common/user_admin/deleted.html:6
 #, python-format
 msgid "User account ‘%(username)s’ disabled"
-msgstr ""
+msgstr "Cyfrif defnyddiwr ‘%(username)s’ wedi'i analluogi"
 
 #: templates/mtp_common/user_admin/deleted.html:9
 #: templates/mtp_common/user_admin/saved.html:22
 #: templates/mtp_common/user_admin/undeleted.html:9
 msgid "Return to user management"
-msgstr ""
+msgstr "Dychwelyd i reoli cyfrif"
 
 #: templates/mtp_common/user_admin/incompatible-admin.html:5
 msgid "Your account is not correctly set up to manage other users."
-msgstr ""
+msgstr "Nid yw eich cyfrif wedi cael ei baratoi yn iawn i reoli defnyddwyr eraill."
 
 #: templates/mtp_common/user_admin/incompatible-admin.html:8
 msgid "Please contact us to request your account to be changed."
-msgstr ""
+msgstr "Cysylltwch â ni i ofyn i'ch cyfrif gael ei newid."
 
 #: templates/mtp_common/user_admin/incompatible-user.html:6
 #, python-format
 msgid "You cannot edit the user account for ‘%(target_username)s’."
-msgstr ""
+msgstr "Ni allwch olygu cyfrif defnyddiwr ‘%(target_username)s’."
 
 #: templates/mtp_common/user_admin/incompatible-user.html:12
 msgid "Please contact us if you need to change it."
-msgstr ""
+msgstr "Cysylltwch â ni os ydych angen ei newid."
 
 #: templates/mtp_common/user_admin/list.html:8 user_admin/views.py:24
 msgid "Manage user accounts"
-msgstr ""
+msgstr "Rheoli cyfrifon defnyddwyr"
 
 #: templates/mtp_common/user_admin/list.html:22
 msgid "Add, view, edit or disable user accounts."
-msgstr ""
+msgstr "Ychwanegu, edrych ar, golygu neu analluogi cyfrifon defnyddwyr."
 
 #: templates/mtp_common/user_admin/list.html:27
 msgid "If a user enters a wrong password too many times, they are locked out for a short period."
-msgstr ""
+msgstr "Os bydd defnyddiwr yn nodi cyfrinair anghywir nifer o weithiau, byddant yn cael eu cloi allan am gyfnod byr."
 
 #: templates/mtp_common/user_admin/list.html:28
 msgid "You can allow them to log in now by clicking ‘Unlock’."
-msgstr ""
+msgstr "Gallwch ganiatáu iddynt fewngofnodi nawr drwy glicio ar 'Datgloi'."
 
 #: templates/mtp_common/user_admin/list.html:33
 msgid "Add a new user"
-msgstr ""
+msgstr "Ychwanegu defnyddiwr newydd"
 
 #: templates/mtp_common/user_admin/list.html:40
 msgid "Name"
-msgstr ""
+msgstr "Enw"
 
 #: templates/mtp_common/user_admin/list.html:41 user_admin/forms.py:20
 msgid "Email"
-msgstr ""
+msgstr "E-bost"
 
 #: templates/mtp_common/user_admin/list.html:42
 msgid "Can manage accounts"
-msgstr ""
+msgstr "Gallu rheoli cyfrifon"
 
 #: templates/mtp_common/user_admin/list.html:43
 msgid "Actions"
-msgstr ""
+msgstr "Camau gweithredu"
 
 #: templates/mtp_common/user_admin/list.html:56
 msgid "User can manage other accounts"
-msgstr ""
+msgstr "Gall y defnyddiwr reoli cyfrifon eraill"
 
 #: templates/mtp_common/user_admin/list.html:61
 msgid "Edit"
-msgstr ""
+msgstr "Golygu"
 
 #: templates/mtp_common/user_admin/list.html:66
 msgid "Enable"
-msgstr ""
+msgstr "Galluogi"
 
 #: templates/mtp_common/user_admin/list.html:70
 msgid "Unlock"
-msgstr ""
+msgstr "Datgloi"
 
 #: templates/mtp_common/user_admin/list.html:74
 msgid "Disable"
-msgstr ""
+msgstr "Analluogi"
 
 #: templates/mtp_common/user_admin/saved.html:8
 #, python-format
 msgid "User account ‘%(username)s’ created"
-msgstr ""
+msgstr "Cyfrif defnyddiwr ‘%(username)s’ wedi'i greu"
 
 #: templates/mtp_common/user_admin/saved.html:12
 #, python-format
 msgid "User account ‘%(username)s’ edited"
-msgstr ""
+msgstr "Cyfrif defnyddiwr ‘%(username)s’ wedi'i olygu"
 
 #: templates/mtp_common/user_admin/saved.html:21
 msgid "Edit this user account"
-msgstr ""
+msgstr "Golygu'r cyfrif defnyddiwr hwn"
 
 #: templates/mtp_common/user_admin/undelete.html:9
 #, python-format
 msgid "Enable user account ‘%(username)s’"
-msgstr ""
+msgstr "Galluogi cyfrif defnyddiwr ‘%(username)s’"
 
 #: templates/mtp_common/user_admin/undelete.html:17
 msgid "When you enable a user account, that user will be able to log in again."
-msgstr ""
+msgstr "Pan fyddwch yn galluogi cyfrif defnyddiwr, bydd y defnyddiwr hwnnw yn gallu mewngofnodi eto."
 
 #: templates/mtp_common/user_admin/undelete.html:22
 msgid "Enable user account"
-msgstr ""
+msgstr "Galluogi cyfrif defnyddiwr"
 
 #: templates/mtp_common/user_admin/undeleted.html:6
 #, python-format
 msgid "User account ‘%(username)s’ enabled"
-msgstr ""
+msgstr "Cyfrif defnyddiwr ‘%(username)s’ wedi'i alluogi"
 
 #: templates/mtp_common/user_admin/update.html:10
 msgid "Create a new user"
-msgstr ""
+msgstr "Creu defnyddiwr newydd"
 
 #: templates/mtp_common/user_admin/update.html:12
 #, python-format
 msgid "Edit user ‘%(username)s’"
-msgstr ""
+msgstr "Golygu defnyddiwr ‘%(username)s’"
 
 #: templates/mtp_common/user_admin/update.html:23
 msgid "Fill in a user’s details to allow them access."
-msgstr ""
+msgstr "Llenwi manylion defnyddiwr er mwyn iddynt gael mynediad"
 
 #: templates/mtp_common/user_admin/update.html:24
 msgid "You can give them a general user or an account management role."
-msgstr ""
+msgstr "Gallwch roi rôl defnyddiwr cyffredinol iddynt neu rôl rheoli cyfrif."
 
 #: templates/mtp_common/user_admin/update.html:53
 msgid "Give the user access to:"
-msgstr ""
+msgstr "Rhoi mynediad i'r defnyddiwr i:"
 
 #: templates/mtp_common/user_admin/update.html:77
 msgid "Create"
-msgstr ""
+msgstr "Creu"
 
 #: templates/mtp_common/user_admin/update.html:79
 msgid "Save"
-msgstr ""
+msgstr "Cadw"
 
 #: templates/mtp_common/user_admin/user-description.html:4
 #, python-format
 msgid "Username: %(username)s"
-msgstr ""
+msgstr "Enw defnyddiwr: %(username)s"
 
 #: templates/mtp_common/user_admin/user-description.html:5
 #, python-format
 msgid "First name: %(first_name)s"
-msgstr ""
+msgstr "Enw cyntaf: %(first_name)s"
 
 #: templates/mtp_common/user_admin/user-description.html:6
 #, python-format
 msgid "Last name: %(last_name)s"
-msgstr ""
+msgstr "Cyfenw: %(last_name)s"
 
 #: templates/mtp_common/user_admin/user-description.html:7
 #, python-format
 msgid "Email: %(email)s"
-msgstr ""
+msgstr "E-bost: %(email)s"
 
 #: templates/mtp_common/user_admin/user-description.html:9
 #, python-format
 msgid "Can manage other users: %(yes_or_no)s"
-msgstr ""
+msgstr "Gallu rheoli defnyddwyr eraill: %(yes_or_no)s"
 
 #: templates/mtp_common/user_admin/user-description.html:12
 #, python-format
 msgid "Can log in: %(yes_or_no)s"
-msgstr ""
+msgstr "Gallu mewngofnodi: %(yes_or_no)s"
 
 #: user_admin/forms.py:17
 msgid "Enter the user’s Quantum ID"
-msgstr ""
+msgstr "Nodwch Quantum ID y defnyddiwr"
 
 #: user_admin/forms.py:18
 msgid "First name"
-msgstr ""
+msgstr "Enw cyntaf"
 
 #: user_admin/forms.py:19
 msgid "Last name"
-msgstr ""
+msgstr "Cyfenw"
 
 #: user_admin/forms.py:21
 msgid "Role"
-msgstr ""
+msgstr "Rôl"
 
 #: user_admin/forms.py:22
 msgid "Please choose user’s role"
-msgstr ""
+msgstr "Dewiswch rôl i'r defnyddiwr"
 
 #: user_admin/forms.py:24
 msgid "Give access to manage other users"
-msgstr ""
+msgstr "Rhowch fynediad i reoli defnyddwyr eraill"
 
 #: user_admin/views.py:76
 msgid "Disable user"
-msgstr ""
+msgstr "Allalluogi'r defnyddiwr"
 
 #: user_admin/views.py:94
 msgid "This user could not be disabled"
-msgstr ""
+msgstr "Nid oedd modd analluogi'r defnyddiwr hwn"
 
 #: user_admin/views.py:110
 msgid "Enable user"
-msgstr ""
+msgstr "Galluogi defnyddiwr"
 
 #: user_admin/views.py:130 user_admin/views.py:163
 msgid "This user could not be enabled"
-msgstr ""
+msgstr "Nid oedd modd galluogi'r defnyddiwr hwn"
 
 #: user_admin/views.py:159
 #, python-format
 msgid "Unlocked user ‘%(username)s’, they can now log in again"
-msgstr ""
+msgstr "Defnyddiwr wedi'i ddatgloi ‘%(username)s’, gallant nawr fewngofnodi eto"
 
 #: user_admin/views.py:168
 msgid "Edit user"
-msgstr ""
+msgstr "Golygu defnyddiwr"
 
 #: user_admin/views.py:195
 msgid "Add user"
-msgstr ""
+msgstr "Ychwanegu defnyddiwr"
 
 #: user_admin/views.py:209
 #, python-format
 msgid "%(prison_list)s and %(prison)s"
-msgstr ""
+msgstr "%(prison_list)s a %(prison)s"
 
 #: user_admin/views.py:215
 #, python-format
 msgid "The new user will be based at %(prison_list)s."
-msgstr ""
+msgstr "Bydd y defnyddiwr newydd wedi'i leoli yn %(prison_list)s."
 
 #: user_admin/views.py:219
 msgid "The new user will not be based at a specific prison."
-msgstr ""
+msgstr "Ni fydd y defnyddiwr newydd wedi'i leoli mewn carchar penodol."
