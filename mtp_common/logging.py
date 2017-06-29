@@ -9,6 +9,7 @@ class ELKFormatter(logging.Formatter):
 
     def format(self, record):
         log = {
+            'timestamp': record.asctime,
             'timestamp_msec': record.created * 1000,
             'message': record.getMessage(),
             '@fields.level': record.levelname or 'NONE',
