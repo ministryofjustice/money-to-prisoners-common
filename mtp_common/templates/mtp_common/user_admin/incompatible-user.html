@@ -1,6 +1,8 @@
 {% extends 'mtp_common/user_admin/list.html' %}
 {% load i18n %}
 
+{% block page_title %}{% trans 'Sorry, something went wrong' %} – {{ block.super }}{% endblock %}
+
 {% block admin_content %}
   <p>
     {% blocktrans trimmed %}

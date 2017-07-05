@@ -2,14 +2,12 @@
 {% load i18n %}
 {% load mtp_common %}
 
+{% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
+
 {% block admin_header %}
   <header>
     {% language_switch %}
-    <h1 class="heading-xlarge">
-      {% blocktrans trimmed with username=user.username %}
-        Enable user account ‘{{ username }}’
-      {% endblocktrans %}
-    </h1>
+    <h1 class="heading-xlarge">{{ page_title }}</h1>
   </header>
 {% endblock %}
 

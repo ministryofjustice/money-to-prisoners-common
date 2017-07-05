@@ -2,18 +2,12 @@
 {% load i18n %}
 {% load mtp_common %}
 
+{% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
+
 {% block admin_header %}
   <header>
     {% language_switch %}
-    <h1 class="heading-xlarge">
-      {% if form.create %}
-        {% trans 'Create a new user' %}
-      {% else %}
-        {% blocktrans trimmed with username=form.username.value %}
-          Edit user ‘{{ username }}’
-        {% endblocktrans %}
-      {% endif %}
-    </h1>
+    <h1 class="heading-xlarge">{{ page_title }}</h1>
   </header>
 {% endblock %}
 

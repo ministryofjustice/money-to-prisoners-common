@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load mtp_common %}
 
+{% block page_title %}{% trans 'Your feedback' %} – {{ block.super }}{% endblock %}
+
 {% block inner_content %}
   {% if return_to %}
     <a class="link-back" href="{{ return_to }}">{% trans 'Back' %}</a>

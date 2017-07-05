@@ -1,9 +1,11 @@
 {% extends 'mtp_common/user_admin/base.html' %}
 {% load i18n %}
 
+{% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
+
 {% block admin_content %}
   <div class="govuk-box-highlight">
-    <h1 class="bold-large">{% blocktrans %}User account ‘{{ username }}’ disabled{% endblocktrans %}</h1>
+    <h1 class="bold-large">{{ page_title }}</h1>
   </div>
 
   <p><a class="link-back" href="{% url 'list-users' %}">{% trans 'Return to user management' %}</a></p>
