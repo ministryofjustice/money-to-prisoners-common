@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load mtp_common %}
 
+{% block page_title %}{% trans 'Manage user accounts' %} – {{ block.super }}{% endblock %}
+
 {% block admin_header %}
   <header>
     {% language_switch %}

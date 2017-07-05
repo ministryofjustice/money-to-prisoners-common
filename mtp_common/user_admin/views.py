@@ -88,7 +88,7 @@ def delete_user(request, username):
                     '@fields.username': admin_username,
                 }
             })
-            context['username'] = username
+            context['page_title'] = _('User account ‘%(username)s’ disabled') % {'username': username}
             return render(request, 'mtp_common/user_admin/deleted.html', context=context)
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be disabled'))
@@ -97,6 +97,7 @@ def delete_user(request, username):
     try:
         user = api_client.get_connection(request).users(username).get()
         context['user'] = user
+        context['page_title'] = _('Disable user account ‘%(username)s’') % {'username': user['username']}
         return render(request, 'mtp_common/user_admin/delete.html', context=context)
     except HttpNotFoundError:
         raise Http404
@@ -124,7 +125,7 @@ def undelete_user(request, username):
                     '@fields.username': admin_username,
                 }
             })
-            context['username'] = username
+            context['page_title'] = _('User account ‘%(username)s’ enabled') % {'username': username}
             return render(request, 'mtp_common/user_admin/undeleted.html', context=context)
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be enabled'))
@@ -133,6 +134,7 @@ def undelete_user(request, username):
     try:
         user = api_client.get_connection(request).users(username).get()
         context['user'] = user
+        context['page_title'] = _('Enable user account ‘%(username)s’') % {'username': user['username']}
         return render(request, 'mtp_common/user_admin/undelete.html', context=context)
     except HttpNotFoundError:
         raise Http404
@@ -180,9 +182,13 @@ class UserFormView(FormView):
         return form_kwargs
 
     def form_valid(self, form):
+        if form.create:
+            page_title = _('User account ‘%(username)s’ created')
+        else:
+            page_title = _('User account ‘%(username)s’ edited')
         context = {
             'user': form.cleaned_data,
-            'create': form.create,
+            'page_title': page_title % {'username': form.cleaned_data.get('username')},
             'breadcrumbs': make_breadcrumbs(self.title),
         }
         return render(self.request, 'mtp_common/user_admin/saved.html', context=context)
@@ -200,7 +206,7 @@ class UserCreationView(UserFormView):
         return form_kwargs
 
     def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
+        context_data = super().get_context_data(page_title=_('Create a new user'), **kwargs)
 
         prisons = self.request.user.user_data.get('prisons', [])
         if prisons:
@@ -262,3 +268,7 @@ class UserUpdateView(UserFormView):
             return initial
         except HttpNotFoundError:
             raise Http404
+
+    def get_context_data(self, **kwargs):
+        page_title = _('Edit user ‘%(username)s’') % {'username': self.kwargs['username']}
+        return super().get_context_data(page_title=page_title, **kwargs)

@@ -3,6 +3,8 @@
 {% load mtp_common %}
 {% load widget_tweaks %}
 
+{% block page_title %}{% trans 'Sign in' %} – {{ block.super }}{% endblock %}
+
 {% block inner_content %}
   <header>
     {% language_switch %}
@@ -10,7 +12,7 @@
       <span class="heading-secondary">
         {% block auth_title %}{% trans 'Send money to a prisoner' %}{% endblock %}
       </span>
-      {%trans 'Sign in' %}
+      {% trans 'Sign in' %}
     </h1>
   </header>
 

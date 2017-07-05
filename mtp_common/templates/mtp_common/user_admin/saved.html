@@ -1,19 +1,11 @@
 {% extends 'mtp_common/user_admin/base.html' %}
 {% load i18n %}
 
+{% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
+
 {% block admin_content %}
   <div class="govuk-box-highlight">
-    <h1 class="bold-large">
-      {% if create %}
-        {% blocktrans trimmed with username=user.username %}
-          User account ‘{{ username }}’ created
-        {% endblocktrans %}
-      {% else %}
-        {% blocktrans trimmed with username=user.username %}
-          User account ‘{{ username }}’ edited
-        {% endblocktrans %}
-      {% endif %}
-    </h1>
+    <h1 class="bold-large">{{ page_title }}</h1>
   </div>
 
   {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
