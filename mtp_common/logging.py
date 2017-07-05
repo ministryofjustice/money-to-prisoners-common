@@ -8,6 +8,8 @@ class ELKFormatter(logging.Formatter):
     """
 
     def format(self, record):
+        if not hasattr(record, 'asctime'):
+            record.asctime = self.formatTime(record, self.datefmt)
         log = {
             'timestamp': record.asctime,
             'timestamp_msec': record.created * 1000,
