@@ -1,0 +1,19 @@
+# Send money to a prisoner
+# Copyright (C) Crown copyright (Ministry of Justice)
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-11 12:31+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2017\n"
+"Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
+
+#: assets-src/javascripts/modules/dialog.js:51
+msgid "Close"
+msgstr "Cau"

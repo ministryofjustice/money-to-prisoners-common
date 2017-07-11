@@ -5,6 +5,9 @@
     "jquery": true
   },
   "extends": "eslint:recommended",
+  "globals": {
+    "django": true
+  },
   "rules": {
     "indent": ["error", 2, {"SwitchCase": 1}],
     "complexity": ["error", 20],

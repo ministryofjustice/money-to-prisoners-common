@@ -48,7 +48,7 @@ exports.Dialog = {
       if ($dialog.data('close-label')) {
         $close.text($dialog.data('close-label'));
       } else {
-        $close.text('close');
+        $close.text(django.gettext('Close'));
       }
 
       $dialog.append($close);
