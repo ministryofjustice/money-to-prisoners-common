@@ -363,12 +363,19 @@ def precompile_python_code(context: Context):
 
 
 @tasks.register('python_dependencies')
-def make_messages(context: Context):
+def make_messages(context: Context, javascript=False):
     """
     Collects text into translation source files
     """
+    kwargs = {
+        'all': True,
+        'keep_pot': True,
+        'no_wrap': True,
+    }
+    if javascript:
+        kwargs.update(domain='djangojs', ignore_patterns=['*.bundle.js'])
     with in_dir(context.app.django_app_name):
-        return context.management_command('makemessages', all=True, keep_pot=True, no_wrap=True)
+        return context.management_command('makemessages', **kwargs)
 
 
 @tasks.register('python_dependencies', hidden=True)
