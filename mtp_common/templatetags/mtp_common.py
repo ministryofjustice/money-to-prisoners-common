@@ -6,6 +6,7 @@ import re
 from django import template
 from django.conf import settings
 from django.core.urlresolvers import NoReverseMatch, reverse
+from django.template.base import token_kwargs
 from django.utils.crypto import get_random_string
 from django.utils.translation import override
 try:
@@ -142,3 +143,45 @@ def footer_feedback_form(request, context):
         return_errors_param=return_errors_param,
         errors=errors,
     )
+
+
+class DialogueNode(template.Node):
+    template_name = 'mtp_common/includes/dialogue-box.html'
+
+    def __init__(self, node_list, title=None, urgent=None, show_close_button=None, html_id=None, html_classes=None):
+        self.node_list = node_list
+        self.title = title
+        self.urgent = urgent
+        self.show_close_button = show_close_button
+        self.html_id = html_id or 'mtp-dialogue-%s' % get_random_string(length=4)
+        self.html_classes = html_classes
+
+    def render(self, context):
+        context.push()
+
+        context['dialogue_id'] = self.html_id.resolve(context) if hasattr(self.html_id, 'resolve') else self.html_id
+        if self.html_classes:
+            context['dialogue_classes'] = self.html_classes.resolve(context)
+        urgent = self.urgent and self.urgent.resolve(context)
+        context['dialogue_role'] = 'alertdialog' if urgent else 'dialog'
+        if self.title:
+            context['dialogue_title'] = self.title.resolve(context)
+        if self.show_close_button:
+            context['dialogue_close_button'] = self.show_close_button.resolve(context)
+        context['dialogue_close_class'] = 'js-dialogue-close'
+
+        context['dialogue_contents'] = self.node_list.render(context)
+
+        dialogue_template = context.template.engine.get_template(self.template_name)
+        rendered_html = dialogue_template.render(context)
+
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def dialoguebox(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    node_list = parser.parse(('enddialoguebox',))
+    parser.delete_first_token()
+    return DialogueNode(node_list, **kwargs)
