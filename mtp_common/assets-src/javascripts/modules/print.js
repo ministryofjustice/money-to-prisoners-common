@@ -49,7 +49,7 @@ exports.Print = {
     }
 
     // close dialog if open
-    this.$body.trigger('Dialog.close');
+    $('#print-dialog').trigger('dialogue:close');
 
     // trigger a render of this object to check if the cookie is set
     this.$body.trigger('Print.render');

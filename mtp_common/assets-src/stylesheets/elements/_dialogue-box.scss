@@ -1,0 +1,62 @@
+// Dialogue box module
+
+.mtp-dialogue__container {
+  @include box-sizing(border-box);
+  display: none;
+  position: fixed;
+  z-index: 5000;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.mtp-dialogue {
+  @include box-sizing(border-box);
+  display: none;
+  position: relative;
+  width: 600px;
+  max-width: 90%;
+  max-height: 80%;
+  margin: 4em auto;
+  padding: 1em;
+  overflow: hidden;
+  background: $page-colour;
+  border: 4px solid $text-colour;
+
+  &:focus {
+    outline: 3px solid $focus-colour;
+  }
+
+  header {
+    margin: 0 0 1em;
+  }
+}
+
+.mtp-dialogue__backdrop {
+  display: block;
+  position: fixed;
+  z-index: 4999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: ' ';
+  background: $canvas-colour;
+  @include opacity(0.8);
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  @media print {
+    display: none !important;
+  }
+}
+
+.js-dialogue-open {
+  visibility: hidden;
+
+  .js-enabled & {
+    visibility: visible;
+  }
+}
