@@ -1,68 +1,78 @@
-// Print module
+// Print module with confirmation dialogue box integration
 'use strict';
 
 var cookie = require('js-cookie');
 
 exports.Print = {
-  selector: '.js-Print',
+  triggerSelector: '.js-print-trigger',
+  confirmationCookie: 'remove-print-prompt',
 
-  cookieName: 'remove-print-prompt',
-
-  init: function () {
-    this.cacheEls();
-    this.bindEvents();
-    this.render();
-  },
-
-  cacheEls: function () {
-    this.$body = $('body');
-  },
-
-  bindEvents: function () {
-    this.$body
-      .on('Print.render', $.proxy(this.render, this))
-      .on('click', this.selector, $.proxy(this.onClickPrint, this));
-  },
-
-  render: function () {
-    var promptCookie = cookie.get(this.cookieName);
-
-    if (promptCookie) {
-      var $printTrigger = $('[href="#print-dialog"]');
-      var $printDialog = $('#print-dialog');
-
-      $printTrigger
-        .removeClass('js-Dialog')
-        .addClass('js-Print');
-
-      $printDialog.remove();
+  init: function (triggerSelector) {
+    var $triggers = $(triggerSelector || this.triggerSelector);
+    if (!window.print) {
+      $triggers.hide();
+      return;
     }
+    $triggers.each(this.bindTriggers);
   },
 
-  onClickPrint: function (e) {
-    var $promptCheck = $('#remove-print-prompt');
+  bindTriggers: function () {
+    var $trigger = $(this);
+    var $printHidden = $($trigger.data('do-not-print')).not('.print-hidden');
+    var $confirmationDialogue = $($trigger.data('confirmation-dialogue'));
+    var onClickAction = null;
+    if ($confirmationDialogue.length === 1 && $confirmationDialogue.hasClass('mtp-dialogue')) {
+      onClickAction = exports.Print.makeConfirmationAction($confirmationDialogue, $printHidden);
+    } else {
+      onClickAction = exports.Print.makePrintAction($printHidden);
+    }
+    $trigger.click(function (e) {
+      e.preventDefault();
+      onClickAction();
+      return false;
+    });
+  },
 
-    e.preventDefault();
-
-    if ($promptCheck.is(':checked')) {
-      cookie.set(this.cookieName, true);
+  makeConfirmationAction: function ($dialogue, $printHidden) {
+    var confirmationCookie = $dialogue.data('confirmation-cookie') || exports.Print.confirmationCookie;
+    var confirmedCookie = cookie.get(confirmationCookie);
+    var printAction = exports.Print.makePrintAction($printHidden);
+    if (confirmedCookie) {
+      return printAction;
     }
 
-    // close dialog if open
-    $('#print-dialog').trigger('dialogue:close');
+    var $dialoguePrintButton = $dialogue.find(exports.Print.triggerSelector);
+    $dialoguePrintButton.click(function (e) {
+      var $skipConfirmationInput = $dialogue.find('input[name="' + confirmationCookie + '"]');
+      if ($skipConfirmationInput.length === 1) {
+        if ($skipConfirmationInput.is(':checked')) {
+          cookie.set(confirmationCookie, '1');
+        } else {
+          cookie.remove(confirmationCookie);
+        }
+      }
+      $dialogue.trigger('dialogue:close');
+      e.preventDefault();
+      return false;
+    });
 
-    // trigger a render of this object to check if the cookie is set
-    this.$body.trigger('Print.render');
+    return function () {
+      var confirmedCookie = cookie.get(confirmationCookie);
+      if (confirmedCookie) {
+        printAction();
+      } else {
+        $dialogue.trigger('dialogue:open');
+      }
+    };
+  },
 
-    // hide additional element
-    var $el = $(e.target);
-    var $toHide = $($el.data('do-not-print')).not('.print-hidden');
-    $toHide.addClass('print-hidden');
-
-    try {
-      window.print();
-    } catch (e) {}  // eslint-disable-line
-
-    $toHide.removeClass('print-hidden');
+  makePrintAction: function ($printHidden) {
+    return function () {
+      $printHidden.addClass('print-hidden');
+      try {
+        window.print();
+      } catch (e) {}  // eslint-disable-line
+      $printHidden.removeClass('print-hidden');
+    };
   }
 };
