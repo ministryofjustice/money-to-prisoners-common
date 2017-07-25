@@ -28,6 +28,7 @@ install_requires = [
     'govuk-bank-holidays==0.1',
     'cryptography==1.7.2',
     'PyJWT==1.4.2',
+    'boto>=2.48,<2.49',
 ]
 extras_require = {
     'monitoring': [
