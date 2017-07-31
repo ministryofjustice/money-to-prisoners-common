@@ -7,8 +7,8 @@ exports.CollapsingTable = {
 
     $('.CollapsingTableHeader').each(function () {
       var $header = $(this),
-        collapseText = $header.data('collapse-text'),
-        expandText = $header.data('expand-text'),
+        collapseText = $header.data('collapse-text') || django.gettext('Collapse'),
+        expandText = $header.data('expand-text') || django.gettext('Expand'),
         $button = $('<a href="#" class="CollapsingTableShowHide CollapsingTableHeader-aside print-hidden"></a>');
 
       $button.text(collapseText);
@@ -25,7 +25,7 @@ exports.CollapsingTable = {
   collapseAll: function () {
     $('.CollapsingTableShowHide').each(function () {
       var $header = $(this).parent('.CollapsingTableHeader');
-      $(this).text($header.data('expand-text'));
+      $(this).text($header.data('expand-text') || django.gettext('Expand'));
       $(this).addClass('CollapsingTableShowHide-hidden');
       $(this).closest('table').find('tbody, thead').hide();
     });

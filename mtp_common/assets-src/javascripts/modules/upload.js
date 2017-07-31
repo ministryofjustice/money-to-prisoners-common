@@ -36,6 +36,6 @@ exports.Upload = {
     this.$formGroups.removeClass('form-group-error');
     this.$errorMessages.remove();
     this.$uploadFilename.text(filename).show();
-    this.$chooseButton.text('Change file');
+    this.$chooseButton.text(django.gettext('Change file'));
   }
 };
