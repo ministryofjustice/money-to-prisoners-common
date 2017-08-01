@@ -197,7 +197,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
     def tearDown(self):
         self.driver.quit()
 
-    def load_test_data(self):
+    def load_test_data(self, command=None):
         """
         Sends a command to the API controller port to reload test data
         """
@@ -208,7 +208,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
                     urlparse(settings.API_URL).netloc.split(':')[0],
                     int(os.environ.get('CONTROLLER_PORT', 8800))
                 ))
-                sock.sendall(b'load_test_data')
+                sock.sendall(command or b'load_test_data')
                 response = sock.recv(1024).strip()
             if response != b'done':
                 logger.error('Test data not reloaded!')
