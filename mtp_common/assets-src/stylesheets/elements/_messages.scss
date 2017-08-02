@@ -14,7 +14,7 @@
     margin: em(10) 0 0;
 
     &.message--success {
-      background-color: $green-3;
+      background-color: lighten($green-50, 10%);
     }
 
     &.message--info {
