@@ -5,28 +5,6 @@ This lists the design components that were designed specifically for the Money
 to Prisoners services, and explains why we created them on top of
 `GOV.UK Elements <http://govuk-elements.herokuapp.com/>`_.
 
-Collapsing Tables
------------------
-
-.. image:: static/collapsing-tables-open.png
-  :align: center
-
-.. image:: static/collapsing-tables-closed.png
-  :align: center
-
-.. code-block:: html
-
-  <table class="CollapsingTable">
-    <caption class="CollapsingTableHeader" data-collapse-text="Collapse" data-expand-text="Expand">
-      Unknown sender (uncredited)
-      <span class="CollapsingTableHeader-aside CollapsingTableHeader-aside-right">
-        Total: £215.00
-      </span>
-    </caption>
-  <thead>...</thead>
-  <tbody>
-    ...
-
 Dialogs
 -------
 
