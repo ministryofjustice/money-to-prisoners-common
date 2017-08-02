@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mtp-common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-31 13:20+0100\n"
+"POT-Creation-Date: 2017-08-02 17:47+0100\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
@@ -13,15 +13,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: assets-src/javascripts/modules/collapsing-table.js:10
-msgid "Collapse"
-msgstr ""
-
-#: assets-src/javascripts/modules/collapsing-table.js:11
-#: assets-src/javascripts/modules/collapsing-table.js:28
-msgid "Expand"
-msgstr ""
 
 #: assets-src/javascripts/modules/upload.js:39
 msgid "Change file"
