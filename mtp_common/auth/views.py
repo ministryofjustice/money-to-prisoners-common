@@ -13,7 +13,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 
 from . import login as auth_login, logout as auth_logout
-from .forms import AuthenticationForm, PasswordChangeForm, ResetPasswordForm
+from .forms import (
+    AuthenticationForm, PasswordChangeForm, ResetPasswordForm,
+    PasswordChangeWithCodeForm, RESET_CODE_PARAM
+)
 
 
 def make_breadcrumbs(section_title):
@@ -143,7 +146,34 @@ def password_change(request,
     return TemplateResponse(request, template_name, context)
 
 
-@login_required
+@sensitive_post_parameters()
+@csrf_protect
+def password_change_with_code(request,
+                              template_name=None,
+                              cancel_url=None,
+                              post_change_redirect=None,
+                              extra_context=None):
+    cancel_url = resolve_url(cancel_url or '/')
+    if post_change_redirect is None:
+        post_change_redirect = reverse('password_change_done')
+    else:
+        post_change_redirect = resolve_url(post_change_redirect)
+    if request.method == 'POST':
+        form = PasswordChangeWithCodeForm(request=request, data=request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect(post_change_redirect)
+    else:
+        reset_code = request.GET.get(RESET_CODE_PARAM)
+        form = PasswordChangeWithCodeForm(reset_code=reset_code, request=request)
+    context = {
+        'form': form,
+        'cancel_url': cancel_url,
+        'breadcrumbs': make_breadcrumbs(_('Change password')),
+    }
+    context.update(extra_context or {})
+    return TemplateResponse(request, template_name, context)
+
+
 def password_change_done(request,
                          template_name=None,
                          cancel_url=None,
@@ -159,6 +189,7 @@ def password_change_done(request,
 
 @csrf_protect
 def reset_password(request,
+                   password_change_url=None,
                    template_name=None,
                    cancel_url=None,
                    post_change_redirect=None,
@@ -172,11 +203,11 @@ def reset_password(request,
     else:
         post_change_redirect = resolve_url(post_change_redirect)
     if request.method == 'POST':
-        form = reset_password_form(request=request, data=request.POST)
+        form = reset_password_form(password_change_url, request=request, data=request.POST)
         if form.is_valid():
             return HttpResponseRedirect(post_change_redirect)
     else:
-        form = reset_password_form(request=request)
+        form = reset_password_form(password_change_url, request=request)
     context = {
         'form': form,
         'cancel_url': cancel_url,

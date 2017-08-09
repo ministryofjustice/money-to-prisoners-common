@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-31 13:20+0100\n"
+"POT-Creation-Date: 2017-08-09 16:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2017\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -36,60 +36,69 @@ msgstr "Gwnewch yn siŵr eich bod yn defnyddio porwr gwe modern megis Firefox ne
 msgid "Your browser failed a security check."
 msgstr "Mi wnaeth eich porwr fethu gwiriad diogelwch."
 
-#: auth/forms.py:21 templates/mtp_common/user_admin/list.html:41
+#: auth/forms.py:24 templates/mtp_common/user_admin/list.html:33
 #: user_admin/forms.py:16
 msgid "Username"
 msgstr "Enw defnyddiwr"
 
-#: auth/forms.py:22
+#: auth/forms.py:25
 msgid "Password"
 msgstr "Cyfrinair"
 
-#: auth/forms.py:25
+#: auth/forms.py:28
 msgid "You’ve entered an incorrect username and/or password"
 msgstr "Rydych wedi nodi enw defnyddiwr a/neu gyfrinair anghywir"
 
-#: auth/forms.py:26
+#: auth/forms.py:29
 msgid "You don’t have access to this application"
 msgstr "Nid oes gennych fynediad i'r adnodd hwn"
 
-#: auth/forms.py:27 auth/forms.py:79 auth/forms.py:125 user_admin/forms.py:27
+#: auth/forms.py:30 auth/forms.py:82 auth/forms.py:128 auth/forms.py:168
+#: user_admin/forms.py:27
 msgid "This service is currently unavailable"
 msgstr "Nid yw'r gwasanaeth hwn ar gael ar hyn o bryd"
 
-#: auth/forms.py:78
+#: auth/forms.py:81 auth/forms.py:167
 msgid "You’ve entered different passwords"
 msgstr "Rydych wedi nodi cyfrineiriau gwahanol"
 
-#: auth/forms.py:81
+#: auth/forms.py:84
 msgid "Old password"
 msgstr "Hen gyfrinair"
 
-#: auth/forms.py:83
+#: auth/forms.py:86 auth/forms.py:172
 msgid "New password"
 msgstr "Cyfrinair newydd"
 
-#: auth/forms.py:85
+#: auth/forms.py:88 auth/forms.py:174
 msgid "New password confirmation"
 msgstr "Cadarnhau eich cyfrinair newydd"
 
-#: auth/forms.py:127
+#: auth/forms.py:130
 msgid "Username or email address"
 msgstr "Enw defnyddiwr neu gyfeiriad e-bost"
 
-#: auth/views.py:21 user_admin/views.py:23
+#: auth/forms.py:166
+msgid "This link for resetting your password has expired"
+msgstr ""
+
+#: auth/forms.py:170
+msgid "Reset code"
+msgstr ""
+
+#: auth/views.py:24 user_admin/views.py:23
 msgid "Home"
 msgstr "Cartref"
 
-#: auth/views.py:106
+#: auth/views.py:109
 msgid "Logged out"
 msgstr "Rydych wedi allgofnodi"
 
-#: auth/views.py:140 auth/views.py:154
+#: auth/views.py:143 auth/views.py:171 auth/views.py:184
 msgid "Change password"
 msgstr "Newid cyfrinair"
 
-#: auth/views.py:183 auth/views.py:198
+#: auth/views.py:214 auth/views.py:229
 msgid "Reset password"
 msgstr "Ailosod cyfrinair"
 
@@ -202,6 +211,7 @@ msgid "Change your password"
 msgstr "Newid eich cyfrinair"
 
 #: templates/mtp_common/auth/password_change.html:8
+#: templates/mtp_common/auth/password_change_with_code.html:8
 #: templates/mtp_common/auth/reset-password.html:8
 msgid "Submit"
 msgstr "Anfon"
@@ -223,14 +233,22 @@ msgstr "Mae eich cyfrinair wedi cael ei newid."
 msgid "Return to the home page"
 msgstr "Dychwelyd i'r dudalen gartref"
 
+#: templates/mtp_common/auth/password_change_with_code.html:4
+#: templates/mtp_common/auth/password_change_with_code.html:7
+msgid "Set a new password"
+msgstr ""
+
 #: templates/mtp_common/auth/reset-password-done.html:4
+msgid "Your password reset request was successful"
+msgstr ""
+
 #: templates/mtp_common/auth/reset-password-done.html:7
-msgid "Your password was reset successfully"
-msgstr "Cafodd eich cyfrinair ei ailosod yn llwyddiannus"
+msgid "A password reset email has been sent to you"
+msgstr ""
 
 #: templates/mtp_common/auth/reset-password-done.html:12
-msgid "You will get an email with your new password."
-msgstr "Fe gewch e-bost gyda'ch cyfrinair newydd."
+msgid "Click on the link in the email and you will be able to create a new password."
+msgstr ""
 
 #: templates/mtp_common/auth/reset-password.html:4
 #: templates/mtp_common/auth/reset-password.html:7
@@ -375,7 +393,7 @@ msgid "All content is available under the <a href=\"%(url)s\" rel=\"license\">Op
 msgstr "Mae'r holl gynnwys ar gael dan delerau'r <a href=\"%(url)s\" rel=\"license\">Drwydded Llywodraeth Agored f3.0</a>, heblaw lle nodir yn wahanol"
 
 #: templates/mtp_common/user_admin/delete.html:15
-#: templates/mtp_common/user_admin/list.html:25
+#: templates/mtp_common/user_admin/list.html:17
 msgid "When you disable a user account, that user will be unable to log in."
 msgstr "Pan fyddwch yn analluogi cyfrif defnyddiwr, ni fydd y defnyddiwr hwnnw yn gallu mewngofnodi."
 
@@ -411,55 +429,55 @@ msgstr "Cysylltwch â ni os ydych angen ei newid."
 msgid "Manage user accounts"
 msgstr "Rheoli cyfrifon defnyddwyr"
 
-#: templates/mtp_common/user_admin/list.html:24
+#: templates/mtp_common/user_admin/list.html:16
 msgid "Add, view, edit or disable user accounts."
 msgstr "Ychwanegu, edrych ar, golygu neu analluogi cyfrifon defnyddwyr."
 
-#: templates/mtp_common/user_admin/list.html:29
+#: templates/mtp_common/user_admin/list.html:21
 msgid "If a user enters a wrong password too many times, they are locked out for a short period."
 msgstr "Os bydd defnyddiwr yn nodi cyfrinair anghywir nifer o weithiau, bydd yn cael ei gloi allan am gyfnod byr."
 
-#: templates/mtp_common/user_admin/list.html:30
+#: templates/mtp_common/user_admin/list.html:22
 msgid "You can allow them to log in now by clicking ‘Unlock’."
 msgstr "Gallwch ganiatáu iddynt fewngofnodi nawr drwy glicio ar 'Datgloi'."
 
-#: templates/mtp_common/user_admin/list.html:35
+#: templates/mtp_common/user_admin/list.html:27
 msgid "Add a new user"
 msgstr "Ychwanegu defnyddiwr newydd"
 
-#: templates/mtp_common/user_admin/list.html:42
+#: templates/mtp_common/user_admin/list.html:34
 msgid "Name"
 msgstr "Enw"
 
-#: templates/mtp_common/user_admin/list.html:43 user_admin/forms.py:20
+#: templates/mtp_common/user_admin/list.html:35 user_admin/forms.py:20
 msgid "Email"
 msgstr "E-bost"
 
-#: templates/mtp_common/user_admin/list.html:44
+#: templates/mtp_common/user_admin/list.html:36
 msgid "Can manage accounts"
 msgstr "Gallu rheoli cyfrifon"
 
-#: templates/mtp_common/user_admin/list.html:45
+#: templates/mtp_common/user_admin/list.html:37
 msgid "Actions"
 msgstr "Camau gweithredu"
 
-#: templates/mtp_common/user_admin/list.html:58
+#: templates/mtp_common/user_admin/list.html:50
 msgid "User can manage other accounts"
 msgstr "Gall y defnyddiwr reoli cyfrifon eraill"
 
-#: templates/mtp_common/user_admin/list.html:63
+#: templates/mtp_common/user_admin/list.html:55
 msgid "Edit"
 msgstr "Golygu"
 
-#: templates/mtp_common/user_admin/list.html:68
+#: templates/mtp_common/user_admin/list.html:60
 msgid "Enable"
 msgstr "Galluogi"
 
-#: templates/mtp_common/user_admin/list.html:72
+#: templates/mtp_common/user_admin/list.html:64
 msgid "Unlock"
 msgstr "Datgloi"
 
-#: templates/mtp_common/user_admin/list.html:76
+#: templates/mtp_common/user_admin/list.html:68
 msgid "Disable"
 msgstr "Analluogi"
 
@@ -630,3 +648,9 @@ msgstr "Ni fydd y defnyddiwr newydd wedi'i leoli mewn carchar penodol."
 #, python-format
 msgid "Edit user ‘%(username)s’"
 msgstr "Golygu defnyddiwr ‘%(username)s’"
+
+#~ msgid "Your password was reset successfully"
+#~ msgstr "Cafodd eich cyfrinair ei ailosod yn llwyddiannus"
+
+#~ msgid "You will get an email with your new password."
+#~ msgstr "Fe gewch e-bost gyda'ch cyfrinair newydd."
