@@ -363,7 +363,7 @@ def precompile_python_code(context: Context):
 
 
 @tasks.register('python_dependencies')
-def make_messages(context: Context, javascript=False):
+def make_messages(context: Context, javascript=False, fuzzy=False):
     """
     Collects text into translation source files
     """
@@ -372,6 +372,8 @@ def make_messages(context: Context, javascript=False):
         'keep_pot': True,
         'no_wrap': True,
     }
+    if fuzzy:
+        kwargs['allow_fuzzy'] = True
     if javascript:
         kwargs.update(domain='djangojs', ignore_patterns=['*.bundle.js'])
     with in_dir(context.app.django_app_name):
@@ -396,6 +398,8 @@ def translations(context: Context, pull=False, push=False):
         raise TaskError('Specify whether to push or pull translations')
     if pull:
         context.shell('tx', 'pull')
+        make_messages(context, javascript=False)
+        make_messages(context, javascript=True)
     if push:
         context.shell('tx', 'push', '--source', '--no-interactive')
 
