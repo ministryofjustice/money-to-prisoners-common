@@ -1,9 +1,12 @@
 from unittest import mock
 
+from django.conf import settings
 from django.test.testcases import SimpleTestCase
 from django.utils.encoding import force_text
 
-from mtp_common.auth.forms import AuthenticationForm, PasswordChangeForm, ResetPasswordForm
+from mtp_common.auth.forms import (
+    AuthenticationForm, PasswordChangeForm, ResetPasswordForm, RESET_CODE_PARAM
+)
 
 
 @mock.patch('mtp_common.auth.forms.authenticate')
@@ -95,12 +98,17 @@ class PasswordChangeFormTestCase(SimpleTestCase):
 @mock.patch('mtp_common.auth.forms.api_client')
 class ResetPasswordFormTestCase(SimpleTestCase):
     def test_reset_password(self, mock_api_client):
-        form = ResetPasswordForm(request=None, data={
+        password_change_url = '/change_password'
+        form = ResetPasswordForm(password_change_url=password_change_url, request=None, data={
             'username': 'admin'
         })
         self.assertTrue(form.is_valid())
 
         reset_password = mock_api_client.get_unauthenticated_connection().reset_password
         reset_password.post.assert_called_once_with({
-            'username': 'admin'
+            'username': 'admin',
+            'create_password': {
+                'password_change_url': settings.SITE_URL + password_change_url,
+                'reset_code_param': RESET_CODE_PARAM
+            }
         })

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mtp-common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-31 13:20+0100\n"
+"POT-Creation-Date: 2017-08-09 16:56+0100\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
@@ -36,60 +36,69 @@ msgstr ""
 msgid "Your browser failed a security check."
 msgstr ""
 
-#: auth/forms.py:21 templates/mtp_common/user_admin/list.html:41
+#: auth/forms.py:24 templates/mtp_common/user_admin/list.html:33
 #: user_admin/forms.py:16
 msgid "Username"
 msgstr ""
 
-#: auth/forms.py:22
+#: auth/forms.py:25
 msgid "Password"
 msgstr ""
 
-#: auth/forms.py:25
+#: auth/forms.py:28
 msgid "You’ve entered an incorrect username and/or password"
 msgstr ""
 
-#: auth/forms.py:26
+#: auth/forms.py:29
 msgid "You don’t have access to this application"
 msgstr ""
 
-#: auth/forms.py:27 auth/forms.py:79 auth/forms.py:125 user_admin/forms.py:27
+#: auth/forms.py:30 auth/forms.py:82 auth/forms.py:128 auth/forms.py:168
+#: user_admin/forms.py:27
 msgid "This service is currently unavailable"
 msgstr ""
 
-#: auth/forms.py:78
+#: auth/forms.py:81 auth/forms.py:167
 msgid "You’ve entered different passwords"
 msgstr ""
 
-#: auth/forms.py:81
+#: auth/forms.py:84
 msgid "Old password"
 msgstr ""
 
-#: auth/forms.py:83
+#: auth/forms.py:86 auth/forms.py:172
 msgid "New password"
 msgstr ""
 
-#: auth/forms.py:85
+#: auth/forms.py:88 auth/forms.py:174
 msgid "New password confirmation"
 msgstr ""
 
-#: auth/forms.py:127
+#: auth/forms.py:130
 msgid "Username or email address"
 msgstr ""
 
-#: auth/views.py:21 user_admin/views.py:23
+#: auth/forms.py:166
+msgid "This link for resetting your password has expired"
+msgstr ""
+
+#: auth/forms.py:170
+msgid "Reset code"
+msgstr ""
+
+#: auth/views.py:24 user_admin/views.py:23
 msgid "Home"
 msgstr ""
 
-#: auth/views.py:106
+#: auth/views.py:109
 msgid "Logged out"
 msgstr ""
 
-#: auth/views.py:140 auth/views.py:154
+#: auth/views.py:143 auth/views.py:171 auth/views.py:184
 msgid "Change password"
 msgstr ""
 
-#: auth/views.py:183 auth/views.py:198
+#: auth/views.py:214 auth/views.py:229
 msgid "Reset password"
 msgstr ""
 
@@ -202,6 +211,7 @@ msgid "Change your password"
 msgstr ""
 
 #: templates/mtp_common/auth/password_change.html:8
+#: templates/mtp_common/auth/password_change_with_code.html:8
 #: templates/mtp_common/auth/reset-password.html:8
 msgid "Submit"
 msgstr ""
@@ -223,13 +233,21 @@ msgstr ""
 msgid "Return to the home page"
 msgstr ""
 
+#: templates/mtp_common/auth/password_change_with_code.html:4
+#: templates/mtp_common/auth/password_change_with_code.html:7
+msgid "Set a new password"
+msgstr ""
+
 #: templates/mtp_common/auth/reset-password-done.html:4
+msgid "Your password reset request was successful"
+msgstr ""
+
 #: templates/mtp_common/auth/reset-password-done.html:7
-msgid "Your password was reset successfully"
+msgid "A password reset email has been sent to you"
 msgstr ""
 
 #: templates/mtp_common/auth/reset-password-done.html:12
-msgid "You will get an email with your new password."
+msgid "Click on the link in the email and you will be able to create a new password."
 msgstr ""
 
 #: templates/mtp_common/auth/reset-password.html:4
@@ -375,7 +393,7 @@ msgid "All content is available under the <a href=\"%(url)s\" rel=\"license\">Op
 msgstr ""
 
 #: templates/mtp_common/user_admin/delete.html:15
-#: templates/mtp_common/user_admin/list.html:25
+#: templates/mtp_common/user_admin/list.html:17
 msgid "When you disable a user account, that user will be unable to log in."
 msgstr ""
 
@@ -411,55 +429,55 @@ msgstr ""
 msgid "Manage user accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:24
+#: templates/mtp_common/user_admin/list.html:16
 msgid "Add, view, edit or disable user accounts."
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:29
+#: templates/mtp_common/user_admin/list.html:21
 msgid "If a user enters a wrong password too many times, they are locked out for a short period."
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:30
+#: templates/mtp_common/user_admin/list.html:22
 msgid "You can allow them to log in now by clicking ‘Unlock’."
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:35
+#: templates/mtp_common/user_admin/list.html:27
 msgid "Add a new user"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:42
+#: templates/mtp_common/user_admin/list.html:34
 msgid "Name"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:43 user_admin/forms.py:20
+#: templates/mtp_common/user_admin/list.html:35 user_admin/forms.py:20
 msgid "Email"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:44
+#: templates/mtp_common/user_admin/list.html:36
 msgid "Can manage accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:45
+#: templates/mtp_common/user_admin/list.html:37
 msgid "Actions"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:58
+#: templates/mtp_common/user_admin/list.html:50
 msgid "User can manage other accounts"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:63
+#: templates/mtp_common/user_admin/list.html:55
 msgid "Edit"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:68
+#: templates/mtp_common/user_admin/list.html:60
 msgid "Enable"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:72
+#: templates/mtp_common/user_admin/list.html:64
 msgid "Unlock"
 msgstr ""
 
-#: templates/mtp_common/user_admin/list.html:76
+#: templates/mtp_common/user_admin/list.html:68
 msgid "Disable"
 msgstr ""
 
