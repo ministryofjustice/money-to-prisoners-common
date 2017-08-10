@@ -1,10 +1,10 @@
-# Send money to a prisoner
+# Prisoner money
 # Copyright (C) Crown copyright (Ministry of Justice)
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 16:56+0100\n"
+"POT-Creation-Date: 2017-08-10 12:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2017\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -14,11 +14,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
 
-#: app.py:9 templates/mtp_common/auth/login.html:13
-#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
-#: templates/mtp_common/mtp_base.html:62
-msgid "Send money to a prisoner"
-msgstr "Anfon arian at garcharor"
+#: app.py:9
+msgid "Prisoner money"
+msgstr ""
 
 #: auth/csrf.py:27 auth/csrf.py:30 auth/csrf.py:35
 msgid "Please try again."
@@ -200,6 +198,12 @@ msgstr "Nodwch 'mis' fel rhif"
 #: templates/mtp_common/auth/login.html:37
 msgid "Sign in"
 msgstr "Mewngofnodi"
+
+#: templates/mtp_common/auth/login.html:13
+#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
+#: templates/mtp_common/mtp_base.html:62
+msgid "Send money to someone in prison"
+msgstr "Anfon arian at garcharor"
 
 #: templates/mtp_common/auth/login.html:44
 msgid "Forgotten your password?"
@@ -648,6 +652,9 @@ msgstr "Ni fydd y defnyddiwr newydd wedi'i leoli mewn carchar penodol."
 #, python-format
 msgid "Edit user ‘%(username)s’"
 msgstr "Golygu defnyddiwr ‘%(username)s’"
+
+#~ msgid "Send money to a prisoner"
+#~ msgstr "Anfon arian at garcharor"
 
 #~ msgid "Your password was reset successfully"
 #~ msgstr "Cafodd eich cyfrinair ei ailosod yn llwyddiannus"

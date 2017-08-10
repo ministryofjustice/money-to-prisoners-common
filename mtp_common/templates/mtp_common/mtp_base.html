@@ -3,7 +3,7 @@
 {% load static %}
 {% load mtp_common %}
 
-{% block page_title %}{% trans 'Send money to a prisoner' %}{% endblock %}
+{% block page_title %}{% trans 'Send money to someone in prison' %}{% endblock %}
 
 {% block head %}
   {{ block.super }}
@@ -59,7 +59,7 @@
         <a href="#proposition-links" class="js-mtp-header-toggle menu print-hidden">{% trans 'Menu' %}</a>
       {% endif %}
       <nav id="proposition-menu">
-        <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to a prisoner' %}{% endblock %}</a>
+        <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}</a>
         {% block proposition_menu %}{% endblock %}
       </nav>
     </div>

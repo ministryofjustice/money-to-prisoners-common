@@ -1,10 +1,10 @@
-# Send money to a prisoner
+# Prisoner money
 # Copyright (C) Crown copyright (Ministry of Justice)
 msgid ""
 msgstr ""
 "Project-Id-Version: mtp-common\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 16:56+0100\n"
+"POT-Creation-Date: 2017-08-10 12:27+0100\n"
 "PO-Revision-Date: 2016-11-04 10:00+0000\n"
 "Last-Translator: Welsh Language Unit <welsh.language.unit.manager@hmcts.gsi.gov.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/ministry-of-justice/mtp/language/cy/)\n"
@@ -14,10 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: app.py:9 templates/mtp_common/auth/login.html:13
-#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
-#: templates/mtp_common/mtp_base.html:62
-msgid "Send money to a prisoner"
+#: app.py:9
+msgid "Prisoner money"
 msgstr ""
 
 #: auth/csrf.py:27 auth/csrf.py:30 auth/csrf.py:35
@@ -199,6 +197,12 @@ msgstr ""
 #: templates/mtp_common/auth/login.html:15
 #: templates/mtp_common/auth/login.html:37
 msgid "Sign in"
+msgstr ""
+
+#: templates/mtp_common/auth/login.html:13
+#: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
+#: templates/mtp_common/mtp_base.html:62
+msgid "Send money to someone in prison"
 msgstr ""
 
 #: templates/mtp_common/auth/login.html:44
