@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-10 12:27+0100\n"
+"POT-Creation-Date: 2017-08-10 14:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2017\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -203,7 +203,7 @@ msgstr "Mewngofnodi"
 #: templates/mtp_common/email_base.html:16 templates/mtp_common/mtp_base.html:6
 #: templates/mtp_common/mtp_base.html:62
 msgid "Send money to someone in prison"
-msgstr "Anfon arian at garcharor"
+msgstr "Anfon arian at rywun sydd yn y carchar"
 
 #: templates/mtp_common/auth/login.html:44
 msgid "Forgotten your password?"
