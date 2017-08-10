@@ -6,7 +6,7 @@ from mtp_common.forms import replace_default_error_messages
 
 class AppConfig(DjangoAppConfig):
     name = 'mtp_common'
-    verbose_name = _('Send money to a prisoner')
+    verbose_name = _('Prisoner money')
 
     def ready(self):
         replace_default_error_messages()
