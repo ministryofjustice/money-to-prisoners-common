@@ -6,11 +6,10 @@ from django.http.request import QueryDict
 from django.test import SimpleTestCase
 from django.utils.encoding import force_text
 import responses
-from slumber.exceptions import HttpClientError
 
 from mtp_common.auth import SESSION_KEY, BACKEND_SESSION_KEY, \
     AUTH_TOKEN_SESSION_KEY, USER_DATA_SESSION_KEY
-from mtp_common.auth import api_client
+from mtp_common.auth import api_client, urljoin
 from mtp_common.auth.exceptions import Forbidden
 from mtp_common.auth.test_utils import generate_tokens
 
@@ -192,10 +191,17 @@ class LogoutViewTestCase(AuthenticatedTestCase):
         self.assertDictEqual(revocation_call_data, expected_revocation_call_data)
 
 
-@mock.patch('mtp_common.auth.forms.api_client')
 class PasswordChangeViewTestCase(AuthenticatedTestCase):
 
-    def test_password_change(self, mock_api_client):
+    @responses.activate
+    def test_password_change(self):
+        responses.add(
+            responses.POST,
+            urljoin(settings.API_URL, 'change_password'),
+            status=204,
+            content_type='application/json'
+        )
+
         self.login()
         response = self.client.post(
             reverse('password_change'), data={
@@ -207,10 +213,15 @@ class PasswordChangeViewTestCase(AuthenticatedTestCase):
 
         self.assertRedirects(response, reverse('password_change_done'))
 
-    def test_incorrect_password_errors(self, mock_api_client):
-        error = b'{"errors":{"__all__":["Incorrect password"]}}'
-        conn = mock_api_client.get_connection()
-        conn.change_password.post.side_effect = HttpClientError(content=error)
+    @responses.activate
+    def test_incorrect_password_errors(self):
+        responses.add(
+            responses.POST,
+            urljoin(settings.API_URL, 'change_password'),
+            json={'errors': {'__all__': ['Incorrect password']}},
+            status=400,
+            content_type='application/json'
+        )
 
         self.login()
         response = self.client.post(
@@ -227,9 +238,17 @@ class PasswordChangeViewTestCase(AuthenticatedTestCase):
         self.assertEqual(form.errors['__all__'], ['Incorrect password'])
 
 
-@mock.patch('mtp_common.auth.forms.api_client')
 class ResetPasswordViewTestCase(SimpleTestCase):
-    def test_reset_password(self, mock_api_client):
+
+    @responses.activate
+    def test_reset_password(self):
+        responses.add(
+            responses.POST,
+            urljoin(settings.API_URL, 'reset_password'),
+            status=204,
+            content_type='application/json'
+        )
+
         response = self.client.post(
             reverse('reset_password'),
             data={
@@ -238,10 +257,16 @@ class ResetPasswordViewTestCase(SimpleTestCase):
         )
         self.assertRedirects(response, reverse('reset_password_done'))
 
-    def test_reset_password_errors(self, mock_api_client):
-        error = b'{"errors":{"username":["User not found"]}}'
-        reset_password = mock_api_client.get_unauthenticated_connection().reset_password
-        reset_password.post.side_effect = HttpClientError(content=error)
+    @responses.activate
+    def test_reset_password_errors(self):
+        responses.add(
+            responses.POST,
+            urljoin(settings.API_URL, 'reset_password'),
+            json={'errors': {'username': ['User not found']}},
+            status=400,
+            content_type='application/json'
+        )
+
         response = self.client.post(
             reverse('reset_password'),
             data={
