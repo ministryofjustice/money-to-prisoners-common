@@ -275,23 +275,6 @@ class GetConnectionTestCase(SimpleTestCase):
 
 class GetApiSessionTestCase(GetConnectionTestCase):
 
-    def setUp(self):
-        """
-        Sets up a request mock object with
-        request.user.token == generated token.
-
-        It also defines the {base_url}/test/ endpoint which will be
-        used by all the test methods.
-        """
-        super().setUp()
-        self.request = mock.MagicMock(
-            user=mock.MagicMock(
-                token=generate_tokens()
-            )
-        )
-
-        self.test_endpoint = urljoin(settings.API_URL, 'test')
-
     def _test_failure(self):
         session = api_client.get_api_session(self.request)
         self.assertRaises(

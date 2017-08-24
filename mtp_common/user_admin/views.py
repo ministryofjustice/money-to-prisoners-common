@@ -9,10 +9,10 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic.edit import FormView
-from slumber.exceptions import HttpNotFoundError, HttpClientError
 
 from mtp_common.api import api_errors_to_messages
 from mtp_common.auth import api_client
+from mtp_common.auth.exceptions import HttpNotFoundError, HttpClientError
 from mtp_common.user_admin.forms import UserUpdateForm
 
 logger = logging.getLogger('mtp')
@@ -56,7 +56,10 @@ def list_users(request):
             raise ValueError
     except (KeyError, ValueError):
         page = 1
-    response = api_client.get_connection(request).users.get(limit=page_size, offset=(page - 1) * page_size)
+    response = api_client.get_api_session(request).get(
+        'users/',
+        params={'limit': page_size, 'offset': (page - 1) * page_size}
+    ).json()
     users = response.get('results', [])
     context = {
         'can_delete': request.user.has_perm('auth.delete_user'),
@@ -77,7 +80,9 @@ def delete_user(request, username):
     }
     if request.method == 'POST':
         try:
-            api_client.get_connection(request).users(username).delete()
+            api_client.get_api_session(request).delete(
+                'users/{username}/'.format(username=username)
+            )
 
             admin_username = request.user.user_data.get('username', 'Unknown')
             logger.info('Admin %(admin_username)s disabled user %(username)s' % {
@@ -95,7 +100,9 @@ def delete_user(request, username):
             return redirect(reverse('list-users'))
 
     try:
-        user = api_client.get_connection(request).users(username).get()
+        user = api_client.get_api_session(request).get(
+            'users/{username}/'.format(username=username)
+        ).json()
         context['user'] = user
         context['page_title'] = _('Disable user account ‘%(username)s’') % {'username': user['username']}
         return render(request, 'mtp_common/user_admin/delete.html', context=context)
@@ -112,9 +119,10 @@ def undelete_user(request, username):
     }
     if request.method == 'POST':
         try:
-            api_client.get_connection(request).users(username).patch({
-                'is_active': True,
-            })
+            api_client.get_api_session(request).patch(
+                'users/{username}/'.format(username=username),
+                json={'is_active': True}
+            )
 
             admin_username = request.user.user_data.get('username', 'Unknown')
             logger.info('Admin %(admin_username)s enabled user %(username)s' % {
@@ -132,7 +140,9 @@ def undelete_user(request, username):
             return redirect(reverse('list-users'))
 
     try:
-        user = api_client.get_connection(request).users(username).get()
+        user = api_client.get_api_session(request).get(
+            'users/{username}/'.format(username=username)
+        ).json()
         context['user'] = user
         context['page_title'] = _('Enable user account ‘%(username)s’') % {'username': user['username']}
         return render(request, 'mtp_common/user_admin/undelete.html', context=context)
@@ -145,9 +155,10 @@ def undelete_user(request, username):
 @ensure_compatible_admin
 def unlock_user(request, username):
     try:
-        api_client.get_connection(request).users(username).patch({
-            'is_locked_out': False,
-        })
+        api_client.get_api_session(request).patch(
+            'users/{username}/'.format(username=username),
+            json={'is_locked_out': False}
+        )
 
         admin_username = request.user.user_data.get('username', 'Unknown')
         logger.info('Admin %(admin_username)s removed lock-out for user %(username)s' % {
@@ -252,7 +263,9 @@ class UserUpdateView(UserFormView):
     def get_initial(self):
         username = self.kwargs['username']
         try:
-            response = api_client.get_connection(self.request).users(username).get()
+            response = api_client.get_api_session(self.request).get(
+                'users/{username}/'.format(username=username)
+            ).json()
             initial = {
                 'username': response.get('username', ''),
                 'first_name': response.get('first_name', ''),
