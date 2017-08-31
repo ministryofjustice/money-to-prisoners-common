@@ -295,7 +295,7 @@ def lint(_: Context):
 
 
 @tasks.register('create_build_paths', hidden=True)
-def govuk_template(context: Context, version='0.19.2', replace_fonts=True):
+def govuk_template(context: Context, version='0.22.3', replace_fonts=True):
     """
     Installs GOV.UK template
     """
