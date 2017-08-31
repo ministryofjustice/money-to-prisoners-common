@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-10 14:19+0100\n"
+"POT-Creation-Date: 2017-08-31 14:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Igor U <igor.ushkarev@digital.justice.gov.uk>, 2017\n"
 "Language-Team: Welsh (https://www.transifex.com/ministry-of-justice/teams/34553/cy/)\n"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: app.py:9
 msgid "Prisoner money"
-msgstr ""
+msgstr "Arian carcharor"
 
 #: auth/csrf.py:27 auth/csrf.py:30 auth/csrf.py:35
 msgid "Please try again."
