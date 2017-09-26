@@ -7,10 +7,9 @@ from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from form_error_reporting import GARequestErrorReportingMixin
 from requests.exceptions import ConnectionError
-from slumber.exceptions import HttpClientError, HttpNotFoundError
 
 from . import api_client
-from .exceptions import Unauthorized, Forbidden
+from .exceptions import Unauthorized, Forbidden, HttpClientError, HttpNotFoundError
 
 logger = logging.getLogger('mtp')
 
@@ -57,9 +56,9 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
                 )
             except Forbidden:
                 raise forms.ValidationError(
-                        self.error_messages['application_inaccessible'],
-                        code='application_inaccessible',
-                    )
+                    self.error_messages['application_inaccessible'],
+                    code='application_inaccessible',
+                )
             except Unauthorized:
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
@@ -109,8 +108,9 @@ class PasswordChangeForm(GARequestErrorReportingMixin, forms.Form):
             old_password = self.cleaned_data.get('old_password')
             new_password = self.cleaned_data.get('new_password')
             try:
-                api_client.get_connection(self.request).change_password.post(
-                    {'old_password': old_password, 'new_password': new_password}
+                api_client.get_api_session(self.request).post(
+                    'change_password/',
+                    json={'old_password': old_password, 'new_password': new_password}
                 )
             except HttpClientError as e:
                 try:
@@ -138,8 +138,9 @@ class ResetPasswordForm(GARequestErrorReportingMixin, forms.Form):
         if self.is_valid():
             username = self.cleaned_data.get('username')
             try:
-                api_client.get_unauthenticated_connection().reset_password.post(
-                    {
+                api_client.get_unauthenticated_session().post(
+                    'reset_password/',
+                    json={
                         'username': username,
                         'create_password': {
                             'password_change_url': settings.SITE_URL + str(self.password_change_url),
@@ -196,8 +197,9 @@ class PasswordChangeWithCodeForm(GARequestErrorReportingMixin, forms.Form):
             code = self.cleaned_data.get('reset_code')
             new_password = self.cleaned_data.get('new_password')
             try:
-                api_client.get_connection(self.request).change_password(code).post(
-                    {'new_password': new_password}
+                api_client.get_api_session(self.request).post(
+                    '/change_password/{code}/'.format(code=code),
+                    json={'new_password': new_password}
                 )
             except HttpNotFoundError:
                 raise forms.ValidationError(self.error_messages['code_expired'])

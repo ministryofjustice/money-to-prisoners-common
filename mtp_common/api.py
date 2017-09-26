@@ -45,3 +45,30 @@ def retrieve_all_pages(api_endpoint, **kwargs):
         offset += page_size
 
     return loaded_results
+
+
+def retrieve_all_pages_for_path(session, path, **params):
+    """
+    Some MTP apis are paginated using Django Rest Framework's LimitOffsetPagination paginator,
+    this method loads all pages into a single results list
+    :param session: Requests Session object
+    :param path: URL path
+    :param params: additional URL params
+    """
+    page_size = getattr(settings, 'REQUEST_PAGE_SIZE', 20)
+    loaded_results = []
+
+    offset = 0
+    while True:
+        response = session.get(
+            path,
+            params=dict(limit=page_size, offset=offset, **params)
+        )
+        content = response.json()
+        count = content.get('count', 0)
+        loaded_results += content.get('results', [])
+        if len(loaded_results) >= count:
+            break
+        offset += page_size
+
+    return loaded_results

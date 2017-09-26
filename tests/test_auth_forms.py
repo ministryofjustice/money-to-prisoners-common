@@ -1,12 +1,16 @@
+import json
 from unittest import mock
 
 from django.conf import settings
 from django.test.testcases import SimpleTestCase
 from django.utils.encoding import force_text
+import responses
 
+from mtp_common.auth import urljoin
 from mtp_common.auth.forms import (
     AuthenticationForm, PasswordChangeForm, ResetPasswordForm, RESET_CODE_PARAM
 )
+from mtp_common.auth.test_utils import generate_tokens
 
 
 @mock.patch('mtp_common.auth.forms.authenticate')
@@ -59,14 +63,27 @@ class AuthenticationFormTestCase(SimpleTestCase):
         mocked_authenticate.assert_called_with(**self.credentials)
 
 
-@mock.patch('mtp_common.auth.forms.api_client')
 class PasswordChangeFormTestCase(SimpleTestCase):
 
-    def test_change_password(self, mock_api_client):
-        conn = mock_api_client.get_connection()
+    def setUp(self):
+        super().setUp()
+        self.request = mock.MagicMock(
+            user=mock.MagicMock(
+                token=generate_tokens()
+            )
+        )
+
+    @responses.activate
+    def test_change_password(self):
+        responses.add(
+            responses.POST,
+            urljoin(settings.API_URL, 'change_password'),
+            status=204,
+            content_type='application/json'
+        )
 
         form = PasswordChangeForm(
-            None,
+            self.request,
             data={
                 'old_password': 'old',
                 'new_password': 'new',
@@ -75,15 +92,14 @@ class PasswordChangeFormTestCase(SimpleTestCase):
         )
 
         self.assertTrue(form.is_valid())
-        conn.change_password.post.assert_called_once_with({
-            'old_password': 'old', 'new_password': 'new'
-        })
+        self.assertEqual(
+            json.loads(responses.calls[0].request.body.decode('utf-8')),
+            {'old_password': 'old', 'new_password': 'new'}
+        )
 
-    def test_non_matching_new_passwords_fail(self, mock_api_client):
-        conn = mock_api_client.get_connection()
-
+    def test_non_matching_new_passwords_fail(self):
         form = PasswordChangeForm(
-            None,
+            self.request,
             data={
                 'old_password': 'old',
                 'new_password': 'new1',
@@ -92,23 +108,33 @@ class PasswordChangeFormTestCase(SimpleTestCase):
         )
 
         self.assertFalse(form.is_valid())
-        self.assertFalse(conn.change_password.post.called)
+        self.assertEqual(len(responses.calls), 0)
 
 
-@mock.patch('mtp_common.auth.forms.api_client')
 class ResetPasswordFormTestCase(SimpleTestCase):
-    def test_reset_password(self, mock_api_client):
+
+    @responses.activate
+    def test_reset_password(self):
+        responses.add(
+            responses.POST,
+            urljoin(settings.API_URL, 'reset_password'),
+            status=204,
+            content_type='application/json'
+        )
+
         password_change_url = '/change_password'
         form = ResetPasswordForm(password_change_url=password_change_url, request=None, data={
             'username': 'admin'
         })
         self.assertTrue(form.is_valid())
 
-        reset_password = mock_api_client.get_unauthenticated_connection().reset_password
-        reset_password.post.assert_called_once_with({
-            'username': 'admin',
-            'create_password': {
-                'password_change_url': settings.SITE_URL + password_change_url,
-                'reset_code_param': RESET_CODE_PARAM
+        self.assertEqual(
+            json.loads(responses.calls[0].request.body.decode('utf-8')),
+            {
+                'username': 'admin',
+                'create_password': {
+                    'password_change_url': settings.SITE_URL + password_change_url,
+                    'reset_code_param': RESET_CODE_PARAM
+                }
             }
-        })
+        )

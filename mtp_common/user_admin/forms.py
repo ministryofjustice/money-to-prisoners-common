@@ -35,7 +35,8 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
             del self.fields['role']
             del self.fields['user_admin']
         else:
-            managed_roles = api_client.get_connection(self.request).roles.get(managed=1).get('results', [])
+            response = api_client.get_api_session(self.request).get('roles/', params={'managed': 1})
+            managed_roles = response.json().get('results', [])
             initial_role = None
             role_choices = []
             for role in managed_roles:
@@ -64,7 +65,7 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
 
                 if self.create:
                     data['username'] = self.cleaned_data['username']
-                    api_client.get_connection(self.request).users().post(data)
+                    api_client.get_api_session(self.request).post('users/', json=data)
 
                     logger.info('Admin %(admin_username)s created user %(username)s' % {
                         'admin_username': admin_username,
@@ -76,7 +77,9 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
                     })
                 else:
                     username = self.initial['username']
-                    api_client.get_connection(self.request).users(username).patch(data)
+                    api_client.get_api_session(self.request).patch(
+                        'users/{username}/'.format(username=username), json=data
+                    )
 
                     logger.info('Admin %(admin_username)s edited user %(username)s' % {
                         'admin_username': admin_username,

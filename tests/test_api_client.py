@@ -140,6 +140,16 @@ class GetConnectionTestCase(SimpleTestCase):
 
         self.test_endpoint = urljoin(settings.API_URL, 'test')
 
+    def _test_failure(self):
+        conn = api_client.get_connection(self.request)
+        self.assertRaises(
+            Unauthorized, conn.test.get
+        )
+
+    def _test_success(self):
+        conn = api_client.get_connection(self.request)
+        return conn.test.get()
+
     def test_without_logged_in_user_raises_unauthorized(self):
         """
         If request.user is None, the get_connection raises
@@ -175,11 +185,7 @@ class GetConnectionTestCase(SimpleTestCase):
             content_type='application/json'
         )
 
-        # test
-        conn = api_client.get_connection(self.request)
-        self.assertRaises(
-            Unauthorized, conn.test.get
-        )
+        self._test_failure()
 
     @responses.activate
     def test_invalid_access_token_raises_unauthorized(self):
@@ -191,10 +197,7 @@ class GetConnectionTestCase(SimpleTestCase):
             content_type='application/json'
         )
 
-        conn = api_client.get_connection(self.request)
-        self.assertRaises(
-            Unauthorized, conn.test.get
-        )
+        self._test_failure()
 
     @responses.activate
     def test_with_valid_access_token(self):
@@ -210,8 +213,7 @@ class GetConnectionTestCase(SimpleTestCase):
         )
 
         # should return the same generated body
-        conn = api_client.get_connection(self.request)
-        result = conn.test.get()
+        result = self._test_success()
 
         self.assertDictEqual(result, expected_response)
 
@@ -261,13 +263,36 @@ class GetConnectionTestCase(SimpleTestCase):
             content_type='application/json'
         )
 
-        # test
-        conn = api_client.get_connection(self.request)
-        result = conn.test.get()
+        result = self._test_success()
 
         self.assertDictEqual(result, expected_response)
         self.assertDictEqual(self.request.user.token, new_token)
         self.assertNotEqual(
             expired_token['access_token'],
             new_token['access_token']
+        )
+
+
+class GetApiSessionTestCase(GetConnectionTestCase):
+
+    def _test_failure(self):
+        session = api_client.get_api_session(self.request)
+        self.assertRaises(
+            Unauthorized, session.get, 'test/'
+        )
+
+    def _test_success(self):
+        session = api_client.get_api_session(self.request)
+        response = session.get('test/')
+        return response.json()
+
+    def test_without_logged_in_user_raises_unauthorized(self):
+        """
+        If request.user is None, the get_api_session raises
+        Unauthorized.
+        """
+        self.request.user = None
+
+        self.assertRaises(
+            Unauthorized, api_client.get_api_session, self.request
         )
