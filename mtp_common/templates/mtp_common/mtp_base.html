@@ -69,11 +69,9 @@
 {% block content %}
   <main role="main" id="content" tabindex="-1">
     {% block phase_banner %}
-      <div class="phase-banner-beta">
+      <div class="phase-banner">
         <p>
-          {% if ENVIRONMENT == 'prod' %}
-            <strong class="phase-tag">{% trans 'Beta' %}</strong>
-          {% else %}
+          {% if ENVIRONMENT != 'prod' %}
             <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT_SHORT }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
           {% endif %}
           {% url 'submit_ticket' as ticket_url %}
