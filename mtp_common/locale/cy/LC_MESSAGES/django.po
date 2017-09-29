@@ -378,10 +378,6 @@ msgstr "Mwy o wybodaeth am cwcis"
 msgid "Menu"
 msgstr "Dewislen"
 
-#: templates/mtp_common/mtp_base.html:75
-msgid "Beta"
-msgstr "Beta"
-
 #: templates/mtp_common/mtp_base.html:81
 msgid "This is a new service."
 msgstr "Mae hwn yn wasanaeth newydd."
