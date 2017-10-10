@@ -1,0 +1,33 @@
+.phase-banner {
+  @extend %site-width-container;
+}
+
+.mtp-sub-nav {
+  @extend %site-width-container;
+  @extend %contain-floats;
+}
+
+.mtp-breadcrumbs {
+  @include grid-column(7 / 10);
+}
+
+.mtp-language-switch {
+  @include grid-column(3 / 10);
+  float: right !important;
+  padding-top: 0.75em;
+  padding-bottom: 0.4em;
+  text-align: right;
+}
+
+.mtp-language-switch__item {
+  border-left: 1px solid $border-color;
+  padding: 0 0.6em;
+
+  &.mtp-language-switch__item--first {
+    border-left: 0;
+  }
+
+  &.mtp-language-switch__item--last {
+    padding-right: 0;
+  }
+}

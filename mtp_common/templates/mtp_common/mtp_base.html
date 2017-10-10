@@ -67,8 +67,8 @@
 {% endblock %}
 
 {% block content %}
-  <main role="main" id="content" tabindex="-1">
-    {% block phase_banner %}
+  {% block phase_banner %}
+    {% if not moj_internal_site %}
       <div class="phase-banner">
         <p>
           {% if ENVIRONMENT != 'prod' %}
@@ -83,24 +83,12 @@
           </span>
         </p>
       </div>
-    {% endblock %}
+    {% endif %}
+  {% endblock %}
 
-    {% block breadcrumbs %}
-      {% if breadcrumbs %}
-        <div class="breadcrumbs">
-          <ol>
-            {% for breadcrumb in breadcrumbs %}
-              {% if breadcrumb.url %}
-                <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>
-              {% else %}
-                <li><a>{{ breadcrumb.name }}</a></li>
-              {% endif %}
-            {% endfor %}
-          </ol>
-        </div>
-      {% endif %}
-    {% endblock %}
+  {% sub_nav %}
 
+  <main role="main" id="content" tabindex="-1">
     {% block inner_content %}{% endblock %}
   </main>
 {% endblock %}
