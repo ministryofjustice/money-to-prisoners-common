@@ -85,10 +85,16 @@ def sentry_js():
     }
 
 
-@register.inclusion_tag('mtp_common/language-switch.html', takes_context=True)
-def language_switch(context):
+@register.inclusion_tag('mtp_common/sub-nav.html', takes_context=True)
+def sub_nav(context):
+    """
+    Sub-nav displayed below proposition header
+    - creates alternate language links if SHOW_LANGUAGE_SWITCH is set
+    - takes "breadcrumbs" from the context
+    - takes "breadcrumbs_back" from the context to show a back link *instead* of breadcrumbs
+    """
     request = context.get('request')
-    urls = []
+    alt_urls = []
     try:
         if not settings.SHOW_LANGUAGE_SWITCH:
             raise NoReverseMatch
@@ -97,10 +103,14 @@ def language_switch(context):
         url_kwargs = request.resolver_match.kwargs
         for lang_code, lang_name in settings.LANGUAGES:
             with override(lang_code):
-                urls.append((lang_code, lang_name, reverse(view_name, args=url_args, kwargs=url_kwargs)))
+                alt_urls.append((lang_code, lang_name, reverse(view_name, args=url_args, kwargs=url_kwargs)))
     except (AttributeError, NoReverseMatch):
-        urls = []
-    return {'urls': urls}
+        alt_urls = []
+    return {
+        'alt_urls': alt_urls,
+        'breadcrumbs': context.get('breadcrumbs'),
+        'breadcrumbs_back': context.get('breadcrumbs_back'),
+    }
 
 
 @register.inclusion_tag('mtp_common/includes/page-list.html')
