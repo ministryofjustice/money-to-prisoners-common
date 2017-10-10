@@ -67,24 +67,7 @@
 {% endblock %}
 
 {% block content %}
-  {% block phase_banner %}
-    {% if not moj_internal_site %}
-      <div class="phase-banner">
-        <p>
-          {% if ENVIRONMENT != 'prod' %}
-            <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT_SHORT }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">{{ ENVIRONMENT }}</strong>
-          {% endif %}
-          {% url 'submit_ticket' as ticket_url %}
-          <span>
-            {% trans 'This is a new service.' %}
-            {% blocktrans trimmed %}
-              If you have any comments or need help please <a href="{{ ticket_url }}">contact us</a>.
-            {% endblocktrans %}
-          </span>
-        </p>
-      </div>
-    {% endif %}
-  {% endblock %}
+  {% block phase_banner %}{% endblock %}
 
   {% sub_nav %}
 
