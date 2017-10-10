@@ -5,10 +5,10 @@ strong {
 
 .breadcrumbs {
   padding-bottom: 0;
-}
 
-.breadcrumbs li a:after {
-  content: '';
+  li a:after {
+    content: '';
+  }
 }
 
 #content {
@@ -17,14 +17,4 @@ strong {
 
 .main-content {
   border-top: 1px solid transparent;
-}
-
-.box-highlight {
-  background-color: #0c857b;
-
-  h1, h2 {
-    font-size: 36px;
-    padding: 0;
-    margin: 0 0 .5em;
-  }
 }
