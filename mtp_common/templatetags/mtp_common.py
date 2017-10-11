@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.urlresolvers import NoReverseMatch, reverse
 from django.template.base import token_kwargs
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.utils.translation import override
 try:
     from raven.contrib.django.models import client as sentry_client
@@ -32,6 +33,11 @@ def to_string(value):
 @register.simple_tag
 def random_string(length=4):
     return get_random_string(length=length)
+
+
+@register.filter
+def wrapwithtag(content, tag):
+    return format_html('<{tag}>{content}</{tag}>', tag=tag, content=content)
 
 
 class StripWhitespaceNode(template.Node):
