@@ -1,0 +1,64 @@
+// mtp-specific staff navigation tabs used instead of proposition links
+
+$mtp-proposition-tab-breakpoint: $tablet-breakpoint !default;
+
+#mtp-proposition-extra {
+  margin-top: 10px;
+}
+
+#mtp-proposition-tabs {
+  margin-bottom: -10px;
+
+  li {
+    display: inline-block;
+  }
+
+  a {
+    display: block;
+    padding: 10px 20px;
+    color: $page-colour;
+    border: 0;
+    border-bottom: 10px solid transparent;
+    text-decoration: none;
+    text-align: center;
+    font-size: 16px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $govuk-blue;
+    }
+
+    &.current {
+      background-color: $page-colour;
+      color: $text-colour;
+
+      &:focus {
+        outline: none;
+        background-color: $focus-colour;
+        border-color: $focus-colour;
+      }
+    }
+  }
+
+  @include media($max-width: $mtp-proposition-tab-breakpoint, $ignore-for-ie: true) {
+    margin-bottom: 0;
+
+    li {
+      margin-bottom: -18px;
+    }
+
+    a {
+      display: table-cell;
+      width: 80px;
+      height: 40px;
+      padding: 5px 5px 0;
+      vertical-align: middle;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+  }
+}
