@@ -1,0 +1,28 @@
+// mtp-specific staff navigation overrides to gds styles
+
+.mtp-internal-site {
+  #global-header.with-proposition .header-wrapper .header-global {
+    @include media(desktop) {
+      width: 60%;
+    }
+  }
+
+  #global-header {
+    #logo {
+      display: block;
+      height: em(36, 30);
+      padding: 5px 0 0;
+      text-indent: 64px;
+      background: file-url('../mtp_common/images/crest-moj.png') no-repeat 0 0;
+
+      @include device-pixel-ratio {
+        background-image: file-url('../mtp_common/images/crest-moj@2x.png');
+        background-size: 55px 36px;
+      }
+
+      img {
+        display: none;
+      }
+    }
+  }
+}

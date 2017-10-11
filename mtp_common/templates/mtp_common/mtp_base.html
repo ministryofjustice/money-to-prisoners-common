@@ -31,7 +31,7 @@
   {% endif %}
 {% endblock %}
 
-{% block body_classes %}{{ block.super }} {% if footer_feedback_context %}without-footer-padding{% endif %}{% endblock %}
+{% block body_classes %}{{ block.super }} {% if moj_internal_site %}mtp-internal-site{% endif %} {% if footer_feedback_context %}without-footer-padding{% endif %}{% endblock %}
 
 {% block cookie_message %}
   <p>
@@ -42,26 +42,16 @@
   </p>
 {% endblock %}
 
-{% block header_class %}with-proposition {% if moj_internal_site %}mtp-internal-site{% endif %}{% endblock %}
-
-{% block inside_header %}
-  {% if moj_internal_site %}
-    <div class="header-logo header-moj-logo">
-      <a href="{{ home_url }}">{{ global_header_text }}</a>
-    </div>
-  {% endif %}
-{% endblock %}
+{% block header_class %}with-proposition{% endblock %}
 
 {% block proposition_header %}
   <div class="header-proposition">
     <div class="content">
-      {% if request.user.is_authenticated %}
-        <a href="#proposition-links" class="js-mtp-header-toggle menu print-hidden">{% trans 'Menu' %}</a>
-      {% endif %}
-      <nav id="proposition-menu">
-        <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}</a>
-        {% block proposition_menu %}{% endblock %}
-      </nav>
+      <div id="proposition-menu">
+        {% if not moj_internal_site %}
+          <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}</a>
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}
