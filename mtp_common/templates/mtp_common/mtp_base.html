@@ -47,11 +47,13 @@
 {% block proposition_header %}
   <div class="header-proposition">
     <div class="content">
-      <div id="proposition-menu">
-        {% if not moj_internal_site %}
+      {% if moj_internal_site %}
+        {% include 'mtp_common/includes/proposition-user-menu.html' %}
+      {% else %}
+        <div id="proposition-menu">
           <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}</a>
-        {% endif %}
-      </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 
