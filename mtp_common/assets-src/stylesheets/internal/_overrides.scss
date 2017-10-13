@@ -5,9 +5,15 @@
     padding-bottom: 0;
   }
 
-  #global-header.with-proposition .header-wrapper .header-global {
+  #global-header.with-proposition .header-wrapper {
     @include media(desktop) {
-      width: 60%;
+      .header-global {
+        width: 60%;
+      }
+
+      .header-proposition {
+        width: 40%;
+      }
     }
   }
 

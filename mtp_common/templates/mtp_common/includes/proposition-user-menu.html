@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load mtp_common %}
+
+<nav id="mtp-user-menu" class="print-hidden" aria-label="{% trans 'User account menu' %}">
+  {% if request.user.is_authenticated %}
+    <a class="mtp-user-menu__link mtp-user-menu__toggle" href="#">
+      {{ request.user.get_full_name|default:request.user.username }}
+    </a>
+    <ul id="mtp-user-menu__links">
+      {% if perms.auth.change_user %}
+        <li><a href="{% url 'list-users' %}">{% trans 'Manage users' %}</a></li>
+      {% endif %}
+      <li><a href="{% url 'password_change' %}">{% trans 'Change password' %}</a></li>
+      <li><a href="{% url 'logout' %}">{% trans 'Sign out' %}</a></li>
+    </ul>
+  {% else %}
+    <a href="{% url 'login' %}" class="mtp-user-menu__link">{% trans 'Sign in' %}</a>
+  {% endif %}
+</nav>
