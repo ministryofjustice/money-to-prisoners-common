@@ -91,15 +91,7 @@ def sentry_js():
     }
 
 
-@register.inclusion_tag('mtp_common/sub-nav.html', takes_context=True)
-def sub_nav(context):
-    """
-    Sub-nav displayed below proposition header
-    - creates alternate language links if SHOW_LANGUAGE_SWITCH is set
-    - takes "breadcrumbs" from the context
-    - takes "breadcrumbs_back" from the context to show a back link *instead* of breadcrumbs
-    """
-    request = context.get('request')
+def make_alternate_language_urls(request):
     alt_urls = []
     try:
         if not settings.SHOW_LANGUAGE_SWITCH:
@@ -112,8 +104,28 @@ def sub_nav(context):
                 alt_urls.append((lang_code, lang_name, reverse(view_name, args=url_args, kwargs=url_kwargs)))
     except (AttributeError, NoReverseMatch):
         alt_urls = []
+    return alt_urls
+
+
+@register.inclusion_tag('mtp_common/includes/language-switch.html', takes_context=True)
+def language_switch(context):
+    request = context.get('request')
     return {
-        'alt_urls': alt_urls,
+        'alt_urls': make_alternate_language_urls(request),
+    }
+
+
+@register.inclusion_tag('mtp_common/sub-nav.html', takes_context=True)
+def sub_nav(context):
+    """
+    Sub-nav displayed below proposition header
+    - creates alternate language links if SHOW_LANGUAGE_SWITCH is set
+    - takes "breadcrumbs" from the context
+    - takes "breadcrumbs_back" from the context to show a back link *instead* of breadcrumbs
+    """
+    request = context.get('request')
+    return {
+        'alt_urls': make_alternate_language_urls(request),
         'breadcrumbs': context.get('breadcrumbs'),
         'breadcrumbs_back': context.get('breadcrumbs_back'),
     }
