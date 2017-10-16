@@ -59,7 +59,18 @@
 {% endblock %}
 
 {% block content %}
-  {% block phase_banner %}{% endblock %}
+  {% block phase_banner %}
+    {% if ENVIRONMENT != 'prod' %}
+      <div class="phase-banner">
+        <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT_SHORT }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">
+          {% trans 'Warning' %}
+        </strong>
+        {% blocktrans trimmed with name=ENVIRONMENT %}
+          This “{{ name }}” website is for testing only.
+        {% endblocktrans %}
+      </div>
+    {% endif %}
+  {% endblock %}
 
   {% sub_nav %}
 
