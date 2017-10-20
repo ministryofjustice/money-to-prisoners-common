@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load mtp_common %}
 
-{% block page_title %}{% trans 'Your feedback' %} – {{ block.super }}{% endblock %}
+{% block page_title %}{% trans 'Get help' %} – {{ block.super }}{% endblock %}
 
 {% block inner_content %}
   {% if return_to %}
@@ -11,7 +11,7 @@
 
   <header>
     {% language_switch %}
-    <h1 class="heading-xlarge">{% trans 'Your feedback' %}</h1>
+    <h1 class="heading-xlarge">{% trans 'Get help' %}</h1>
   </header>
 
   <form action="." method="post" id="send-feedback">
@@ -26,21 +26,18 @@
 
       {% with field=form.ticket_content value=request.GET.message|default:'' %}
         <div class="form-group {% if field.errors %}form-group-error{% endif %}">
-          {% include 'mtp_common/forms/field-label.html' with field=field only %}
-          <p class="panel panel-border-wide">
-            {% trans 'Please don’t include bank details or any other personal information.' %}
+          <p>
+            {% trans 'Ask questions about this service to the Prisoner Money team.<br> It\'s the fastest way we can help you with a query.<br> You can send us any feedback here too.' %}
           </p>
           {% include 'mtp_common/forms/field-errors.html' with field=field only %}
           <textarea class="form-control {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
         </div>
       {% endwith %}
 
-      <h2 class="heading-large">{% trans 'Do you want a reply?' %}</h2>
-      <p>{% trans 'Enter your email address if you’d like a reply. We won’t use it for anything else.' %}</p>
       {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
 
       <div class="form-group">
-        <button type="submit" class="button" name="submit-feedback">{% trans 'Send feedback' %}</button>
+        <button type="submit" class="button" name="submit-feedback">{% trans 'Send' %}</button>
       </div>
     </fieldset>
   </form>
