@@ -27,13 +27,17 @@
       {% with field=form.ticket_content value=request.GET.message|default:'' %}
         <div class="form-group {% if field.errors %}form-group-error{% endif %}">
           <p class="lede padding-blurb">
-            {% trans 'Ask questions about this service to the Prisoner Money team.<br> It\'s the fastest way we can help you with a query.<br> You can send us any feedback here too.' %}
+            {% trans 'Ask questions about this service to the Prisoner Money team.<br> It`s the fastest way we can help you with a query. <br> You can send us any feedback here too.' %}
           </p>
           {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-          <p class="no-padding">
-            {% trans 'Your questions and feedback' %}
-          </p>
-          <textarea class="form-control form-control-3-4 {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
+          
+          <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+          {{ field.label }}
+          {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+          </label>
+
+          <textarea class="form-control {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
+
         </div>
       {% endwith %}
 
