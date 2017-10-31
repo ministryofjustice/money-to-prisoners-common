@@ -32,7 +32,7 @@
           {% include 'mtp_common/forms/field-errors.html' with field=field only %}
           
           <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
-          {{ "Your questions and feedback." }}
+          {{% trans 'Your questions and feedback' %}}
           {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
           </label>
 
