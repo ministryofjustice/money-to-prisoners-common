@@ -27,6 +27,6 @@
     "jquery": "~1.12",
     "js-cookie": "~2.1",
     "node-sass": "~4.6",
-    "webpack": "~1.15"
+    "webpack": "~3.8"
   }
 }
