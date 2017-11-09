@@ -11,7 +11,7 @@
 
   <header>
     {% language_switch %}
-    <h1 class="heading-xlarge get-help-padding">{% trans 'Get help' %}</h1>
+    <h1 class="heading-xlarge mtp-get-help-padding">{% trans 'Get help' %}</h1>
   </header>
 
   <form action="." method="post" id="send-feedback">
@@ -26,13 +26,21 @@
 
       {% with field=form.ticket_content value=request.GET.message|default:'' %}
         <div class="form-group {% if field.errors %}form-group-error{% endif %}">
-          <p class="lede padding-blurb">
-            {% trans 'Ask questions about this service to the Prisoner Money team.<br> It’s the fastest way we can help you with a query. <br> You can send us any feedback here too.' %}
+          <p class="lede mtp-padding-blurb">
+            <div>
+              {% trans 'Ask questions about this service to the Prisoner Money team.' %}
+            </div>
+            <div>
+              {% trans 'It’s the fastest way we can help you with a query.' %}
+            </div>
+            <div class="mtp-padding-blurb">
+              {% trans 'You can send us any feedback here too.' %}
+            </div>
           </p>
           {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-          
+
           <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
-          {{% trans 'Your questions and feedback' %}}
+          {% trans 'Your questions and feedback' %}
           {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
           </label>
 
