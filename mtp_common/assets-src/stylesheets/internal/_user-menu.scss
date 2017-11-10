@@ -32,7 +32,16 @@ a.mtp-user-menu__link {
   }
 
   &:focus {
-    background-color: $focus-colour;
+    background-image: file-url('../mtp_common/images/proposition-user-icon-focused.png');
+    outline: none;
+
+    @include device-pixel-ratio {
+      background-image: file-url('../mtp_common/images/proposition-user-icon-focused@2x.png');
+    }
+
+    #global-header & {
+      color: $focus-colour;
+    }
   }
 }
 

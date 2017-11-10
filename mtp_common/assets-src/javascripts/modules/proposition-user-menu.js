@@ -23,7 +23,8 @@ exports.PropositionUserMenu = {
     $linksMenu.find('a').attr('role', 'menuitem');
 
     var closed = true;
-    $linksMenuToggle.click(function () {
+    $linksMenuToggle.click(function (e) {
+      e.preventDefault();
       closed = !closed;
       if (closed) {
         $linksMenu.attr('aria-expanded', 'true');
