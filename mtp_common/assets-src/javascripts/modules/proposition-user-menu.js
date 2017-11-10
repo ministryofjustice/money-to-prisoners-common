@@ -3,6 +3,7 @@
 
 exports.PropositionUserMenu = {
   init: function () {
+    var $body = $('body');
     var $userNav = $('#mtp-user-menu');
     var $linksMenu = $('#mtp-user-menu__links');
     var $linksMenuToggle = $('.mtp-user-menu__toggle');
@@ -34,5 +35,11 @@ exports.PropositionUserMenu = {
         $userNav.addClass('mtp-user-menu--open');
       }
     });
+
+    $body.on('click', function (e) {
+      if (!closed && e.target !== $linksMenuToggle[0]) {
+        $linksMenuToggle.click();
+      }
+    })
   }
 };
