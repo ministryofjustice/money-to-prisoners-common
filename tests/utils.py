@@ -1,9 +1,9 @@
 from unittest import mock
 
-from django.core.urlresolvers import reverse
 from django.template import Origin, Template, TemplateDoesNotExist
 from django.template.loaders.app_directories import Loader
 from django.test import SimpleTestCase as DjangoSimpleTestCase
+from django.urls import reverse
 
 
 def get_template_source():

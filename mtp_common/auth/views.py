@@ -2,10 +2,10 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
@@ -47,7 +47,7 @@ def login(request, template_name=None,
             return resolve_url(settings.LOGIN_REDIRECT_URL)
         return redirect_to
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(get_redirect_to())
 
     if request.method == "POST":
@@ -196,7 +196,7 @@ def reset_password(request,
                    reset_password_form=ResetPasswordForm,
                    extra_context=None):
     cancel_url = resolve_url(cancel_url or '/')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(cancel_url)
     if post_change_redirect is None:
         post_change_redirect = reverse('reset_password_done')
@@ -222,7 +222,7 @@ def reset_password_done(request,
                         cancel_url=None,
                         extra_context=None):
     cancel_url = resolve_url(cancel_url or '/')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(cancel_url)
     context = {
         'cancel_url': cancel_url,

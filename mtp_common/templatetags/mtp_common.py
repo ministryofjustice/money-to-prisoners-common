@@ -5,8 +5,8 @@ import re
 
 from django import template
 from django.conf import settings
-from django.core.urlresolvers import NoReverseMatch, reverse
 from django.template.base import token_kwargs
+from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
 from django.utils.translation import override

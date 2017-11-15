@@ -17,8 +17,8 @@ class TestRunner(DiscoverRunner):
             from mtp_common.test_utils.functional_tests import enable_accessibility
 
             middleware = 'mtp_common.test_utils.functional_tests.AccessibilityTestingMiddleware'
-            if middleware not in settings.MIDDLEWARE_CLASSES:
-                settings.MIDDLEWARE_CLASSES += (middleware,)
+            if middleware not in settings.MIDDLEWARE:
+                settings.MIDDLEWARE += (middleware,)
             enable_accessibility(suite)
 
         if self.verbosity < 2:

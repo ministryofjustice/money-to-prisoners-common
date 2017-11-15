@@ -3,9 +3,9 @@ import math
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic.edit import FormView

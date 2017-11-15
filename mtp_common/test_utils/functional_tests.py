@@ -12,6 +12,7 @@ from urllib.parse import urlparse, urljoin
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.test import LiveServerTestCase
+from django.utils.deprecation import MiddlewareMixin
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.command import Command
@@ -407,19 +408,18 @@ def override_accessibility_standard(standard):
     return inner
 
 
-class AccessibilityTestingMiddleware:
+class AccessibilityTestingMiddleware(MiddlewareMixin):
     """
     View processing middleware to insert accessibility testing code into the HTML
     """
     standard = 'WCAG2AA'  # WCAG2A, WCAG2AA, WCAG2AAA, Section508
 
-    @classmethod
-    def process_response(cls, _, response):
+    def process_response(self, request, response):
         if response and response.status_code == 200:
             content = response.content
             a11y_template = render_to_string('mtp_common/a11y.html', {
                 'include_warnings': False,
-                'standard': cls.standard
+                'standard': self.standard
             })
             a11y_template = a11y_template.encode(response.charset)
             content = content.replace(b'</body>', a11y_template + b'\n</body>', 1)

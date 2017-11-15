@@ -1,9 +1,9 @@
 from unittest import mock
 
 from django.conf import settings
-from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.request import QueryDict
 from django.test import SimpleTestCase
+from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_text
 import responses
 

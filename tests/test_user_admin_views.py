@@ -3,7 +3,7 @@ import logging
 from unittest import mock
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import responses
 
 from mtp_common.auth import login, urljoin
