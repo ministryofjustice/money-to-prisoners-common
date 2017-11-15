@@ -49,7 +49,7 @@ Configure Django settings:
 
 .. code-block:: python
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         ...
         # instead of django.middleware.csrf.CsrfViewMiddleware
         'mtp_common.auth.csrf.CsrfViewMiddleware',

@@ -2,9 +2,9 @@ import logging
 from unittest import mock
 
 from django.conf import settings
-from django.core.urlresolvers import reverse_lazy
 from django.http.response import HttpResponseForbidden
 from django.test import SimpleTestCase
+from django.urls import reverse_lazy
 
 from mtp_common.test_utils import silence_logger
 

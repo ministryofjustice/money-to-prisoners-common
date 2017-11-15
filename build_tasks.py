@@ -22,7 +22,7 @@ def setup_django_for_testing(_: Context):
     """
     import django
     from django.conf import settings
-    from django.core.urlresolvers import reverse_lazy
+    from django.urls import reverse_lazy
 
     if settings.configured:
         raise TaskError('This task must be called first')
@@ -64,7 +64,7 @@ def setup_django_for_testing(_: Context):
                 'loaders': ['tests.utils.DummyTemplateLoader']
             },
         }],
-        MIDDLEWARE_CLASSES=(
+        MIDDLEWARE=(
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.middleware.common.CommonMiddleware',
             'mtp_common.auth.csrf.CsrfViewMiddleware',

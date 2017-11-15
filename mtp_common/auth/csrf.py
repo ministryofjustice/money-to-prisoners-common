@@ -64,7 +64,7 @@ class CsrfViewMiddleware(DjangoCsrfViewMiddleware):
     Usage:
 
     * Replace django.middleware.csrf.CsrfViewMiddleware with mtp_common.auth.csrf.CsrfViewMiddleware
-      in `settings.MIDDLEWARE_CLASSES`
+      in `settings.MIDDLEWARE`
     * Add `CSRF_FAILURE_VIEW = 'mtp_common.auth.csrf.csrf_failure'` to `settings`
     """
 

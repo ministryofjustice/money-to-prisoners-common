@@ -1,7 +1,8 @@
-from django.utils.functional import SimpleLazyObject
-from django.http import HttpResponseRedirect
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils.deprecation import MiddlewareMixin
+from django.utils.functional import SimpleLazyObject
 
 from mtp_common.auth import get_user as auth_get_user, logout
 from .exceptions import Unauthorized
@@ -17,7 +18,7 @@ def get_user(request):
     return request._cached_user
 
 
-class AuthenticationMiddleware(object):
+class AuthenticationMiddleware(MiddlewareMixin):
     """
     It simply sets `request.user` so that it can be used in our views.
 
