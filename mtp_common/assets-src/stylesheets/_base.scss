@@ -3,6 +3,15 @@ strong {
   font-weight: bold;
 }
 
+@include ie-lte(8) {
+  #global-header .header-wrapper {
+    // override $gutter-half padding either side as too wide on ie8
+    // https://github.com/alphagov/govuk_template/blob/530a5027af9b8f358ae78e1b78cc4025f31b9b5e/source/assets/stylesheets/_header.scss#L9
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .phase-tag.phase-tag-dev {
   background-color: $red;
 }
