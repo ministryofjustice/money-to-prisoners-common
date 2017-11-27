@@ -1,5 +1,6 @@
 from datetime import date
 import time
+from urllib.parse import quote_plus
 
 from django.conf import settings
 import jwt
@@ -74,7 +75,8 @@ def post(path, data=None, timeout=15, retries=0, session=None):
 def get_account_balances(prison_id, prisoner_number, retries=0, session=None):
     return get(
         '/prison/{prison_id}/offenders/{prisoner_number}/accounts'.format(
-            prison_id=prison_id, prisoner_number=prisoner_number
+            prison_id=quote_plus(prison_id),
+            prisoner_number=quote_plus(prisoner_number)
         ),
         retries=retries, session=session
     )
@@ -88,7 +90,9 @@ def get_transaction_history(prison_id, prisoner_number, account_code,
     }
     return get(
         '/prison/{prison_id}/offenders/{prisoner_number}/accounts/{account_code}/transactions'.format(
-            prison_id=prison_id, prisoner_number=prisoner_number, account_code=account_code
+            prison_id=quote_plus(prison_id),
+            prisoner_number=quote_plus(prisoner_number),
+            account_code=quote_plus(account_code)
         ),
         params=params, retries=retries, session=session
     )
@@ -105,7 +109,8 @@ def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description,
     }
     return post(
         '/prison/{prison_id}/offenders/{prisoner_number}/transactions'.format(
-            prison_id=prison_id, prisoner_number=prisoner_number
+            prison_id=quote_plus(prison_id),
+            prisoner_number=quote_plus(prisoner_number)
         ),
         data, retries=retries, session=session
     )
@@ -113,7 +118,9 @@ def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description,
 
 def get_photograph_data(prisoner_number, retries=0, session=None):
     result = get(
-        '/offenders/{prisoner_number}/image'.format(prisoner_number=prisoner_number),
+        '/offenders/{prisoner_number}/image'.format(
+            prisoner_number=quote_plus(prisoner_number)
+        ),
         retries=retries, session=session
     )
     if result.get('image'):
@@ -122,7 +129,9 @@ def get_photograph_data(prisoner_number, retries=0, session=None):
 
 def get_location(prisoner_number, retries=0, session=None):
     result = get(
-        '/offenders/{prisoner_number}/location'.format(prisoner_number=prisoner_number),
+        '/offenders/{prisoner_number}/location'.format(
+            prisoner_number=quote_plus(prisoner_number)
+        ),
         retries=retries, session=session
     )
     if 'establishment' in result:
