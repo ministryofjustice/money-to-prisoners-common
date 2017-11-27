@@ -32,13 +32,14 @@ def build_nomis_url(path):
     return urljoin(settings.NOMIS_API_BASE_URL, path)
 
 
-def get(path, params=None, timeout=15, retries=0):
+def get(path, params=None, timeout=15, retries=0, session=None):
     if params:
         params = {
             param: params[param] for param in params
             if params[param] is not None
         }
-    response = requests.get(
+    session_or_module = session or requests
+    response = session_or_module.get(
         build_nomis_url(path),
         params=params,
         headers=generate_request_headers(),
@@ -53,8 +54,9 @@ def get(path, params=None, timeout=15, retries=0):
     return {'status_code': response.status_code}
 
 
-def post(path, data=None, timeout=15, retries=0):
-    response = requests.post(
+def post(path, data=None, timeout=15, retries=0, session=None):
+    session_or_module = session or requests
+    response = session_or_module.post(
         build_nomis_url(path),
         json=data,
         headers=generate_request_headers(),
@@ -69,17 +71,17 @@ def post(path, data=None, timeout=15, retries=0):
     return {'status_code': response.status_code}
 
 
-def get_account_balances(prison_id, prisoner_number, retries=0):
+def get_account_balances(prison_id, prisoner_number, retries=0, session=None):
     return get(
         '/prison/{prison_id}/offenders/{prisoner_number}/accounts'.format(
             prison_id=prison_id, prisoner_number=prisoner_number
         ),
-        retries=retries
+        retries=retries, session=session
     )
 
 
 def get_transaction_history(prison_id, prisoner_number, account_code,
-                            from_date, to_date=None, retries=0):
+                            from_date, to_date=None, retries=0, session=None):
     params = {
         'from_date': convert_date_param(from_date),
         'to_date': convert_date_param(to_date),
@@ -88,12 +90,12 @@ def get_transaction_history(prison_id, prisoner_number, account_code,
         '/prison/{prison_id}/offenders/{prisoner_number}/accounts/{account_code}/transactions'.format(
             prison_id=prison_id, prisoner_number=prisoner_number, account_code=account_code
         ),
-        params=params,
-        retries=retries
+        params=params, retries=retries, session=session
     )
 
 
-def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description, retries=0):
+def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description,
+                    retries=0, session=None):
     data = {
         'type': 'MRPR',
         'description': description,
@@ -105,24 +107,23 @@ def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description, 
         '/prison/{prison_id}/offenders/{prisoner_number}/transactions'.format(
             prison_id=prison_id, prisoner_number=prisoner_number
         ),
-        data,
-        retries=retries
+        data, retries=retries, session=session
     )
 
 
-def get_photograph_data(prisoner_number, retries=0):
+def get_photograph_data(prisoner_number, retries=0, session=None):
     result = get(
         '/offenders/{prisoner_number}/image'.format(prisoner_number=prisoner_number),
-        retries=retries
+        retries=retries, session=session
     )
     if result.get('image'):
         return result['image']
 
 
-def get_location(prisoner_number, retries=0):
+def get_location(prisoner_number, retries=0, session=None):
     result = get(
         '/offenders/{prisoner_number}/location'.format(prisoner_number=prisoner_number),
-        retries=retries
+        retries=retries, session=session
     )
     if 'establishment' in result:
         return {
