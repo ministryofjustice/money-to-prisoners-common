@@ -5,9 +5,9 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from form_error_reporting import GARequestErrorReportingMixin
-from slumber.exceptions import HttpClientError
 
 from mtp_common.auth import api_client
+from mtp_common.auth.exceptions import HttpClientError
 
 logger = logging.getLogger('mtp')
 
