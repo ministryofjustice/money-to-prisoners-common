@@ -1,0 +1,133 @@
+.mtp-notification {
+  margin: 0.5em 0 0;
+  background: $light-blue-25;
+  border-left: 6px solid $light-blue;
+  @include core-19;
+
+  .mtp-notification__headline {
+    position: relative;
+    display: block;
+    padding: 0.75em 0.75em 0.75em 66px;
+    min-height: 30px;
+    @include bold-24;
+    background: file-url('../mtp_common/images/message-info.png') no-repeat 16px 16px;
+
+    @include media(mobile) {
+      padding-top: 1.2em;
+      padding-bottom: 0.5em;
+    }
+
+    @include device-pixel-ratio {
+      background-image: file-url('../mtp_common/images/message-info@2x.png');
+      background-size: 34px 34px !important;
+    }
+
+    span {
+      position: absolute;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+      top: 0.75em;
+      right: 0.5em;
+      background: file-url('../mtp_common/images/notification-control.png') no-repeat -40px 0;
+
+      @include device-pixel-ratio {
+        background-image: file-url('../mtp_common/images/notification-control@2x.png');
+        background-size: 80px 96px !important;
+      }
+    }
+  }
+
+  &.mtp-notification--open .mtp-notification__headline span {
+    background-position: 0 0;
+  }
+}
+
+.mtp-notification--success {
+  background: $turquoise-25;
+  border-color: $turquoise;
+
+  .mtp-notification__headline {
+    background-image: file-url('../mtp_common/images/message-success.png');
+
+    @include device-pixel-ratio {
+      background-image: file-url('../mtp_common/images/message-success@2x.png');
+    }
+
+    span {
+      background-position: -40px -24px;
+    }
+  }
+
+  &.mtp-notification--open .mtp-notification__headline span {
+    background-position: 0 -24px;
+  }
+}
+
+.mtp-notification--warning {
+  background: $orange-25;
+  border-color: $orange;
+
+  .mtp-notification__headline {
+    background-image: file-url('../mtp_common/images/message-warning.png');
+
+    @include device-pixel-ratio {
+      background-image: file-url('../mtp_common/images/message-warning@2x.png');
+    }
+
+    span {
+      background-position: -40px -48px;
+    }
+  }
+
+  &.mtp-notification--open .mtp-notification__headline span {
+    background-position: 0 -48px;
+  }
+}
+
+.mtp-notification--error {
+  background: $red-25;
+  border-color: $red;
+
+  .mtp-notification__headline {
+    background-image: file-url('../mtp_common/images/message-error.png');
+
+    @include device-pixel-ratio {
+      background-image: file-url('../mtp_common/images/message-error@2x.png');
+    }
+
+    span {
+      background-position: -40px -72px;
+    }
+  }
+
+  &.mtp-notification--open .mtp-notification__headline span {
+    background-position: 0 -72px;
+  }
+}
+
+a.mtp-notification__headline {
+  text-decoration: none;
+  color: $text-colour;
+
+  &:focus {
+    color: $text-colour;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .mtp-notification & {
+    padding-right: 3em;
+  }
+}
+
+.mtp-notification__message {
+  display: none;
+  padding: 0 0.75em 0.75em 66px;
+
+  .mtp-notification--open & {
+    display: block;
+  }
+}

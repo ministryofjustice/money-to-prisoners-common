@@ -1,0 +1,17 @@
+{% for notification in notifications %}
+  <div class="mtp-notification mtp-notification--{{ notification.level }}">
+    {% if notification.message %}
+      <h1>
+        <a href="#mtp-notification-{{ forloop.counter }}" class="mtp-notification__headline">
+          {{ notification.headline }}
+          <span></span>
+        </a>
+      </h1>
+      <div id="mtp-notification-{{ forloop.counter }}" class="mtp-notification__message">
+        {{ notification.message|urlize|linebreaksbr }}
+      </div>
+    {% else %}
+      <h1 class="mtp-notification__headline">{{ notification.headline }}</h1>
+    {% endif %}
+  </div>
+{% endfor %}
