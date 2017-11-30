@@ -1,7 +1,13 @@
 import json
+import logging
 
 from django.conf import settings
 from django.contrib import messages
+from requests.exceptions import RequestException
+
+from mtp_common.auth import api_client
+
+logger = logging.getLogger('mtp')
 
 
 def api_errors_to_messages(request, error, fallback_text):
@@ -72,3 +78,15 @@ def retrieve_all_pages_for_path(session, path, **params):
         offset += page_size
 
     return loaded_results
+
+
+def notifications_for_request(request, target=None):
+    try:
+        if request.user.is_authenticated:
+            session = api_client.get_api_session(request)
+        else:
+            session = api_client.get_unauthenticated_session()
+        response = session.get('notifications/', params={'target__startswith': target} if target else None)
+        return response.json()['results']
+    except (RequestException, ValueError, KeyError):
+        logger.exception('Could not load notifications')

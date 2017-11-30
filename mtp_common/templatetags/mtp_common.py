@@ -10,6 +10,9 @@ from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
 from django.utils.translation import override
+
+from mtp_common.api import notifications_for_request
+
 try:
     from raven.contrib.django.models import client as sentry_client
 except ImportError:
@@ -213,3 +216,13 @@ def dialoguebox(parser, token):
     node_list = parser.parse(('enddialoguebox',))
     parser.delete_first_token()
     return DialogueNode(node_list, **kwargs)
+
+
+@register.inclusion_tag('mtp_common/includes/notifications.html')
+def notifications_box(request, *targets):
+    for target in targets:
+        notifications = notifications_for_request(request, target)
+        if notifications:
+            return {
+                'notifications': notifications
+            }
