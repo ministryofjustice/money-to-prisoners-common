@@ -70,6 +70,8 @@ class MoJOAuth2Session(LocalisedOAuth2Session):
     def request(self, method, url, data=None, headers=None, **kwargs):
         if self.base_url and not urlsplit(url).scheme:
             url = urljoin(self.base_url, url)
+        if 'timeout' not in kwargs:
+            kwargs['timeout'] = 15
         return super().request(method, url, data=data, headers=headers, **kwargs)
 
 
