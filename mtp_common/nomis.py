@@ -6,6 +6,7 @@ from django.conf import settings
 import jwt
 from mtp_common.auth import urljoin
 import requests
+from requests.exceptions import ConnectionError
 
 
 def convert_date_param(param):
@@ -40,14 +41,19 @@ def get(path, params=None, timeout=15, retries=0, session=None):
             if params[param] is not None
         }
     session_or_module = session or requests
-    response = session_or_module.get(
-        build_nomis_url(path),
-        params=params,
-        headers=generate_request_headers(),
-        timeout=timeout
-    )
+    try:
+        response = session_or_module.get(
+            build_nomis_url(path),
+            params=params,
+            headers=generate_request_headers(),
+            timeout=timeout
+        )
+    except ConnectionError as e:
+        if retries > 0:
+            return get(path, params, timeout, retries-1, session=session)
+        raise e
     if response.status_code >= 500 and retries > 0:
-        return get(path, params, timeout, retries-1)
+        return get(path, params, timeout, retries-1, session=session)
 
     response.raise_for_status()
     if response.status_code != requests.codes.no_content:
@@ -57,14 +63,19 @@ def get(path, params=None, timeout=15, retries=0, session=None):
 
 def post(path, data=None, timeout=15, retries=0, session=None):
     session_or_module = session or requests
-    response = session_or_module.post(
-        build_nomis_url(path),
-        json=data,
-        headers=generate_request_headers(),
-        timeout=timeout
-    )
+    try:
+        response = session_or_module.post(
+            build_nomis_url(path),
+            json=data,
+            headers=generate_request_headers(),
+            timeout=timeout
+        )
+    except ConnectionError as e:
+        if retries > 0:
+            return post(path, data, timeout, retries-1, session=session)
+        raise e
     if response.status_code >= 500 and retries > 0:
-        return post(path, data, timeout, retries-1)
+        return post(path, data, timeout, retries-1, session=session)
 
     response.raise_for_status()
     if response.status_code != requests.codes.no_content:
