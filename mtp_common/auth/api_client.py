@@ -17,11 +17,16 @@ from .exceptions import (
 
 
 # set insecure transport depending on settings val
-if settings.OAUTHLIB_INSECURE_TRANSPORT:
+if getattr(settings, 'OAUTHLIB_INSECURE_TRANSPORT', False):
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-REQUEST_TOKEN_URL = urljoin(settings.API_URL, '/oauth2/token/')
-REVOKE_TOKEN_URL = urljoin(settings.API_URL, '/oauth2/revoke_token/')
+
+def get_request_token_url():
+    return urljoin(settings.API_URL, '/oauth2/token/')
+
+
+def get_revoke_token_url():
+    return urljoin(settings.API_URL, '/oauth2/revoke_token/')
 
 
 class LocalisedOAuth2Session(OAuth2Session):
@@ -94,7 +99,7 @@ def authenticate(username, password):
     )
 
     token = session.fetch_token(
-        token_url=REQUEST_TOKEN_URL,
+        token_url=get_request_token_url(),
         username=username,
         password=password,
         auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
@@ -116,7 +121,7 @@ def revoke_token(access_token):
     Instructs the API to delete this access token and associated refresh token
     """
     response = requests.post(
-        REVOKE_TOKEN_URL,
+        get_revoke_token_url(),
         data={
             'token': access_token,
             'client_id': settings.API_CLIENT_ID,
@@ -142,7 +147,7 @@ def get_api_session_with_session(user, session):
     session = MoJOAuth2Session(
         settings.API_CLIENT_ID,
         token=user.token,
-        auto_refresh_url=REQUEST_TOKEN_URL,
+        auto_refresh_url=get_request_token_url(),
         auto_refresh_kwargs={
             'client_id': settings.API_CLIENT_ID,
             'client_secret': settings.API_CLIENT_SECRET
@@ -164,7 +169,7 @@ def get_authenticated_api_session(username, password):
     )
 
     session.fetch_token(
-        token_url=REQUEST_TOKEN_URL,
+        token_url=get_request_token_url(),
         username=username,
         password=password,
         auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
