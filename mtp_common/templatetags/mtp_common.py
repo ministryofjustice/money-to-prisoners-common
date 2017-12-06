@@ -219,9 +219,9 @@ def dialoguebox(parser, token):
 
 
 @register.inclusion_tag('mtp_common/includes/notifications.html')
-def notifications_box(request, *targets):
+def notifications_box(request, *targets, **kwargs):
     for target in targets:
-        notifications = notifications_for_request(request, target)
+        notifications = notifications_for_request(request, target, **kwargs)
         if notifications:
             return {
                 'notifications': notifications
