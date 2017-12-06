@@ -3,6 +3,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import cache
 from requests.exceptions import RequestException
 
 from mtp_common.auth import api_client
@@ -80,13 +81,22 @@ def retrieve_all_pages_for_path(session, path, **params):
     return loaded_results
 
 
-def notifications_for_request(request, target=None):
+def notifications_for_request(request, target=None, use_cache=True):
+    # NB: caching can only be used since notifications are not currently set up to be user/request specific
+    cache_key = 'notifications-%s' % target
+    if use_cache:
+        results = cache.get(cache_key)
+        if results:
+            return results
     try:
         if request.user.is_authenticated:
             session = api_client.get_api_session(request)
         else:
             session = api_client.get_unauthenticated_session()
         response = session.get('notifications/', params={'target__startswith': target} if target else None)
-        return response.json()['results']
+        results = response.json()['results']
+        if use_cache:
+            cache.set(cache_key, results, timeout=60 * 5)
+        return results
     except (RequestException, ValueError, KeyError):
         logger.exception('Could not load notifications')
