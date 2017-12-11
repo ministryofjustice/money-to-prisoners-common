@@ -112,7 +112,7 @@ def get_transaction_history(prison_id, prisoner_number, account_code,
 def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description,
                     retries=0, session=None):
     data = {
-        'type': 'MRPR',
+        'type': 'MTDS',
         'description': description,
         'amount': amount,
         'client_transaction_id': str(credit_id),
