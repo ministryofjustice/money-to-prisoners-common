@@ -147,7 +147,7 @@ class LogoutViewTestCase(AuthenticatedTestCase):
     def mock_revocation_response(self):
         responses.add(
             responses.POST,
-            api_client.REVOKE_TOKEN_URL,
+            api_client.get_revoke_token_url(),
             status=200,
             content_type='application/json'
         )
