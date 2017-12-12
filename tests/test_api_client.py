@@ -19,7 +19,7 @@ class AuthenticateTestCase(SimpleTestCase):
         # mock the response, return 401
         responses.add(
             responses.POST,
-            api_client.REQUEST_TOKEN_URL,
+            api_client.get_request_token_url(),
             status=401,
             content_type='application/json'
         )
@@ -180,7 +180,7 @@ class GetConnectionTestCase(SimpleTestCase):
         # mock the refresh token endpoint, return 401
         responses.add(
             responses.POST,
-            api_client.REQUEST_TOKEN_URL,
+            api_client.get_request_token_url(),
             status=401,
             content_type='application/json'
         )
@@ -247,7 +247,7 @@ class GetConnectionTestCase(SimpleTestCase):
         new_token = generate_tokens(expires_at=expires_tomorrow)
         responses.add(
             responses.POST,
-            api_client.REQUEST_TOKEN_URL,
+            api_client.get_request_token_url(),
             body=json.dumps(new_token),
             status=200,
             content_type='application/json'
