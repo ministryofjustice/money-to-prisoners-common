@@ -1,10 +1,17 @@
 {% extends base_template_name %}
 {% load i18n %}
 
-{% block page_title %}{% trans 'Your feedback' %} – {{ block.super }}{% endblock %}
+{% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
 {% block inner_content %}
-  <h1 class="heading-xlarge">{% trans 'Thanks for your query' %}</h1>
+  <header>
+    <h1 class="heading-xlarge">
+      <span class="heading-secondary">
+        {{ get_help_title|default:_('Get help') }}
+      </span>
+      {% trans 'Thanks for your query' %}
+    </h1>
+  </header>
 
   <div class="container">
     <div class="grid-row">
