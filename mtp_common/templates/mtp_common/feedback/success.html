@@ -4,20 +4,22 @@
 {% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
 {% block inner_content %}
-  <header>
-    <h1 class="heading-xlarge">
-      <span class="heading-secondary">
-        {{ get_help_title|default:_('Get help') }}
-      </span>
-      {% trans 'Thanks for your query' %}
-    </h1>
-  </header>
+  {% block get_help_heading %}
+    <header>
+      <h1 class="heading-xlarge">
+        <span class="heading-secondary">
+          {{ get_help_title|default:_('Get help') }}
+        </span>
+        {% trans 'Thanks for your query' %}
+      </h1>
+    </header>
+  {% endblock %}
 
-  <div class="container">
-    <div class="grid-row">
-      <div class="column-two-thirds">
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {% block get_help_message %}
         <p>{% trans 'The Prisoner Money team received your request and will try to reply in one working day.' %}</p>
-      </div>
+      {% endblock %}
     </div>
   </div>
 {% endblock %}
