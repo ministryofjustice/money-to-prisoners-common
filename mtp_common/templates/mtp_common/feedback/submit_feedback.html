@@ -5,48 +5,54 @@
 {% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
 {% block inner_content %}
-  <header>
-    <h1 class="heading-xlarge">{{ get_help_title|default:_('Get help') }}</h1>
-  </header>
+  {% block get_help_heading %}
+    <header>
+      <h1 class="heading-xlarge">{{ get_help_title|default:_('Get help') }}</h1>
+    </header>
+  {% endblock %}
 
-  <p class="lede">
-    {% trans 'Ask questions about this service to the Prisoner Money team.' %}
+  {% block get_help_leading %}
+    <p class="lede">
+      {% trans 'Ask questions about this service to the Prisoner Money team.' %}
+      <br>
+      {% trans 'It’s the fastest way we can help you with a query.' %}
+      <br>
+      {% trans 'You can send us any feedback here too.' %}
+    </p>
     <br>
-    {% trans 'It’s the fastest way we can help you with a query.' %}
-    <br>
-    {% trans 'You can send us any feedback here too.' %}
-  </p>
-  <br>
+  {% endblock %}
 
-  <form action="." method="post" id="mtp-feedback-form">
-    {% csrf_token %}
+  {% block get_help_form %}
+    <form action="." method="post" id="mtp-feedback-form">
+      {% csrf_token %}
 
-    {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+      {% include 'mtp_common/forms/error-summary.html' with form=form only %}
 
-    {{ form.referer }}
+      {{ form.referer }}
 
-    <fieldset>
-      <legend class="visually-hidden">{% trans 'Feedback details' %}</legend>
+      <fieldset>
+        <legend class="visually-hidden">{% trans 'Feedback details' %}</legend>
 
-      {% with field=form.ticket_content value=request.GET.message|default:'' %}
-        <div class="form-group {% if field.errors %}form-group-error{% endif %}">
-          {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+        {% with field=form.ticket_content value=request.GET.message|default:'' %}
+          <div class="form-group {% if field.errors %}form-group-error{% endif %}">
+            {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
-          <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
-          {% trans 'Your questions and feedback' %}
-          {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
-          </label>
+            <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+            {% trans 'Your questions and feedback' %}
+            {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+            </label>
 
-          <textarea class="form-control form-control-3-4 {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
+            <textarea class="form-control form-control-3-4 {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
 
+          </div>
+        {% endwith %}
+
+        {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
+
+        <div class="form-group">
+          <button type="submit" class="button" name="submit-feedback">{% trans 'Send' %}</button>
         </div>
-      {% endwith %}
-
-      {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
-
-      <div class="form-group">
-        <button type="submit" class="button" name="submit-feedback">{% trans 'Send' %}</button>
-      </div>
-    </fieldset>
-  </form>
+      </fieldset>
+    </form>
+  {% endblock %}
 {% endblock %}
