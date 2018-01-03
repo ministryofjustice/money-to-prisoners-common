@@ -2,11 +2,11 @@
 {% load i18n %}
 {% load mtp_common %}
 
-{% block page_title %}{% trans 'Get help' %} – {{ block.super }}{% endblock %}
+{% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
 {% block inner_content %}
   <header>
-    <h1 class="heading-xlarge">{% trans 'Get help' %}</h1>
+    <h1 class="heading-xlarge">{{ get_help_title|default:_('Get help') }}</h1>
   </header>
 
   <p class="lede">
