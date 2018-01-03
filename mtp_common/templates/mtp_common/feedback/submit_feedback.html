@@ -18,7 +18,7 @@
   </p>
   <br>
 
-  <form action="." method="post" id="send-feedback">
+  <form action="." method="post" id="mtp-feedback-form">
     {% csrf_token %}
 
     {% include 'mtp_common/forms/error-summary.html' with form=form only %}
