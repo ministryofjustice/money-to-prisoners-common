@@ -15,9 +15,11 @@ def bad_request(request, exception, template_name='mtp_common/errors/400.html'):
 
 
 class GetHelpView(TicketView):
+    base_template_name = 'base.html'
     template_name = 'mtp_common/feedback/submit_feedback.html'
 
     def get_context_data(self, **kwargs):
+        kwargs['base_template_name'] = self.base_template_name
         context = super().get_context_data(**kwargs)
         if 'return_to' in context:
             context['breadcrumbs_back'] = context['return_to']
@@ -25,9 +27,11 @@ class GetHelpView(TicketView):
 
 
 class GetHelpSuccessView(TicketSentView):
+    base_template_name = 'base.html'
     template_name = 'mtp_common/feedback/success.html'
 
     def get_context_data(self, **kwargs):
+        kwargs['base_template_name'] = self.base_template_name
         context = super().get_context_data(**kwargs)
         if 'return_to' in context:
             context['breadcrumbs_back'] = context['return_to']
