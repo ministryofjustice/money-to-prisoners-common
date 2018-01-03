@@ -1,4 +1,5 @@
 from django.views import defaults
+from zendesk_tickets.forms import EmailTicketForm
 from zendesk_tickets.views import TicketView, TicketSentView
 
 
@@ -15,8 +16,15 @@ def bad_request(request, exception, template_name='mtp_common/errors/400.html'):
 
 
 class GetHelpView(TicketView):
+    form_class = EmailTicketForm
     base_template_name = 'base.html'
     template_name = 'mtp_common/feedback/submit_feedback.html'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if not self.request.user.is_anonymous and self.request.user.email:
+            initial['contact_email'] = self.request.user.email
+        return initial
 
     def get_context_data(self, **kwargs):
         kwargs['base_template_name'] = self.base_template_name
