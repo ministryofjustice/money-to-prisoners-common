@@ -72,7 +72,9 @@
     {% endif %}
   {% endblock %}
 
-  {% sub_nav %}
+  {% block sub_nav %}
+    {% sub_nav %}
+  {% endblock %}
 
   <main role="main" id="content" tabindex="-1">
     {% block inner_content %}{% endblock %}
