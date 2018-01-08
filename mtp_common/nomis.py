@@ -109,14 +109,14 @@ def get_transaction_history(prison_id, prisoner_number, account_code,
     )
 
 
-def credit_prisoner(prison_id, prisoner_number, amount, credit_id, description, transaction_type,
-                    retries=0, session=None):
+def create_transaction(prison_id, prisoner_number, amount, record_id,
+                       description, transaction_type, retries=0, session=None):
     data = {
         'type': transaction_type,
         'description': description,
         'amount': amount,
-        'client_transaction_id': str(credit_id),
-        'client_unique_ref': str(credit_id)
+        'client_transaction_id': str(record_id),
+        'client_unique_ref': str(record_id)
     }
     return post(
         '/prison/{prison_id}/offenders/{prisoner_number}/transactions'.format(
