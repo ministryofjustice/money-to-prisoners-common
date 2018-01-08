@@ -5,6 +5,7 @@ import re
 
 from django import template
 from django.conf import settings
+from django.forms.utils import flatatt
 from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
@@ -226,3 +227,87 @@ def notifications_box(request, *targets, **kwargs):
             return {
                 'notifications': notifications
             }
+
+
+class TabbedPanelNode(template.Node):
+    template_name = 'mtp_common/includes/tabbed-panel.html'
+
+    def __init__(self, node_list, cookie_name=None, tab_label=None):
+        self.node_list = node_list
+        self.cookie_name = cookie_name
+        self.tab_label = tab_label
+
+    def render(self, context):
+        tabs = []
+        tab_nodes = template.NodeList()
+        other_nodes = template.NodeList()
+        for node in self.node_list:
+            if isinstance(node, PanelTabNode):
+                tab_nodes.append(node)
+                name = node.name.resolve(context)
+                panel_id = 'mtp-tabpanel-%s' % name
+                tabs.append({
+                    'title': node.title.resolve(context),
+                    'attrs': flatatt({
+                        'id': 'mtp-tab-%s' % name,
+                        'href': '#%s' % panel_id,
+                        'role': 'tab',
+                        'aria-controls': panel_id,
+                        'aria-flowto': panel_id,
+                    }),
+                })
+            else:
+                other_nodes.append(node)
+
+        tab_content = tab_nodes.render(context)
+        other_content = other_nodes.render(context)
+        cookie_name = self.cookie_name.resolve(context) if self.cookie_name else ''
+        tab_label = self.tab_label.resolve(context) if self.tab_label else ''
+        context.push()
+        context['cookie_name'] = cookie_name
+        context['tab_label'] = tab_label
+        context['tabs'] = tabs
+        context['tab_content'] = tab_content
+        context['other_content'] = other_content
+        tabbed_content = context.template.engine.get_template(self.template_name)
+        rendered_html = tabbed_content.render(context)
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def tabbedpanel(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    node_list = parser.parse(('endtabbedpanel',))
+    parser.delete_first_token()
+    return TabbedPanelNode(node_list, **kwargs)
+
+
+class PanelTabNode(template.Node):
+    template_name = 'mtp_common/includes/panel-tab.html'
+
+    def __init__(self, node_list, name=None, title=None):
+        self.node_list = node_list
+        if not name or not title:
+            raise template.TemplateSyntaxError('name and title must be provided')
+        self.name = name
+        self.title = title
+
+    def render(self, context):
+        name = self.name.resolve(context)
+        content = self.node_list.render(context)
+        context.push()
+        context['name'] = name
+        context['content'] = content
+        tab_template = context.template.engine.get_template(self.template_name)
+        rendered_html = tab_template.render(context)
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def paneltab(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    node_list = parser.parse(('endpaneltab',))
+    parser.delete_first_token()
+    return PanelTabNode(node_list, **kwargs)

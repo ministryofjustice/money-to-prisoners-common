@@ -1,0 +1,15 @@
+<div class="mtp-tab-container mtp-tab-container--collapsed" data-tab-cookie-name="{{ cookie_name }}">
+  {% spaceless %}
+    <ul class="mtp-tab-wrapper" role="tablist" aria-label="{{ tab_label|default:_('Filter by') }}">
+      {% for tab in tabs %}
+        <li class="mtp-tab-item" role="presentation"><a class="mtp-tab {% if forloop.first %}mtp-tab--first{% elif forloop.last %}mtp-tab--last{% endif %}" {{ tab.attrs }}>{{ tab.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endspaceless %}
+
+  <div class="mtp-tabpanels" aria-expanded="false">
+    {{ tab_content }}
+  </div>
+
+  {{ other_content }}
+</div>
