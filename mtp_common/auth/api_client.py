@@ -42,7 +42,8 @@ def create_http_exception(response, exception_type):
             code=response.status_code,
             url=response.url
         ),
-        content=response.content if hasattr(response, 'content') else None
+        content=response.content if hasattr(response, 'content') else None,
+        response=response
     )
 
 
