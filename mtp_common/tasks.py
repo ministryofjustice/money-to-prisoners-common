@@ -1,21 +1,23 @@
 from email.utils import parseaddr
+import logging
 import smtplib
 from urllib.parse import urljoin
 
+try:
+    from anymail.exceptions import AnymailRequestsAPIError
+except ImportError:
+    AnymailRequestsAPIError = None
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail.backends.console import EmailBackend as ConsoleEmailBackend
 from django.template import loader
 from django.utils.encoding import force_text
-try:
-    from django_mailgun import MailgunAPIError
-except ImportError:
-    MailgunAPIError = None
 
 from mtp_common.spooling import Context, spoolable
 
-if MailgunAPIError:
-    mail_errors = (MailgunAPIError,)
+logger = logging.getLogger('mtp')
+if AnymailRequestsAPIError:
+    mail_errors = (AnymailRequestsAPIError,)
 else:
     mail_errors = (smtplib.SMTPException,)
 
@@ -58,7 +60,14 @@ def send_email(to, text_template, subject, context=None, html_template=None, fro
 
     try:
         email.send()
-    except mail_errors:
+    except mail_errors as e:
+        if hasattr(e, 'status_code') and e.status_code == 400:
+            try:
+                message = e.response.json()['message']
+            except (AttributeError, TypeError, ValueError, KeyError):
+                message = 'Mailgun 400 response'
+            logger.exception(message)
+            return
         if not spoolable_ctx.spooled or not retry_attempts:
             raise
         send_email(to, text_template, subject, context=context,
