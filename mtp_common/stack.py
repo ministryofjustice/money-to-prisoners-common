@@ -1,7 +1,6 @@
-import boto.cloudformation
-import boto.ec2
-import boto.ec2.autoscale
-from boto.utils import get_instance_identity
+import boto3
+from botocore.exceptions import ClientError
+import requests
 
 
 class StackInterrogationException(Exception):
@@ -13,31 +12,41 @@ class InstanceNotInAsgException(Exception):
 
 
 def is_first_instance():
-    '''
+    """
     Returns True if the current instance is the first instance in the ASG group,
     sorted by instance_id.
-    '''
+    """
     try:
-        instance_identity = get_instance_identity()
-        instance_id = instance_identity['document']['instanceId']
-        instance_region = instance_identity['document']['availabilityZone'].strip()[:-1]
-        conn = boto.ec2.connect_to_region(instance_region)
-        instance_data = conn.get_all_instances(
-            instance_ids=[instance_id]
-        )[0].instances[0]
-
-        # my autoscaling group
-        asg_group = instance_data.tags['aws:autoscaling:groupName']
-
-        autoscale = boto.ec2.autoscale.connect_to_region(instance_region)
-        group = autoscale.get_all_groups(names=[asg_group])[0]
-        sorted_instance_ids = sorted(
-            [instance.instance_id for instance in group.instances]
-        )
-    except boto.exception.AWSConnectionError as e:
+        # get instance id and aws region
+        instance_details = requests.get('http://169.254.169.254/latest/dynamic/instance-identity/document').json()
+        instance_id = instance_details['instanceId']
+        instance_region = instance_details['region']
+    except (requests.RequestException, ValueError, KeyError) as e:
         raise StackInterrogationException(e)
 
-    if instance_id not in sorted_instance_ids:
+    try:
+        # get instance's autoscaling group
+        autoscaling_client = boto3.client('autoscaling', region_name=instance_region)
+        response = autoscaling_client.describe_auto_scaling_instances(InstanceIds=[instance_id])
+        assert len(response['AutoScalingInstances']) == 1
+        autoscaling_group = response['AutoScalingInstances'][0]['AutoScalingGroupName']
+    except (ClientError, AssertionError) as e:
+        raise StackInterrogationException(e)
+
+    try:
+        # list in-service instances in autoscaling group
+        # instances being launched or terminated should not be considered
+        response = autoscaling_client.describe_auto_scaling_groups(AutoScalingGroupNames=[autoscaling_group])
+        assert len(response['AutoScalingGroups']) == 1
+        autoscaling_group_instance_ids = sorted(
+            instance['InstanceId']
+            for instance in response['AutoScalingGroups'][0]['Instances']
+            if instance['LifecycleState'] == 'InService'
+        )
+    except (ClientError, AssertionError) as e:
+        raise StackInterrogationException(e)
+
+    if instance_id not in autoscaling_group_instance_ids:
         raise InstanceNotInAsgException()
 
-    return sorted_instance_ids[0] == instance_id
+    return autoscaling_group_instance_ids[0] == instance_id
