@@ -20,7 +20,7 @@ install_requires = [
     'django-form-error-reporting>=0.6',
     'django-widget-tweaks>=1.4,<1.5',
     'django-zendesk-tickets>=0.11,<1',
-    'pytz>=2016.7',
+    'pytz>=2017.3',
     'requests-oauthlib>=0.6,<0.7',
     'slumber>=0.7,<0.8',
     'selenium>=3.0,<3.1',
@@ -28,7 +28,7 @@ install_requires = [
     'govuk-bank-holidays>=0.2,<1',
     'cryptography==1.7.2',
     'PyJWT==1.4.2',
-    'boto>=2.48,<2.49',
+    'boto3>=1.5,<2',
 ]
 extras_require = {
     'monitoring': [
