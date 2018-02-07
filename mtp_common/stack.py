@@ -3,11 +3,15 @@ from botocore.exceptions import ClientError
 import requests
 
 
-class StackInterrogationException(Exception):
+class StackException(Exception):
     pass
 
 
-class InstanceNotInAsgException(Exception):
+class StackInterrogationException(StackException):
+    pass
+
+
+class InstanceNotInAsgException(StackException):
     pass
 
 
@@ -18,7 +22,8 @@ def is_first_instance():
     """
     try:
         # get instance id and aws region
-        instance_details = requests.get('http://169.254.169.254/latest/dynamic/instance-identity/document').json()
+        instance_details = requests.get('http://169.254.169.254/latest/dynamic/instance-identity/document',
+                                        timeout=5).json()
         instance_id = instance_details['instanceId']
         instance_region = instance_details['region']
     except (requests.RequestException, ValueError, KeyError) as e:
@@ -30,8 +35,10 @@ def is_first_instance():
         response = autoscaling_client.describe_auto_scaling_instances(InstanceIds=[instance_id])
         assert len(response['AutoScalingInstances']) == 1
         autoscaling_group = response['AutoScalingInstances'][0]['AutoScalingGroupName']
-    except (ClientError, AssertionError) as e:
+    except ClientError as e:
         raise StackInterrogationException(e)
+    except AssertionError:
+        raise InstanceNotInAsgException()
 
     try:
         # list in-service instances in autoscaling group
@@ -46,7 +53,4 @@ def is_first_instance():
     except (ClientError, AssertionError) as e:
         raise StackInterrogationException(e)
 
-    if instance_id not in autoscaling_group_instance_ids:
-        raise InstanceNotInAsgException()
-
-    return autoscaling_group_instance_ids[0] == instance_id
+    return autoscaling_group_instance_ids and autoscaling_group_instance_ids[0] == instance_id
