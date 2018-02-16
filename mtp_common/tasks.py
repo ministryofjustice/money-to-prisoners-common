@@ -66,7 +66,10 @@ def send_email(to, text_template, subject, context=None, html_template=None, fro
                 message = e.response.json()['message']
             except (AttributeError, TypeError, ValueError, KeyError):
                 message = 'Mailgun 400 response'
-            logger.exception(message)
+            if "'to' parameter is not a valid address" in message:
+                logger.warning(message)
+            else:
+                logger.exception(message)
             return
         if not spoolable_ctx.spooled or not retry_attempts:
             raise
