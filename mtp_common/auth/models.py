@@ -1,6 +1,3 @@
-from django.utils.deprecation import CallableFalse, CallableTrue
-
-
 class MojUser:
     """
     Authenticated user, similar to the Django one.
@@ -21,11 +18,11 @@ class MojUser:
 
     @property
     def is_anonymous(self):
-        return CallableFalse
+        return False
 
     @property
     def is_authenticated(self):
-        return CallableTrue
+        return True
 
     def get_all_permissions(self, obj=None):
         return self.user_data.get('permissions', [])
@@ -86,11 +83,11 @@ class MojAnonymousUser:
 
     @property
     def is_anonymous(self):
-        return CallableTrue
+        return True
 
     @property
     def is_authenticated(self):
-        return CallableFalse
+        return False
 
     def get_all_permissions(self, obj=None):
         return []
