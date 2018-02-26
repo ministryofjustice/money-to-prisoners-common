@@ -37,7 +37,7 @@ class CsrfTestCase(SimpleTestCase):
         self.assertTrue(response.has_header('location'))
 
     def test_missing_csrf_cookie(self):
-        with silence_logger('django.request', level=logging.ERROR):
+        with silence_logger('django.security.csrf', level=logging.ERROR):
             response = self.client.post(self.login_url, data={
                 'username': 'test',
                 'password': '1234',
@@ -46,7 +46,7 @@ class CsrfTestCase(SimpleTestCase):
 
     def test_invalid_csrf_token(self):
         self.client.get(self.login_url)
-        with silence_logger('django.request', level=logging.ERROR):
+        with silence_logger('django.security.csrf', level=logging.ERROR):
             response = self.client.post(self.login_url, data={
                 'username': 'test',
                 'password': '1234',
@@ -73,7 +73,7 @@ class CsrfTestCase(SimpleTestCase):
 
         default_csrf_behaviour(login)
         mocked_csrf_failure.return_value = HttpResponseForbidden(b'Django CSRF response')
-        with silence_logger('django.request', level=logging.ERROR):
+        with silence_logger('django.security.csrf', level=logging.ERROR):
             response = self.client.post(self.login_url, data={
                 'username': 'test',
                 'password': '1234',
