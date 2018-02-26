@@ -4,8 +4,8 @@ import sys
 
 from setuptools import setup, find_packages
 
-if sys.version_info < (3, 4):
-    raise SystemError('Python version must be at least 3.4')
+if sys.version_info < (3, 5):
+    raise SystemError('Python version must be at least 3.5')
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
