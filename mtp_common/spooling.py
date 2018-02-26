@@ -72,7 +72,7 @@ class Spooler:
             if task.context_name:
                 kwargs[task.context_name] = Context(spooled=True)
             task.func(*args, **kwargs)
-        except:
+        except:  # noqa: E722
             logger.exception('Spooler task %s failed with uncaught exception' % task.name)
 
         return uwsgi.SPOOL_OK
@@ -136,7 +136,7 @@ class Task:
             if self.context_name:
                 kwargs[self.context_name] = Context(spooled=False)
             self.func(*args, **kwargs)
-        except:
+        except:  # noqa: E722
             logger.exception('Spooler task %s failed with uncaught exception' % self.name)
             raise
 
