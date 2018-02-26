@@ -206,9 +206,8 @@ class SpoolableTestCase(unittest.TestCase):
 @unittest.skipIf(spooler.installed, 'Cannot test spoolable tasks under uWSGI')
 class SendEmailTestCase(SimpleTestCase):
     @mock.patch.object(spooler, 'installed', True)
-    @mock.patch('tests.utils.get_template_source')
     @mock.patch('mtp_common.spooling.uwsgi')
-    def test_asynchronous_send_email_task(self, uwsgi, get_template_source):
+    def test_asynchronous_send_email_task(self, uwsgi):
         import mtp_common.tasks
 
         if b'send_email' not in spooler._registry:
@@ -217,12 +216,8 @@ class SendEmailTestCase(SimpleTestCase):
 
         self.assertIn(b'send_email', spooler._registry)
 
-        # template setup
-        email_body = 'abc-{{ abc }}'
-        get_template_source.return_value = email_body
-
-        email_args = ('test1@example.com', 'tpl.txt', '890')
-        email_kwargs = dict(context={'abc': '321'}, html_template='tpl.html')
+        email_args = ('test1@example.com', 'dummy-email.txt', '890')
+        email_kwargs = dict(context={'abc': '321'}, html_template='dummy-email.html')
         job = {
             spooler.identifier: b'send_email',
             b'args': pickle.dumps(email_args),
@@ -239,7 +234,7 @@ class SendEmailTestCase(SimpleTestCase):
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]
         self.assertEqual(email.subject, '890')
-        self.assertEqual(email.body, 'abc-321')
+        self.assertEqual(email.body, 'EMAIL-321')
         self.assertSequenceEqual(email.recipients(), ['test1@example.com'])
 
     @override_settings(ENVIRONMENT='prod')
@@ -257,7 +252,7 @@ class SendEmailTestCase(SimpleTestCase):
 
         mocked_email().send = mock_send_email
         with self.assertRaises(mail_error):
-            send_email('admin@mtp.local', 'dummy', 'email subject', retry_attempts=10)
+            send_email('admin@mtp.local', 'dummy-email.txt', 'email subject', retry_attempts=10)
         self.assertEqual(state['calls'], 1)
         self.assertTrue(logger.exception.called, True)
 
@@ -278,6 +273,6 @@ class SendEmailTestCase(SimpleTestCase):
 
         mocked_email().send = mock_send_email
         uwsgi.spool = spooler.__call__
-        send_email('admin@mtp.local', 'dummy', 'email subject', retry_attempts=3)
+        send_email('admin@mtp.local', 'dummy-email.txt', 'email subject', retry_attempts=3)
         self.assertEqual(state['calls'], 4)
         self.assertTrue(logger.exception.called, True)

@@ -16,6 +16,9 @@ node_modules/
 npm-debug.log
 package-lock.json
 
+# app-specific
+mtp_common/assets/
+
 # selenium
 geckodriver.log
 ghostdriver.log

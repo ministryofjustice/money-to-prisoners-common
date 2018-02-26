@@ -4,7 +4,7 @@ from unittest import mock
 from django.conf import settings
 from django.http.response import HttpResponseForbidden
 from django.test import SimpleTestCase
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from mtp_common.test_utils import silence_logger
 
@@ -54,10 +54,10 @@ class CsrfTestCase(SimpleTestCase):
             })
         self.assertInvalidCsrfResponse(response)
 
-    @mock.patch('tests.utils.get_template_source')
+    @mock.patch('tests.urls.mocked_template')
     def test_successful_csrf_challenge(self, mocked_template):
         mocked_template.return_value = '{% csrf_token %}'
-        self.client.get(self.login_url)
+        self.client.get(reverse('dummy'))
         csrf_token = self.client.cookies[settings.CSRF_COOKIE_NAME]
         response = self.client.post(self.login_url, data={
             'username': 'test',
