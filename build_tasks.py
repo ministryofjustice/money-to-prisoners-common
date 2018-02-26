@@ -9,10 +9,14 @@ from mtp_common.build_tasks import tasks as shared_tasks
 from mtp_common.build_tasks.paths import paths_for_shell
 
 tasks = shared_tasks.tasks = Tasks()  # unregister all existing tasks
+tasks.register('create_build_paths')(shared_tasks.govuk_template.func)
+tasks.register(hidden=True)(shared_tasks.create_build_paths.func)
 tasks.register('python_dependencies', 'setup_django_for_testing', hidden=True)(shared_tasks.compile_messages.func)
 tasks.register('python_dependencies', 'setup_django_for_testing')(shared_tasks.make_messages.func)
 tasks.register(hidden=True)(shared_tasks.precompile_python_code.func)
 tasks.register('python_dependencies')(shared_tasks.translations.func)
+
+root_path = os.path.abspath(os.path.dirname(__file__))
 
 
 @tasks.register('python_dependencies', hidden=True)
@@ -31,11 +35,13 @@ def setup_django_for_testing(_: Context):
         SECRET_KEY='a' * 24,
         ROOT_URLCONF='tests.urls',
         INSTALLED_APPS=(
-            'mtp_common',
-            'django.contrib.contenttypes',
             'django.contrib.sessions',
-            'django.contrib.auth',
             'django.contrib.messages',
+            'django.contrib.staticfiles',
+            'django.contrib.contenttypes',
+            'django.contrib.auth',
+            'widget_tweaks',
+            'mtp_common',
         ),
         LANGUAGES=(
             ('en-gb', 'English'),
@@ -53,23 +59,28 @@ def setup_django_for_testing(_: Context):
         DEFAULT_FROM_EMAIL='service@mtp.local',
         TEMPLATES=[{
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [],
-            'APP_DIRS': False,
+            'DIRS': [os.path.join(root_path, 'tests', 'templates')],
+            'APP_DIRS': True,
             'OPTIONS': {
                 'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
                     'mtp_common.context_processors.analytics',
                     'mtp_common.context_processors.app_environment',
-                    'django.contrib.messages.context_processors.messages'
                 ],
-                'loaders': ['tests.utils.DummyTemplateLoader']
             },
         }],
         MIDDLEWARE=(
             'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.middleware.locale.LocaleMiddleware',
             'django.middleware.common.CommonMiddleware',
             'mtp_common.auth.csrf.CsrfViewMiddleware',
             'mtp_common.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
+            'django.middleware.clickjacking.XFrameOptionsMiddleware',
+            'django.middleware.security.SecurityMiddleware',
         ),
         CSRF_FAILURE_VIEW='mtp_common.auth.csrf.csrf_failure',
         LOGIN_URL=reverse_lazy('login'),
@@ -102,7 +113,7 @@ def python_dependencies(context: Context, extras=None):
     return context.pip_command('install', *requirements)
 
 
-@tasks.register('python_dependencies', 'compile_messages', 'precompile_python_code', default=True)
+@tasks.register('python_dependencies', 'govuk_template', 'compile_messages', 'precompile_python_code', default=True)
 def build(_: Context):
     """
     Builds all necessary assets
@@ -150,10 +161,10 @@ def set_version(context: Context, version=None, bump=False):
          'package.json'),
     ]
     for search, replacement, path in replacements:
-        with open(os.path.join(os.path.dirname(__file__), path)) as f:
+        with open(os.path.join(root_path, path)) as f:
             content = f.read()
         content = re.sub(search, replacement, content, flags=re.MULTILINE)
-        with open(os.path.join(os.path.dirname(__file__), path), 'w') as f:
+        with open(os.path.join(root_path, path), 'w') as f:
             f.write(content)
     context.debug('Updated version to %s' % dotted_version)
 

@@ -159,7 +159,7 @@ class NewUserTestCase(UserAdminTestCase):
         )
 
     @responses.activate
-    @mock.patch('tests.utils.get_template_source')
+    @mock.patch('tests.urls.mocked_template')
     def test_form_lists_roles(self, mocked_template):
         mocked_template.return_value = '{{ form }}'
         self.mocked_login()
@@ -203,6 +203,14 @@ class EditUserTestCase(UserAdminTestCase):
     def test_edit_user(self):
         self._init_existing_user()
 
+        self.mocked_login()
+        self.mock_roles_list()
+
+        response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
+        content = response.content.decode(response.charset)
+        self.assertIn('id_user_admin', content)
+        self.assertIn('id_role', content)
+
         updated_user_data = {
             'first_name': 'dave',
             'last_name': 'smith',
@@ -216,9 +224,6 @@ class EditUserTestCase(UserAdminTestCase):
             status=204,
             content_type='application/json'
         )
-
-        self.mocked_login()
-        self.mock_roles_list()
         with silence_logger('mtp', level=logging.WARNING):
             self.client.post(
                 reverse('edit-user', kwargs={'username': 'current_user'}),
@@ -265,9 +270,7 @@ class EditUserTestCase(UserAdminTestCase):
         )
 
     @responses.activate
-    @mock.patch('tests.utils.get_template_source')
-    def test_editing_self_hides_roles_and_admin_status(self, mocked_template):
-        mocked_template.return_value = '{{ form }}'
+    def test_editing_self_hides_roles_and_admin_status(self):
         self._init_existing_user(username='current_user')
         self.mocked_login(username='current_user')
         self.mock_roles_list()
@@ -275,8 +278,8 @@ class EditUserTestCase(UserAdminTestCase):
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertNotContains(response, 'Digital cashbook', msg_prefix=response.content.decode(response.charset))
         content = response.content.decode(response.charset)
-        self.assertNotIn('user_admin', content)
-        self.assertNotIn('role', content)
+        self.assertNotIn('id_user_admin', content)
+        self.assertNotIn('id_role', content)
 
     @responses.activate
     def test_admin_account_compatibility(self):
