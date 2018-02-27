@@ -15,18 +15,18 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "~2.18",
-    "eslint": "~4.0",
-    "sass-lint": "~1.10",
+    "browser-sync": "~2.23",
+    "eslint": "~4.18",
+    "sass-lint": "~1.12",
     "phantomjs-prebuilt": "~2.1",
-    "selenium-standalone": "~6.5"
+    "selenium-standalone": "~6.12"
   },
   "dependencies": {
     "checked-polyfill": "ministryofjustice/checked-polyfill#1.0.0",
     "govuk-elements-sass": "~3.1",
     "jquery": "~1.12",
     "js-cookie": "~2.2",
-    "node-sass": "~4.6",
+    "node-sass": "~4.7",
     "webpack": "~3.8"
   }
 }
