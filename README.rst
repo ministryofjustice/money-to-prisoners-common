@@ -87,6 +87,9 @@ should be unique to your application.
 Developing
 ----------
 
+.. image:: https://travis-ci.org/ministryofjustice/money-to-prisoners-common.svg?branch=master
+    :target: https://travis-ci.org/ministryofjustice/money-to-prisoners-common
+
 * Test using ``./run.py test`` or ``python setup.py test``
 * Update the version with ``./run.py set_version --version [?.?.?]``
 * Commit and push changes to github
