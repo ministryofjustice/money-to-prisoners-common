@@ -10,7 +10,7 @@ from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
-from django.utils.translation import override
+from django.utils.translation import gettext, override
 
 from mtp_common.api import notifications_for_request
 
@@ -42,6 +42,23 @@ def random_string(length=4):
 @register.filter
 def wrapwithtag(content, tag):
     return format_html('<{tag}>{content}</{tag}>', tag=tag, content=content)
+
+
+@register.filter
+def hide_long_text(text, count=5):
+    if not text:
+        return text
+    count = int(count)
+    words = text.split()
+    if len(words) <= count:
+        return text
+    short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])
+    return format_html('<span class="visually-hidden">{text}</span>'
+                       '<span aria-hidden="true">'
+                       '  {short_text}'
+                       '  <a href="#" class="js-long-text" data-rest="{rest_text}">{more}</a>'
+                       '</span>',
+                       short_text=short_text, rest_text=rest_text, text=text, more=gettext('More…'))
 
 
 class StripWhitespaceNode(template.Node):
