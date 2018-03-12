@@ -1,0 +1,11 @@
+// Show a warning when an email address domain might be misspelled
+
+.mtp-mailcheck-warning {
+  padding-top: 6px;
+  color: $error-colour;
+
+  a {
+    font-weight: bold;
+    color: $error-colour;
+  }
+}
