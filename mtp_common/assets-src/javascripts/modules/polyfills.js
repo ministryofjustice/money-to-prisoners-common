@@ -20,6 +20,11 @@ exports.Polyfills = {
   },
 
   bind: function () {
+    if (!String.prototype.trim) {
+      String.prototype.trim = function () {
+        return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+      };
+    }
     if (!Function.prototype.bind) {
       Function.prototype.bind = function (oThis) {
         if (typeof this !== 'function') {
@@ -45,6 +50,21 @@ exports.Polyfills = {
         fBound.prototype = new fNOP();
 
         return fBound;
+      };
+    }
+    if (!Array.prototype.indexOf) {
+      Array.prototype.indexOf = function (searchElement, fromIndex) {
+        var index = -1;
+        if (fromIndex === undefined) {
+          fromIndex = 0;
+        }
+        $.each(this, function (i) {
+          if (this === searchElement && i >= fromIndex) {
+            index = i;
+            return false;
+          }
+        });
+        return index;
       };
     }
   }
