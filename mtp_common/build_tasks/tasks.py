@@ -110,7 +110,6 @@ def test(context: Context, test_labels=None, functional_tests=False, accessibili
         functional_tests = True
         os.environ['RUN_ACCESSIBILITY_TESTS'] = '1'
     if functional_tests:
-        selenium_drivers(context)
         os.environ['RUN_FUNCTIONAL_TESTS'] = '1'
     if webdriver:
         os.environ['WEBDRIVER'] = webdriver
@@ -165,14 +164,6 @@ def dependencies(_: Context):
     """
     Updates all dependencies
     """
-
-
-@tasks.register('node_dependencies', hidden=True)
-def selenium_drivers(context: Context):
-    """
-    Installs selenium drivers
-    """
-    context.node_tool('selenium-standalone', 'install')
 
 
 @tasks.register(hidden=True)

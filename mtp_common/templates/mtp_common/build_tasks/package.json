@@ -17,9 +17,7 @@
   "devDependencies": {
     "browser-sync": "~2.23",
     "eslint": "~4.18",
-    "sass-lint": "~1.12",
-    "phantomjs-prebuilt": "~2.1",
-    "selenium-standalone": "~6.12"
+    "sass-lint": "~1.12"
   },
   "dependencies": {
     "checked-polyfill": "ministryofjustice/checked-polyfill#1.0.0",

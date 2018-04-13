@@ -1,10 +1,8 @@
 import collections
 import functools
-import glob
 import logging
 import os
 import socket
-import subprocess
 import types
 import unittest
 from urllib.parse import urlparse, urljoin
@@ -13,64 +11,13 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.test import LiveServerTestCase
 from django.utils.deprecation import MiddlewareMixin
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.command import Command
 from selenium.webdriver.remote.webelement import WebElement
 
+from mtp_common.test_utils.webdrivers import get_web_driver
+
 logger = logging.getLogger('mtp')
-
-web_drivers = {
-    # NB: ensure the paths refer to the machine binaries not node.js wrappers (since they capture important signals)
-    'phantomjs': {
-        'class': webdriver.PhantomJS,
-        'path': 'phantomjs-prebuilt/lib/phantom/bin/phantomjs',
-        'requires_selenium_standalone': False,
-    },
-    'chrome': {
-        'class': webdriver.Chrome,
-        'path': 'selenium-standalone/.selenium/chromedriver/*-chromedriver',
-        'requires_selenium_standalone': True,
-    },
-    'firefox': {
-        'class': webdriver.Firefox,
-        'path': 'selenium-standalone/.selenium/geckodriver/*-geckodriver',
-        'requires_selenium_standalone': True,
-    },
-}
-
-
-def is_executable(path):
-    return os.path.isfile(path) and os.access(path, os.X_OK)
-
-
-def install_selenium_standalone_drivers(node_modules_path='./node_modules'):
-    selenium_standalone = os.path.join(node_modules_path, '.bin/selenium-standalone')
-    if not is_executable(selenium_standalone):
-        raise ValueError('Selenium standalone node package is not installed')
-    if subprocess.call([selenium_standalone, 'install']) != 0:
-        raise ValueError('Could not install selenium standalone binaries')
-
-
-def get_web_driver(driver_name, node_modules_path='./node_modules'):
-    web_driver = web_drivers.get(driver_name)
-    if not web_driver:
-        raise ValueError('Unknown driver: %s' % driver_name)
-
-    def find_executable():
-        paths = glob.glob(os.path.join(node_modules_path, web_driver['path']))
-        try:
-            return next(filter(is_executable, paths))
-        except StopIteration:
-            return None
-
-    executable_path = find_executable()
-    if not executable_path and web_driver['requires_selenium_standalone']:
-        install_selenium_standalone_drivers(node_modules_path=node_modules_path)
-        executable_path = find_executable()
-    if not executable_path:
-        raise ValueError('Cannot find executable for %s' % driver_name)
-    return web_driver['class'](executable_path=executable_path)
 
 
 class WebDriverControlMixin:
@@ -180,7 +127,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         if self.auto_load_test_data:
             self.load_test_data()
 
-        web_driver = os.environ.get('WEBDRIVER', 'phantomjs')
+        web_driver = os.environ.get('WEBDRIVER', 'chrome-headless')
         if self.required_webdrivers and web_driver not in self.required_webdrivers:
             self.skipTest('this test requires %s' % ' or '.join(self.required_webdrivers))
         try:
@@ -190,10 +137,6 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
 
         if self.test_accessibility:
             self.setup_accessibility_run()
-
-        if not isinstance(self.driver, webdriver.Firefox):
-            self.driver.set_window_position(0, 0)
-        self.driver.set_window_size(1000, 1000)
 
     def tearDown(self):
         self.driver.quit()
