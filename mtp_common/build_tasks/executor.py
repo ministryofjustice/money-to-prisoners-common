@@ -419,7 +419,10 @@ class Context:
         """
         Runs a pip command
         """
-        from pip import main as pip_main
+        try:
+            from pip._internal import main as pip_main
+        except ImportError:
+            from pip import main as pip_main
 
         args = [command] + list(args)
         if self.verbosity == 0:
