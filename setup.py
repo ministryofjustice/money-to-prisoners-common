@@ -33,7 +33,7 @@ install_requires = [
 ]
 extras_require = {
     'monitoring': [
-        'raven>=6.0,<6.1',
+        'raven>=6.6,<7',
     ],
     'testing': [
         'flake8>=3.5,<4',

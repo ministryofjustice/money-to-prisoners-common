@@ -1,5 +1,5 @@
 {% if sentry_dsn %}
-  <script src="https://cdn.ravenjs.com/3.14.2/raven.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.ravenjs.com/3.24.1/raven.min.js" crossorigin="anonymous"></script>
   <script>
     if (Raven) {
       Raven.config('{{ sentry_dsn }}', {
