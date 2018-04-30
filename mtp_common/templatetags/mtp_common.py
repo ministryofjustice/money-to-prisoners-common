@@ -45,6 +45,11 @@ def wrapwithtag(content, tag):
 
 
 @register.filter
+def wraplink(text, url):
+    return format_html('<a href="{url}">{text}</a>', text=text, url=url)
+
+
+@register.filter
 def hide_long_text(text, count=5):
     if not text:
         return text
