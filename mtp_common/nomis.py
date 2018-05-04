@@ -1,16 +1,60 @@
-from datetime import date
+import datetime
+import logging
 import time
 from urllib.parse import quote_plus
 
 from django.conf import settings
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import now
 import jwt
-from mtp_common.auth import urljoin
 import requests
 from requests.exceptions import ConnectionError
 
+from mtp_common.auth import api_client, urljoin
+from mtp_common.auth.exceptions import HttpNotFoundError
+
+logger = logging.getLogger('mtp')
+
+
+def can_access_nomis():
+    return bool(
+        settings.NOMIS_API_BASE_URL and settings.NOMIS_API_PRIVATE_KEY and
+        get_client_token()
+    )
+
+
+client_token = None
+
+
+def get_client_token():
+    """
+    Requests and stores the NOMIS API client token from mtp-api
+    """
+    if getattr(settings, 'NOMIS_API_CLIENT_TOKEN', ''):
+        return settings.NOMIS_API_CLIENT_TOKEN
+    global client_token
+    if not client_token or client_token['expires'] and client_token['expires'] - now() < datetime.timedelta(days=1):
+        session = None
+        try:
+            session = api_client.get_authenticated_api_session(settings.TOKEN_RETRIEVAL_USERNAME,
+                                                               settings.TOKEN_RETRIEVAL_PASSWORD)
+            client_token = session.get('/tokens/nomis/').json()
+        except (requests.RequestException, HttpNotFoundError, ValueError, AttributeError):
+            logger.exception('Cannot load NOMIS API client token')
+            return None
+        finally:
+            if session and getattr(session, 'access_token', None):
+                api_client.revoke_token(session.access_token)
+        if client_token.get('expires'):
+            client_token['expires'] = parse_datetime(client_token['expires'])
+            if client_token['expires'] < now():
+                logger.error('NOMIS API client token from mtp-api had expired')
+                return None
+    return client_token['token']
+
 
 def convert_date_param(param):
-    if isinstance(param, date):
+    if isinstance(param, datetime.date):
         return param.isoformat()
     elif isinstance(param, str):
         return param
@@ -19,7 +63,7 @@ def convert_date_param(param):
 
 def generate_request_headers():
     encoded = jwt.encode(
-        {'iat': int(time.time()), 'token': settings.NOMIS_API_CLIENT_TOKEN},
+        {'iat': int(time.time()), 'token': get_client_token()},
         settings.NOMIS_API_PRIVATE_KEY, 'ES256'
     )
     bearer_token = encoded.decode('utf8')
