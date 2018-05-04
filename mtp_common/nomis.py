@@ -146,7 +146,20 @@ def get_location(prisoner_number, retries=0, session=None):
         retries=retries, session=session
     )
     if 'establishment' in result:
-        return {
+        location = {
             'nomis_id': result['establishment']['code'],
             'name': result['establishment']['desc'],
         }
+        if 'housing_location' in result:
+            housing = result['housing_location']
+            if isinstance(housing, str):
+                housing = {'description': housing}
+                levels = housing['description'].split('-')
+                levels.pop(0)  # disregard prison code
+                levels = [
+                    {'type': k, 'value': v}
+                    for k, v in zip(('Wing', 'Landing', 'Cell'), levels)
+                ]
+                housing['levels'] = levels
+            location['housing_location'] = housing
+        return location
