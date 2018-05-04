@@ -1,13 +1,44 @@
 from django.conf import settings
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, override_settings
 from requests.exceptions import ConnectionError
 import responses
 
-from mtp_common.auth import urljoin
 from mtp_common import nomis
+from mtp_common.auth import urljoin
+from mtp_common.auth.test_utils import generate_tokens
+from mtp_common.test_utils import silence_logger
 
 
 class NomisApiTestCase(SimpleTestCase):
+    @override_settings(NOMIS_API_CLIENT_TOKEN='abc.abc.abc')
+    def test_client_token_taken_from_settings(self):
+        self.assertEqual(nomis.get_client_token(), settings.NOMIS_API_CLIENT_TOKEN)
+        self.assertTrue(nomis.can_access_nomis())
+
+    @override_settings(NOMIS_API_CLIENT_TOKEN='',
+                       TOKEN_RETRIEVAL_USERNAME='token-user',
+                       TOKEN_RETRIEVAL_PASSWORD='abc')
+    def test_client_token_cached_from_api(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/token/', json=generate_tokens())
+            rsps.add(rsps.GET, 'http://localhost:8000/tokens/nomis/', json={
+                'token': '1234567890',
+                'expires': None,
+            })
+            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/revoke_token/')
+            self.assertTrue(nomis.can_access_nomis())
+        self.assertEqual(nomis.get_client_token(), '1234567890')
+
+    @override_settings(NOMIS_API_CLIENT_TOKEN='',
+                       TOKEN_RETRIEVAL_USERNAME='token-user',
+                       TOKEN_RETRIEVAL_PASSWORD='abc')
+    def test_cannot_access_nomis_without_token(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/token/', json=generate_tokens())
+            rsps.add(rsps.GET, 'http://localhost:8000/tokens/nomis/', status=404)
+            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/revoke_token/')
+            with silence_logger():
+                self.assertFalse(nomis.can_access_nomis())
 
     def test_get_account_balances(self):
         with responses.RequestsMock() as rsps:
