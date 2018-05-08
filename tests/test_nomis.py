@@ -45,3 +45,91 @@ class NomisApiTestCase(SimpleTestCase):
 
             balances = nomis.get_account_balances('BMI', 'A1471AE', retries=1)
             self.assertEqual(balances, {'cash': 500, 'savings': 0, 'spends': 25})
+
+    def test_housing_location_no_housing(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1471AE/location/'),
+                json={
+                    'establishment': {
+                        'code': 'BXI',
+                        'desc': 'BRIXTON (HMP)'
+                    },
+                },
+                status=200,
+            )
+
+            location = nomis.get_location('A1471AE')
+            self.assertEqual(location, {'nomis_id': 'BXI', 'name': 'BRIXTON (HMP)'})
+
+    def test_housing_location_string_housing(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1471AE/location/'),
+                json={
+                    'establishment': {
+                        'code': 'BXI',
+                        'desc': 'BRIXTON (HMP)'
+                    },
+                    'housing_location': 'BXI-H-2-001'
+                },
+                status=200,
+            )
+
+            location = nomis.get_location('A1471AE')
+            self.assertEqual(
+                location,
+                {
+                    'nomis_id': 'BXI',
+                    'name': 'BRIXTON (HMP)',
+                    'housing_location': {
+                        'description': 'BXI-H-2-001',
+                        'levels': [
+                            {'type': 'Wing', 'value': 'H'},
+                            {'type': 'Landing', 'value': '2'},
+                            {'type': 'Cell', 'value': '001'},
+                        ]
+                    }
+                }
+            )
+
+    def test_housing_location_dict_housing(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1471AE/location/'),
+                json={
+                    'establishment': {
+                        'code': 'BXI',
+                        'desc': 'BRIXTON (HMP)'
+                    },
+                    'housing_location': {
+                        'description': 'BXI-H-2-001',
+                        'levels': [
+                            {'type': 'Wing', 'value': 'H'},
+                            {'type': 'Landing', 'value': '2'},
+                            {'type': 'Cell', 'value': '001'},
+                        ]
+                    }
+                },
+                status=200,
+            )
+
+            location = nomis.get_location('A1471AE')
+            self.assertEqual(
+                location,
+                {
+                    'nomis_id': 'BXI',
+                    'name': 'BRIXTON (HMP)',
+                    'housing_location': {
+                        'description': 'BXI-H-2-001',
+                        'levels': [
+                            {'type': 'Wing', 'value': 'H'},
+                            {'type': 'Landing', 'value': '2'},
+                            {'type': 'Cell', 'value': '001'},
+                        ]
+                    }
+                }
+            )
