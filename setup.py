@@ -16,6 +16,7 @@ with open('README.rst') as readme:
     README = readme.read()
 
 install_requires = [
+    'urllib3==1.22',
     'Django>=1.11,<2.1',
     'django-form-error-reporting>=0.7',
     'django-widget-tweaks>=1.4,<1.5',
