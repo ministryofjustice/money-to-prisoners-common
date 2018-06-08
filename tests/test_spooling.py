@@ -239,7 +239,7 @@ class SendEmailTestCase(SimpleTestCase):
 
     @override_settings(ENVIRONMENT='prod')
     @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.tasks.EmailMultiAlternatives')
+    @mock.patch('mtp_common.tasks.mail_class')
     def test_synchronous_send_email_does_not_retry(self, mocked_email, logger):
         from mtp_common.tasks import mail_errors, send_email
 
@@ -259,7 +259,7 @@ class SendEmailTestCase(SimpleTestCase):
     @override_settings(ENVIRONMENT='prod')
     @mock.patch.object(spooler, 'installed', True)
     @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.tasks.EmailMultiAlternatives')
+    @mock.patch('mtp_common.tasks.mail_class')
     @mock.patch('mtp_common.spooling.uwsgi')
     def test_asynchronous_send_email_retries(self, uwsgi, mocked_email, logger):
         from mtp_common.tasks import mail_errors, send_email
