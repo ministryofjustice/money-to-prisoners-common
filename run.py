@@ -5,8 +5,8 @@ import sys
 from mtp_common.build_tasks.executor import Executor
 import build_tasks  # noqa
 
-if sys.version_info[0:2] < (3, 4):
-    raise SystemExit('python 3.4+ is required')
+if sys.version_info[0:2] < (3, 5):
+    raise SystemExit('python 3.5+ is required')
 
 
 def main():
