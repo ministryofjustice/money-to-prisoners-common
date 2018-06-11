@@ -227,7 +227,8 @@ class SendEmailTestCase(SimpleTestCase):
         # schedule call
         self.assertIsNone(mtp_common.tasks.send_email(*email_args, **email_kwargs))
         self.assertEqual(len(mail.outbox), 0)
-        uwsgi.spool.assert_called_with(job)
+        call_args, _ = uwsgi.spool.call_args
+        self.assertDictEqual(call_args[0], job)
 
         # simulate call
         self.assertEqual(spooler(job), uwsgi.SPOOL_OK)
