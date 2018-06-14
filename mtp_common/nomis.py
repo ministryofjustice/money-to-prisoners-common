@@ -197,13 +197,30 @@ def get_location(prisoner_number, retries=0, session=None):
         if 'housing_location' in result:
             housing = result['housing_location']
             if isinstance(housing, str):
+                # older NOMIS api only returned housing_location as a string
                 housing = {'description': housing}
                 levels = housing['description'].split('-')
-                levels.pop(0)  # disregard prison code
-                levels = [
-                    {'type': k, 'value': v}
-                    for k, v in zip(('Wing', 'Landing', 'Cell'), levels)
-                ]
+                if len(levels) == 4:
+                    levels.pop(0)  # disregard prison code
+                    levels = [
+                        {'type': k, 'value': v}
+                        for k, v in zip(('Wing', 'Landing', 'Cell'), levels)
+                    ]
+                else:
+                    levels = []
                 housing['levels'] = levels
+            else:
+                # newer NOMIS api returns a dict but with a variety of levels
+                if 'levels' not in housing:
+                    # ensure levels key is present
+                    housing['levels'] = []
+                if 'description' not in housing:
+                    # synthesise missing description
+                    housing['description'] = location['nomis_id']
+                    if housing['levels']:
+                        housing['description'] += (
+                            '-' +
+                            '-'.join(level['value'] for level in housing['levels'])
+                        )
             location['housing_location'] = housing
         return location

@@ -77,90 +77,172 @@ class NomisApiTestCase(SimpleTestCase):
             balances = nomis.get_account_balances('BMI', 'A1471AE', retries=1)
             self.assertEqual(balances, {'cash': 500, 'savings': 0, 'spends': 25})
 
-    def test_housing_location_no_housing(self):
+    def assertHousingFormatStructure(self, nomis_response, expected_dict):  # noqa: N802
         with responses.RequestsMock() as rsps:
             rsps.add(
                 responses.GET,
-                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1471AE/location/'),
-                json={
-                    'establishment': {
-                        'code': 'BXI',
-                        'desc': 'BRIXTON (HMP)'
-                    },
-                },
-                status=200,
+                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1401AE/location/'),
+                json=nomis_response
             )
+            location = nomis.get_location('A1401AE')
+        self.assertEqual(location, expected_dict)
 
-            location = nomis.get_location('A1471AE')
-            self.assertEqual(location, {'nomis_id': 'BXI', 'name': 'BRIXTON (HMP)'})
+    def test_housing_location_no_housing(self):
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {
+                    'code': 'BXI',
+                    'desc': 'BRIXTON (HMP)'
+                }
+            },
+            {'nomis_id': 'BXI', 'name': 'BRIXTON (HMP)'}
+        )
 
     def test_housing_location_string_housing(self):
-        with responses.RequestsMock() as rsps:
-            rsps.add(
-                responses.GET,
-                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1471AE/location/'),
-                json={
-                    'establishment': {
-                        'code': 'BXI',
-                        'desc': 'BRIXTON (HMP)'
-                    },
-                    'housing_location': 'BXI-H-2-001'
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {
+                    'code': 'BXI',
+                    'desc': 'BRIXTON (HMP)'
                 },
-                status=200,
-            )
-
-            location = nomis.get_location('A1471AE')
-            self.assertEqual(
-                location,
-                {
-                    'nomis_id': 'BXI',
-                    'name': 'BRIXTON (HMP)',
-                    'housing_location': {
-                        'description': 'BXI-H-2-001',
-                        'levels': [
-                            {'type': 'Wing', 'value': 'H'},
-                            {'type': 'Landing', 'value': '2'},
-                            {'type': 'Cell', 'value': '001'},
-                        ]
-                    }
+                'housing_location': 'BXI-H-2-001'
+            },
+            {
+                'nomis_id': 'BXI',
+                'name': 'BRIXTON (HMP)',
+                'housing_location': {
+                    'description': 'BXI-H-2-001',
+                    'levels': [
+                        {'type': 'Wing', 'value': 'H'},
+                        {'type': 'Landing', 'value': '2'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
                 }
-            )
+            }
+        )
 
     def test_housing_location_dict_housing(self):
-        with responses.RequestsMock() as rsps:
-            rsps.add(
-                responses.GET,
-                urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1471AE/location/'),
-                json={
-                    'establishment': {
-                        'code': 'BXI',
-                        'desc': 'BRIXTON (HMP)'
-                    },
-                    'housing_location': {
-                        'description': 'BXI-H-2-001',
-                        'levels': [
-                            {'type': 'Wing', 'value': 'H'},
-                            {'type': 'Landing', 'value': '2'},
-                            {'type': 'Cell', 'value': '001'},
-                        ]
-                    }
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {
+                    'code': 'BXI',
+                    'desc': 'BRIXTON (HMP)'
                 },
-                status=200,
-            )
-
-            location = nomis.get_location('A1471AE')
-            self.assertEqual(
-                location,
-                {
-                    'nomis_id': 'BXI',
-                    'name': 'BRIXTON (HMP)',
-                    'housing_location': {
-                        'description': 'BXI-H-2-001',
-                        'levels': [
-                            {'type': 'Wing', 'value': 'H'},
-                            {'type': 'Landing', 'value': '2'},
-                            {'type': 'Cell', 'value': '001'},
-                        ]
-                    }
+                'housing_location': {
+                    'description': 'BXI-H-2-001',
+                    'levels': [
+                        {'type': 'Wing', 'value': 'H'},
+                        {'type': 'Landing', 'value': '2'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
                 }
-            )
+            },
+            {
+                'nomis_id': 'BXI',
+                'name': 'BRIXTON (HMP)',
+                'housing_location': {
+                    'description': 'BXI-H-2-001',
+                    'levels': [
+                        {'type': 'Wing', 'value': 'H'},
+                        {'type': 'Landing', 'value': '2'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            }
+        )
+
+    def test_housing_location_level_variations(self):
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {'code': 'HEI', 'desc': 'HMP HEWELL'},
+                'housing_location': {
+                    'description': 'HEI-1-1-A-001',
+                    'levels': [
+                        {'type': 'Block', 'value': '1'},
+                        {'type': 'Tier', 'value': '1'},
+                        {'type': 'Spur', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            },
+            {
+                'nomis_id': 'HEI', 'name': 'HMP HEWELL',
+                'housing_location': {
+                    'description': 'HEI-1-1-A-001',
+                    'levels': [
+                        {'type': 'Block', 'value': '1'},
+                        {'type': 'Tier', 'value': '1'},
+                        {'type': 'Spur', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            }
+        )
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {'code': 'BZI', 'desc': 'BRONZEFIELD (HMP)'},
+                'housing_location': {
+                    'description': 'BZI-A-A-001',
+                    'levels': [
+                        {'type': 'Block', 'value': 'A'},
+                        {'type': 'Landing', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            },
+            {
+                'nomis_id': 'BZI', 'name': 'BRONZEFIELD (HMP)',
+                'housing_location': {
+                    'description': 'BZI-A-A-001',
+                    'levels': [
+                        {'type': 'Block', 'value': 'A'},
+                        {'type': 'Landing', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            }
+        )
+
+    def test_housing_location_absent_levels(self):
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {'code': 'WWI', 'desc': 'WANDSWORTH (HMP)'},
+                'housing_location': {
+                    'description': 'WWI-COURT',
+                }
+            },
+            {
+                'nomis_id': 'WWI', 'name': 'WANDSWORTH (HMP)',
+                'housing_location': {
+                    'description': 'WWI-COURT',
+                    'levels': []
+                }
+            }
+        )
+
+    def test_housing_location_absent_description(self):
+        self.assertHousingFormatStructure(
+            {
+                'establishment': {'code': 'HEI', 'desc': 'HMP HEWELL'},
+                'housing_location': {
+                    'levels': [
+                        {'type': 'Block', 'value': '1'},
+                        {'type': 'Tier', 'value': '1'},
+                        {'type': 'Spur', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            },
+            {
+                'nomis_id': 'HEI', 'name': 'HMP HEWELL',
+                'housing_location': {
+                    'description': 'HEI-1-1-A-001',
+                    'levels': [
+                        {'type': 'Block', 'value': '1'},
+                        {'type': 'Tier', 'value': '1'},
+                        {'type': 'Spur', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            }
+        )
