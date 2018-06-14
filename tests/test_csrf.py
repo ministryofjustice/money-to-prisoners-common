@@ -27,12 +27,12 @@ class CsrfTestCase(SimpleTestCase):
     def tearDown(self):
         self.mocked_api_client.stop()
 
-    def assertInvalidCsrfResponse(self, response):  # noqa
+    def assertInvalidCsrfResponse(self, response):  # noqa: N802
         self.assertEqual(response.status_code, 403)
         messages = '\n'.join(str(message) for message in response.context['messages'])
         self.assertIn('Please try again', messages)
 
-    def assertValidCsrfResponse(self, response):  # noqa
+    def assertValidCsrfResponse(self, response):  # noqa: N802
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.has_header('location'))
 
