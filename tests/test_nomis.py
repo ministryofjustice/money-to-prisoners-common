@@ -98,29 +98,6 @@ class NomisApiTestCase(SimpleTestCase):
             {'nomis_id': 'BXI', 'name': 'BRIXTON (HMP)'}
         )
 
-    def test_housing_location_string_housing(self):
-        self.assertHousingFormatStructure(
-            {
-                'establishment': {
-                    'code': 'BXI',
-                    'desc': 'BRIXTON (HMP)'
-                },
-                'housing_location': 'BXI-H-2-001'
-            },
-            {
-                'nomis_id': 'BXI',
-                'name': 'BRIXTON (HMP)',
-                'housing_location': {
-                    'description': 'BXI-H-2-001',
-                    'levels': [
-                        {'type': 'Wing', 'value': 'H'},
-                        {'type': 'Landing', 'value': '2'},
-                        {'type': 'Cell', 'value': '001'},
-                    ]
-                }
-            }
-        )
-
     def test_housing_location_dict_housing(self):
         self.assertHousingFormatStructure(
             {
