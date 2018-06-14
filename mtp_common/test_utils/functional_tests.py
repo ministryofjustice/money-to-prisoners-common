@@ -222,7 +222,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
 
     # Assertions
 
-    def assertInSource(self, search, msg=None):  # noqa
+    def assertInSource(self, search, msg=None):  # noqa: N802
         """
         Searches the page source for text or a regular expression
         """
@@ -231,7 +231,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         else:
             self.assertIn(search, self.driver.page_source, msg=msg)
 
-    def assertNotInSource(self, search, msg=None):  # noqa
+    def assertNotInSource(self, search, msg=None):  # noqa: N802
         """
         Searches the page source to ensure it doesn't contain text or a regular expression
         """
@@ -240,7 +240,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         else:
             self.assertNotIn(search, self.driver.page_source, msg=msg)
 
-    def assertCssProperty(self, selector, property, expected_value):  # noqa
+    def assertCssProperty(self, selector, property, expected_value):  # noqa: N802
         element = self.driver.find_element_by_css_selector(selector)
         self.assertEqual(expected_value, element.value_of_css_property(property))
 
@@ -254,7 +254,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
             expected_url = urljoin(self.live_server_url, expected_url)
             return expected_url == current_url
 
-    def assertCurrentUrl(self, expected_url, ignore_query_string=True, msg=None):  # noqa
+    def assertCurrentUrl(self, expected_url, ignore_query_string=True, msg=None):  # noqa: N802
         """
         Checks the current page url matches expected url or regular expression
         """
@@ -263,7 +263,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         return self.assertTrue(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
                                msg=msg)
 
-    def assertNotCurrentUrl(self, expected_url, ignore_query_string=True, msg=None):  # noqa
+    def assertNotCurrentUrl(self, expected_url, ignore_query_string=True, msg=None):  # noqa: N802
         """
         Checks the current page url does not match expected url or regular expression
         """
@@ -272,7 +272,7 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         return self.assertFalse(self._current_url_matches(expected_url, ignore_query_string=ignore_query_string),
                                 msg=msg)
 
-    def assertAccessible(self):  # noqa
+    def assertAccessible(self):  # noqa: N802
         """
         Checks accessibility audit
         """
