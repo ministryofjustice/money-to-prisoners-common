@@ -46,9 +46,9 @@ exports.SelectAll = {
     var $row = $checkEl.closest('tr');
 
     if ($checkEl.is(':checked')) {
-      $row.addClass('is-selected');
+      $row.addClass('mtp-row-highlight');
     } else {
-      $row.removeClass('is-selected');
+      $row.removeClass('mtp-row-highlight');
     }
   },
 

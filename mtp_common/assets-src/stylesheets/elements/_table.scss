@@ -3,50 +3,84 @@
 table {
   width: auto;
   border-collapse: collapse;
+}
 
+table.mtp-table {
   th, td {
-    padding: .75em 1em;
+    padding: 0.75em 1em;
+    border-top: 1px solid $border-colour;
+    border-bottom: 0;
+    vertical-align: top;
 
     @media print {
-      padding-top: .3em;
-      padding-bottom: .3em;
+      padding-top: 0.3em;
+      padding-bottom: 0.3em;
     }
-
-    // modifiers
-    &.check {
-      text-align: center;
-      padding: 5px 1em 0;
-
-      input[type=checkbox] {
-        @extend .Checkbox--no-text !optional;
-      }
-    }
-
-    &.cell--compact {
-      padding: .75em 0;
-    }
-
-    &.cell--bold {
-      font-weight: 700;
-    }
-
-    &.flush-right {
-      text-align: right;
-    }
-
   }
 
-  .no-border {
-    > th, > td {
-      border: 0;
+  .mtp-row-highlight {
+    background: $light-blue-25;
+  }
+
+  .mtp-compact-cell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .mtp-check-cell {
+    text-align: center;
+    padding: 5px 1em 0;
+
+    input[type=checkbox] {
+      @extend .Checkbox--no-text !optional;
     }
+  }
+
+  tbody {
+    border-bottom: 1px solid $border-colour;
   }
 }
 
-tbody {
-  tr {
-    &.is-selected td {
-      background: $light-blue-25;
-    }
+.mtp-sortable-cell {
+  display: inline-block;
+  padding-right: 16px;
+  text-decoration: none;
+  background: transparent file-url('../mtp_common/images/ordering-none.png') no-repeat 100% 50%;
+  color: $text-colour;
+
+  &:hover {
+    text-decoration: underline;
   }
+
+  @include device-pixel-ratio {
+    background-image: file-url('../mtp_common/images/ordering-none@2x.png');
+    background-size: 9px 9px;
+  }
+
+  @media print {
+    background-image: none;
+  }
+}
+.mtp-sortable-cell--asc, .mtp-sortable-cell:focus {
+  background-image: file-url('../mtp_common/images/ordering-asc.png');
+
+  @include device-pixel-ratio {
+    background-image: file-url('../mtp_common/images/ordering-asc@2x.png');
+  }
+}
+.mtp-sortable-cell--desc, .mtp-sortable-cell--desc:focus  {
+  background-image: file-url('../mtp_common/images/ordering-desc.png');
+
+  @include device-pixel-ratio {
+    background-image: file-url('../mtp_common/images/ordering-desc@2x.png');
+  }
+}
+a.mtp-sortable-cell {
+  &:link, &:visited, &:hover, &:active, &:focus {
+    color: $text-colour;
+  }
+}
+.mtp-sortable-cell--pad {
+  // usage: inside a td.numeric where the column header is .numeric and .mtp-sortable-cell
+  padding-right: 16px;
 }

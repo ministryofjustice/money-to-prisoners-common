@@ -1,0 +1,10 @@
+<th class="{{ cell_classes }}">
+  <a href="{{ url_prefix }}?{{ query_string }}" class="{{ link_classes }}">
+    {{ title }}
+    {% if screenreader_description %}
+      <span class="visually-hidden">
+        ({{ screenreader_description }})
+      </span>
+    {% endif %}
+  </a>
+</th>
