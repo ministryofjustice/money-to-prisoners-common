@@ -10,6 +10,7 @@ from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
+from django.utils.http import urlencode
 from django.utils.translation import gettext, override
 
 from mtp_common.api import notifications_for_request
@@ -333,3 +334,35 @@ def paneltab(parser, token):
     node_list = parser.parse(('endpaneltab',))
     parser.delete_first_token()
     return PanelTabNode(node_list, **kwargs)
+
+
+@register.inclusion_tag('mtp_common/includes/sortable-cell.html')
+def sortable_cell(title, params, field, url_prefix='', cell_classes='', ignored_fields=('page',)):
+    current_ordering = params.get('ordering')
+    reversed_params = {
+        key: value
+        for key, value in params.items()
+        if value and key not in ignored_fields
+    }
+    reversed_params['ordering'] = field
+
+    link_classes = ['mtp-sortable-cell']
+    if current_ordering == field:
+        screenreader_description = gettext('In ascending order')
+        link_classes.append('mtp-sortable-cell--asc')
+        reversed_params['ordering'] = '-%s' % field
+    elif current_ordering == '-%s' % field:
+        screenreader_description = gettext('In descending order')
+        link_classes.append('mtp-sortable-cell--desc')
+    else:
+        screenreader_description = ''
+
+    query_string = urlencode(reversed_params, doseq=True)
+    return {
+        'title': title,
+        'url_prefix': url_prefix,
+        'query_string': query_string,
+        'screenreader_description': screenreader_description,
+        'link_classes': ' '.join(link_classes),
+        'cell_classes': cell_classes,
+    }
