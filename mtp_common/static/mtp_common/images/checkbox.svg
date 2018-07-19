@@ -14,10 +14,10 @@
    viewBox="0 0 40 40"
    id="svg4315"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="box.svg"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="checkbox.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <defs
      id="defs4317" />
   <sodipodi:namedview
@@ -27,7 +27,7 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
+     inkscape:zoom="11.631907"
      inkscape:cx="20"
      inkscape:cy="20"
      inkscape:document-units="px"
@@ -36,7 +36,7 @@
      units="px"
      inkscape:snap-global="false"
      inkscape:window-width="1440"
-     inkscape:window-height="851"
+     inkscape:window-height="855"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1" />
@@ -48,17 +48,17 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title/>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     inkscape:label="Box"
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1012.3622)">
     <rect
-       style="fill:#656565;fill-opacity:1;stroke:none"
+       style="fill:#0b0c0c;fill-opacity:1;stroke:none"
        id="rect4925"
        width="40"
        height="40"
