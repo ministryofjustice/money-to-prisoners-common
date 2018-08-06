@@ -12,7 +12,36 @@ from mtp_common.auth.exceptions import HttpClientError
 logger = logging.getLogger('mtp')
 
 
-class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
+class ApiForm(GARequestErrorReportingMixin, forms.Form):
+    error_messages = {
+        'generic': _('This service is currently unavailable')
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+    @property
+    def api_session(self):
+        return api_client.get_api_session(self.request)
+
+    def api_validation_error(self, error):
+        try:
+            response_body = json.loads(error.content.decode('utf-8'))
+            for field, errors in response_body.items():
+                if field in ('__all__', 'non_field_errors'):
+                    field = None
+                if isinstance(errors, list):
+                    for error in errors:
+                        self.add_error(field, error)
+                else:
+                    self.add_error(field, errors)
+        except (AttributeError, ValueError, KeyError):
+            logger.exception('api returned unexpected error response')
+            raise forms.ValidationError(self.error_messages['generic'])
+
+
+class UserUpdateForm(ApiForm):
     username = forms.CharField(label=_('Username'), disabled=True,
                                help_text=_('Enter the user’s Quantum ID'))
     first_name = forms.CharField(label=_('First name'))
@@ -23,19 +52,14 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
     })
     user_admin = forms.BooleanField(label=_('Give access to manage other users'), required=False)
 
-    error_messages = {
-        'generic': _('This service is currently unavailable')
-    }
-
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
         self.create = kwargs.pop('create', False)
         super().__init__(*args, **kwargs)
         if self.request.user.username.lower() == kwargs.get('initial', {}).get('username', '').lower():
             del self.fields['role']
             del self.fields['user_admin']
         else:
-            response = api_client.get_api_session(self.request).get('roles/', params={'managed': 1})
+            response = self.api_session.get('roles/', params={'managed': 1})
             managed_roles = response.json().get('results', [])
             initial_role = None
             role_choices = []
@@ -65,7 +89,7 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
 
                 if self.create:
                     data['username'] = self.cleaned_data['username']
-                    api_client.get_api_session(self.request).post('users/', json=data)
+                    self.api_session.post('users/', json=data)
 
                     logger.info('Admin %(admin_username)s created user %(username)s' % {
                         'admin_username': admin_username,
@@ -77,7 +101,7 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
                     })
                 else:
                     username = self.initial['username']
-                    api_client.get_api_session(self.request).patch(
+                    self.api_session.patch(
                         'users/{username}/'.format(username=username), json=data
                     )
 
@@ -90,14 +114,29 @@ class UserUpdateForm(GARequestErrorReportingMixin, forms.Form):
                         }
                     })
             except HttpClientError as e:
-                try:
-                    response_body = json.loads(e.content.decode('utf-8'))
-                    for field, errors in response_body.items():
-                        if isinstance(errors, list):
-                            for error in errors:
-                                self.add_error(field, error)
-                        else:
-                            self.add_error(field, errors)
-                except (AttributeError, ValueError, KeyError):
+                self.api_validation_error(e)
+        return super().clean()
+
+
+class SignUpForm(ApiForm):
+    first_name = forms.CharField(label=_('First name'))
+    last_name = forms.CharField(label=_('Last name'))
+    username = forms.CharField(label=_('Username'), help_text=_('Enter your Quantum ID'))
+    email = forms.EmailField(label=_('Email'))
+    reason = forms.CharField(label=_('Reason for access'), required=False)
+    role = forms.ChoiceField(label=_('Role'))
+
+    def clean(self):
+        if self.is_valid():
+            try:
+                payload = {
+                    key: self.cleaned_data[key]
+                    for key in self.fields.keys()
+                }
+                response = self.api_session.post('requests/', data=payload)
+                if response.status_code != 201:
+                    logger.error('Sign up api error: %r' % response.content)
                     raise forms.ValidationError(self.error_messages['generic'])
-        return self.cleaned_data
+            except HttpClientError as e:
+                self.api_validation_error(e)
+        return super().clean()
