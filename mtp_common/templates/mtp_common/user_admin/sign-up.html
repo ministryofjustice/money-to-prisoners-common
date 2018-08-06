@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans 'Request access' %} – {{ block.super }}{% endblock %}
+
+{% block inner_content %}
+  <header>
+    <h1 class="heading-xlarge">{% trans 'Request access' %}</h1>
+  </header>
+
+  <form action="." method="post" class="mtp-account-management__sign-up">
+    {% csrf_token %}
+
+    {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+
+    {% include 'mtp_common/forms/field.html' with field=form.first_name only %}
+    {% include 'mtp_common/forms/field.html' with field=form.last_name only %}
+    {% include 'mtp_common/forms/field.html' with field=form.email only %}
+    {% include 'mtp_common/forms/field.html' with field=form.username only %}
+
+    {% block sign_up_extras_fields %}{% endblock %}
+
+    {% include 'mtp_common/forms/textarea.html' with field=form.reason only %}
+
+    {% with field=form.role %}
+      <input type="hidden" name="{{ field.html_name }}" value="{{ field.value|default_if_none:field.initial }}">
+    {% endwith %}
+
+    <div class="form-group">
+      <button type="submit" class="button">
+        {% trans 'Submit request' %}
+      </button>
+    </div>
+  </form>
+{% endblock %}

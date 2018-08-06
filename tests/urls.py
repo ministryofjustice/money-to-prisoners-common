@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.template import RequestContext, Template
 
 from mtp_common.auth import views
+from mtp_common.user_admin.forms import SignUpForm
+import mtp_common.user_admin.views as user_admin_views
 
 
 def mocked_template():
@@ -18,6 +20,14 @@ def mocked_context(request):
 def dummy_view(request):
     content = Template(mocked_template()).render(RequestContext(request, mocked_context(request)))
     return HttpResponse(content=content)
+
+
+class TestingSignUpForm(SignUpForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        role_field = self.fields['role']
+        role_field.initial = 'general'
+        role_field.choices = (('general', 'General role'), ('special', 'Special role'))
 
 
 urlpatterns = [
@@ -56,6 +66,9 @@ urlpatterns = [
             'template_name': 'mtp_common/auth/reset-password-done.html',
         }, name='reset_password_done'
     ),
+
+    # unauthenticated user views
+    url(r'^users/sign-up/$', user_admin_views.SignUpView.as_view(form_class=TestingSignUpForm), name='sign-up'),
 
     # user account administration
     url(r'^user-admin/', include('mtp_common.user_admin.urls')),

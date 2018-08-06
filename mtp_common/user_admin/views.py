@@ -1,6 +1,7 @@
 import logging
 import math
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import Http404
@@ -285,3 +286,26 @@ class UserUpdateView(UserFormView):
     def get_context_data(self, **kwargs):
         page_title = _('Edit user ‘%(username)s’') % {'username': self.kwargs['username']}
         return super().get_context_data(page_title=page_title, **kwargs)
+
+
+class SignUpView(FormView):
+    template_name = 'mtp_common/user_admin/sign-up.html'
+    success_template_name = 'mtp_common/user_admin/sign-up-success.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(getattr(settings, 'LOGIN_REDIRECT_URL', None) or '/')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['request'] = self.request
+        return form_kwargs
+
+    def form_valid(self, form):
+        return self.response_class(
+            request=self.request,
+            template=[self.success_template_name],
+            context=self.get_context_data(),
+            using=self.template_engine,
+        )

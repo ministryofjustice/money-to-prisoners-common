@@ -296,3 +296,61 @@ class EditUserTestCase(UserAdminTestCase):
         self.mock_roles_list()
         response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-user.html')
+
+
+class SignUpTestCase(SimpleTestCase):
+    def test_sign_up(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.POST, urljoin(settings.API_URL, '/requests/'),
+                json={}, status=201,
+                content_type='application/json'
+            )
+            response = self.client.post(reverse('sign-up'), data={
+                'first_name': 'A', 'last_name': 'B',
+                'email': 'a@mtp.local', 'username': 'abc',
+                'role': 'general',
+            })
+        self.assertContains(response, 'Your request for access has been sent')
+
+    def test_missing_fields(self):
+        with responses.RequestsMock():
+            response = self.client.post(reverse('sign-up'), data={
+                'first_name': 'A', 'last_name': '',
+                'email': 'a@mtp.local', 'username': 'abc',
+                'role': 'general',
+            })
+        self.assertNotContains(response, 'Your request for access has been sent')
+        self.assertContains(response, 'field is required')
+
+    def test_api_error_response(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.POST, urljoin(settings.API_URL, '/requests/'),
+                json={'non_field_errors': 'Duplicate request'}, status=400,
+                content_type='application/json'
+            )
+            response = self.client.post(reverse('sign-up'), data={
+                'first_name': 'A', 'last_name': 'B',
+                'email': 'a@mtp.local', 'username': 'abc',
+                'role': 'general',
+            })
+        self.assertNotContains(response, 'Your request for access has been sent')
+        self.assertContains(response, 'Duplicate request')
+
+    def test_unexpected_api_error_response(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.POST, urljoin(settings.API_URL, '/requests/'),
+                json={'abc': '******'}, status=400,
+                content_type='application/json'
+            )
+            with silence_logger('mtp'):
+                response = self.client.post(reverse('sign-up'), data={
+                    'first_name': 'A', 'last_name': 'B',
+                    'email': 'a@mtp.local', 'username': 'abc',
+                    'role': 'general',
+                })
+        self.assertNotContains(response, 'Your request for access has been sent')
+        self.assertNotContains(response, '******')
+        self.assertContains(response, 'This service is currently unavailable')
