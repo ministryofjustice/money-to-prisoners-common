@@ -1,0 +1,31 @@
+{% extends 'mtp_common/user_admin/sign-up-confirm-changes.html' %}
+{% load i18n %}
+
+
+{% block confirm_changes %}
+
+  <p>
+    {% trans 'You can sign in or reset your password at' %}:
+  </p>
+  <ul class="list list-bullet">
+    {% for name, url in login_urls %}
+      <li>
+        <a href="{{ url }}">{{ name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="heading-large">
+    {% trans 'Do you want to continue?' %}
+  </h2>
+  <p>
+    {% blocktrans trimmed count count=login_urls|length %}
+      You will lose access to this service if you continue to submit your request.
+    {% plural %}
+      You will lose access to the services you already have if you continue to submit your request.
+    {% endblocktrans %}
+  </p>
+
+  {{ block.super }}
+
+{% endblock %}

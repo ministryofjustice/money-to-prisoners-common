@@ -8,7 +8,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, ngettext_lazy
 from django.views.generic.edit import FormView
 
 from mtp_common.api import api_errors_to_messages
@@ -290,12 +290,18 @@ class UserUpdateView(UserFormView):
 
 class SignUpView(FormView):
     template_name = 'mtp_common/user_admin/sign-up.html'
+    has_role_template_name = 'mtp_common/user_admin/sign-up-has-role.html'
+    has_other_roles_template_name = 'mtp_common/user_admin/sign-up-has-other-roles.html'
     success_template_name = 'mtp_common/user_admin/sign-up-success.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect(getattr(settings, 'LOGIN_REDIRECT_URL', None) or '/')
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        kwargs['page_title'] = _('Request access')
+        return super().get_context_data(**kwargs)
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -307,5 +313,46 @@ class SignUpView(FormView):
             request=self.request,
             template=[self.success_template_name],
             context=self.get_context_data(),
+            using=self.template_engine,
+        )
+
+    def form_invalid(self, form):
+        if form.error_conditions.get('condition') == 'user-exists':
+            return self.confirm_account_changes(form)
+        return super().form_invalid(form)
+
+    def confirm_account_changes(self, form):
+        context = self.get_context_data(form=form)
+        requested_role = form.cleaned_data['role']
+        current_roles = form.error_conditions['roles']
+        has_requested_role = next(filter(lambda role: role['role'] == requested_role, current_roles), None)
+        if has_requested_role:
+            context.update(
+                page_title=_('You already have access to this service'),
+                login_url=has_requested_role['login_url'],
+            )
+            template_name = self.has_role_template_name
+        else:
+            login_urls = {
+                role['application']: role['login_url']
+                for role in current_roles
+            }
+            login_urls = [
+                (application, login_url)
+                for application, login_url in login_urls.items()
+            ]
+            context.update(
+                page_title=ngettext_lazy(
+                    'You already have access to another service',
+                    'You already have access to other services',
+                    len(login_urls)
+                ),
+                login_urls=login_urls,
+            )
+            template_name = self.has_other_roles_template_name
+        return self.response_class(
+            request=self.request,
+            template=[template_name],
+            context=context,
             using=self.template_engine,
         )
