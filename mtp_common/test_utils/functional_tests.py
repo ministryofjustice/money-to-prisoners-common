@@ -123,6 +123,15 @@ class FunctionalTestCase(LiveServerTestCase, WebDriverControlMixin):
         else:
             super(FunctionalTestCase, cls).setUpClass()
 
+    @classmethod
+    def tearDownClass(cls):
+        remote_url = os.environ.get('DJANGO_TEST_REMOTE_INTEGRATION_URL', None)
+        if remote_url:
+            cls._tearDownClassInternal()
+            super(LiveServerTestCase, cls).tearDownClass()
+        else:
+            super(FunctionalTestCase, cls).tearDownClass()
+
     def setUp(self):
         if self.auto_load_test_data:
             self.load_test_data()

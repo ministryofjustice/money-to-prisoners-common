@@ -2,7 +2,7 @@ language: python
 python:
   - 3.5
 install:
-  - pip install -U setuptools pip wheel
+  - pip install -U setuptools wheel
   - pip install .
 script:
   - python run.py --verbosity 2 test
