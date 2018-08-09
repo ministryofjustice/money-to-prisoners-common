@@ -27,7 +27,7 @@ install_requires = [
     'selenium>=3.11,<4',
     'transifex-client>=0.13,<0.14',
     'govuk-bank-holidays>=0.3',
-    'cryptography>=2.1,<2.2',
+    'cryptography>=2.3,<2.4',
     'PyJWT>=1.5,<1.6',
     'boto3>=1.5,<2',
 ]
