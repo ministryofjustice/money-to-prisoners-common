@@ -354,3 +354,46 @@ class SignUpTestCase(SimpleTestCase):
         self.assertNotContains(response, 'Your request for access has been sent')
         self.assertNotContains(response, '******')
         self.assertContains(response, 'This service is currently unavailable')
+
+    def test_shows_has_role_page(self):
+        with responses.RequestsMock() as rsps:
+            error = {
+                'condition': 'user-exists',
+                'roles': [{'role': 'general',
+                           'application': 'Application 1',
+                           'login_url': 'http://example.com/1'}],
+            }
+            rsps.add(
+                rsps.POST, urljoin(settings.API_URL, '/requests/'),
+                json={'__mtp__': error, 'username': 'Exists'}, status=400,
+                content_type='application/json'
+            )
+            response = self.client.post(reverse('sign-up'), data={
+                'first_name': 'A', 'last_name': 'B',
+                'email': 'a@mtp.local', 'username': 'abc',
+                'role': 'general',
+            })
+        self.assertContains(response, 'You already have access to this service')
+        self.assertContains(response, 'http://example.com/1')
+
+    def test_shows_has_other_roles_page(self):
+        with responses.RequestsMock() as rsps:
+            error = {
+                'condition': 'user-exists',
+                'roles': [{'role': 'general',
+                           'application': 'Application 1',
+                           'login_url': 'http://example.com/1'}],
+            }
+            rsps.add(
+                rsps.POST, urljoin(settings.API_URL, '/requests/'),
+                json={'__mtp__': error, 'username': 'Exists'}, status=400,
+                content_type='application/json'
+            )
+            response = self.client.post(reverse('sign-up'), data={
+                'first_name': 'A', 'last_name': 'B',
+                'email': 'a@mtp.local', 'username': 'abc',
+                'role': 'special',
+            })
+        self.assertContains(response, 'You will lose access to this service')
+        self.assertContains(response, 'Application 1')
+        self.assertContains(response, 'http://example.com/1')

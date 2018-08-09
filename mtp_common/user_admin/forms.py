@@ -126,17 +126,33 @@ class SignUpForm(ApiForm):
     reason = forms.CharField(label=_('Reason for access'), required=False)
     role = forms.ChoiceField(label=_('Role'))
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.error_conditions = {}
+
+    @property
+    def payload(self):
+        payload = {
+            key: self.cleaned_data[key]
+            for key in self.fields.keys()
+        }
+        if 'change-role' in self.request.POST:
+            payload['change-role'] = self.request.POST['change-role']
+        return payload
+
     def clean(self):
         if self.is_valid():
             try:
-                payload = {
-                    key: self.cleaned_data[key]
-                    for key in self.fields.keys()
-                }
-                response = self.api_session.post('requests/', data=payload)
+                response = self.api_session.post('requests/', data=self.payload)
                 if response.status_code != 201:
                     logger.error('Sign up api error: %r' % response.content)
                     raise forms.ValidationError(self.error_messages['generic'])
             except HttpClientError as e:
                 self.api_validation_error(e)
         return super().clean()
+
+    def add_error(self, field, error):
+        if field == '__mtp__':
+            self.error_conditions = error
+        else:
+            super().add_error(field, error)

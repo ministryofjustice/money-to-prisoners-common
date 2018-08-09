@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
+
+{% block inner_content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <header>
+        <h1 class="heading-xlarge">{{ page_title }}</h1>
+      </header>
+
+      {% block confirm_changes %}
+        <form action="." method="post">
+          {% csrf_token %}
+
+          <input type="hidden" name="change-role" value="true">
+          {% for field, value in form.cleaned_data.items %}
+            <input type="hidden" name="{{ field }}" value="{{ value }}" />
+          {% endfor %}
+
+          {% block sign_up_extras_fields %}{% endblock %}
+
+          <div class="form-group">
+            <button type="submit" class="button">
+              {% trans 'Submit request' %}
+            </button>
+          </div>
+        </form>
+      {% endblock %}
+    </div>
+  </div>
+
+{% endblock %}

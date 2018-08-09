@@ -1,0 +1,13 @@
+{% extends 'mtp_common/user_admin/sign-up-confirm-changes.html' %}
+{% load i18n %}
+
+
+{% block confirm_changes %}
+
+  <p>
+    <a href="{{ login_url }}" class="button">
+      {% trans 'Sign in or reset your password' %}
+    </a>
+  </p>
+
+{% endblock %}
