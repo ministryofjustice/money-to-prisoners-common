@@ -26,29 +26,54 @@
     }
   }
 
-  .mtp-account-management__can_manage {
-    text-align: center;
-  }
-
-  .mtp-account-management__actions {
-    width: 8em;
-
-    .mtp-account-management__action {
-      display: inline-block;
-      margin-right: 1em;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-
-    a:visited {
-      color: $link-colour;
-    }
-  }
-
   .mtp-page-list {
     margin-top: 1em;
+  }
+}
+
+.mtp-account-management__container {
+  .mtp-table {
+      width: 100%;
+  }
+
+  @include media($max-width: $desktop-breakpoint, $ignore-for-ie: true) {
+    overflow-x: scroll;
+
+    .mtp-table {
+      min-width: ($desktop-breakpoint + 20px);
+    }
+  }
+}
+
+.mtp-account-management__is_manager {
+  width: 11em;
+}
+
+.mtp-account-management__can_manage {
+  min-width: 50px;
+  min-height: 25px;
+  background: file-url('../mtp_common/images/checkmark.png') 20px 50% no-repeat;
+
+  @include device-pixel-ratio {
+    background-image: file-url('../mtp_common/images/checkmark@2x.png');
+    background-size: 25px 20px;
+  }
+}
+
+.mtp-account-management__actions {
+  width: 5em;
+
+  .mtp-account-management__action {
+    display: inline-block;
+    margin-right: 1em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  a:visited {
+    color: $link-colour;
   }
 }
 

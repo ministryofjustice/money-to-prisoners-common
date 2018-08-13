@@ -26,54 +26,56 @@
     <a class="button button-secondary" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
   </p>
 
-  <table class="mtp-table">
-    <thead>
-      <tr>
-        <th>{% trans 'Username' %}</th>
-        <th>{% trans 'Name' %}</th>
-        <th>{% trans 'Email' %}</th>
-        <th>{% trans 'Can manage accounts' %}</th>
-        <th class="mtp-account-management__actions print-hidden">{% trans 'Actions' %}</th>
-      </tr>
-    </thead>
+  <div class="mtp-account-management__container">
+    <table class="mtp-table">
+      <thead>
+        <tr>
+          <th>{% trans 'Name' %}</th>
+          <th>{% trans 'Email' %}</th>
+          <th class="mtp-account-management__is_manager">{% trans 'Can manage accounts' %}</th>
+          <th class="mtp-account-management__actions print-hidden">{% trans 'Actions' %}</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      {% for user in users %}
-        {% if can_delete or user.is_active %}
-          <tr class="{% if not user.is_active %}mtp-inactive-user{% endif %}">
-            <td>{{ user.username }}</td>
-            <td>{{ user.first_name }} {{ user.last_name }}</td>
-            <td>{{ user.email }}</td>
-            <td class="mtp-account-management__can_manage">
+      <tbody>
+        {% for user in users %}
+          {% if can_delete or user.is_active %}
+            <tr class="{% if not user.is_active %}mtp-inactive-user{% endif %}">
+              <td>{{ user.first_name }} {{ user.last_name }}</td>
+              <td>{{ user.email }}</td>
               {% if user.user_admin %}
-                ✔ <span class="visually-hidden">{% trans 'User can manage other accounts' %}</span>
+                <td class="mtp-account-management__can_manage">
+                  <span class="visually-hidden">{% trans 'User can manage other accounts' %}</span>
+                </td>
+              {% else %}
+                <td></td>
               {% endif %}
-            </td>
-            <td class="mtp-account-management__actions print-hidden">
-              <a href="{% url 'edit-user' username=user.username %}" class="mtp-account-management__action">
-                {% trans 'Edit' %}
-              </a>
-              {% if can_delete and request.user.username.lower != user.username.lower %}
-                {% if not user.is_active %}
-                  <a class="mtp-account-management__action" href="{% url 'undelete-user' username=user.username %}">
-                    <span class="mtp-undelete-icon"></span>{% trans 'Enable' %}
-                  </a>
-                {% elif user.is_locked_out %}
-                  <a class="mtp-account-management__action" href="{% url 'unlock-user' username=user.username %}">
-                    <span class="mtp-undelete-icon"></span>{% trans 'Unlock' %}
-                  </a>
-                {% else %}
-                  <a class="mtp-account-management__action" href="{% url 'delete-user' username=user.username %}">
-                    <span class="mtp-delete-icon"></span>{% trans 'Disable' %}
-                  </a>
+              <td class="mtp-account-management__actions print-hidden">
+                <a href="{% url 'edit-user' username=user.username %}" class="mtp-account-management__action">
+                  {% trans 'Edit' %}
+                </a>
+                {% if can_delete and request.user.username.lower != user.username.lower %}
+                  {% if not user.is_active %}
+                    <a class="mtp-account-management__action" href="{% url 'undelete-user' username=user.username %}">
+                      {% trans 'Enable' %}
+                    </a>
+                  {% elif user.is_locked_out %}
+                    <a class="mtp-account-management__action" href="{% url 'unlock-user' username=user.username %}">
+                      {% trans 'Unlock' %}
+                    </a>
+                  {% else %}
+                    <a class="mtp-account-management__action" href="{% url 'delete-user' username=user.username %}">
+                      {% trans 'Disable' %}
+                    </a>
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            </td>
-          </tr>
-        {% endif %}
-      {% endfor %}
-    </tbody>
-  </table>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   {% page_list page=page page_count=page_count %}
 {% endblock %}
