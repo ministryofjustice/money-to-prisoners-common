@@ -7,6 +7,9 @@ exports.Notifications = {
       var $control = $(this);
       var $container = $control.closest('.mtp-notification');
       var messageID = $container.find('.mtp-notification__message').attr('id');
+      if (!messageID) {
+        return;
+      }
       var closed = true;
       $container.attr('aria-expanded', 'false');
       $control.attr({
