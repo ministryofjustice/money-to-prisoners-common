@@ -76,8 +76,16 @@ class UserListTestCase(UserAdminTestCase):
                 ], 'count': 2},
                 content_type='application/json'
             )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
             self.mocked_login()
             response = self.client.get(reverse('list-users'))
+        self.assertNotContains(response, 'New user requests')
+        self.assertContains(response, 'Edit existing users')
         content = response.content.decode(response.charset)
         self.assertIn('john123', content)
         self.assertIn('mary321', content)
@@ -92,6 +100,12 @@ class UserListTestCase(UserAdminTestCase):
                 status=200,
                 content_type='application/json'
             )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
             self.mocked_login()
             response = self.client.get(reverse('list-users'))
         self.assertTrue(response.context['can_delete'])
@@ -101,6 +115,41 @@ class UserListTestCase(UserAdminTestCase):
             self.mocked_login(roles=['prison-clerk', 'security'])
             response = self.client.get(reverse('list-users'))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-admin.html')
+
+    def test_list_account_requests(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'users'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [
+                    {
+                        'created': '2018-08-12T12:00:00Z', 'id': 1,
+                        'first_name': 'John', 'last_name': 'Smith',
+                        'username': 'john123', 'email': 'john@mtp.local',
+                    },
+                    {
+                        'created': '2018-08-13T12:10:00Z', 'id': 2,
+                        'first_name': 'Mary', 'last_name': 'Marks',
+                        'username': 'mary321', 'email': 'mary@mtp.local',
+                    },
+                ], 'count': 2},
+                content_type='application/json'
+            )
+            self.mocked_login()
+            response = self.client.get(reverse('list-users'))
+        self.assertContains(response, 'New user requests')
+        self.assertContains(response, 'Edit existing users')
+        content = response.content.decode(response.charset)
+        self.assertIn('John Smith', content)
+        self.assertIn('Mary Marks', content)
+        self.assertIn('12/08/2018', content)
+        self.assertNotIn('john123', content)
 
 
 class DeleteUserTestCase(UserAdminTestCase):
@@ -118,6 +167,12 @@ class DeleteUserTestCase(UserAdminTestCase):
                 urljoin(settings.API_URL, '/users'),
                 json={'results': [], 'count': 0},
                 status=200,
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
                 content_type='application/json'
             )
 
@@ -142,6 +197,12 @@ class DeleteUserTestCase(UserAdminTestCase):
                 urljoin(settings.API_URL, '/users'),
                 json={'results': [], 'count': 0},
                 status=200,
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
                 content_type='application/json'
             )
 
