@@ -72,4 +72,9 @@ urlpatterns = [
 
     # user account administration
     url(r'^user-admin/', include('mtp_common.user_admin.urls')),
+    url(
+        r'^users/request/(?P<account_request>\d+)/accept/$',
+        user_admin_views.AcceptRequestView.as_view(),
+        name='accept-request'
+    ),
 ]

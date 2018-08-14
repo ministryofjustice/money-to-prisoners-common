@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import Http404
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext, gettext_lazy as _, ngettext_lazy
@@ -15,7 +15,7 @@ from django.views.generic.edit import FormView
 from mtp_common.api import api_errors_to_messages, retrieve_all_pages_for_path
 from mtp_common.auth import api_client
 from mtp_common.auth.exceptions import HttpNotFoundError, HttpClientError
-from mtp_common.user_admin.forms import UserUpdateForm
+from mtp_common.user_admin.forms import UserUpdateForm, AcceptRequestForm
 
 logger = logging.getLogger('mtp')
 
@@ -362,3 +362,56 @@ class SignUpView(FormView):
             context=context,
             using=self.template_engine,
         )
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required(['auth.add_user', 'auth.change_user'], raise_exception=True), name='dispatch')
+@method_decorator(ensure_compatible_admin, name='dispatch')
+class AcceptRequestView(FormView):
+    template_name = 'mtp_common/user_admin/accept-request.html'
+    form_class = AcceptRequestForm
+    success_url = reverse_lazy('list-users')
+
+    def get_form(self, form_class=None):
+        try:
+            return super().get_form(form_class)
+        except HttpNotFoundError:
+            raise Http404
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update(
+            request=self.request,
+            account_request=self.kwargs['account_request'],
+        )
+        return form_kwargs
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        account_request = context_data['form'].account_request
+        account_request.update(
+            created=parse_datetime(account_request['created']),
+            full_name='%s %s' % (account_request['first_name'], account_request['last_name']),
+        )
+        context_data.update(
+            breadcrumbs_back=self.success_url,
+            account_request=account_request,
+        )
+        return context_data
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, gettext('New user request accepted'))
+        return response
+
+
+@login_required
+@permission_required('auth.change_user', raise_exception=True)
+@ensure_compatible_admin
+def decline_request(request, account_request):
+    response = api_client.get_api_session(request).delete('requests/%s/' % account_request)
+    if response.status_code == 204:
+        messages.success(request, gettext('New user request was declined'))
+    else:
+        messages.error(request, gettext('New user request could not be declined'))
+    return redirect(AcceptRequestView.success_url)

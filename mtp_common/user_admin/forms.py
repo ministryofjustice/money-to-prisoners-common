@@ -156,3 +156,24 @@ class SignUpForm(ApiForm):
             self.error_conditions = error
         else:
             super().add_error(field, error)
+
+
+class AcceptRequestForm(ApiForm):
+    user_admin = forms.BooleanField(label=_('Give access to manage other users'), required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.url = 'requests/%s/' % kwargs.pop('account_request')
+        super().__init__(*args, **kwargs)
+        self.account_request = self.api_session.get(self.url).json()
+
+    def clean(self):
+        if self.is_valid():
+            try:
+                user_admin = str(self.cleaned_data.get('user_admin'))
+                response = self.api_session.patch(self.url, data={'user_admin': user_admin})
+                if response.status_code != 200:
+                    logger.error('Accept account request api error: %r' % response.content)
+                    raise forms.ValidationError(self.error_messages['generic'])
+            except HttpClientError as e:
+                self.api_validation_error(e)
+        return super().clean()

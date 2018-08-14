@@ -477,3 +477,87 @@ class SignUpTestCase(SimpleTestCase):
         self.assertContains(response, 'You will lose access to this service')
         self.assertContains(response, 'Application 1')
         self.assertContains(response, 'http://example.com/1')
+
+
+class AccountRequestTestCase(UserAdminTestCase):
+    def assertAcceptRequest(self, user_admin):  # noqa: N802
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests', '1'),
+                json={
+                    'created': '2018-08-12T12:00:00Z', 'id': 1,
+                    'first_name': 'A', 'last_name': 'B',
+                    'email': 'a@mtp.local', 'username': 'abc',
+                    'role': 'general', 'reason': ''
+                },
+                content_type='application/json'
+            )
+            response = self.client.get(reverse('accept-request', kwargs={'account_request': 1}))
+
+            self.assertContains(response, 'New user request')
+            content = response.content.decode(response.charset)
+            self.assertIn('A B', content)
+            self.assertIn('12/08/2018', content)
+            self.assertIn('a@mtp.local', content)
+            self.assertIn('abc', content)
+            self.assertNotIn('Reason', content)
+
+            rsps.add(
+                rsps.PATCH,
+                urljoin(settings.API_URL, 'requests', '1'),
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'users'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            payload = {}
+            if user_admin:
+                payload['user_admin'] = 'on'
+            response = self.client.post(reverse('accept-request', kwargs={'account_request': 1}),
+                                        data=payload, follow=True)
+
+            self.assertContains(response, 'New user request accepted')
+            patch_call = rsps.calls[-3]
+            if user_admin:
+                self.assertEqual(patch_call.request.body, 'user_admin=True')
+            else:
+                self.assertEqual(patch_call.request.body, 'user_admin=False')
+
+    def test_accept_account_requests(self):
+        self.mocked_login()
+        self.assertAcceptRequest(user_admin=False)
+        self.assertAcceptRequest(user_admin=True)
+
+    def test_decline_account_requests(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.DELETE,
+                urljoin(settings.API_URL, 'requests', '1'),
+                status=204,
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'users'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            self.mocked_login()
+            response = self.client.post(reverse('decline-request', kwargs={'account_request': 1}), follow=True)
+            self.assertContains(response, 'New user request was declined')
