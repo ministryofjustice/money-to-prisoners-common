@@ -29,7 +29,7 @@ class ApiForm(GARequestErrorReportingMixin, forms.Form):
         try:
             response_body = json.loads(error.content.decode('utf-8'))
             for field, errors in response_body.items():
-                if field in ('__all__', 'non_field_errors'):
+                if field in ('__all__', 'non_field_errors', 'detail'):
                     field = None
                 if isinstance(errors, list):
                     for error in errors:
