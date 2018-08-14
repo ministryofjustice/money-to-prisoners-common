@@ -7,6 +7,7 @@
       {{ request.user.get_full_name|default:request.user.username }}
     </a>
     <ul id="mtp-user-menu__links">
+      {% block user_menu_links %}{% endblock %}
       {% if perms.auth.change_user %}
         <li><a href="{% url 'list-users' %}">{% trans 'Manage users' %}</a></li>
       {% endif %}
