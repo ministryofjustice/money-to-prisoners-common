@@ -58,6 +58,7 @@ class UserAdminTestCase(SimpleTestCase):
 
 class UserListTestCase(UserAdminTestCase):
     def test_list_users(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             rsps.add(
                 rsps.GET,
@@ -82,7 +83,6 @@ class UserListTestCase(UserAdminTestCase):
                 json={'results': [], 'count': 0},
                 content_type='application/json'
             )
-            self.mocked_login()
             response = self.client.get(reverse('list-users'))
         self.assertNotContains(response, 'New user requests')
         self.assertContains(response, 'Edit existing users')
@@ -92,6 +92,7 @@ class UserListTestCase(UserAdminTestCase):
         self.assertIn('User can manage other accounts', content)
 
     def test_delete_user_permission_propagates(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             rsps.add(
                 rsps.GET,
@@ -106,17 +107,17 @@ class UserListTestCase(UserAdminTestCase):
                 json={'results': [], 'count': 0},
                 content_type='application/json'
             )
-            self.mocked_login()
             response = self.client.get(reverse('list-users'))
         self.assertTrue(response.context['can_delete'])
 
     def test_admin_account_compatibility(self):
+        self.mocked_login(roles=['prison-clerk', 'security'])
         with responses.RequestsMock():
-            self.mocked_login(roles=['prison-clerk', 'security'])
             response = self.client.get(reverse('list-users'))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-admin.html')
 
     def test_list_account_requests(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             rsps.add(
                 rsps.GET,
@@ -141,7 +142,6 @@ class UserListTestCase(UserAdminTestCase):
                 ], 'count': 2},
                 content_type='application/json'
             )
-            self.mocked_login()
             response = self.client.get(reverse('list-users'))
         self.assertContains(response, 'New user requests')
         self.assertContains(response, 'Edit existing users')
@@ -154,6 +154,7 @@ class UserListTestCase(UserAdminTestCase):
 
 class DeleteUserTestCase(UserAdminTestCase):
     def test_user_not_found(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             rsps.add(
                 rsps.DELETE,
@@ -176,7 +177,6 @@ class DeleteUserTestCase(UserAdminTestCase):
                 content_type='application/json'
             )
 
-            self.mocked_login()
             response = self.client.post(
                 reverse('delete-user', kwargs={'username': 'test123'}), follow=True)
         messages = response.context['messages']
@@ -184,6 +184,7 @@ class DeleteUserTestCase(UserAdminTestCase):
         self.assertIn('Not found', messages)
 
     def test_cannot_delete_self(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             rsps.add(
                 rsps.DELETE,
@@ -206,7 +207,6 @@ class DeleteUserTestCase(UserAdminTestCase):
                 content_type='application/json'
             )
 
-            self.mocked_login()
             response = self.client.post(
                 reverse('delete-user', kwargs={'username': 'test-user'}), follow=True)
         messages = response.context['messages']
@@ -216,6 +216,7 @@ class DeleteUserTestCase(UserAdminTestCase):
 
 class NewUserTestCase(UserAdminTestCase):
     def test_new_user(self):
+        self.mocked_login()
         new_user_data = {
             'username': 'new_user',
             'first_name': 'new',
@@ -232,7 +233,6 @@ class NewUserTestCase(UserAdminTestCase):
                 content_type='application/json'
             )
 
-            self.mocked_login()
             self.mock_roles_list(rsps)
             with silence_logger('mtp', level=logging.WARNING):
                 self.client.post(reverse('new-user'), data=new_user_data)
@@ -244,9 +244,9 @@ class NewUserTestCase(UserAdminTestCase):
 
     @mock.patch('tests.urls.mocked_template')
     def test_form_lists_roles(self, mocked_template):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             mocked_template.return_value = '{{ form }}'
-            self.mocked_login()
             self.mock_roles_list(rsps)
             with silence_logger('mtp', level=logging.WARNING):
                 response = self.client.get(reverse('new-user'))
@@ -257,8 +257,8 @@ class NewUserTestCase(UserAdminTestCase):
         )
 
     def test_admin_account_compatibility(self):
+        self.mocked_login(roles=['prison-clerk', 'security'])
         with responses.RequestsMock():
-            self.mocked_login(roles=['prison-clerk', 'security'])
             response = self.client.get(reverse('new-user'))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-admin.html')
 
@@ -283,10 +283,9 @@ class EditUserTestCase(UserAdminTestCase):
         )
 
     def test_edit_user(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             self._init_existing_user(rsps)
-
-            self.mocked_login()
             self.mock_roles_list(rsps)
 
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
@@ -320,6 +319,7 @@ class EditUserTestCase(UserAdminTestCase):
             )
 
     def test_cannot_change_username(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             self._init_existing_user(rsps)
 
@@ -338,7 +338,6 @@ class EditUserTestCase(UserAdminTestCase):
                 content_type='application/json'
             )
 
-            self.mocked_login()
             self.mock_roles_list(rsps)
             with silence_logger('mtp', level=logging.WARNING):
                 self.client.post(
@@ -354,9 +353,9 @@ class EditUserTestCase(UserAdminTestCase):
             )
 
     def test_editing_self_hides_roles_and_admin_status(self):
+        self.mocked_login(username='current_user')
         with responses.RequestsMock() as rsps:
             self._init_existing_user(rsps, username='current_user')
-            self.mocked_login(username='current_user')
             with silence_logger('mtp', level=logging.WARNING):
                 response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertNotContains(response, 'Digital cashbook', msg_prefix=response.content.decode(response.charset))
@@ -365,15 +364,15 @@ class EditUserTestCase(UserAdminTestCase):
         self.assertNotIn('id_role', content)
 
     def test_admin_account_compatibility(self):
+        self.mocked_login(roles=['prison-clerk', 'security'])
         with responses.RequestsMock():
-            self.mocked_login(roles=['prison-clerk', 'security'])
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-admin.html')
 
     def test_user_account_compatibility(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             self._init_existing_user(rsps, roles=['prison-clerk', 'security'])
-            self.mocked_login()
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-user.html')
 
@@ -539,6 +538,7 @@ class AccountRequestTestCase(UserAdminTestCase):
         self.assertAcceptRequest(user_admin=True)
 
     def test_decline_account_requests(self):
+        self.mocked_login()
         with responses.RequestsMock() as rsps:
             rsps.add(
                 rsps.DELETE,
@@ -558,6 +558,5 @@ class AccountRequestTestCase(UserAdminTestCase):
                 json={'results': [], 'count': 0},
                 content_type='application/json'
             )
-            self.mocked_login()
             response = self.client.post(reverse('decline-request', kwargs={'account_request': 1}), follow=True)
             self.assertContains(response, 'New user request was declined')
