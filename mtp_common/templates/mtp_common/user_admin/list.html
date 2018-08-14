@@ -26,6 +26,52 @@
     <a class="button button-secondary" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
   </p>
 
+  {% if account_requests %}
+    <h2 class="heading-medium">
+      {% trans 'New user requests' %}
+    </h2>
+
+    <div class="mtp-account-management__container">
+      <table class="mtp-table">
+        <thead>
+          <tr>
+            <th>{% trans 'Name' %}</th>
+            <th>{% trans 'Email' %}</th>
+            <th class="mtp-account-management__request_date">{% trans 'Requested' %}</th>
+            <th class="mtp-account-management__actions print-hidden">{% trans 'Actions' %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% now 'd/m/Y' as today_str %}
+          {% for account_request in account_requests %}
+            <tr>
+              <td>{{ account_request.first_name }} {{ account_request.last_name }}</td>
+              <td>{{ account_request.email }}</td>
+              <td class="mtp-account-management__request_date">
+                {% with created_str=account_request.created|date:'d/m/Y' %}
+                  {% if created_str == today_str %}
+                    {{ account_request.created|date:'H:i' }}
+                  {% else %}
+                    {{ created_str }}
+                  {% endif %}
+                {% endwith %}
+              </td>
+              <td class="mtp-account-management__actions print-hidden">
+                <a href="#">
+                  {% trans 'Manage' %}
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+  <h2 class="heading-medium">
+    {% trans 'Edit existing users' %}
+  </h2>
+
   <div class="mtp-account-management__container">
     <table class="mtp-table">
       <thead>

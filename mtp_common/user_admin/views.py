@@ -8,10 +8,11 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext, gettext_lazy as _, ngettext_lazy
 from django.views.generic.edit import FormView
 
-from mtp_common.api import api_errors_to_messages
+from mtp_common.api import api_errors_to_messages, retrieve_all_pages_for_path
 from mtp_common.auth import api_client
 from mtp_common.auth.exceptions import HttpNotFoundError, HttpClientError
 from mtp_common.user_admin.forms import UserUpdateForm
@@ -57,17 +58,22 @@ def list_users(request):
             raise ValueError
     except (KeyError, ValueError):
         page = 1
-    response = api_client.get_api_session(request).get(
+    session = api_client.get_api_session(request)
+    response = session.get(
         'users/',
         params={'limit': page_size, 'offset': (page - 1) * page_size}
     ).json()
     users = response.get('results', [])
+    account_requests = retrieve_all_pages_for_path(session, 'requests/')
+    for account_request in account_requests:
+        account_request['created'] = parse_datetime(account_request['created'])
     context = {
         'can_delete': request.user.has_perm('auth.delete_user'),
         'locked_users_exist': any(user['is_locked_out'] for user in users),
         'users': users,
         'page': page,
         'page_count': int(math.ceil(response.get('count', 0) / page_size)),
+        'account_requests': account_requests,
     }
     return render(request, 'mtp_common/user_admin/list.html', context=context)
 
