@@ -57,7 +57,7 @@
                 {% endwith %}
               </td>
               <td class="mtp-account-management__actions print-hidden">
-                <a href="#">
+                <a href="{% url 'accept-request' account_request=account_request.id %}">
                   {% trans 'Manage' %}
                 </a>
               </td>
