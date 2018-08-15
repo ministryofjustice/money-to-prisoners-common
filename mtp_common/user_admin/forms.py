@@ -131,6 +131,10 @@ class SignUpForm(ApiForm):
         self.error_conditions = {}
 
     @property
+    def api_session(self):
+        return api_client.get_unauthenticated_session()
+
+    @property
     def payload(self):
         payload = {
             key: self.cleaned_data[key]
