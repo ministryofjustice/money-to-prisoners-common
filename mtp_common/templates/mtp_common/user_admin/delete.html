@@ -14,9 +14,13 @@
   <p>{% trans 'When you disable a user account, that user will be unable to log in.' %}</p>
   {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
 
+  <br />
+
   <form method="post" action=".">
     {% csrf_token %}
-    <button type="submit" name="submit" value="submit" class="button">{% trans 'Disable user account' %}</button>
-    <a class="cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+    <div class="form-group">
+      <button type="submit" name="submit" value="submit" class="button">{% trans 'Disable user account' %}</button>
+      <a class="mtp-cancel-button" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+    </div>
   </form>
 {% endblock %}
