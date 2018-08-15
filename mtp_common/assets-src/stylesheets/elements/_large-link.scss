@@ -1,6 +1,6 @@
 // Large links styled similarly to radio boxes for making choices within a tree of options
 
-.large-link-list {
+.mtp-large-link-list {
   list-style: none;
   padding: 0;
 
@@ -12,10 +12,10 @@
     background-color: $grey-3;
   }
 
-  .large-link-list--link {
+  .mtp-large-link-list--link {
     display: block;
     padding: 0.7em 40px 0.6em 1.3em;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     background: transparent file-url('../mtp_common/images/large-link-arrow.png') 98% no-repeat;
     color: $text-colour;
     text-decoration: none;
@@ -25,15 +25,12 @@
       background-size: 22px 22px;
     }
 
-    &:link {
+    &:link, &:visited {
       color: $text-colour;
     }
 
-    &:hover,
-    &:active,
-    &:focus,
-    &:visited {
-      border: 1px solid $grey-1;
+    &:hover, &:active, &:focus {
+      border-color: $grey-1;
       background-color: inherit;
       color: $text-colour;
     }
