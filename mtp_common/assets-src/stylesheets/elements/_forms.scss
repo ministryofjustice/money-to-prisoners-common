@@ -2,8 +2,8 @@ input {
   font-family: inherit;
 }
 
-form a.cancel {
-  vertical-align: -.3em;
+form a.mtp-cancel-button {
+  vertical-align: -0.45em;
 
   @include media(tablet) {
     margin-left: 1em;
