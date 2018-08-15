@@ -7,28 +7,8 @@
 }
 
 // user account management pages
-.mtp-account-management {
-  ul {
-    padding-left: 0;
-
-    li {
-      list-style-type: none;
-    }
-  }
-
-  td {
-    font-size: 0.8em;
-  }
-
-  table tr.mtp-inactive-user {
-    td, a, a:visited {
-      color: $secondary-text-colour;
-    }
-  }
-
-  .mtp-page-list {
-    margin-top: 1em;
-  }
+.mtp-account-management .mtp-page-list {
+  margin-top: 1em;
 }
 
 .mtp-account-management__container {
@@ -41,6 +21,18 @@
 
     .mtp-table {
       min-width: ($desktop-breakpoint + 20px);
+    }
+  }
+}
+
+.mtp-account-management__users {
+  td {
+    font-size: 0.8em;
+  }
+
+  .mtp-inactive-user {
+    td, a, a:visited {
+      color: $secondary-text-colour;
     }
   }
 }
@@ -79,4 +71,12 @@
 
 form.mtp-account-management__user-form {
   width: 70%;
+}
+
+.mtp-account-management__user-desc {
+  th, td {
+    border: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
