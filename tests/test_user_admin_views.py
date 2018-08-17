@@ -250,7 +250,7 @@ class NewUserTestCase(UserAdminTestCase):
             self.mock_roles_list(rsps)
             with silence_logger('mtp', level=logging.WARNING):
                 response = self.client.get(reverse('new-user'))
-        self.assertContains(response, 'Digital cashbook')
+        self.assertContains(response, 'prison-clerk')
         self.assertSequenceEqual(
             response.context['form']['role'].field.choices,
             [('prison-clerk', 'Digital cashbook')]
@@ -291,7 +291,7 @@ class EditUserTestCase(UserAdminTestCase):
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
             content = response.content.decode(response.charset)
             self.assertIn('id_user_admin', content)
-            self.assertIn('id_role', content)
+            self.assertNotIn('id_role', content)
 
             updated_user_data = {
                 'first_name': 'dave',

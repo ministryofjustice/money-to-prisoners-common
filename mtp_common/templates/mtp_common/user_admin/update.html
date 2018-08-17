@@ -38,19 +38,7 @@
 
     {% with field=form.role %}
       {% if field.field.choices %}
-        <fieldset class="form-group {% if field.errors %}form-group-error{% endif %}">
-          <div id="{{ field.id_for_label }}-label" class="form-label">{% trans 'Give the user access to:' %}</div>
-          {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
-          {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-          {% for choice_value, choice_description in field.field.choices %}
-            <div class="multiple-choice">
-              <input id="id_{{ choice_value }}" type="radio" name="{{ field.html_name }}" value="{{ choice_value }}" {% if field.value == choice_value %}checked{% endif %}>
-              <label id="id_{{ choice_value }}-label" for="id_{{ choice_value }}">
-                {{ choice_description }}
-              </label>
-            </div>
-          {% endfor %}
-        </fieldset>
+        <input type="hidden" name="{{ field.html_name }}" value="{{ field.field.choices.0.0 }}" />
       {% endif %}
     {% endwith %}
 
