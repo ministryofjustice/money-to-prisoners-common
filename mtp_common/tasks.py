@@ -32,8 +32,12 @@ def send_email(to, text_template, subject, context=None, html_template=None, fro
     from_address = from_address or default_from_address
     if not isinstance(to, (list, tuple)):
         to = [to]
+    if hasattr(settings, 'PUBLIC_STATIC_URL'):
+        static_url = settings.PUBLIC_STATIC_URL
+    else:
+        static_url = urljoin(settings.SITE_URL, settings.STATIC_URL)
     template_context = {
-        'static_url': urljoin(settings.SITE_URL, settings.STATIC_URL),
+        'static_url': static_url,
         **(context or {})
     }
 
