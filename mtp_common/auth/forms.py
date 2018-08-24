@@ -27,6 +27,14 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
         'invalid_login': _('You’ve entered an incorrect username and/or password'),
         'application_inaccessible': _('You don’t have access to this application'),
         'connection_error': _('This service is currently unavailable'),
+        'lockout_imminent': _(
+            'You’ll be locked out if you enter another incorrect username '
+            'and/or password'
+        ),
+        'locked_out': _(
+            'You’ve been locked out of this account because you entered your '
+            'username and/or password incorrectly too many times'
+        ),
     }
 
     def __init__(self, request=None, **kwargs):
@@ -59,7 +67,21 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
                     self.error_messages['application_inaccessible'],
                     code='application_inaccessible',
                 )
-            except Unauthorized:
+            except Unauthorized as e:
+                try:
+                    response_body = json.loads(e.content.decode('utf-8'))
+                    if response_body['error'] == 'lockout_imminent':
+                        raise forms.ValidationError(
+                            self.error_messages['lockout_imminent'],
+                            code='lockout_imminent',
+                        )
+                    elif response_body['error'] == 'locked_out':
+                        raise forms.ValidationError(
+                            self.error_messages['locked_out'],
+                            code='locked_out',
+                        )
+                except (AttributeError, ValueError, KeyError):
+                    pass
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
                     code='invalid_login',
