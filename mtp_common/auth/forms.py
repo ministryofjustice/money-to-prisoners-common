@@ -28,12 +28,12 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
         'application_inaccessible': _('You don’t have access to this application'),
         'connection_error': _('This service is currently unavailable'),
         'lockout_imminent': _(
-            'You’ll be locked out if you enter another incorrect username '
+            'You’ll be LOCKED OUT if you enter another incorrect username '
             'and/or password'
         ),
         'locked_out': _(
-            'You’ve been locked out of this account because you entered your '
-            'username and/or password incorrectly too many times'
+            'You’ve been locked out of this account. '
+            'Please wait 10 minutes, then click on ‘Forgotten your password’.'
         ),
     }
 
