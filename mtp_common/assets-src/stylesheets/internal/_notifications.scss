@@ -22,7 +22,7 @@
       background-size: 34px 34px !important;
     }
 
-    span {
+    i {
       position: absolute;
       display: inline-block;
       width: 40px;
@@ -38,7 +38,7 @@
     }
   }
 
-  &.mtp-notification--open .mtp-notification__headline span {
+  &.mtp-notification--open .mtp-notification__headline i {
     background-position: 0 0;
   }
 }
@@ -54,12 +54,12 @@
       background-image: file-url('../mtp_common/images/message-success@2x.png');
     }
 
-    span {
+    i {
       background-position: -40px -24px;
     }
   }
 
-  &.mtp-notification--open .mtp-notification__headline span {
+  &.mtp-notification--open .mtp-notification__headline i {
     background-position: 0 -24px;
   }
 }
@@ -75,12 +75,12 @@
       background-image: file-url('../mtp_common/images/message-warning@2x.png');
     }
 
-    span {
+    i {
       background-position: -40px -48px;
     }
   }
 
-  &.mtp-notification--open .mtp-notification__headline span {
+  &.mtp-notification--open .mtp-notification__headline i {
     background-position: 0 -48px;
   }
 }
@@ -96,12 +96,12 @@
       background-image: file-url('../mtp_common/images/message-error@2x.png');
     }
 
-    span {
+    i {
       background-position: -40px -72px;
     }
   }
 
-  &.mtp-notification--open .mtp-notification__headline span {
+  &.mtp-notification--open .mtp-notification__headline i {
     background-position: 0 -72px;
   }
 }

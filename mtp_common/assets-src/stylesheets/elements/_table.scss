@@ -39,6 +39,10 @@ table.mtp-table {
   tbody {
     border-bottom: 1px solid $border-colour;
   }
+
+  .mtp-numeric-left {
+    font-family: $toolkit-font-stack-tabular;
+  }
 }
 
 .mtp-sortable-cell {

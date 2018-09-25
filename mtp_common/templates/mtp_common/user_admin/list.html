@@ -43,19 +43,12 @@
           </tr>
         </thead>
         <tbody>
-          {% now 'd/m/Y' as today_str %}
           {% for account_request in account_requests %}
             <tr>
               <td>{{ account_request.first_name }} {{ account_request.last_name }}</td>
               <td>{{ account_request.email }}</td>
-              <td class="mtp-account-management__request_date">
-                {% with created_str=account_request.created|date:'d/m/Y' %}
-                  {% if created_str == today_str %}
-                    {{ account_request.created|date:'H:i' }}
-                  {% else %}
-                    {{ created_str }}
-                  {% endif %}
-                {% endwith %}
+              <td class="mtp-account-management__request_date mtp-numeric-left">
+                {{ account_request.created|date:'d/m/Y' }}
               </td>
               <td class="mtp-account-management__actions print-hidden">
                 <a href="{% url 'accept-request' account_request=account_request.id %}">
