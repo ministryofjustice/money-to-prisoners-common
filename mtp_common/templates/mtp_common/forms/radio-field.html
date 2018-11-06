@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/radio-field.html' with field=<field variable> only %}
+  optional parameters:
+    value - input element value override instead of default filtered field value (ignored if None)
+
+  TODO: the widget is not currently configurable
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="form-group {% if field.errors %}form-group-error{% endif %}">
+  {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+  {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+
+  {% with initial=value|default:field.value %}
+    {% for value, label in field.field.choices %}
+      <div class="multiple-choice">
+        <input id="{{ field.html_name }}-{{ value }}" type="radio" name="{{ field.html_name }}" value="{{ value }}" {% if value == initial %}checked{% endif %} />
+        <label for="{{ field.html_name }}-{{ value }}" id="{{ field.id_for_label }}-label" class="form-label">{{ label }}</label>
+      </div>
+    {% endfor %}
+  {% endwith %}
+</div>
