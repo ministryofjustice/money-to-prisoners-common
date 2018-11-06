@@ -167,19 +167,19 @@ class SpoolableTestCase(unittest.TestCase):
         state = {'runs': 0}
 
         @spoolable(pre_condition=True)
-        def async(context: Context):
+        def async_task(context: Context):
             self.assertTrue(context.spooled)
             state['runs'] += 1
 
         @spoolable(pre_condition=False)
-        def sync(context: Context):
+        def sync_task(context: Context):
             self.assertFalse(context.spooled)
             state['runs'] += 1
 
-        async()
-        sync()
+        async_task()
+        sync_task()
         self.assertEqual(len(uwsgi.spool.call_args_list), 1)
-        spooler({spooler.identifier: b'async'})
+        spooler({spooler.identifier: b'async_task'})
         self.assertEqual(state['runs'], 2)
 
     @mock.patch.object(spooler, 'installed', True)
