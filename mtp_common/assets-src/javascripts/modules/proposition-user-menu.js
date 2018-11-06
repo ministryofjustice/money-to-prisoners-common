@@ -40,6 +40,6 @@ exports.PropositionUserMenu = {
       if (!closed && e.target !== $linksMenuToggle[0]) {
         $linksMenuToggle.click();
       }
-    })
+    });
   }
 };
