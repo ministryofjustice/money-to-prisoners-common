@@ -1,5 +1,13 @@
 // date picker control
 
+.form-control.mtp-control-with-date-picker {
+  width: 8em;
+
+  @include media(tablet) {
+    padding-right: 30px;
+  }
+}
+
 .mtp-date-picker__control {
   display: none;
 }
