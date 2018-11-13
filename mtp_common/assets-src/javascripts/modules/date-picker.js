@@ -154,6 +154,7 @@ MTPDatePicker.prototype.selectDate = function (e) {
     month = '0' + month;
   }
   this.$field.val(day + '/' + month + '/' + this.year);
+  this.$field.focus();
   this.hide();
 };
 
