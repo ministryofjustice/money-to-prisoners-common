@@ -1,6 +1,6 @@
 {
   "name": "{{ app.complete_hyphenated_name }}",
-  "description": "Money to Prisoners - {{ app.title }}",
+  "description": "Prisoner Money - {{ app.title }}",
   "version": "{{ app.common_version }}",
   "private": true,
   "repository": {
@@ -15,8 +15,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "~2.23",
-    "eslint": "~4.18",
+    "browser-sync": "~2.26",
+    "eslint": "~5.10",
     "sass-lint": "~1.12"
   },
   "dependencies": {
@@ -24,8 +24,8 @@
     "govuk-elements-sass": "~3.1",
     "jquery": "~1.12",
     "js-cookie": "~2.2",
-    "node-sass": "~4.9",
+    "node-sass": "~4.11",
     "mailcheck": "~1.1",
-    "webpack": "~3.8"
+    "webpack": "~3.12"
   }
 }
