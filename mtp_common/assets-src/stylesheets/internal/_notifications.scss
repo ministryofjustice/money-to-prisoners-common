@@ -111,7 +111,9 @@ a.mtp-notification__headline {
   color: $text-colour;
 
   &:focus {
+    outline: none;
     color: $text-colour;
+    background-color: $focus-colour;
   }
 
   &:hover {
@@ -125,7 +127,7 @@ a.mtp-notification__headline {
 
 .mtp-notification__message {
   display: none;
-  padding: 0 0.75em 0.75em 66px;
+  padding: 0.75em 0.75em 0.75em 66px;
 
   .mtp-notification--open & {
     display: block;
