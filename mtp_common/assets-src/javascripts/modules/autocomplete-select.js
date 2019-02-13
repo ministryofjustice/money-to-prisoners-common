@@ -78,9 +78,16 @@ exports.AutocompleteSelect = {
       if (searchTerm.length < 2) {
         return;
       }
+      var searchParts = searchTerm.split(' ');
       var suggestions = $.map(choices, function (choice) {
-        if (choice.name.toLowerCase().indexOf(searchTerm) !== -1) {
-          return choice;
+        if (searchParts.length > 0) {
+          var results = true;
+          $.each(searchParts, function(i, searchPart) {
+            results = results && choice.name.toLowerCase().indexOf(searchPart) !== -1
+          });
+          if (results) {
+            return choice;
+          }
         }
       });
       if (suggestions.length > 0 && suggestions.length <= 6) {
