@@ -108,14 +108,6 @@ exports.AutocompleteSelect = {
       }
     });
 
-    $hiddenInput.on('change', function () {
-      if ($hiddenInput.val()) {
-        $visualInput.removeClass('form-control-error');
-      } else {
-        $visualInput.addClass('form-control-error');
-      }
-    });
-
     return $hiddenInput;
   }
 };
