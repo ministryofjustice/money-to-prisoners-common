@@ -1,6 +1,8 @@
 // Find-as-you-type selection menu
 'use strict';
 
+var analytics = require('analytics');
+
 exports.AutocompleteSelect = {
   init: function () {
     var $form = $('form.mtp-autocomplete');
@@ -97,6 +99,16 @@ exports.AutocompleteSelect = {
           $suggestion.text(suggestion.name);
           $suggestion.click(function (e) {
             e.preventDefault();
+            if ($hiddenInput.data('event-category')) {
+              analytics.Analytics.send(
+                'event', {
+                  eventCategory: $hiddenInput.data('event-category'),
+                  eventAction: 'Autocomplete',
+                  eventLabel: $visualInput.val() + ' > ' + suggestion.name
+                }
+              );
+            }
+
             $visualInput.val(suggestion.name);
             setHiddenValue(suggestion.value);
             clearSuggestions();
