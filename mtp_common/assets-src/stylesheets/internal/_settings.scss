@@ -1,0 +1,40 @@
+#mtp-user-menu {
+  @extend %contain-floats;
+  display: block;
+  position: relative;
+
+  a {
+    display: block;
+  }
+
+  @include media(desktop) {
+    margin-top: 10px;
+    margin-bottom: 3px;
+  }
+}
+
+a.mtp-user-menu__link {
+  float: right;
+  padding: 3px 0 3px 0px;
+  color: $page-colour;
+  font-weight: bold;
+  text-decoration: none;
+  margin-left: 20px;
+
+  &:focus, &:hover {
+    text-decoration: underline;
+  }
+}
+
+.mtp-settings-item {
+  border-bottom: 1px solid $border-colour;
+  padding-bottom: 2em;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.mtp-settings-heading {
+  margin-bottom: 0em;
+}

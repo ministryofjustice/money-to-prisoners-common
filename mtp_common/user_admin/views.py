@@ -61,7 +61,11 @@ def list_users(request):
     session = api_client.get_api_session(request)
     response = session.get(
         'users/',
-        params={'limit': page_size, 'offset': (page - 1) * page_size}
+        params={
+            'limit': page_size,
+            'offset': (page - 1) * page_size,
+            'ordering': '-is_active'
+        }
     ).json()
     users = response.get('results', [])
     account_requests = retrieve_all_pages_for_path(session, 'requests/')
