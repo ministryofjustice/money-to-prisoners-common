@@ -31,6 +31,8 @@ def setup_django_for_testing(_: Context):
     if settings.configured:
         raise TaskError('This task must be called first')
     settings.configure(
+        APP='common',
+        ENVIRONMENT='test',
         DEBUG=True,
         SECRET_KEY='a' * 24,
         ROOT_URLCONF='tests.urls',

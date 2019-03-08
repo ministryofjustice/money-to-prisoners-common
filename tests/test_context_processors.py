@@ -7,6 +7,7 @@ now_text = now().isoformat()
 
 
 class ContextProcessorTestCase(SimpleTestCase):
+    @override_settings(APP=None, ENVIRONMENT=None)
     def test_context_processors_with_empty_settings(self):
         response = self.client.get(reverse('dummy'))
         self.assertEqual(response.context.get('GOOGLE_ANALYTICS_ID'), None)

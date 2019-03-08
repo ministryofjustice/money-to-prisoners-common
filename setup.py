@@ -30,6 +30,7 @@ install_requires = [
     'cryptography>=2.3,<2.4',
     'PyJWT>=1.5,<1.6',
     'boto3>=1.5,<2',
+    'kubernetes>=8,<9',
 ]
 extras_require = {
     'monitoring': [
