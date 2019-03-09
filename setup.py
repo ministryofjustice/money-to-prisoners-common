@@ -35,6 +35,7 @@ install_requires = [
 extras_require = {
     'monitoring': [
         'raven>=6.6,<7',
+        'prometheus_client>=0.6,<1',
     ],
     'testing': [
         'flake8>=3.5,<4',

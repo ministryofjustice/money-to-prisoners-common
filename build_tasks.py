@@ -44,6 +44,7 @@ def setup_django_for_testing(_: Context):
             'django.contrib.auth',
             'widget_tweaks',
             'mtp_common',
+            'mtp_common.metrics',
         ),
         LANGUAGES=(
             ('en-gb', 'English'),
