@@ -20,15 +20,15 @@ install_requires = [
     'django-form-error-reporting>=0.7',
     'django-widget-tweaks>=1.4,<1.5',
     'django-zendesk-tickets>=0.12',
-    'pytz>=2018.3',
-    'requests>=2.18',
-    'requests-oauthlib>=0.8,<9',
+    'pytz>=2018.9',
+    'requests>=2.18,<3',
+    'requests-oauthlib>=1,<2',
     'slumber>=0.7,<0.8',
     'selenium>=3.11,<4',
     'transifex-client>=0.13,<0.14',
     'govuk-bank-holidays>=0.3',
-    'cryptography>=2.3,<2.4',
-    'PyJWT>=1.5,<1.6',
+    'cryptography>=2.3,<3',
+    'PyJWT>=1.7,<2',
     'boto3>=1.5,<2',
     'kubernetes>=8,<9',
 ]
@@ -38,9 +38,9 @@ extras_require = {
         'prometheus_client>=0.6,<1',
     ],
     'testing': [
-        'flake8>=3.5,<4',
-        'pep8-naming>=0.5,<1',
-        'responses>=0.8,<1',
+        'flake8>=3.7,<4',
+        'pep8-naming>=0.8.2,<1',
+        'responses>=0.10,<1',
     ],
 }
 
