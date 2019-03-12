@@ -1,0 +1,34 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: ${ECR_ENDPOINT}/prisoner-money/money-to-prisoners:mtp-web
+    working_directory: /tmp/mtp
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - py-v1-{{ checksum "setup.py" }}
+            - py-v1-
+      - run:
+          name: Install python dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -U setuptools pip wheel
+            pip install .
+            python run.py python_dependencies --extras testing
+      - save_cache:
+          key: py-v1-{{ checksum "setup.py" }}
+          paths:
+            - ./venv
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            python run.py --verbosity 2 test
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
