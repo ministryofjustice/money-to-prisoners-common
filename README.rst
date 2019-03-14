@@ -87,8 +87,8 @@ should be unique to your application.
 Developing
 ----------
 
-.. image:: https://travis-ci.org/ministryofjustice/money-to-prisoners-common.svg?branch=master
-    :target: https://travis-ci.org/ministryofjustice/money-to-prisoners-common
+.. image:: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common
 
 * Test using ``./run.py test`` or ``python setup.py test``
 * Update the version with ``./run.py set_version --version [?.?.?]``
