@@ -32,6 +32,7 @@ exports.AutocompleteSelect = {
         };
       }
     }).get();
+    var $container = $('<div class="mtp-autocomplete-field"></div>');
     var $visualInput = $('<input type="text" autocomplete="off" />');
     var $suggestions = $('<ul class="mtp-autocomplete-suggestions"></ul>');
     var $hiddenInput = $('<input type="hidden" class="mtp-autocomplete-hidden"/>');
@@ -43,9 +44,10 @@ exports.AutocompleteSelect = {
       $visualInput.val(initialText);
       $hiddenInput.val(initialValue);
     }
-    $select.after($hiddenInput);
-    $select.after($visualInput);
+    $select.after($container);
     $select.remove();
+    $container.append($hiddenInput);
+    $container.append($visualInput);
     $visualInput.attr('id', selectID);
     $visualInput.after($suggestions);
     $suggestions.attr('aria-controls', selectID);
