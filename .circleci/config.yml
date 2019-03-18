@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: ${ECR_ENDPOINT}/prisoner-money/money-to-prisoners:mtp-web
+      - image: ${ECR_ENDPOINT}/prisoner-money/money-to-prisoners:base-web
     working_directory: /tmp/mtp
     steps:
       - checkout
