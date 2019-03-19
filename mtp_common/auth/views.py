@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+from mtp_common.analytics import genericised_pageview
 
 from . import login as auth_login, logout as auth_logout
 from .forms import (
@@ -169,6 +170,7 @@ def password_change_with_code(request,
         'form': form,
         'cancel_url': cancel_url,
         'breadcrumbs': make_breadcrumbs(_('Change password')),
+        'google_analytics_pageview': genericised_pageview(request, _('Set a new password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
