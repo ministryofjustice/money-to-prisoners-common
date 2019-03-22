@@ -18,6 +18,15 @@ exports.Analytics = {
 
   send: function () {
     if (this._gaExists()) {
+      var ga_data = $('span.mtp-ga-data');
+      if (ga_data) {
+        var ga_override = {
+          page: ga_data.data('page'),
+          location: ga_data.data('location'),
+          title: ga_data.data('title') || document.title,
+        };
+        [].push.call(arguments, ga_override);
+      }
       [].unshift.call(arguments, 'send');
       ga.apply(window, arguments);
     }

@@ -30,6 +30,11 @@
           'location': '{{ google_analytics_pageview.location }}',
           'title': '{{ google_analytics_pageview.title }}'
         });
+      {% elif default_google_analytics_pageview %}
+        ga('send', 'pageview', '{{ default_google_analytics_pageview.page }}', {
+          'page': '{{ default_google_analytics_pageview.page }}',
+          'location': '{{ default_google_analytics_pageview.location }}'
+        });
       {% else %}
         ga('send', 'pageview');
       {% endif %}
@@ -90,6 +95,9 @@
 {% endblock %}
 
 {% block body_end %}
+  {% if GOOGLE_ANALYTICS_ID %}
+    <span class="mtp-ga-data" data-page="{% if google_analytics_pageview %}{{ google_analytics_pageview.page }}{% elif default_google_analytics_pageview %}{{ default_google_analytics_pageview.page }}{% endif %}" data-location="{% if google_analytics_pageview %}{{ google_analytics_pageview.location }}{% elif default_google_analytics_pageview %}{{ default_google_analytics_pageview.location }}{% endif %}" data-title="{% if google_analytics_pageview %}{{ google_analytics_pageview.title }}{% endif %}"></span>
+  {% endif %}
   <script src="{% static 'javascripts/app.bundle.js' %}?{{ APP_GIT_COMMIT_SHORT }}"></script>
   <!--
   {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }}
