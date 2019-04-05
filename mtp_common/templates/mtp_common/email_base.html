@@ -1,25 +1,64 @@
 {% load i18n %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body style="font-family: sans-serif;">
-    <div style="margin: auto; max-width: 600px;">
-      <table style="background: #0b0c0c;">
-        <tr>
-          <td>
-            <img src="{{ static_url }}/mtp_common/images/govuk-header-logo.png" alt="GOV.UK">
-          </td>
-          <td style="padding-right: 30px; color: #fff; font-size: 20px; font-family: sans-serif;">
-            {% trans 'Send money to someone in prison' %}
-          </td>
-        </tr>
-      </table>
-      <div style="padding: 16px 30px 0;">
-        {% block inner_content %}{% endblock %}
-      </div>
-    </div>
-  </body>
+{% get_current_language as lang %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ lang }}" xml:lang="{{ lang }}">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>{% trans 'Send money to someone in prison' %}</title>
+</head>
+<body style="font-family:sans-serif;padding:0;margin:0" bgcolor="#ffffff">
+<table style="border-collapse:collapse;min-width:100%;width:100% !important" cellpadding="0" cellspacing="0" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td style="background:#0b0c0c;color:#fff;width:100%;height:53px" width="100%" height="53" bgcolor="#0b0c0c">
+        <table style="border-collapse:collapse;width:580px !important" cellpadding="0" cellspacing="0" border="0" width="580" align="center">
+          <tbody>
+            <tr>
+              <td style="width:10px;font-size:1px" width="10">&nbsp;</td>
+              <td style="width:170px" width="170">
+                <img src="{{ static_url }}/mtp_common/images/govuk-header-logo-email.png" alt="GOV.UK" style="width:170px;height:53px" width="170" height="53" />
+              </td>
+              <td style="color:#fff;background:#0b0c0c;font-size:24px;font-family:sans-serif">
+                {% block title %}{% trans 'Send money to someone in prison' %}{% endblock %}
+              </td>
+              <td style="width:10px;font-size:1px" width="10">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table style="border-collapse:collapse;min-width:100%;width:100% !important" cellpadding="0" cellspacing="0" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td style="background:#fff;color:#000;width:100%" width="100%" bgcolor="#ffffff">
+        <table style="border-collapse:collapse;width:580px !important;margin:auto" cellpadding="0" cellspacing="0" border="0" width="580" align="center">
+          <tbody>
+            <tr>
+              <td style="width:10px;font-size:1px" width="10" height="10">&nbsp;</td>
+              <td style="width:560px;background:#005ea5" bgcolor="#005ea5" width="560" height="10"></td>
+              <td style="width:10px;font-size:1px" width="10" height="10">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background:#fff" bgcolor="#ffffff" width="580" height="20"></td>
+            </tr>
+            <tr>
+              <td style="width:10px;font-size:1px" width="10">&nbsp;</td>
+              <td style="width:560px;color:#000;background:#fff;font-size:19px;font-family:sans-serif;line-height:1.316" bgcolor="#ffffff" width="560" valign="top">
+                {% block inner_content %}{% endblock %}
+              </td>
+              <td style="width:10px;font-size:1px" width="10">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background:#fff" bgcolor="#ffffff" width="580" height="40"></td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
 </html>
