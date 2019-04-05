@@ -46,6 +46,7 @@ def setup_django_for_testing(_: Context):
             'mtp_common',
             'mtp_common.metrics',
         ),
+        LANGUAGE_CODE='en-gb',
         LANGUAGES=(
             ('en-gb', 'English'),
             ('cy', 'Cymraeg'),
