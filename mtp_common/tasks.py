@@ -14,6 +14,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.mail.backends.console import EmailBackend as ConsoleEmailBackend
 from django.template import loader
 from django.utils.encoding import force_text
+from django.utils.translation import activate, get_language
 
 from mtp_common.spooling import Context, spoolable
 
@@ -28,18 +29,10 @@ mail_class = AnymailMessage if AnymailMessage else EmailMultiAlternatives
 @spoolable()
 def send_email(to, text_template, subject, context=None, html_template=None, from_address=None,
                anymail_tags=(), retry_attempts=2, spoolable_ctx: Context = None):
-    default_from_address = getattr(settings, 'MAILGUN_FROM_ADDRESS', '') or settings.DEFAULT_FROM_EMAIL
-    from_address = from_address or default_from_address
+    from_address = from_address or default_from_address()
     if not isinstance(to, (list, tuple)):
         to = [to]
-    if hasattr(settings, 'PUBLIC_STATIC_URL'):
-        static_url = settings.PUBLIC_STATIC_URL
-    else:
-        static_url = urljoin(settings.SITE_URL, settings.STATIC_URL)
-    template_context = {
-        'static_url': static_url,
-        **(context or {})
-    }
+    template_context = prepare_context(context)
 
     email = prepare_email(from_address, to, subject, text_template, html_template, template_context, anymail_tags)
 
@@ -69,7 +62,26 @@ def send_email(to, text_template, subject, context=None, html_template=None, fro
                    retry_attempts=retry_attempts - 1)
 
 
+def default_from_address():
+    return getattr(settings, 'MAILGUN_FROM_ADDRESS', '') or settings.DEFAULT_FROM_EMAIL
+
+
+def prepare_context(context=None):
+    if hasattr(settings, 'PUBLIC_STATIC_URL'):
+        static_url = settings.PUBLIC_STATIC_URL
+    else:
+        static_url = urljoin(settings.SITE_URL, settings.STATIC_URL)
+    return {
+        'static_url': static_url,
+        **(context or {})
+    }
+
+
 def prepare_email(from_address, to, subject, text_template, html_template, template_context, anymail_tags):
+    if not get_language():
+        language = getattr(settings, 'LANGUAGE_CODE', 'en')
+        activate(language)
+
     text_body = loader.get_template(text_template).render(template_context)
     email = mail_class(
         subject=subject,
