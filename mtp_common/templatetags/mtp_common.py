@@ -14,6 +14,7 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext, override
 
 from mtp_common.api import notifications_for_request
+from mtp_common.utils import and_join
 
 try:
     from raven.contrib.django.models import client as sentry_client
@@ -21,6 +22,11 @@ except ImportError:
     sentry_client = None
 
 register = template.Library()
+
+
+@register.filter(name='and_join')
+def and_join_filter(values):
+    return and_join(values)
 
 
 @register.filter
