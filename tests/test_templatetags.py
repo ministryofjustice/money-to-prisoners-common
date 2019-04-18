@@ -97,3 +97,18 @@ class TemplateTagTestCase(SimpleTestCase):
                 self.assertIn(page_link, many_pages)
             else:
                 self.assertNotIn(page_link, many_pages)
+
+    def test_and_join(self):
+        def render(values, expected, unexpected=None):
+            template = '{% load mtp_common %}{{ values|and_join }}'
+            response = self.load_mocked_template(template, {'values': values})
+            content = response.content.decode('utf-8')
+            self.assertEqual(expected, content)
+            if unexpected:
+                self.assertNotIn(unexpected, content)
+
+        render([], '', 'and')
+        render(['a'], 'a', 'and')
+        render([1], '1', 'and')
+        render([1, 'b'], '1 and b')
+        render(range(10), '0, 1, 2, 3, 4, 5, 6, 7, 8 and 9')
