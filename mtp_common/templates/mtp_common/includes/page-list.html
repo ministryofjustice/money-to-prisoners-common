@@ -10,7 +10,7 @@
           {% if not page_index %}
             …
           {% else %}
-            <a href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page_index }}" {% if page == page_index %}class="mtp-page-list__current-page"{% endif %}>
+            <a href="?{% if query_string %}{{ query_string }}&amp;{% endif %}{{ page_param }}={{ page_index }}{% if bookmark %}#{{ bookmark }}{% endif %}" {% if page == page_index %}class="mtp-page-list__current-page"{% endif %}>
               {% if page_index != 1 %}
                 <span class="visually-hidden">{% trans 'Page' %} </span>
               {% endif %}
