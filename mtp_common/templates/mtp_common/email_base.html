@@ -16,8 +16,12 @@
           <tbody>
             <tr>
               <td style="width:10px;font-size:1px" width="10">&nbsp;</td>
-              <td style="width:170px" width="170">
-                <img src="{{ static_url }}/mtp_common/images/govuk-header-logo-email.png" alt="GOV.UK" style="width:170px;height:53px" width="170" height="53" />
+              <td style="width:170px; font-size: 24px; font-family: sans-serif; font-weight: bold;" width="170">
+                {% if staff_email %}
+                  <img src="{{ static_url }}/mtp_common/images/crest-moj.png" alt="GOV.UK" style="width:55px; height:36px; vertical-align:middle;" width="55" height="36" /><span style="vertical-align: middle; margin-left: 0.25em;">HMPPS</span>
+                {% else %}
+                  <img src="{{ static_url }}/mtp_common/images/govuk-header-logo-email.png" alt="GOV.UK" style="width:170px;height:53px" width="170" height="53" />
+                {% endif %}
               </td>
               <td style="color:#fff;background:#0b0c0c;font-size:24px;font-family:sans-serif">
                 {% block title %}{% trans 'Send money to someone in prison' %}{% endblock %}
