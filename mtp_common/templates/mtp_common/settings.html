@@ -24,6 +24,14 @@
         <a class="button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
       </div>
 
+      <div class="mtp-settings-item">
+        <h2 class="heading-large">
+          {% trans 'Your email' %}
+        </h2>
+        <p>{{ request.user.email }}</p>
+        <a class="button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
+      </div>
+
       {% if perms.auth.change_user %}
         <div class="mtp-settings-item">
           <h2 class="heading-large">

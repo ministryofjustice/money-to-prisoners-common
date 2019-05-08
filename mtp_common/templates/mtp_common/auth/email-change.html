@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans 'Change your email' %} – {{ block.super }}{% endblock %}
+
+{% block inner_content %}
+  {% trans 'Change your email' as form_title %}
+  {% trans 'Submit' as submit_text %}
+  {% include 'mtp_common/forms/generic.html' %}
+{% endblock %}
