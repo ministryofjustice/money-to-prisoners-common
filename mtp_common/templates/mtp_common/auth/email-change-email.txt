@@ -1,0 +1,15 @@
+{% load i18n %}
+{% blocktrans trimmed with name=user.first_name %}
+Dear {{ name }},
+{% endblocktrans %}
+
+{% blocktrans trimmed %}
+The email address associated with your account at {{ site_url }} was recently changed to {{ new_email }}.
+{% endblocktrans %}
+
+{% blocktrans trimmed %}
+If this action was not taken by you, please contact us at {{ feedback_url }} immediately.
+{% endblocktrans %}
+
+Kind regards,
+Prisoner money team

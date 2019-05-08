@@ -119,3 +119,13 @@ def logout(request):
 
 def urljoin(base, *parts):
     return '/'.join([s.strip('/') for s in [base] + list(parts)]) + '/'
+
+
+def refresh_user_data(request, api_session=None):
+    from .api_client import get_api_session
+    api_session = api_session or get_api_session(request)
+    user = request.user
+    user.user_data = api_session.get(
+        '/users/{username}/'.format(username=user.username)
+    ).json()
+    request.session[USER_DATA_SESSION_KEY] = user.user_data

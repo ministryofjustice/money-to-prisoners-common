@@ -1,0 +1,29 @@
+{% extends 'mtp_common/email_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Prisoner money' %}{% endblock %}
+
+{% block inner_content %}
+  <p>
+    {% blocktrans trimmed with name=user.first_name %}
+      Dear {{ name }},
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    {% blocktrans trimmed %}
+      The email address associated with your account at {{ site_url }} was recently changed to {{ new_email }}.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    {% blocktrans trimmed %}
+      If this action was not taken by you, please <a style="word-wrap: break-word; color: #005ea5;" href="{{ feedback_url }}">contact us</a> immediately.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    Kind regards,<br />
+    Prisoner money team
+  </p>
+{% endblock %}

@@ -16,7 +16,7 @@ from mtp_common.analytics import genericised_pageview
 from . import login as auth_login, logout as auth_logout
 from .forms import (
     AuthenticationForm, PasswordChangeForm, ResetPasswordForm,
-    PasswordChangeWithCodeForm, RESET_CODE_PARAM
+    PasswordChangeWithCodeForm, RESET_CODE_PARAM, EmailChangeForm
 )
 
 
@@ -229,6 +229,36 @@ def reset_password_done(request,
     context = {
         'cancel_url': cancel_url,
         'breadcrumbs': make_breadcrumbs(_('Reset password')),
+    }
+    context.update(extra_context or {})
+    return TemplateResponse(request, template_name, context)
+
+
+@csrf_protect
+@login_required
+def email_change(
+    request,
+    template_name='mtp_common/auth/email-change.html',
+    cancel_url=None,
+    post_change_redirect=None,
+    email_change_form=EmailChangeForm,
+    extra_context=None
+):
+    cancel_url = resolve_url(cancel_url or '/')
+    if post_change_redirect is None:
+        post_change_redirect = reverse('settings')
+    else:
+        post_change_redirect = resolve_url(post_change_redirect)
+    if request.method == 'POST':
+        form = email_change_form(request, data=request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect(post_change_redirect)
+    else:
+        form = email_change_form(request)
+    context = {
+        'form': form,
+        'cancel_url': cancel_url,
+        'breadcrumbs': make_breadcrumbs(_('Change email')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)

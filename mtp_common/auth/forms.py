@@ -1,14 +1,17 @@
 import json
 import logging
+from urllib.parse import urljoin
 
 from django import forms
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from form_error_reporting import GARequestErrorReportingMixin
 from requests.exceptions import ConnectionError
 
-from . import api_client
+from mtp_common.tasks import send_email
+from . import api_client, refresh_user_data
 from .exceptions import Unauthorized, Forbidden, HttpClientError, HttpNotFoundError
 
 logger = logging.getLogger('mtp')
@@ -234,3 +237,52 @@ class PasswordChangeWithCodeForm(GARequestErrorReportingMixin, forms.Form):
                 except Exception:
                     logger.exception('Could not display password change error')
                     raise forms.ValidationError(self.error_messages['generic'])
+
+
+class EmailChangeForm(GARequestErrorReportingMixin, forms.Form):
+    """
+    A form that lets a user change their email.
+    """
+    error_messages = {
+        'generic': _('This service is currently unavailable'),
+    }
+    email = forms.EmailField(label=_('Your new email address'))
+
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        if self.is_valid():
+            email = self.cleaned_data.get('email')
+            send_email(
+                self.request.user.email,
+                'mtp_common/auth/email-change-email.txt',
+                _('Your prisoner money email address has been changed'),
+                context={
+                    'user': self.request.user,
+                    'new_email': email,
+                    'site_url': settings.SITE_URL,
+                    'feedback_url': urljoin(settings.SITE_URL, reverse('submit_ticket')),
+                    'staff_email': True,
+                },
+                html_template='mtp_common/auth/email-change-email.html',
+                anymail_tags=['change-email'],
+            )
+            try:
+                session = api_client.get_api_session(self.request)
+                session.patch(
+                    '/users/%s/' % (self.request.user.username),
+                    json={'email': email}
+                )
+                refresh_user_data(self.request, session)
+            except HttpClientError as e:
+                try:
+                    response_body = json.loads(e.content.decode('utf-8'))
+                    for field in response_body:
+                        for error in response_body[field]:
+                            self.add_error(field, error)
+                except Exception:
+                    logger.exception('Could not email change error')
+                    raise forms.ValidationError(self.error_messages['generic'])
+        return self.cleaned_data
