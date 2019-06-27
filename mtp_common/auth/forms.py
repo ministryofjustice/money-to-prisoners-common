@@ -23,7 +23,7 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
     """
     Authentication form used for authenticating users during the login process.
     """
-    username = forms.CharField(label=_('Username'), max_length=30)
+    username = forms.CharField(label=_('Username'), help_text=_('This is usually your Quantum ID'), max_length=30)
     password = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
 
     error_messages = {
@@ -31,8 +31,7 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
         'application_inaccessible': _('You don’t have access to this application'),
         'connection_error': _('This service is currently unavailable'),
         'lockout_imminent': _(
-            'You’ll be LOCKED OUT if you enter another incorrect username '
-            'and/or password'
+            'You’ll be LOCKED OUT if you enter another incorrect username and/or password'
         ),
         'locked_out': _(
             'You’ve been locked out of this account. '
@@ -272,7 +271,7 @@ class EmailChangeForm(GARequestErrorReportingMixin, forms.Form):
             try:
                 session = api_client.get_api_session(self.request)
                 session.patch(
-                    '/users/%s/' % (self.request.user.username),
+                    '/users/%s/' % self.request.user.username,
                     json={'email': email}
                 )
                 refresh_user_data(self.request, session)
