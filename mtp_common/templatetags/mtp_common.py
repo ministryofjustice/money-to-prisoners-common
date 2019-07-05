@@ -179,10 +179,7 @@ def sub_nav(context):
 
 
 @register.inclusion_tag('mtp_common/includes/page-list.html')
-def page_list(
-    page, page_count, query_string=None, end_padding=1, page_padding=2,
-    page_param='page', bookmark=None
-):
+def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1):
     if page_count < 7:
         pages_with_ellipses = range(1, page_count + 1)
     else:
@@ -204,9 +201,7 @@ def page_list(
         'page': page,
         'page_count': page_count,
         'page_range': pages_with_ellipses,
-        'query_string': query_string,
-        'page_param': page_param,
-        'bookmark': bookmark
+        'query_string': f'{query_string}&' if query_string else '',
     }
 
 
