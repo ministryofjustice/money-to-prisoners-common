@@ -83,13 +83,13 @@ class TemplateTagTestCase(SimpleTestCase):
 
         self.assertNotIn('?page=1', render(1, 1))
         self.assertIn('?page=2', render(1, 2))
-        self.assertIn('?page=2', render(2, 2))
+        self.assertNotIn('?page=2', render(2, 2))
 
         self.assertIn('?a=b&amp;page=2', render(1, 2, 'a=b'))
 
         many_pages = render(7, 100)
         self.assertIn('…', many_pages)
-        expected_pages = (1, 2, 5, 6, 7, 8, 9, 99, 100)
+        expected_pages = (1, 6, 8, 100)
         for page in range(100):
             page += 1
             page_link = 'href="?page=%d"' % page
