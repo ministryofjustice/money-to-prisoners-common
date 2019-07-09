@@ -139,7 +139,7 @@ def get_api_session(request):
 
 def get_api_session_with_session(user, session):
     if not user:
-        raise Unauthorized(u'no such user')
+        raise Unauthorized('no such user')
 
     def token_saver(token, session, user):
         user.token = token
