@@ -21,7 +21,7 @@ def api_errors_to_messages(request, error, fallback_text):
     """
     try:
         response_body = json.loads(error.content.decode('utf-8'))
-        for field, errors in response_body.items():
+        for _, errors in response_body.items():
             if isinstance(errors, list):
                 for error in errors:
                     messages.error(request, error)

@@ -40,6 +40,7 @@ extras_require = {
     'testing': [
         'flake8>=3.7,<4',
         'pep8-naming>=0.8.2,<1',
+        'flake8-bugbear>=19.3,<20',
         'responses>=0.10,<1',
     ],
 }
