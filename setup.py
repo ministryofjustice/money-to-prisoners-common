@@ -41,6 +41,7 @@ extras_require = {
         'flake8>=3.7,<4',
         'pep8-naming>=0.8.2,<1',
         'flake8-bugbear>=19.3,<20',
+        'flake8-quotes>=2.0.1,<3',
         'responses>=0.10,<1',
     ],
 }

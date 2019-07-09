@@ -37,10 +37,10 @@ class NotificationTestCase(SimpleTestCase):
                 }]},
             )
             response = self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' %}
-                ''',
+                """,
                 {'request': self.unauthenticated_request()},
             )
         response_content = response.content.decode(response.charset).strip()
@@ -59,10 +59,10 @@ class NotificationTestCase(SimpleTestCase):
                 }]},
             )
             response = self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
         response_content = response.content.decode(response.charset).strip()
@@ -77,10 +77,10 @@ class NotificationTestCase(SimpleTestCase):
                 body='error', status=500,
             )
             response = self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
         response_content = response.content.decode(response.charset).strip()
@@ -106,10 +106,10 @@ class NotificationTestCase(SimpleTestCase):
                 }]},
             )
             response = self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target1' 'target2' %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
         response_content = response.content.decode(response.charset).strip()
@@ -128,17 +128,17 @@ class NotificationTestCase(SimpleTestCase):
                 }]},
             )
             self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
             response = self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
         response_content = response.content.decode(response.charset).strip()
@@ -166,17 +166,17 @@ class NotificationTestCase(SimpleTestCase):
                 }]},
             )
             self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' use_cache=False %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
             response = self.load_mocked_template(
-                '''
+                """
                 {% load mtp_common %}
                 {% notifications_box request 'target' use_cache=False %}
-                ''',
+                """,
                 {'request': self.authenticated_request()},
             )
         response_content = response.content.decode(response.charset).strip()
