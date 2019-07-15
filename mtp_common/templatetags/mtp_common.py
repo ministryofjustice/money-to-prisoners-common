@@ -62,10 +62,10 @@ def labelled_data(label, value, tag='div', url=None):
     if url:
         value = format_html('<a href="{url}">{value}</a>', value=value, url=url)
     return format_html(
-        '''
+        """
         <div id="mtp-label-{element_id}" class="mtp-detail-label">{label}</div>
         <{tag} aria-labelledby="mtp-label-{element_id}">{value}</{tag}>
-        ''',
+        """,
         element_id=element_id, label=label, value=value, tag=tag
     )
 

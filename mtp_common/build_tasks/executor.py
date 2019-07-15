@@ -134,7 +134,7 @@ class ParameterGroup(collections.MutableMapping):
     """
 
     @classmethod
-    def from_callable(cls, func, ignored_parameters=set()):
+    def from_callable(cls, func, ignored_parameters=frozenset()):
         """
         Reads a function or method signature to produce a set of parameters
         """

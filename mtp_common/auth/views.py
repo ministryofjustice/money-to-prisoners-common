@@ -51,7 +51,7 @@ def login(request, template_name=None,
     if request.user.is_authenticated:
         return HttpResponseRedirect(get_redirect_to())
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = authentication_form(request=request, data=request.POST)
         if form.is_valid():
 

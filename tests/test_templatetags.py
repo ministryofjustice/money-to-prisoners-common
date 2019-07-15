@@ -11,13 +11,13 @@ class TemplateTagTestCase(SimpleTestCase):
             def __str__(self):
                 return 'magic'
 
-        template = '''
+        template = """
         {% load mtp_common %}
         {% if magic_int in ints %}PASS1{% endif %}
         {% if magic_int|to_string in ints %}FAIL1{% endif %}
         {% if magic_int in strs %}FAIL2{% endif %}
         {% if magic_int|to_string in strs %}PASS2{% endif %}
-        '''
+        """
         response = self.load_mocked_template(template, {
             'magic_int': MagicInt(123),
             'ints': [123],
@@ -34,7 +34,7 @@ class TemplateTagTestCase(SimpleTestCase):
         class TestForm(forms.Form):
             test_field = forms.CharField()
 
-        template = '''
+        template = """
         {% load mtp_common %}
         {% with field=form|field_from_name:'missing_field' %}
             -{{ field.value }}-
@@ -42,7 +42,7 @@ class TemplateTagTestCase(SimpleTestCase):
         {% with field=form|field_from_name:'test_field' %}
             +{{ field.value }}+
         {% endwith %}
-        '''
+        """
         response = self.load_mocked_template(template, {
             'form': TestForm(data={
                 'test_field': 123
@@ -57,20 +57,20 @@ class TemplateTagTestCase(SimpleTestCase):
         sentry_dsn = 'http://sentry.example.com/123'
         mocked_sentry_client.get_public_dsn.return_value = sentry_dsn
 
-        template = '''
+        template = """
         {% load mtp_common %}
         {% sentry_js %}
-        '''
+        """
         response = self.load_mocked_template(template, {})
         html = response.content.decode('utf-8')
         self.assertIn(sentry_dsn, html)
         self.assertIn('Raven.config', html)
 
     def test_page_list(self):
-        template = '''
+        template = """
         {% load mtp_common %}
         {% page_list page=current_page page_count=pages query_string=query_string %}
-        '''
+        """
 
         def render(current_page, pages, query_string=''):
             context = {
