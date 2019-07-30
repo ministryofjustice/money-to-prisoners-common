@@ -1,4 +1,4 @@
-<div class="mtp-tab-container mtp-tab-container--collapsed" data-tab-cookie-name="{{ cookie_name }}">
+<div class="mtp-tab-container {{ css_class }} mtp-tab-container--collapsed" data-tab-cookie-name="{{ cookie_name }}" data-tab-collapsable="{{ collapsable|yesno:"true,false" }}">
   {% spaceless %}
     <ul class="mtp-tab-wrapper" role="tablist" aria-label="{{ tab_label|default:_('Filter by') }}">
       {% for tab in tabs %}

@@ -75,3 +75,90 @@
     }
   }
 }
+
+
+// alternative version - inspired by the GOV.UK Design System https://design-system.service.gov.uk/components/tabs/
+
+.govuk-grey.mtp-tab-container {
+  $tab-spacing: 5px;
+  $tab-border-width: 3px;
+  $tab-border-colour: $grey-2;
+
+  .mtp-tab-wrapper {
+    display: block;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid $tab-border-colour;
+
+    &:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+  }
+
+  .mtp-tab-item {
+    display: inline-block;
+  }
+
+  .mtp-tab {
+    margin-right: $tab-spacing;
+    padding: $tab-spacing * 2 $tab-spacing * 4;
+    background-color: $grey-4;
+
+    display: inline-block;
+    color: $page-colour;
+    text-align: center;
+    text-decoration: none;
+    color: $black;
+    background-color: $grey-4;
+    border: 0;
+
+    &:focus {
+      outline: 3px solid $focus-colour;
+    }
+
+    &.mtp-tab--selected {
+      margin-top: - $tab-spacing;
+      margin-bottom: -1px;
+
+      // 1px is compensation for border (otherwise we get a 1px shift)
+      padding-top: $tab-spacing * 3 - 1px;
+      padding-right: $tab-spacing * 4 - 1px;
+      padding-bottom: $tab-spacing * 3 + 1px;
+      padding-left: $tab-spacing * 4 - 1px;
+
+      border: 1px solid $tab-border-colour;
+      border-bottom: 0;
+      color: $black;
+      background-color: $white;
+    }
+
+    &.error-message {
+      color: $error-colour;
+    }
+  }
+
+  .mtp-tabpanels {
+    margin-top: 0;
+  }
+
+  .mtp-tabpanel {
+    padding-top: $tab-spacing * 6;
+    padding-right: $tab-spacing * 4;
+    padding-bottom: $tab-spacing * 6;
+    padding-left: $tab-spacing * 4;
+    border: 1px solid $tab-border-colour;
+    border-top: 0;
+
+    &--hidden {
+      display: none;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
