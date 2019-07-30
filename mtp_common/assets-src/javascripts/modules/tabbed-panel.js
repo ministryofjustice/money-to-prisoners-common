@@ -19,6 +19,7 @@ exports.TabbedPanel = {
     var $tabPanels = $tabContainer.find('.mtp-tabpanel');
     var $tabPanelContainer = $tabPanels.closest('.mtp-tabpanels');
     var tabCookieName = $tabContainer.data('tab-cookie-name');
+    var tabCollapsable = $tabContainer.data('tab-collapsable');
 
     function resetTabsAndPanels (allowTabFocus) {
       $tabButtons.attr({
@@ -46,17 +47,20 @@ exports.TabbedPanel = {
       var $tabPanel = $tabButton.data('mtp-tabpanel');
       var wasSelected = $tabButton.hasClass('mtp-tab--selected');
 
-      resetTabsAndPanels(wasSelected);
-
       $tabButton.focus();
       if (wasSelected) {
-        closed = true;
-        $tabContainer.addClass('mtp-tab-container--collapsed');
-        $tabPanelContainer.attr('aria-expanded', 'false');
-        if (tabCookieName) {
-          Cookies.remove(tabCookieName);
+        if (tabCollapsable) {
+          resetTabsAndPanels(true);
+          closed = true;
+          $tabContainer.addClass('mtp-tab-container--collapsed');
+          $tabPanelContainer.attr('aria-expanded', 'false');
+          if (tabCookieName) {
+            Cookies.remove(tabCookieName);
+          }
         }
       } else {
+        resetTabsAndPanels(false);
+
         closed = false;
         selectedIndex = $tabButtons.index($tabButton);
         $tabButton.attr({
@@ -121,6 +125,11 @@ exports.TabbedPanel = {
       var lastOpenTab = parseInt(Cookies.get(tabCookieName), 10);
       if ($.isNumeric(lastOpenTab) && lastOpenTab >= 0 && lastOpenTab < $tabButtons.length) {
         $tabButtons.eq(lastOpenTab).click().blur();
+      } else {
+        // if collapsing not allowed and first time on this page, expand first tab
+        if (!tabCollapsable) {
+          $tabButtons.eq(0).click().blur();
+        }
       }
     }
 
