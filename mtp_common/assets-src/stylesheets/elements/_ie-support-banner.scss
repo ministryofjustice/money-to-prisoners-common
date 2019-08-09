@@ -1,0 +1,19 @@
+.mtp-ie-support-banner {
+  @extend %site-width-container;
+
+  background: $light-blue;
+
+  div {
+    margin: $gutter 0;
+    padding: 1px $gutter $gutter;
+  }
+
+  header, p {
+    color: $white;
+  }
+
+  p {
+    padding-left: 80px;
+    background: file-url('../mtp_common/images/firefox.png') no-repeat 0 50%;
+  }
+}
