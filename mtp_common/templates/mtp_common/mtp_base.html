@@ -24,20 +24,18 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', '{{ GOOGLE_ANALYTICS_ID }}', 'auto');
-      {% if google_analytics_pageview %}
-        ga('send', 'pageview', '{{ google_analytics_pageview.page }}', {
-          'page': '{{ google_analytics_pageview.page }}',
-          'location': '{{ google_analytics_pageview.location }}',
-          'title': '{{ google_analytics_pageview.title }}'
-        });
-      {% elif default_google_analytics_pageview %}
-        ga('send', 'pageview', '{{ default_google_analytics_pageview.page }}', {
-          'page': '{{ default_google_analytics_pageview.page }}',
-          'location': '{{ default_google_analytics_pageview.location }}'
-        });
-      {% else %}
-        ga('send', 'pageview');
-      {% endif %}
+
+      {% with default_ga_data=default_google_analytics_pageview %}
+      {% with ga_data=google_analytics_pageview|default:default_ga_data %}
+        {% spaceless %}
+          {% for key, value in ga_data.items %}
+            {% if value %}ga('set', '{{ key }}', '{{ value }}');{% endif %}
+          {% endfor %}
+        {% endspaceless %}
+
+      ga('send', 'pageview');
+      {% endwith %}
+      {% endwith %}
     </script>
   {% endif %}
 {% endblock %}
