@@ -17,6 +17,11 @@ exports.Analytics = {
   },
 
   send: function () {
+    /*
+      Sends to GA passing through all specified arguments.
+      It appends an object with page, location and title to the call, if you don't want
+      this use rawSend instead.
+    */
     if (this._gaExists()) {
       var ga_data = $('span.mtp-ga-data');
       if (ga_data) {
@@ -27,6 +32,17 @@ exports.Analytics = {
         };
         [].push.call(arguments, ga_override);
       }
+      [].unshift.call(arguments, 'send');
+      ga.apply(window, arguments);
+    }
+  },
+
+  rawSend: function () {
+    /*
+      Sends to GA passing through all specified arguments.
+      Unlike send, it does NOT modify any arguments.
+    */
+    if (this._gaExists()) {
       [].unshift.call(arguments, 'send');
       ga.apply(window, arguments);
     }
