@@ -14,7 +14,7 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext, override
 
 from mtp_common.api import notifications_for_request
-from mtp_common.utils import and_join
+from mtp_common.utils import and_join, format_postcode
 
 try:
     from raven.contrib.django.models import client as sentry_client
@@ -34,6 +34,13 @@ def separate_thousands(value):
     if not isinstance(value, int):
         return value
     return '{:,}'.format(value)
+
+
+@register.filter
+def postcode(value):
+    if not value or not isinstance(value, str):
+        return value
+    return format_postcode(value)
 
 
 @register.filter

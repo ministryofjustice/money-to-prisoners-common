@@ -112,3 +112,20 @@ class TemplateTagTestCase(SimpleTestCase):
         render([1], '1', 'and')
         render([1, 'b'], '1 and b')
         render(range(10), '0, 1, 2, 3, 4, 5, 6, 7, 8 and 9')
+
+    def test_format_postcode(self):
+        def render(postcode, expected):
+            template = '{% load mtp_common %}{{ postcode|postcode }}'
+            response = self.load_mocked_template(template, {'postcode': postcode})
+            content = response.content.decode('utf-8')
+            self.assertEqual(expected, content)
+
+        render('SW1H9AJ', 'SW1H 9AJ')
+        render('sw1h9aj', 'SW1H 9AJ')
+        render('sw1h 9aj', 'SW1H 9AJ')
+        render('BS78PS', 'BS7 8PS')
+        render('M609AH', 'M60 9AH')
+        render('ME173DF', 'ME17 3DF')
+        render('abc123', 'ABC123')
+        render('75008', '75008')
+        render(75008, '75008')
