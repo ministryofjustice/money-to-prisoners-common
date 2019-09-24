@@ -195,12 +195,6 @@ MTPDatePicker.prototype.drawCalendar = function () {
   }
 };
 
-MTPDatePicker.prototype.monthLabels = [
-  django.gettext('January'), django.gettext('February'), django.gettext('March'), django.gettext('April'),
-  django.gettext('May'), django.gettext('June'), django.gettext('July'), django.gettext('August'),
-  django.gettext('September'), django.gettext('October'), django.gettext('November'), django.gettext('December')
-];
-
 exports.DatePicker = {
   selector: '.mtp-date-picker__control',
   $calendar: null,
@@ -210,6 +204,13 @@ exports.DatePicker = {
     if ($controls.length === 0) {
       return;
     }
+
+    MTPDatePicker.prototype.monthLabels = [
+      django.gettext('January'), django.gettext('February'), django.gettext('March'), django.gettext('April'),
+      django.gettext('May'), django.gettext('June'), django.gettext('July'), django.gettext('August'),
+      django.gettext('September'), django.gettext('October'), django.gettext('November'), django.gettext('December')
+    ];
+
     var picker = new MTPDatePicker();
     $controls.each(function () {
       var $control = $(this);
