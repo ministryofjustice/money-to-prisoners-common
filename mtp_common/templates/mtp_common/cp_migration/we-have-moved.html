@@ -14,13 +14,16 @@
   {{ block.super }}
 
   <!--[if IE 8]>
-  <aside class="mtp-ie-support-banner">
+  <aside class="mtp-ie-we-have-moved-banner">
     <div>
-      <header class="heading-large">{% trans 'Change to Firefox to continue using this service' %}</header>
-      <p class="font-medium">{% blocktrans %}
-        You cannot use this service using your current browser, please open {{ new_url }} in Firefox.
-        {% endblocktrans %}
+      <header class="heading-large">{% trans 'Change to Firefox to keep using this service' %}</header>
+      <p class="font-medium">
+        {% trans 'Your current browser no longer supports this service.' %}
+        <br />
+        {% trans 'Please use this in Firefox from now on:' %}
       </p>
+
+      <p class="font-medium">{{ new_url }}</p>
     </div>
   </aside>
   <![endif]-->
@@ -28,14 +31,16 @@
 
 {% block inner_content %}
 <!--[if !IE 8]><!-->
-  <h1 class="heading-xlarge">{% trans 'We have moved!' %}</h1>
+  <h1 class="heading-xlarge">{% trans 'We have moved' %}</h1>
 
   <div class="container">
     <div class="grid-row">
-      <div class="column-two-thirds">
+      <div class="column-full">
+        <p class="lede">
+          {% trans 'You will be automatically redirected in 5 seconds.' %}
+        </p>
         <p>
-          {% trans 'You will be automatically redirected to the site in 5 seconds.' %}
-          <br />{% blocktrans %}- or if you are impatient, <a href="{{ new_url }}">click here</a>.{% endblocktrans %}
+          {% blocktrans %}If not, go to: <br /><a href="{{ new_url }}">{{ new_url }}</a>{% endblocktrans %}
         </p>
       </div>
     </div>

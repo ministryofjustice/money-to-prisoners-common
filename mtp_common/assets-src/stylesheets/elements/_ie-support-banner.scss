@@ -17,3 +17,18 @@
     background: file-url('../mtp_common/images/firefox.png') no-repeat 0 50%;
   }
 }
+
+.mtp-ie-we-have-moved-banner {
+  @extend %site-width-container;
+
+  background: $light-blue file-url('../mtp_common/images/firefox.png') no-repeat 96% 15%;
+
+  div {
+    margin: $gutter 0;
+    padding: 1px $gutter $gutter;
+  }
+
+  header, p {
+    color: $white;
+  }
+}
