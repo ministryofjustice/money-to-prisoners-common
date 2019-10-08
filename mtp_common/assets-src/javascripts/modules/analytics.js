@@ -28,7 +28,7 @@ exports.Analytics = {
         var ga_override = {
           page: ga_data.data('page'),
           location: ga_data.data('location'),
-          title: ga_data.data('title') || document.title,
+          title: ga_data.data('title') || document.title
         };
         [].push.call(arguments, ga_override);
       }
