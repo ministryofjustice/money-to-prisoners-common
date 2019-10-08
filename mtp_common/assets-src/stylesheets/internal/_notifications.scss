@@ -4,6 +4,10 @@
   border-left: 6px solid $light-blue;
   @include core-19;
 
+  h1 {
+    margin: 0;
+  }
+
   .mtp-notification__headline {
     position: relative;
     display: block;
