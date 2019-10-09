@@ -34,6 +34,7 @@
       {% endwith %}
 
       ga('send', 'pageview');
+      {% block google_analytics_end %}{% endblock %}
     </script>
   {% endif %}
 {% endblock %}
