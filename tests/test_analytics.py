@@ -1,6 +1,27 @@
 from unittest import mock, TestCase
 
+from django.test import override_settings
+
 from mtp_common.analytics import genericised_pageview
+from tests.utils import SimpleTestCase
+
+
+@override_settings(GOOGLE_ANALYTICS_ID='ABC123')
+class CookiePolicyTestCase(SimpleTestCase):
+    template = """
+    {% extends 'mtp_common/mtp_base.html' %}
+    """
+
+    def test_analytics_enabled_by_default(self):
+        response = self.load_mocked_template(self.template, {})
+        self.assertContains(response, 'ABC123')
+
+        response = self.load_mocked_template(self.template, {}, HTTP_COOKIE='cookie_policy="{\\"usage\\":true}"')
+        self.assertContains(response, 'ABC123')
+
+    def test_analytics_can_be_disabled(self):
+        response = self.load_mocked_template(self.template, {}, HTTP_COOKIE='cookie_policy="{\\"usage\\":false}"')
+        self.assertNotContains(response, 'ABC123')
 
 
 class GenericisedPageviewTestCase(TestCase):
