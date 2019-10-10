@@ -27,10 +27,11 @@ class CookiePolicy:
     Additional keys can be added when the object is instantiated,
     but otherwise all other cookie contents are ignored.
     """
+    cookie_name = 'cookie_policy'
 
     def __init__(self, request, **defaults):
         defaults.setdefault('usage', True)
-        cookie_policy = request.COOKIES.get('cookie_policy', '')
+        cookie_policy = request.COOKIES.get(self.cookie_name, '')
         try:
             cookie_policy = json.loads(cookie_policy)
             if not isinstance(cookie_policy, dict):
