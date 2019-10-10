@@ -27,15 +27,14 @@
 
       {% with default_ga_data=default_google_analytics_pageview %}
       {% with ga_data=google_analytics_pageview|default:default_ga_data %}
-        {% spaceless %}
-          {% for key, value in ga_data.items %}
-            {% if value %}ga('set', '{{ key }}', '{{ value }}');{% endif %}
-          {% endfor %}
-        {% endspaceless %}
+        {% for key, value in ga_data.items %}
+          {% if value %}ga('set', '{{ key }}', '{{ value }}');{% endif %}
+        {% endfor %}
+      {% endwith %}
+      {% endwith %}
 
       ga('send', 'pageview');
-      {% endwith %}
-      {% endwith %}
+      {% block google_analytics_end %}{% endblock %}
     </script>
   {% endif %}
 {% endblock %}
