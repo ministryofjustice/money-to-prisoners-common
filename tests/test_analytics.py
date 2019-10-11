@@ -3,6 +3,7 @@ from unittest import mock, TestCase
 from django.test import override_settings
 
 from mtp_common.analytics import genericised_pageview
+from mtp_common.utils import CookiePolicy
 from tests.utils import SimpleTestCase
 
 
@@ -16,11 +17,17 @@ class CookiePolicyTestCase(SimpleTestCase):
         response = self.load_mocked_template(self.template, {})
         self.assertContains(response, 'ABC123')
 
-        response = self.load_mocked_template(self.template, {}, HTTP_COOKIE='cookie_policy="{\\"usage\\":true}"')
+        response = self.load_mocked_template(
+            self.template, {},
+            HTTP_COOKIE=f'{CookiePolicy.cookie_name}="{{\\"usage\\":true}}"',
+        )
         self.assertContains(response, 'ABC123')
 
     def test_analytics_can_be_disabled(self):
-        response = self.load_mocked_template(self.template, {}, HTTP_COOKIE='cookie_policy="{\\"usage\\":false}"')
+        response = self.load_mocked_template(
+            self.template, {},
+            HTTP_COOKIE=f'{CookiePolicy.cookie_name}="{{\\"usage\\":false}}"',
+        )
         self.assertNotContains(response, 'ABC123')
 
 
