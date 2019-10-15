@@ -5,6 +5,7 @@ import inspect
 import os
 import subprocess
 import sys
+from importlib import import_module
 
 import django
 from django.core.management import call_command
@@ -419,17 +420,21 @@ class Context:
         """
         Runs a pip command
         """
-        try:
-            from pip._internal import main as pip_main
-        except ImportError:
-            from pip import main as pip_main
+        # support different versions of pip by trying different imports, despite the fact that it's not recommended
+        for mod_name in ('pip._internal.main', 'pip._internal', 'pip'):
+            try:
+                pip = import_module(mod_name)
+            except ImportError:
+                pass
+            else:
+                break
 
         args = [command] + list(args)
         if self.verbosity == 0:
             args.insert(0, '--quiet')
         elif self.verbosity == 2:
             args.insert(0, '--verbose')
-        return pip_main(args)
+        return pip.main(args)
 
     def shell(self, command, *args, environment=None):
         """
