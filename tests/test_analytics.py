@@ -1,9 +1,9 @@
+import json
 from unittest import mock, TestCase
 
-from django.test import override_settings
+from django.test import override_settings, modify_settings
 
-from mtp_common.analytics import genericised_pageview
-from mtp_common.utils import CookiePolicy
+from mtp_common.analytics import AnalyticsPolicy, genericised_pageview
 from tests.utils import SimpleTestCase
 
 
@@ -13,22 +13,77 @@ class CookiePolicyTestCase(SimpleTestCase):
     {% extends 'mtp_common/mtp_base.html' %}
     """
 
-    def test_analytics_enabled_by_default(self):
+    def test_analytics_enabled_if_required_implicitly(self):
+        # i.e. `ANALYTICS_REQUIRED` setting is missing, so assumed to be True
         response = self.load_mocked_template(self.template, {})
         self.assertContains(response, 'ABC123')
 
         response = self.load_mocked_template(
             self.template, {},
-            HTTP_COOKIE=f'{CookiePolicy.cookie_name}="{{\\"usage\\":true}}"',
+            HTTP_COOKIE=f'{AnalyticsPolicy.cookie_name}="{{\\"usage\\":true}}"',
         )
         self.assertContains(response, 'ABC123')
 
-    def test_analytics_can_be_disabled(self):
+    @override_settings(ANALYTICS_REQUIRED=True)
+    def test_analytics_enabled_if_required_explicity(self):
+        self.test_analytics_enabled_if_required_implicitly()
+
+    @override_settings(ANALYTICS_REQUIRED=False)
+    def test_analytics_not_enabled_if_not_required(self):
+        response = self.load_mocked_template(self.template, {})
+        self.assertNotContains(response, 'ABC123')
+
+    @override_settings(ANALYTICS_REQUIRED=False)
+    def test_analytics_can_be_disabled_if_not_required(self):
         response = self.load_mocked_template(
             self.template, {},
-            HTTP_COOKIE=f'{CookiePolicy.cookie_name}="{{\\"usage\\":false}}"',
+            HTTP_COOKIE=f'{AnalyticsPolicy.cookie_name}="{{\\"usage\\":false}}"',
         )
         self.assertNotContains(response, 'ABC123')
+
+    @override_settings(ANALYTICS_REQUIRED=False)
+    def test_analytics_can_be_enabled_when_not_required(self):
+        response = self.load_mocked_template(
+            self.template, {},
+            HTTP_COOKIE=f'{AnalyticsPolicy.cookie_name}="{{\\"usage\\":true}}"',
+        )
+        self.assertContains(response, 'ABC123')
+
+    @override_settings(ANALYTICS_REQUIRED=False)
+    def test_analytics_not_enabled_if_not_required_and_cookie_is_malformed(self):
+        response = self.load_mocked_template(
+            self.template, {},
+            HTTP_COOKIE=f'{AnalyticsPolicy.cookie_name}="{{\\"usage\\":}}"',
+        )
+        self.assertNotContains(response, 'ABC123')
+
+    def test_valid_cookie_policies(self):
+        valid_cookies = ['{"usage":true}', '{"usage": true, "marketing": false}']
+        for valid_cookie in valid_cookies:
+            request = mock.MagicMock(
+                COOKIES={AnalyticsPolicy.cookie_name: valid_cookie}
+            )
+            analytics_policy = AnalyticsPolicy(request)
+            self.assertTrue(analytics_policy.is_cookie_policy_accepted(request))
+
+    def test_invalid_cookie_policies(self):
+        invalid_cookies = ['', '{}', '123', '""', '[]', '{"usage":}', '{"usage": "yes"}']
+        for invalid_cookie in invalid_cookies:
+            request = mock.MagicMock(
+                COOKIES={AnalyticsPolicy.cookie_name: invalid_cookie}
+            )
+            analytics_policy = AnalyticsPolicy(request)
+            self.assertFalse(analytics_policy.is_cookie_policy_accepted(request))
+
+    @modify_settings(
+        MIDDLEWARE={
+            'append': 'tests.utils.AcceptCookiePolicyMiddleware',
+        },
+    )
+    def test_setting_cookie_policy(self):
+        self.load_mocked_template(self.template, {})
+        cookie = self.client.cookies[AnalyticsPolicy.cookie_name]
+        self.assertDictEqual(json.loads(cookie.value), {'usage': True})
 
 
 class GenericisedPageviewTestCase(TestCase):
