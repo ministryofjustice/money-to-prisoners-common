@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.utils.translation import get_language, gettext
 
-from mtp_common.utils import CookiePolicy
+from mtp_common.analytics import AnalyticsPolicy, genericised_pageview
 
 
 def analytics(request):
-    cookie_policy = CookiePolicy(request)
-    google_analytics_id = getattr(settings, 'GOOGLE_ANALYTICS_ID', None) if cookie_policy.usage else None
-    return {'GOOGLE_ANALYTICS_ID': google_analytics_id}
+    return {
+        'analytics_policy': AnalyticsPolicy(request),
+        'default_google_analytics_pageview': genericised_pageview(request),
+    }
 
 
 def app_environment(_):
