@@ -117,8 +117,11 @@ def logout(request):
         request.user = MojAnonymousUser()
 
 
-def urljoin(base, *parts):
-    return '/'.join([s.strip('/') for s in [base] + list(parts)]) + '/'
+def urljoin(base, *parts, trailing_slash=True):
+    url = '/'.join([s.strip('/') for s in [base] + list(parts)])
+    if trailing_slash:
+        url += '/'
+    return url
 
 
 def refresh_user_data(request, api_session=None):

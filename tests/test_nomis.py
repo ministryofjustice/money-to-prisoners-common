@@ -5,40 +5,17 @@ import responses
 
 from mtp_common import nomis
 from mtp_common.auth import urljoin
-from mtp_common.auth.test_utils import generate_tokens
-from mtp_common.test_utils import silence_logger
 
 
-class NomisApiTestCase(SimpleTestCase):
+class LegacyNomisApiTestCase(SimpleTestCase):
     @override_settings(NOMIS_API_CLIENT_TOKEN='abc.abc.abc')
     def test_client_token_taken_from_settings(self):
-        self.assertEqual(nomis.get_client_token(), settings.NOMIS_API_CLIENT_TOKEN)
+        self.assertEqual(nomis.connector.get_client_token(), settings.NOMIS_API_CLIENT_TOKEN)
         self.assertTrue(nomis.can_access_nomis())
 
-    @override_settings(NOMIS_API_CLIENT_TOKEN='',
-                       TOKEN_RETRIEVAL_USERNAME='token-user',
-                       TOKEN_RETRIEVAL_PASSWORD='abc')
-    def test_client_token_cached_from_api(self):
-        with responses.RequestsMock() as rsps:
-            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/token/', json=generate_tokens())
-            rsps.add(rsps.GET, 'http://localhost:8000/tokens/nomis/', json={
-                'token': '1234567890',
-                'expires': None,
-            })
-            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/revoke_token/')
-            self.assertTrue(nomis.can_access_nomis())
-        self.assertEqual(nomis.get_client_token(), '1234567890')
-
-    @override_settings(NOMIS_API_CLIENT_TOKEN='',
-                       TOKEN_RETRIEVAL_USERNAME='token-user',
-                       TOKEN_RETRIEVAL_PASSWORD='abc')
+    @override_settings(NOMIS_API_CLIENT_TOKEN='')
     def test_cannot_access_nomis_without_token(self):
-        with responses.RequestsMock() as rsps:
-            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/token/', json=generate_tokens())
-            rsps.add(rsps.GET, 'http://localhost:8000/tokens/nomis/', status=404)
-            rsps.add(rsps.POST, 'http://localhost:8000/oauth2/revoke_token/')
-            with silence_logger():
-                self.assertFalse(nomis.can_access_nomis())
+        self.assertFalse(nomis.can_access_nomis())
 
     def test_get_account_balances(self):
         with responses.RequestsMock() as rsps:
@@ -77,15 +54,15 @@ class NomisApiTestCase(SimpleTestCase):
             balances = nomis.get_account_balances('BMI', 'A1471AE', retries=1)
             self.assertEqual(balances, {'cash': 500, 'savings': 0, 'spends': 25})
 
-    def assertHousingFormatStructure(self, nomis_response, expected_dict):  # noqa: N802
+    def assertHousingFormatStructure(self, nomis_mocked_response, expected_location_dict):  # noqa: N802
         with responses.RequestsMock() as rsps:
             rsps.add(
                 responses.GET,
                 urljoin(settings.NOMIS_API_BASE_URL, '/offenders/A1401AE/location/'),
-                json=nomis_response
+                json=nomis_mocked_response
             )
-            location = nomis.get_location('A1401AE')
-        self.assertEqual(location, expected_dict)
+            actual_location_dict = nomis.get_location('A1401AE')
+        self.assertEqual(actual_location_dict, expected_location_dict)
 
     def test_housing_location_no_housing(self):
         self.assertHousingFormatStructure(
