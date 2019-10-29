@@ -77,7 +77,7 @@ class CookiePolicyTestCase(SimpleTestCase):
 
     @modify_settings(
         MIDDLEWARE={
-            'append': 'tests.utils.AcceptCookiePolicyMiddleware',
+            'append': 'tests.utils.TestAcceptingCookiePolicyMiddleware',
         },
     )
     def test_setting_cookie_policy(self):

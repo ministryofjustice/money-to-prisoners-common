@@ -16,7 +16,11 @@ class SimpleTestCase(DjangoSimpleTestCase):
         return self.client.get(reverse('dummy'), **extra)
 
 
-class AcceptCookiePolicyMiddleware(MiddlewareMixin):
+class TestAcceptingCookiePolicyMiddleware(MiddlewareMixin):
+    """
+    Used in tests that mimic a user clicking accept on a cookie prompt
+    """
+
     def process_response(self, request, response):
         AnalyticsPolicy(request).set_cookie_policy(response, True)
         return response
