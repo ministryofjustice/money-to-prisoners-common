@@ -86,6 +86,11 @@ def setup_django_for_testing(_: Context):
             'django.middleware.clickjacking.XFrameOptionsMiddleware',
             'django.middleware.security.SecurityMiddleware',
         ),
+        CACHES={
+            'default': {
+                'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+            },
+        },
         CSRF_FAILURE_VIEW='mtp_common.auth.csrf.csrf_failure',
         LOGIN_URL=reverse_lazy('login'),
         LOGOUT_URL=reverse_lazy('logout'),
@@ -99,6 +104,9 @@ def setup_django_for_testing(_: Context):
             'TUeoge9H2N/cCafyhCKdFRdQF9lYB2jB+A==\n'
             '-----END EC PRIVATE KEY-----\n'
         ),  # this key is just for tests, doesn't do anything
+        NOMIS_ELITE_CLIENT_ID='mtp',
+        NOMIS_ELITE_CLIENT_SECRET='mtp-secret',
+        NOMIS_ELITE_BASE_URL='https://noms-api-dev.local',
     )
     django.setup()
 

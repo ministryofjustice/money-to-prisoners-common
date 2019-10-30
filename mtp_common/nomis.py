@@ -1,3 +1,4 @@
+import base64
 import datetime
 import logging
 import time
@@ -5,6 +6,7 @@ from abc import ABC, abstractmethod
 from urllib.parse import quote_plus
 
 from django.conf import settings
+from django.core.cache import cache
 import jwt
 import requests
 from requests.exceptions import ConnectionError
@@ -27,16 +29,27 @@ class BaseNomisConnector(ABC):
         """
 
     @abstractmethod
-    def build_request_api_headers(self):
+    def get_bearer_token(self):
         """
-        :return: dict with headers to used in calls to the NOMIS API.
+        :return: bearer token to be used in API calls.
         """
 
     @abstractmethod
     def can_access_nomis(self):
         """
-        :return: True if this class can connect to NOMIS.
+        :return: True if this class has all the elements in place to connect to NOMIS.
         """
+
+    def build_request_api_headers(self):
+        """
+        :return: dict with headers to used in calls to the NOMIS API.
+        """
+        bearer_token = self.get_bearer_token()
+        return {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {bearer_token}',
+        }
 
     def request(self, verb, path, params=None, json=None, timeout=15, retries=0, session=None):
         """
@@ -113,7 +126,7 @@ class LegacyNomisConnector(BaseNomisConnector):
     def build_nomis_api_url(self, path):
         return urljoin(settings.NOMIS_API_BASE_URL, path)
 
-    def build_request_api_headers(self):
+    def get_bearer_token(self):
         encoded = jwt.encode(
             {
                 'iat': int(time.time()),
@@ -122,12 +135,7 @@ class LegacyNomisConnector(BaseNomisConnector):
             settings.NOMIS_API_PRIVATE_KEY,
             'ES256',
         )
-        bearer_token = encoded.decode('utf8')
-        return {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {bearer_token}',
-        }
+        return encoded.decode('utf8')
 
     def can_access_nomis(self):
         return bool(
@@ -137,7 +145,85 @@ class LegacyNomisConnector(BaseNomisConnector):
         )
 
 
-connector = LegacyNomisConnector()
+class EliteNomisConnector(BaseNomisConnector):
+    """
+    Connector for Elite2 NOMIS auth and API.
+    """
+
+    TOKEN_CACHE_KEY = 'NOMIS_TOKEN'
+
+    def _build_nomis_url(self, *path):
+        """
+        Can be used to build both auth and API urls.
+        """
+        return urljoin(settings.NOMIS_ELITE_BASE_URL, *path, trailing_slash=False)
+
+    def build_nomis_api_url(self, path):
+        return self._build_nomis_url('/elite2api/api/v1', path)
+
+    def _get_new_token_data(self):
+        """
+        Gets a new token from NOMIS.
+        """
+        creds = base64.b64encode(
+            f'{settings.NOMIS_ELITE_CLIENT_ID}:{settings.NOMIS_ELITE_CLIENT_SECRET}'.encode('utf8')
+        ).decode('utf8')
+
+        response = requests.post(
+            self._build_nomis_url('/auth/oauth/token'),
+            params={
+                'grant_type': 'client_credentials',
+            },
+            headers={
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Content-Length': '0',
+                'Authorization': f'Basic {creds}',
+            },
+        )
+        response.raise_for_status()
+
+        return response.json()
+
+    def get_bearer_token(self):
+        """
+        Gets the bearer token from cache if it exists, or from NOMIS otherwise.
+        """
+        token = cache.get(self.TOKEN_CACHE_KEY)
+        if not token:
+            token_data = self._get_new_token_data()
+            token = token_data['access_token']
+
+            cache_expire_in = token_data['expires_in'] - (60 * 5)  # -5 mins just to avoid disalignment
+            cache.set(self.TOKEN_CACHE_KEY, token, timeout=cache_expire_in)
+        return token
+
+    def can_access_nomis(self):
+        """
+        :return: True if this connector has all keys in place to authenticate
+        """
+        return all(
+            getattr(settings, key, None)
+            for key in (
+                'NOMIS_ELITE_CLIENT_ID',
+                'NOMIS_ELITE_CLIENT_SECRET',
+                'NOMIS_ELITE_BASE_URL',
+            )
+        )
+
+
+def _get_connector():
+    """
+    :return: the best NOMIS connector that can be used.
+    """
+    elite_connector = EliteNomisConnector()
+    if elite_connector.can_access_nomis():
+        return elite_connector
+
+    return LegacyNomisConnector()
+
+
+connector = _get_connector()
 
 
 def can_access_nomis():
@@ -158,7 +244,8 @@ def get_account_balances(prison_id, prisoner_number, retries=0, session=None):
             prison_id=quote_plus(prison_id),
             prisoner_number=quote_plus(prisoner_number)
         ),
-        retries=retries, session=session
+        retries=retries,
+        session=session,
     )
 
 
@@ -174,7 +261,9 @@ def get_transaction_history(prison_id, prisoner_number, account_code,
             prisoner_number=quote_plus(prisoner_number),
             account_code=quote_plus(account_code)
         ),
-        params=params, retries=retries, session=session
+        params=params,
+        retries=retries,
+        session=session,
     )
 
 
@@ -192,7 +281,9 @@ def create_transaction(prison_id, prisoner_number, amount, record_id,
             prison_id=quote_plus(prison_id),
             prisoner_number=quote_plus(prisoner_number)
         ),
-        data, retries=retries, session=session
+        data,
+        retries=retries,
+        session=session,
     )
 
 
@@ -201,10 +292,11 @@ def get_photograph_data(prisoner_number, retries=0, session=None):
         '/offenders/{prisoner_number}/image'.format(
             prisoner_number=quote_plus(prisoner_number)
         ),
-        retries=retries, session=session
+        retries=retries,
+        session=session,
     )
-    if result.get('image'):
-        return result['image']
+
+    return result.get('image', None)
 
 
 def get_location(prisoner_number, retries=0, session=None):
@@ -212,7 +304,8 @@ def get_location(prisoner_number, retries=0, session=None):
         '/offenders/{prisoner_number}/location'.format(
             prisoner_number=quote_plus(prisoner_number)
         ),
-        retries=retries, session=session
+        retries=retries,
+        session=session,
     )
     if 'establishment' in result:
         location = {
@@ -234,3 +327,4 @@ def get_location(prisoner_number, retries=0, session=None):
                     )
             location['housing_location'] = housing
         return location
+    return None

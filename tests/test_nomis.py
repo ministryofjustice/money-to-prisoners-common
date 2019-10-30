@@ -1,12 +1,23 @@
+import datetime
+import json
+from unittest import mock
+
 from django.conf import settings
+from django.core import cache as django_cache
 from django.test import SimpleTestCase, override_settings
 from requests.exceptions import ConnectionError
 import responses
 
 from mtp_common import nomis
 from mtp_common.auth import urljoin
+from mtp_common.test_utils import local_memory_cache
 
 
+def _build_elite_nomis_api_url(path):
+    return urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', path, trailing_slash=False)
+
+
+@mock.patch.object(nomis, 'connector', nomis.LegacyNomisConnector())
 class LegacyNomisApiTestCase(SimpleTestCase):
     @override_settings(NOMIS_API_CLIENT_TOKEN='abc.abc.abc')
     def test_client_token_taken_from_settings(self):
@@ -200,3 +211,418 @@ class LegacyNomisApiTestCase(SimpleTestCase):
                 }
             }
         )
+
+
+@mock.patch.object(nomis, 'connector', nomis.EliteNomisConnector())
+class EliteTestCaseMixin:
+    """
+    Mixin related to NOMIS logic using Elite2 Auth and API.
+    """
+
+    def _mock_successful_auth_request(self, rsps, token='my-token'):
+        rsps.add(
+            responses.POST,
+            urljoin(
+                settings.NOMIS_ELITE_BASE_URL,
+                '/auth/oauth/token?grant_type=client_credentials',
+                trailing_slash=False,
+            ),
+            json={
+                'access_token': token,
+                'expires_in': 3600,
+            },
+            status=200,
+        )
+
+
+class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
+    """
+    Tests related to generic NOMIS Elite2 auth and API.
+    """
+
+    def test_cannot_access_nomis_if_key_not_set(self):
+        """
+        Test that can_access_nomis returns False if any of the required keys is not set.
+        """
+        required_keys = (
+            'NOMIS_ELITE_CLIENT_ID',
+            'NOMIS_ELITE_CLIENT_SECRET',
+            'NOMIS_ELITE_BASE_URL',
+        )
+        for key in required_keys:
+            with override_settings(**{key: ''}):
+                self.assertFalse(nomis.can_access_nomis())
+
+    @local_memory_cache()
+    def test_token_cached(self):
+        """
+        Test that the token is cached when making a NOMIS call.
+        """
+        self.assertEqual(
+            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            None,
+        )
+
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps, token='my-token')
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/some/path'),
+                json={},
+                status=200,
+            )
+
+            nomis.connector.get('/some/path')
+
+        self.assertEqual(
+            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            'my-token',
+        )
+
+    @local_memory_cache()
+    def test_gets_token_from_cache(self):
+        """
+        Test that any cached token is used when making a NOMIS call.
+        """
+        django_cache.cache.set(
+            nomis.EliteNomisConnector.TOKEN_CACHE_KEY,
+            'some-token',
+        )
+
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/some/path'),
+                json={},
+                status=200,
+            )
+
+            nomis.connector.get('/some/path')
+
+        self.assertEqual(
+            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            'some-token',
+        )
+
+
+class GetAccountBalancesTestCase(EliteTestCaseMixin, SimpleTestCase):
+    """
+    Tests related to the get_account_balances function.
+    """
+
+    def test_call(self):
+        """
+        Test that the function connects to NOMIS and gets the expected data.
+        """
+        actual_balances = {
+            'cash': 500,
+            'savings': 0,
+            'spends': 25,
+        }
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts'),
+                json=actual_balances,
+                status=200,
+            )
+
+            balances = nomis.get_account_balances('BMI', 'A1471AE')
+
+        self.assertEqual(balances, actual_balances)
+
+
+class GetTransactionHistoryTestCase(EliteTestCaseMixin, SimpleTestCase):
+    """
+    Tests related to the get_transaction_history function.
+    """
+    TRANSACTIONS_RESPONSE = {
+        'transactions': [
+            {
+                'id': '204564839-3',
+                'type': {
+                    'code': 'c',
+                    'desc': 'some description'
+                },
+                'description': 'Transfer In Regular from caseload PVR',
+                'amount': 12345,
+                'date': '2016-10-21',
+            },
+        ],
+    }
+
+    def test_date_converted_to_string(self):
+        """
+        Test that the the date param is converted to string and passed in as query param.
+        """
+        url = _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
+        from_date = datetime.date(year=2019, month=10, day=30)
+
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                f'{url}?from_date=2019-10-30',
+                json=self.TRANSACTIONS_RESPONSE,
+                status=200,
+            )
+
+            transactions = nomis.get_transaction_history('BMI', 'A1471AE', 'spends', from_date)
+
+        self.assertEqual(transactions, self.TRANSACTIONS_RESPONSE)
+
+    def test_string_date_passed_through(self):
+        """
+        Test that the string date param is kept untouched when passed in as query param.
+        """
+        url = _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
+        from_date = '2019-09-09'
+
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                f'{url}?from_date={from_date}',
+                json=self.TRANSACTIONS_RESPONSE,
+                status=200,
+            )
+
+            transactions = nomis.get_transaction_history('BMI', 'A1471AE', 'spends', from_date)
+
+        self.assertEqual(transactions, self.TRANSACTIONS_RESPONSE)
+
+    def test_date_of_invalid_type_ignored(self):
+        """
+        Test that if the date param of the function is not of type string or date,
+        its value is ignored and not passed in as query param.
+        """
+        url = _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
+        from_date = 1
+
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                url,
+                match_querystring=True,
+                json=self.TRANSACTIONS_RESPONSE,
+                status=200,
+            )
+
+            transactions = nomis.get_transaction_history('BMI', 'A1471AE', 'spends', from_date)
+
+        self.assertEqual(transactions, self.TRANSACTIONS_RESPONSE)
+
+
+class CreateTransactionTestCase(EliteTestCaseMixin, SimpleTestCase):
+    """
+    Tests related to the create_transaction function.
+    """
+
+    def test_call(self):
+        """
+        Test that the function connects to NOMIS and gets the expected data.
+        """
+        actual_transaction_data = {
+            'id': '6179604-1',
+        }
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.POST,
+                _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/transactions'),
+                json=actual_transaction_data,
+                status=200,
+            )
+
+            transactions = nomis.create_transaction('BMI', 'A1471AE', 1634, 'CL123212', 'Canteen Purchase', 'CANT')
+
+            self.assertEqual(transactions, actual_transaction_data)
+
+            self.assertEqual(
+                json.loads(rsps.calls[-1].request.body.decode()),
+                {
+                    'type': 'CANT',
+                    'description': 'Canteen Purchase',
+                    'amount': 1634,
+                    'client_transaction_id': 'CL123212',
+                    'client_unique_ref': 'CL123212',
+                },
+            )
+
+
+class GetPhotographDataTestCase(EliteTestCaseMixin, SimpleTestCase):
+    """
+    Tests related to the get_photograph_data function.
+    """
+
+    def test_call(self):
+        """
+        Test that the function connects to NOMIS and gets the expected data.
+        """
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/offenders/A1471AE/image'),
+                json={
+                    'image': 'some-image',
+                },
+                status=200,
+            )
+
+            photo_data = nomis.get_photograph_data('A1471AE')
+
+        self.assertEqual(photo_data, 'some-image')
+
+    def test_returns_none_if_nomis_does_not_include_image(self):
+        """
+        Test that the function returns None if the NOMIS response doesn't include any image.
+        """
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/offenders/A1471AE/image'),
+                json={},
+                status=200,
+            )
+
+            photo_data = nomis.get_photograph_data('A1471AE')
+
+        self.assertEqual(photo_data, None)
+
+
+class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
+    """
+    Tests related to the get_location function.
+    """
+
+    def _test_get_location_scenario(self, nomis_mocked_response, expected_location_dict):
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/offenders/A1401AE/location'),
+                json=nomis_mocked_response,
+            )
+            actual_location_dict = nomis.get_location('A1401AE')
+        self.assertEqual(actual_location_dict, expected_location_dict)
+
+    def test_housing_location_no_housing(self):
+        """
+        Test that if the NOMIS response doesn't include 'housing_location', the returned
+        value doesn't include that either.
+        """
+        self._test_get_location_scenario(
+            {
+                'establishment': {
+                    'code': 'BXI',
+                    'desc': 'BRIXTON (HMP)'
+                }
+            },
+            {'nomis_id': 'BXI', 'name': 'BRIXTON (HMP)'}
+        )
+
+    def test_housing_location_dict_housing(self):
+        """
+        Test that if the NOMIS response includes 'housing_location', the returned value includes that as well.
+        """
+        self._test_get_location_scenario(
+            {
+                'establishment': {
+                    'code': 'BXI',
+                    'desc': 'BRIXTON (HMP)'
+                },
+                'housing_location': {
+                    'description': 'BXI-H-2-001',
+                    'levels': [
+                        {'type': 'Wing', 'value': 'H'},
+                        {'type': 'Landing', 'value': '2'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            },
+            {
+                'nomis_id': 'BXI',
+                'name': 'BRIXTON (HMP)',
+                'housing_location': {
+                    'description': 'BXI-H-2-001',
+                    'levels': [
+                        {'type': 'Wing', 'value': 'H'},
+                        {'type': 'Landing', 'value': '2'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            }
+        )
+
+    def test_housing_location_absent_levels(self):
+        """
+        Test that if the NOMIS response doesn't include housing_location.levels,
+        the returned value uses [] instead.
+        """
+        self._test_get_location_scenario(
+            {
+                'establishment': {'code': 'WWI', 'desc': 'WANDSWORTH (HMP)'},
+                'housing_location': {
+                    'description': 'WWI-COURT',
+                }
+            },
+            {
+                'nomis_id': 'WWI', 'name': 'WANDSWORTH (HMP)',
+                'housing_location': {
+                    'description': 'WWI-COURT',
+                    'levels': [],
+                }
+            }
+        )
+
+    def test_housing_location_absent_description(self):
+        """
+        Test that if the NOMIS response doesn't include housing_location.description,
+        the returned value uses the value from establishment.desc instead.
+        """
+        self._test_get_location_scenario(
+            {
+                'establishment': {'code': 'HEI', 'desc': 'HMP HEWELL'},
+                'housing_location': {
+                    'levels': [
+                        {'type': 'Block', 'value': '1'},
+                        {'type': 'Tier', 'value': '1'},
+                        {'type': 'Spur', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            },
+            {
+                'nomis_id': 'HEI', 'name': 'HMP HEWELL',
+                'housing_location': {
+                    'description': 'HEI-1-1-A-001',
+                    'levels': [
+                        {'type': 'Block', 'value': '1'},
+                        {'type': 'Tier', 'value': '1'},
+                        {'type': 'Spur', 'value': 'A'},
+                        {'type': 'Cell', 'value': '001'},
+                    ]
+                }
+            }
+        )
+
+    def test_returns_none_if_nomis_does_not_include_establishment(self):
+        """
+        Test that the function returns None if the NOMIS response doesn't include any establishment.
+        """
+        with responses.RequestsMock() as rsps:
+            self._mock_successful_auth_request(rsps)
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url('/offenders/A1401AE/location'),
+                json={},
+                status=200,
+            )
+
+            actual_location_dict = nomis.get_location('A1401AE')
+
+        self.assertEqual(actual_location_dict, None)
