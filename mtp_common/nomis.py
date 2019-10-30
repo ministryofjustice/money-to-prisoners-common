@@ -16,6 +16,87 @@ from mtp_common.auth import urljoin
 logger = logging.getLogger('mtp')
 
 
+class Retry:
+    """
+    Object to be used with `request_retry`.
+    It configures some retry options and can be subclassed to customise related logic.
+    """
+    def __init__(
+        self,
+        max_retries,
+        retry_on_status=(
+            408,  # Request Timeout
+            500,  # Internal Server Error
+            502,  # Bad Gateway
+            503,  # Service Unavailable
+            504,  # Gateway Timeout
+        ),
+    ):
+
+        self.max_retries = max_retries
+        self.retry_on_status = retry_on_status
+        self.retry_count = 0
+
+    def should_retry(self, exception=None, response=None):
+        """
+        :return: True if the caller should retry the same request.
+        :exception Exception: any raised exception
+        :response HTTPResponse: any response returned, including successful ones.
+        """
+        if response is not None and response.status_code not in self.retry_on_status:
+            return False
+        return (self.max_retries - self.retry_count) > 0
+
+    def increment(self):
+        """
+        If the caller retries, it should call this method to update this object.
+        """
+        self.retry_count += 1
+
+
+def request_retry(
+    verb,
+    *args,
+    retries=0,
+    session=None,
+    **kwargs,
+):
+    """
+    Like requests but with the ability to retry a request.
+    `retries` can be a number or an instance of `mtp_common.nomis.Retry`.
+
+    The logic doesn't use the session.mount + urllib3 Retry because we want to configure the retry count per-call
+    instead of per-session and because we want to customise the retry logic.
+    """
+    if not isinstance(retries, Retry):
+        retries = Retry(retries)
+
+    session_or_module = session or requests
+
+    method = getattr(session_or_module, verb)
+    should_retry = False
+    try:
+        response = method(*args, **kwargs)
+    except ConnectionError as e:
+        should_retry = retries.should_retry(exception=e)
+        if not should_retry:
+            raise e
+    else:
+        should_retry = retries.should_retry(response=response)
+
+    if should_retry:
+        retries.increment()
+        return request_retry(
+            verb,
+            *args,
+            retries=retries,
+            session=session,
+            **kwargs,
+        )
+
+    return response
+
+
 class BaseNomisConnector(ABC):
     """
     Abstract class that connects to NOMIS; to be sublassed.
@@ -56,39 +137,19 @@ class BaseNomisConnector(ABC):
         Makes a request call to NOMIS.
         You probably want to use the `get` or the `post` methods instead.
         """
-        session_or_module = session or requests
-
-        method = getattr(session_or_module, verb)
-        should_retry = False
-        try:
-            response = method(
-                self.build_nomis_api_url(path),
-                headers=self.build_request_api_headers(),
-                timeout=timeout,
-                params=params,
-                json=json,
-            )
-        except ConnectionError as e:
-            if retries > 0:
-                should_retry = True
-            else:
-                raise e
-        else:
-            if response.status_code >= 500 and retries > 0:
-                should_retry = True
-
-        if should_retry:
-            return self.request(
-                verb,
-                path,
-                params=params,
-                json=json,
-                timeout=timeout,
-                retries=retries-1,
-                session=session,
-            )
+        response = request_retry(
+            verb,
+            self.build_nomis_api_url(path),
+            retries=retries,
+            session=session,
+            headers=self.build_request_api_headers(),
+            timeout=timeout,
+            params=params,
+            json=json,
+        )
 
         response.raise_for_status()
+
         if response.status_code != requests.codes.no_content:
             return response.json()
 
@@ -169,8 +230,10 @@ class EliteNomisConnector(BaseNomisConnector):
             f'{settings.NOMIS_ELITE_CLIENT_ID}:{settings.NOMIS_ELITE_CLIENT_SECRET}'.encode('utf8')
         ).decode('utf8')
 
-        response = requests.post(
+        response = request_retry(
+            'post',
             self._build_nomis_url('/auth/oauth/token'),
+            retries=3,
             params={
                 'grant_type': 'client_credentials',
             },
@@ -180,6 +243,7 @@ class EliteNomisConnector(BaseNomisConnector):
                 'Content-Length': '0',
                 'Authorization': f'Basic {creds}',
             },
+            timeout=10,
         )
         response.raise_for_status()
 

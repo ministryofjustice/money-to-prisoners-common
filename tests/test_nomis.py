@@ -17,6 +17,160 @@ def _build_elite_nomis_api_url(path):
     return urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', path, trailing_slash=False)
 
 
+class RequestRetryTestCase(SimpleTestCase):
+    """
+    Tests related to the request_retry function.
+    """
+
+    def test_retries_successfully_after_exception(self):
+        """
+        Test that a successful request is automatically made after a failed one.
+        The failed request triggers a ConnectionError.
+        """
+        url = 'https://example.com'
+        successful_content = b'some content'
+
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                body=ConnectionError(),
+            )
+            rsps.add(
+                responses.GET,
+                url,
+                body=successful_content,
+                status=200,
+            )
+
+            response = nomis.request_retry('get', url, retries=1)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, successful_content)
+
+    def test_retries_successfully_after_erroneous_status_code(self):
+        """
+        Test that a successful request is automatically made after a failed one.
+        The failed request has a status_code in the retry_on_status.
+        """
+        url = 'https://example.com'
+        successful_content = b'some content'
+
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                status=500,
+            )
+            rsps.add(
+                responses.GET,
+                url,
+                body=successful_content,
+                status=200,
+            )
+
+            response = nomis.request_retry('get', url, retries=1)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, successful_content)
+
+    def test_retries_successfully_after_specific_erroneous_status_code(self):
+        """
+        Test that a successful request is automatically made after a failed one.
+        The failed request has a status_code in the passed-in retry_on_status.
+        """
+        url = 'https://example.com'
+        successful_content = b'some content'
+
+        retry = nomis.Retry(1, retry_on_status=(423, ))
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                status=423,
+            )
+            rsps.add(
+                responses.GET,
+                url,
+                body=successful_content,
+                status=200,
+            )
+
+            response = nomis.request_retry('get', url, retries=retry)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, successful_content)
+
+    def test_max_retries_exceeded_triggers_exception(self):
+        """
+        Test that the exception triggered by the last retry is propagated after retrying `retries` times.
+        """
+        url = 'https://example.com'
+        retries = 2
+
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                body=ConnectionError(),
+            )
+
+            with self.assertRaises(ConnectionError):
+                nomis.request_retry('get', url, retries=retries)
+            self.assertEqual(len(rsps.calls), retries+1)
+
+    def test_max_retries_exceeded_returns_status_code(self):
+        """
+        Test that the status_code returned by the last retry is propagated after retrying `retries` times.
+        """
+        url = 'https://example.com'
+        retries = 2
+
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                status=500,
+            )
+
+            response = nomis.request_retry('get', url, retries=retries)
+            self.assertEqual(response.status_code, 500)
+            self.assertEqual(len(rsps.calls), retries+1)
+
+    def test_shouldnt_retry(self):
+        """
+        Test that if retries = 0, the function doesn't retry following a failed request.
+        """
+        url = 'https://example.com'
+
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                status=500,
+            )
+
+            response = nomis.request_retry('get', url, retries=0)
+            self.assertEqual(response.status_code, 500)
+            self.assertEqual(len(rsps.calls), 1)
+
+    def test_shouldnt_retry_if_status_code_ignored(self):
+        """
+        Test that the function doesn't retry if the status code of the first attempt is not
+        in the retry_on_status list even when `retries` > 0.
+        """
+        url = 'https://example.com'
+
+        retry = nomis.Retry(1, retry_on_status=(401, ))
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                url,
+                status=500,
+            )
+
+            response = nomis.request_retry('get', url, retries=retry)
+            self.assertEqual(response.status_code, 500)
+            self.assertEqual(len(rsps.calls), 1)
+
+
 @mock.patch.object(nomis, 'connector', nomis.LegacyNomisConnector())
 class LegacyNomisApiTestCase(SimpleTestCase):
     @override_settings(NOMIS_API_CLIENT_TOKEN='abc.abc.abc')
