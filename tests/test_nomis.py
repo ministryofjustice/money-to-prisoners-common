@@ -5,7 +5,7 @@ from unittest import mock
 from django.conf import settings
 from django.core import cache as django_cache
 from django.test import SimpleTestCase, override_settings
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, HTTPError
 import responses
 
 from mtp_common import nomis
@@ -456,6 +456,75 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
         self.assertEqual(
             django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
             'some-token',
+        )
+
+    @local_memory_cache()
+    def test_retries_after_401_response(self):
+        """
+        Test that if a request returns 401, the logic invalidates the cached token
+        and retries again to make sure it wasn't because of the cached token.
+        This happens even when the caller passes in retries == 0.
+        """
+        django_cache.cache.set(
+            nomis.EliteNomisConnector.TOKEN_CACHE_KEY,
+            'invalid-token',
+        )
+
+        path = '/some/path'
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url(path),
+                status=401,
+            )
+            self._mock_successful_auth_request(rsps, token='my-token')
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url(path),
+                json={},
+                status=200,
+            )
+
+            nomis.connector.get(path, retries=0)
+
+        self.assertEqual(
+            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            'my-token',
+        )
+
+    @local_memory_cache()
+    def test_doesnt_retry_more_than_once_after_401_response(self):
+        """
+        Test that if a request returns 401, the logic invalidates the cached token
+        and retries again to make sure it wasn't because of the cached token
+        but it doesn't invalidate the token again if the subsequent call is still in error.
+        """
+        django_cache.cache.set(
+            nomis.EliteNomisConnector.TOKEN_CACHE_KEY,
+            'invalid-token',
+        )
+
+        path = '/some/path'
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url(path),
+                status=401,
+            )
+            self._mock_successful_auth_request(rsps, token='my-token')
+            rsps.add(
+                responses.GET,
+                _build_elite_nomis_api_url(path),
+                status=401,
+            )
+
+            with self.assertRaises(HTTPError):
+                nomis.connector.get(path, retries=0)
+            self.assertEqual(len(rsps.calls), 3)
+
+        self.assertEqual(
+            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            'my-token',
         )
 
 

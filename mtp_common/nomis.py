@@ -47,9 +47,9 @@ class Retry:
             return False
         return (self.max_retries - self.retry_count) > 0
 
-    def increment(self):
+    def before_retrying(self, request_kwargs):
         """
-        If the caller retries, it should call this method to update this object.
+        Callback called before retrying.
         """
         self.retry_count += 1
 
@@ -85,7 +85,7 @@ def request_retry(
         should_retry = retries.should_retry(response=response)
 
     if should_retry:
-        retries.increment()
+        retries.before_retrying(kwargs)
         return request_retry(
             verb,
             *args,
@@ -206,6 +206,38 @@ class LegacyNomisConnector(BaseNomisConnector):
         )
 
 
+class EliteNomisRetry(Retry):
+    """
+    A subclass of Retry that deletes the token from the cache and instructs
+    the caller to retry again if the status code of the response is 401.
+
+    This is to cache the (hopefully) rare case where the cached token is not valid.
+    """
+    def __init__(self, connector, *args, **kwargs):
+        self.connector = connector
+        super().__init__(*args, **kwargs)
+
+    def should_retry(self, exception=None, response=None):
+        """
+        If we haven't retried yet and response.status_code == 401, delete the cached token and retry again.
+        """
+        if self.retry_count == 0:
+            if response is not None and response.status_code == 401:
+                logger.warning('Deleting the cached NOMIS token because of a 401 response')
+                cache.delete(self.connector.TOKEN_CACHE_KEY)
+                return True
+        return super().should_retry(exception=exception, response=response)
+
+    def before_retrying(self, request_kwargs):
+        """
+        Re-builds the headers if the token can't be find in the cache.
+        """
+        if not cache.get(self.connector.TOKEN_CACHE_KEY):
+            request_kwargs['headers'] = self.connector.build_request_api_headers()
+
+        super().before_retrying(request_kwargs)
+
+
 class EliteNomisConnector(BaseNomisConnector):
     """
     Connector for Elite2 NOMIS auth and API.
@@ -248,6 +280,15 @@ class EliteNomisConnector(BaseNomisConnector):
         response.raise_for_status()
 
         return response.json()
+
+    def request(self, verb, path, params=None, json=None, timeout=15, retries=0, session=None):
+        """
+        Overrides the parent method by retrying the request if it returns 401 after deleting the cached token.
+        """
+        if not isinstance(retries, Retry):
+            retries = EliteNomisRetry(self, retries)
+
+        return super().request(verb, path, params=params, json=json, timeout=timeout, retries=retries, session=session)
 
     def get_bearer_token(self):
         """
