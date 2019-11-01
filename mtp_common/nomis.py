@@ -179,6 +179,7 @@ class BaseNomisConnector(ABC):
 class LegacyNomisConnector(BaseNomisConnector):
     """
     Connector for legacy NOMIS auth and API.
+    TODO: Remove once all apps move to NOMIS Elite2
     """
 
     def get_client_token(self):
@@ -320,6 +321,7 @@ class EliteNomisConnector(BaseNomisConnector):
 def _get_connector():
     """
     :return: the best NOMIS connector that can be used.
+    TODO: Remove once all apps move to NOMIS Elite2
     """
     elite_connector = EliteNomisConnector()
     if elite_connector.can_access_nomis():

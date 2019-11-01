@@ -10,7 +10,7 @@ import responses
 
 from mtp_common import nomis
 from mtp_common.auth import urljoin
-from mtp_common.test_utils import local_memory_cache
+from mtp_common.test_utils import local_memory_cache, silence_logger
 
 
 def _build_elite_nomis_api_url(path):
@@ -173,6 +173,9 @@ class RequestRetryTestCase(SimpleTestCase):
 
 @mock.patch.object(nomis, 'connector', nomis.LegacyNomisConnector())
 class LegacyNomisApiTestCase(SimpleTestCase):
+    """
+    TODO: Remove once all apps move to NOMIS Elite2
+    """
     @override_settings(NOMIS_API_CLIENT_TOKEN='abc.abc.abc')
     def test_client_token_taken_from_settings(self):
         self.assertEqual(nomis.connector.get_client_token(), settings.NOMIS_API_CLIENT_TOKEN)
@@ -485,7 +488,8 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
                 status=200,
             )
 
-            nomis.connector.get(path, retries=0)
+            with silence_logger('mtp'):
+                nomis.connector.get(path, retries=0)
 
         self.assertEqual(
             django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
@@ -518,8 +522,9 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
                 status=401,
             )
 
-            with self.assertRaises(HTTPError):
-                nomis.connector.get(path, retries=0)
+            with silence_logger('mtp'):
+                with self.assertRaises(HTTPError):
+                    nomis.connector.get(path, retries=0)
             self.assertEqual(len(rsps.calls), 3)
 
         self.assertEqual(

@@ -95,6 +95,8 @@ def setup_django_for_testing(_: Context):
         LOGIN_URL=reverse_lazy('login'),
         LOGOUT_URL=reverse_lazy('logout'),
         LOGIN_REDIRECT_URL=reverse_lazy('dummy'),
+
+        # TODO: Remove once all apps move to NOMIS Elite2
         NOMIS_API_BASE_URL='https://noms-api-dev.local/nomisapi/',
         NOMIS_API_CLIENT_TOKEN='hello',
         NOMIS_API_PRIVATE_KEY=(
@@ -104,6 +106,7 @@ def setup_django_for_testing(_: Context):
             'TUeoge9H2N/cCafyhCKdFRdQF9lYB2jB+A==\n'
             '-----END EC PRIVATE KEY-----\n'
         ),  # this key is just for tests, doesn't do anything
+
         NOMIS_ELITE_CLIENT_ID='mtp',
         NOMIS_ELITE_CLIENT_SECRET='mtp-secret',
         NOMIS_ELITE_BASE_URL='https://noms-api-dev.local',
