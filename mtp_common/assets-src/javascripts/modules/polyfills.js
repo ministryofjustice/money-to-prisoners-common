@@ -1,25 +1,8 @@
 // (IE) Polyfills module
 'use strict';
 
-require('checked-polyfill');
-
 exports.Polyfills = {
   init: function () {
-    this.bindEvents();
-    this.render();
-    this.bind();
-  },
-
-  bindEvents: function () {
-    $('body').on('Polyfills.render', this.render);
-  },
-
-  render: function () {
-    // :checked selector polyfill for IE 7/8
-    $('input:radio, input:checkbox').checkedPolyfill();
-  },
-
-  bind: function () {
     if (!String.prototype.trim) {
       String.prototype.trim = function () {
         return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');

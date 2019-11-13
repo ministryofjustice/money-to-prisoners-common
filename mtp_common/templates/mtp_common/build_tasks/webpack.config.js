@@ -1,4 +1,5 @@
 /* eslint-disable */
+'use strict';
 
 var webpack = require('webpack');
 
@@ -7,11 +8,6 @@ module.exports = {
   output: {
     path: __dirname + '/{{ app.javascript_build_path }}',
     filename: 'app.bundle.js'
-  },
-  module: {
-    noParse: [
-      /\.\/node_modules\/checked-polyfill\/checked-polyfill\.js$/
-    ]
   },
   resolve: {
     modules: [
