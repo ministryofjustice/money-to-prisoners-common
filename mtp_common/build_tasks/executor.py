@@ -5,11 +5,11 @@ import inspect
 import os
 import subprocess
 import sys
-from importlib import import_module
 
 import django
 from django.core.management import call_command
 from django.core.management.color import supports_color
+import pkg_resources
 
 from .app import App
 from .paths import FileSet
@@ -420,21 +420,13 @@ class Context:
         """
         Runs a pip command
         """
-        # support different versions of pip by trying different imports, despite the fact that it's not recommended
-        for mod_name in ('pip._internal.main', 'pip._internal', 'pip'):
-            try:
-                pip = import_module(mod_name)
-            except ImportError:
-                pass
-            else:
-                break
-
+        pip = pkg_resources.load_entry_point('pip', 'console_scripts', 'pip')
         args = [command] + list(args)
         if self.verbosity == 0:
             args.insert(0, '--quiet')
         elif self.verbosity == 2:
             args.insert(0, '--verbose')
-        return pip.main(args)
+        return pip(args)
 
     def shell(self, command, *args, environment=None):
         """
