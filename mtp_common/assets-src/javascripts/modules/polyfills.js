@@ -4,11 +4,13 @@
 exports.Polyfills = {
   init: function () {
     if (!String.prototype.trim) {
+      // FF 3.5
       String.prototype.trim = function () {
         return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
       };
     }
     if (!Function.prototype.bind) {
+      // FF 4
       Function.prototype.bind = function (oThis) {
         if (typeof this !== 'function') {
           // closest thing possible to the ECMAScript 5
@@ -36,6 +38,7 @@ exports.Polyfills = {
       };
     }
     if (!Array.prototype.indexOf) {
+      // FF 1.5
       Array.prototype.indexOf = function (searchElement, fromIndex) {
         var index = -1;
         if (fromIndex === undefined) {
