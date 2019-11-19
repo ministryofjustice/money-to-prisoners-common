@@ -659,12 +659,12 @@ class CreateTransactionTestCase(EliteTestCaseMixin, SimpleTestCase):
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.POST,
-                _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/transactions'),
+                _build_elite_nomis_api_url('/prison/BWI/offenders/A1471AE/transactions'),
                 json=actual_transaction_data,
                 status=200,
             )
 
-            transactions = nomis.create_transaction('BMI', 'A1471AE', 1634, 'CL123212', 'Canteen Purchase', 'CANT')
+            transactions = nomis.create_transaction('BWI', 'A1471AE', 1634, 'CL123212', 'Canteen Purchase', 'CANT')
 
             self.assertEqual(transactions, actual_transaction_data)
 
