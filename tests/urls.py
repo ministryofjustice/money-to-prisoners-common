@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import RequestContext, Template
 
 from mtp_common.auth import views
+from mtp_common.auth.basic import basic_auth
 from mtp_common.user_admin.forms import SignUpForm
 import mtp_common.user_admin.views as user_admin_views
 
@@ -77,4 +78,7 @@ urlpatterns = [
         user_admin_views.AcceptRequestView.as_view(),
         name='accept-request'
     ),
+
+    # mocked basic auth view
+    url(r'^basic-auth/', basic_auth('BASIC_USER', 'BASIC_PASSWORD')(dummy_view), name='basic-auth')
 ]
