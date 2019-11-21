@@ -6,12 +6,14 @@ A Django app containing utilities and assets common to all Money to Prisoners se
 Features
 --------
 
+* Build pipeline with actions that depend on others
+* Base SCSS, JS and static assets
+* Base templates for staff and public apps
 * Reusable templates for form fields and errors
-* Base sass and static assets
-* Base templates
-* Authentication utilities and views for connecting to the MTP api
+* Authentication utilities and views for connecting to `money-to-prisoners-api`_
 * User account management forms and views
 * REST utilities for retrieving information from `money-to-prisoners-api`_
+* Utility for communicating with NOMIS api
 * Integration and accessibility testing with selenium
 * Python code style testing
 * Log formatting for shipping to ELK
@@ -110,7 +112,7 @@ Common assets
 -------------
 
 All shared assets used for `money-to-prisoners-cashbook`_, `money-to-prisoners-bank-admin`_,
-`money-to-prisoners-prisoner-location-admin`_ and `money-to-prisoners-send-money`_ are kept in this package.
+`money-to-prisoners-noms-ops`_ and `money-to-prisoners-send-money`_ are kept in this package.
 
 Each application’s build scripts install this package automatically.
 
@@ -134,5 +136,5 @@ Common templates used by the client applications are kept in ``mtp_common/templa
 .. _money-to-prisoners-api: https://github.com/ministryofjustice/money-to-prisoners-api
 .. _money-to-prisoners-cashbook: https://github.com/ministryofjustice/money-to-prisoners-cashbook
 .. _money-to-prisoners-bank-admin: https://github.com/ministryofjustice/money-to-prisoners-bank-admin
-.. _money-to-prisoners-prisoner-location-admin: https://github.com/ministryofjustice/money-to-prisoners-prisoner-location-admin
+.. _money-to-prisoners-noms-ops: https://github.com/ministryofjustice/money-to-prisoners-noms-ops
 .. _money-to-prisoners-send-money: https://github.com/ministryofjustice/money-to-prisoners-send-money

@@ -31,11 +31,11 @@ install_requires = [
     'PyJWT>=1.7,<2',
     'boto3>=1.5,<2',
     'kubernetes>=9,<10',  # corresponds to server version 1.13
+    'prometheus_client>=0.6,<1',
 ]
 extras_require = {
     'monitoring': [
         'raven>=6.6,<7',
-        'prometheus_client>=0.6,<1',
     ],
     'testing': [
         'flake8>=3.7,<4',
