@@ -89,7 +89,7 @@ should be unique to your application.
 Developing
 ----------
 
-.. image:: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common/tree/master.svg?style=svg
+.. image:: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common.svg?style=svg
     :target: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common
 
 * Test using ``./run.py test`` or ``python setup.py test``
