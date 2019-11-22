@@ -1,7 +1,7 @@
 import os
 
 from django.conf import settings
-from kubernetes import client as k8s_client
+from kubernetes import client
 from kubernetes.client.rest import ApiException
 from kubernetes.config import ConfigException, load_incluster_config
 
@@ -14,26 +14,43 @@ class StackInterrogationException(StackException):
     pass
 
 
-def is_first_instance(current_pod_name=None):
-    """
-    Returns True if the current pod is the first replica in cloud platform cluster
-    """
-    current_pod_name = current_pod_name or os.environ.get('POD_NAME')
-    if not current_pod_name:
-        raise StackInterrogationException('Pod name not known')
-
-    namespace = 'money-to-prisoners-%s' % settings.ENVIRONMENT
+def get_pod_list(app=None):
     try:
         load_incluster_config()
     except ConfigException as e:
         raise StackInterrogationException(e)
+
+    filters = {
+        'namespace': f'money-to-prisoners-{settings.ENVIRONMENT}',
+    }
+    if app:
+        filters['label_selector'] = f'app={app}'
     try:
-        response = k8s_client.CoreV1Api().list_namespaced_pod(
-            namespace=namespace,
-            label_selector='app=%s' % settings.APP,
-            watch=False,
-        )
+        api = client.CoreV1Api()
+        return api.list_namespaced_pod(watch=False, **filters)
     except ApiException as e:
         raise StackInterrogationException(e)
-    pod_names = sorted(pod.metadata.name for pod in filter(lambda pod: pod.status.phase == 'Running', response.items))
+
+
+def is_first_instance():
+    """
+    Returns True if the current pod is the first replica in cloud platform cluster
+    """
+    current_pod_name = os.environ['POD_NAME']
+    if not current_pod_name:
+        raise StackInterrogationException('Pod name not known')
+    pod_list = get_pod_list(app=settings.APP)
+    pod_names = sorted(
+        pod.metadata.name
+        for pod in filter(lambda pod: pod.status.phase == 'Running', pod_list.items)
+    )
     return bool(pod_names and pod_names[0] == current_pod_name)
+
+
+def get_current_pod():
+    """
+    Get current pod details
+    """
+    current_pod_name = os.environ['POD_NAME']
+    pod_list = get_pod_list(app=settings.APP)
+    return next(filter(lambda pod: pod.metadata.name == current_pod_name, pod_list.items), None)
