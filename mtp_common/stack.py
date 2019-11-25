@@ -36,7 +36,7 @@ def is_first_instance():
     """
     Returns True if the current pod is the first replica in cloud platform cluster
     """
-    current_pod_name = os.environ['POD_NAME']
+    current_pod_name = os.environ.get('POD_NAME')
     if not current_pod_name:
         raise StackInterrogationException('Pod name not known')
     pod_list = get_pod_list(app=settings.APP)
@@ -50,7 +50,10 @@ def is_first_instance():
 def get_current_pod():
     """
     Get current pod details
+    Returns None unlike `is_first_instance` if not running within Cloud Platform
     """
-    current_pod_name = os.environ['POD_NAME']
+    current_pod_name = os.environ.get('POD_NAME')
+    if not current_pod_name:
+        return None
     pod_list = get_pod_list(app=settings.APP)
     return next(filter(lambda pod: pod.metadata.name == current_pod_name, pod_list.items), None)
