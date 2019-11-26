@@ -377,14 +377,6 @@ def get_transaction_history(prison_id, prisoner_number, account_code,
 def create_transaction(prison_id, prisoner_number, amount, record_id,
                        description, transaction_type, retries=0, session=None):
 
-    # TODO remove after testing that the Elite2 connector works fine
-    if prison_id == 'BWI':
-        temp_connector = _get_connector()
-        if isinstance(temp_connector, EliteNomisConnector):
-            logger.info(f'Using Elite NOMIS for creating transactions in prison {prison_id}')
-    else:
-        temp_connector = LegacyNomisConnector()
-
     data = {
         'type': transaction_type,
         'description': description,
@@ -392,7 +384,7 @@ def create_transaction(prison_id, prisoner_number, amount, record_id,
         'client_transaction_id': str(record_id),
         'client_unique_ref': str(record_id)
     }
-    return temp_connector.post(
+    return connector.post(
         '/prison/{prison_id}/offenders/{prisoner_number}/transactions'.format(
             prison_id=quote_plus(prison_id),
             prisoner_number=quote_plus(prisoner_number)
