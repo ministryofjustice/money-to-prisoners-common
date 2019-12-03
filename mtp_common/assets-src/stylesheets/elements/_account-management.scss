@@ -16,7 +16,7 @@
       width: 100%;
   }
 
-  @include media($max-width: $desktop-breakpoint, $ignore-for-ie: true) {
+  @include media($max-width: $desktop-breakpoint) {
     overflow-x: scroll;
 
     .mtp-table {

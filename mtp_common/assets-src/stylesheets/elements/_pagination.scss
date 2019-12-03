@@ -68,7 +68,7 @@
     margin-top: 0;
     padding: 5px 0;
 
-    @include media(mobile, $ignore-for-ie: true) {
+    @include media(mobile) {
       position: static;
       margin-top: 0.25em;
     }

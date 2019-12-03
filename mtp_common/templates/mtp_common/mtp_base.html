@@ -7,8 +7,7 @@
 
 {% block head %}
   {{ block.super }}
-  <!--[if gt IE 8]><!--><link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css"><!--<![endif]-->
-  <!--[if IE 8]><link href="{% static "stylesheets/app-ie8.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" /><![endif]-->
+  <link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" />
 
   <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}?{{ APP_GIT_COMMIT_SHORT }}" media="print"/>
   <style media="print">

@@ -10,10 +10,6 @@
   textarea {
     max-width: 100%;
 
-    @include ie-lte(8) {
-      width: 100%;
-    }
-
     @include media(mobile) {
       width: 100%;
     }
