@@ -17,11 +17,11 @@ class App:
         self.root_path = root_path
 
     def __repr__(self):
-        return '<App: %s>' % self.name
+        return f'<App: {self.name}>'
 
     @property
     def django_app_name(self):
-        return 'mtp_%s' % self.name
+        return f'mtp_{self.name}'
 
     @property
     def hyphenated_name(self):
@@ -29,7 +29,7 @@ class App:
 
     @property
     def complete_hyphenated_name(self):
-        return 'money-to-prisoners-%s' % self.hyphenated_name
+        return f'money-to-prisoners-{self.hyphenated_name}'
 
     @property
     def title(self):

@@ -37,7 +37,7 @@ class Tasks(collections.MutableMapping):
         self._overidden_tasks = collections.defaultdict(list)
 
     def __repr__(self):
-        return '<Tasks: %d registered>' % len(self)
+        return f'<Tasks: {len(self)} registered>'
 
     def __getitem__(self, key):
         return self._tasks[key]
@@ -78,7 +78,7 @@ class Tasks(collections.MutableMapping):
                 return self[task]
             except KeyError:
                 pass
-        raise TaskError('Unknown task %s' % task)
+        raise TaskError(f'Unknown task {task}')
 
     def get_default_task(self):
         """
@@ -111,14 +111,15 @@ class Task:
         functools.update_wrapper(self, func)
 
     def __repr__(self):
-        return '%s(%s)' % (self.name, ', '.join(map(repr, self.parameters.values())))
+        parameters = ', '.join(map(repr, self.parameters.values()))
+        return f'{self.name}({parameters})'
 
     def __call__(self, context, **kwargs):
         parameters = self.parameters.to_dict()
         parameters.update(kwargs)
         return_code = self.func(context, **parameters)
         if not (self.ignore_return_code or return_code in (0, None)):
-            raise TaskError('%s exited with an error' % self.name)
+            raise TaskError(f'{self.name} exited with an error')
         return return_code
 
     @property
@@ -170,7 +171,8 @@ class ParameterGroup(collections.MutableMapping):
     def __repr__(self):
         if not self:
             return '<Parameters>'
-        return '<Parameters: %s>' % ', '.join(map(repr, self._parameters.values()))
+        parameters = ', '.join(map(repr, self._parameters.values()))
+        return f'<Parameters: {parameters}>'
 
     def __getitem__(self, key):
         return self._parameters[key]
@@ -249,7 +251,7 @@ class Parameter:
         value_type = type(value)
         if value_type in (str, int, bool):
             return value_type
-        raise ParameterError('Parameter type cannot be %s' % value_type)
+        raise ParameterError(f'Parameter type cannot be {value_type}')
 
     @classmethod
     def constraint_from_choices(cls, value_type: type, choices: collections.Sequence):
@@ -261,11 +263,11 @@ class Parameter:
         def constraint(value):
             value = value_type(value)
             if value not in choices:
-                raise ParameterError('Argument must be one of %s' % choices_str)
+                raise ParameterError(f'Argument must be one of {choices_str}')
             return value
 
-        constraint.__name__ = 'choices_%s' % value_type.__name__
-        constraint.__doc__ = 'choice of %s' % choices_str
+        constraint.__name__ = f'choices_{value_type.__name__}'
+        constraint.__doc__ = f'choice of {choices_str}'
         return constraint
 
     def __init__(self, name, value, constraint):
@@ -275,16 +277,17 @@ class Parameter:
         self.value = value
 
     def __repr__(self):
-        return '%s=%s' % (self.name, self.value)
+        return f'{self.name}={self.value}'
 
     @property
     def arg_name(self):
         """
         Returns the name of the parameter as a command line flag
         """
+        arg_name = self.name.replace('_', '-')
         if self.constraint is bool and self.value:
-            return '--no-%s' % self.name.replace('_', '-')
-        return '--%s' % self.name.replace('_', '-')
+            return f'--no-{arg_name}'
+        return f'--{arg_name}'
 
     @property
     def value(self):
@@ -296,8 +299,9 @@ class Parameter:
             try:
                 self._value = self.constraint(value)
             except (ValueError, TypeError):
-                raise ParameterError('Argument %s needs a value of type %s' % (self.arg_name,
-                                                                               self.constraint.__name__))
+                raise ParameterError(
+                    f'Argument {self.arg_name} needs a value of type {self.constraint.__name__}'
+                )
         else:
             self._value = value
 
@@ -326,7 +330,7 @@ class Parameter:
                 try:
                     value = argument_list.pop(0)
                 except IndexError:
-                    raise ParameterError('Argument %s expects a value' % self.arg_name)
+                    raise ParameterError(f'Argument {self.arg_name} expects a value')
                 self.value = value
         return argument_list
 
@@ -349,14 +353,14 @@ class Context:
         self.use_colour = colour and supports_color()
 
         self.requirements_file = requirements_file
-        self.django_settings = django_settings or '%s.settings' % app.django_app_name
+        self.django_settings = django_settings or f'{app.django_app_name}.settings'
         self._setup_django = False
 
         self.env = os.environ.copy()
         self.overidden_tasks = []
 
     def __repr__(self):
-        return '<Context for %s>' % self.app.name
+        return f'<Context for {self.app.name}>'
 
     def setup_django(self):
         if self._setup_django:
@@ -368,22 +372,22 @@ class Context:
 
     def red_style(self, text):
         if self.use_colour:
-            return '\x1b[31m%s\x1b[0m' % text
+            return f'\x1b[31m{text}\x1b[0m'
         return text
 
     def green_style(self, text):
         if self.use_colour:
-            return '\x1b[32m%s\x1b[0m' % text
+            return f'\x1b[32m{text}\x1b[0m'
         return text
 
     def yellow_style(self, text):
         if self.use_colour:
-            return '\x1b[33m%s\x1b[0m' % text
+            return f'\x1b[33m{text}\x1b[0m'
         return text
 
     def blue_style(self, text):
         if self.use_colour:
-            return '\x1b[34m%s\x1b[0m' % text
+            return f'\x1b[34m{text}\x1b[0m'
         return text
 
     def print(self, *msg, file=sys.stdout, verbosity=1):
@@ -403,13 +407,13 @@ class Context:
         from django.template.loader import get_template
 
         self.setup_django()
-        template = get_template('mtp_common/build_tasks/%s' % template_name)
+        template = get_template(f'mtp_common/build_tasks/{template_name}')
         template_path = os.path.relpath(template.origin.name, os.getcwd())
         path = path or template_name
         if not FileSet(template_path).modified_since(FileSet(path)):
             return
 
-        self.info('Writing %s' % template_name)
+        self.info(f'Writing {template_name}')
         context = context or {}
         context['app'] = self.app
         content = template.render(context=context)
@@ -434,7 +438,7 @@ class Context:
         """
         command += ' ' + ' '.join(args)
         command = command.strip()
-        self.debug(self.yellow_style('$ %s' % command))
+        self.debug(self.yellow_style(f'$ {command}'))
         env = self.env.copy()
         env.update(environment or {})
         return subprocess.call(command, shell=True, env=env)
@@ -443,7 +447,7 @@ class Context:
         """
         Runs a node tool in a shell
         """
-        return self.shell('./node_modules/.bin/%s' % tool, *args)
+        return self.shell(f'./node_modules/.bin/{tool}', *args)
 
     def management_command(self, command, *args, **kwargs):
         """
@@ -454,7 +458,7 @@ class Context:
             kwargs['verbosity'] = self.verbosity
         if not self.use_colour:
             kwargs['no_color'] = False
-        self.debug(self.yellow_style('$ manage.py %s' % command))
+        self.debug(self.yellow_style(f'$ manage.py {command}'))
         return call_command(command, *args, **kwargs)
 
 
@@ -474,7 +478,7 @@ class Executor:
         self.available_tasks = None
 
     def __repr__(self):
-        return '<%s>' % self.name
+        return f'<{self.name}>'
 
     def load_tasks(self):
         from .tasks import tasks
@@ -503,13 +507,13 @@ class Executor:
             except IndexError:
                 break
             if task_name.startswith('-'):
-                raise ParameterError('Unknown flag %s' % task_name)
+                raise ParameterError(f'Unknown flag {task_name}')
             try:
                 task = self.available_tasks[task_name]
                 args = task.parameters.consume_arguments(args)
                 run_tasks.append(task)
             except KeyError:
-                raise TaskError('Unknown task %s' % task_name)
+                raise TaskError(f'Unknown task {task_name}')
         return run_tasks
 
     def flatten_tasks(self, tasks):
@@ -525,17 +529,17 @@ class Executor:
         """
         Prints this help (use --verbosity 2 for more details)
         """
-        context.info('%s\n%s [global options] [task] [task options]...\n' % (self.name, sys.argv[0]))
+        context.info(f'{self.name}\n{sys.argv[0]} [global options] [task] [task options]...\n')
 
         def print_parameter(prn, p):
             if p.description:
-                suffix = '    - {0.description}'.format(p)
+                suffix = f'    - {p.description}'
             else:
                 suffix = ''
             if p.constraint is bool:
-                prn('    {0.arg_name}'.format(p) + suffix)
+                prn(f'    {p.arg_name}' + suffix)
             else:
-                prn('    {0.arg_name} [{0.value}]'.format(p) + suffix)
+                prn(f'    {p.arg_name} [{p.value}]' + suffix)
 
         context.info('Global options:')
         for parameter in self.context_parameters.values():
@@ -555,7 +559,7 @@ class Executor:
 
     def run_task(self, context, task):
         if context.print_task_names and task.name != 'help':
-            context.info(context.blue_style('\n> Running %s task...' % task.name))
+            context.info(context.blue_style(f'\n> Running {task.name} task...'))
         os.chdir(self.root_path)
         context.overidden_tasks = self.available_tasks.get_overidden_tasks(task.name)
         return task(context)
