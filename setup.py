@@ -32,6 +32,7 @@ install_requires = [
     'kubernetes>=11,<12',  # corresponds to server version 1.15
     'prometheus_client>=0.6,<1',
     'sentry_sdk==0.16.5',
+    'libsass~=0.20',
 ]
 extras_require = {
     'testing': [
