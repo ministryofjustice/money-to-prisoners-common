@@ -20,7 +20,6 @@
     "sass-lint": "~1.12"
   },
   "dependencies": {
-    "checked-polyfill": "ministryofjustice/checked-polyfill#1.0.0",
     "govuk-elements-sass": "~3.1",
     "jquery": "~1.12",
     "js-cookie": "~2.2",

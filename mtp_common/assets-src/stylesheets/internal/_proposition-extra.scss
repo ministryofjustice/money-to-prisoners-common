@@ -44,7 +44,7 @@ $mtp-proposition-tab-breakpoint: $tablet-breakpoint !default;
     }
   }
 
-  @include media($max-width: $mtp-proposition-tab-breakpoint, $ignore-for-ie: true) {
+  @include media($max-width: $mtp-proposition-tab-breakpoint) {
     margin-bottom: 0;
 
     li {
