@@ -31,6 +31,7 @@ install_requires = [
     'PyJWT>=1.7,<2',
     'kubernetes>=9,<10',  # corresponds to server version 1.13
     'prometheus_client>=0.6,<1',
+    'libsass~=0.19',
 ]
 extras_require = {
     'monitoring': [

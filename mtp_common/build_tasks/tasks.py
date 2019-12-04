@@ -6,6 +6,8 @@ import socket
 import sys
 import threading
 
+import pkg_resources
+
 from .executor import Context, Tasks, TaskError
 from .paths import FileSet, in_dir, paths_for_shell
 
@@ -122,7 +124,12 @@ def create_build_paths(context: Context):
     """
     Creates directories needed for build outputs
     """
-    paths = [context.app.asset_build_path, context.app.screenshots_build_path, context.app.collected_assets_path]
+    paths = [
+        context.app.asset_build_path,
+        context.app.scss_build_path,
+        context.app.screenshots_build_path,
+        context.app.collected_assets_path,
+    ]
     for path in filter(None, paths):
         os.makedirs(path, exist_ok=True)
 
@@ -221,20 +228,24 @@ def bundle_stylesheets(context: Context):
     """
     Compiles stylesheets
     """
+    def make_output_file(css_path):
+        css_name = os.path.basename(css_path)
+        base_name = os.path.splitext(css_name)[0]
+        return os.path.join(context.app.scss_build_path, f'{base_name}.css')
+
     args = [
-        '--output', context.app.scss_build_path,
-        '--output-style', 'compressed',
+        '--output-style=compressed',
     ]
-    if context.verbosity == 0:
-        args.append('--quiet')
-    if not context.use_colour:
-        args.append('--no-color')
     for path in context.app.scss_include_paths:
-        args.append('--include-path')
-        args.append(path)
+        args.append(f'--include-path={path}')
+
     return_code = 0
+    pysassc = pkg_resources.load_entry_point('libsass', 'console_scripts', 'pysassc')
     for source_file in context.app.scss_source_file_set.paths_for_shell(separator=None):
-        return_code = context.node_tool('node-sass', *args + [source_file]) or return_code
+        context.info(f'Building {source_file}')
+        pysassc_args = [*args + [source_file, make_output_file(source_file)]]
+        return_code = pysassc(pysassc_args) or return_code
+
     return return_code
 
 
