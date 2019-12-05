@@ -3,6 +3,7 @@ import collections
 import functools
 import inspect
 import os
+import pathlib
 import subprocess
 import sys
 
@@ -436,7 +437,7 @@ class Context:
         """
         Runs a shell command
         """
-        command += ' ' + ' '.join(args)
+        command += ' ' + ' '.join(map(str, args))
         command = command.strip()
         self.debug(self.yellow_style(f'$ {command}'))
         env = self.env.copy()
@@ -472,7 +473,7 @@ class Executor:
     name = 'MTP build tool'
 
     def __init__(self, root_path):
-        self.root_path = root_path or '.'
+        self.root_path = pathlib.Path(root_path or '.').absolute()
         self.context_parameters = ParameterGroup.from_callable(Context.__init__, ignored_parameters={'self', 'app'})
         self.local_config = None
         self.available_tasks = None
@@ -488,7 +489,7 @@ class Executor:
 
     def load_local_config(self):
         config_parser = configparser.ConfigParser()
-        if not config_parser.read(os.path.join(self.root_path, 'setup.cfg')):
+        if not config_parser.read(self.root_path / 'setup.cfg'):
             raise ExecutorError('Cannot read configuration from setup.cfg')
         self.local_config = ParameterGroup.from_mapping(config_parser['mtp'])
         # update global parameters

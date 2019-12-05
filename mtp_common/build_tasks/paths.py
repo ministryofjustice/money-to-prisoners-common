@@ -21,7 +21,7 @@ def paths_for_shell(paths, separator=' '):
     Converts a list of paths for use in shell commands
     """
     paths = filter(None, paths)
-    paths = map(shlex.quote, paths)
+    paths = map(lambda path: shlex.quote(str(path)), paths)
     if separator is None:
         return paths
     return separator.join(paths)
@@ -29,7 +29,9 @@ def paths_for_shell(paths, separator=' '):
 
 class FileSet(collections.Iterable, collections.Sized):
     def __init__(self, *include, root='.'):
-        self.include = list(include)
+        self.include = list(map(str, include))
+        if isinstance(root, str):
+            root = pathlib.Path(root)
         self.root = root
 
     def __repr__(self):
@@ -37,13 +39,13 @@ class FileSet(collections.Iterable, collections.Sized):
         return f'<File set: {paths}>'
 
     def include(self, pattern):
-        self.include.append(pattern)
+        self.include.append(str(pattern))
         return self
 
     def __iter__(self):
         paths = []
         for pattern in self.include:
-            paths.extend(pathlib.Path(self.root).glob(pattern))
+            paths.extend(self.root.glob(pattern))
         return iter(set(paths))
 
     def __bool__(self):
@@ -59,9 +61,6 @@ class FileSet(collections.Iterable, collections.Sized):
 
     def files(self):
         return filter(lambda path: path.is_file(), self)
-
-    def paths_for_shell(self, separator=' '):
-        return paths_for_shell(map(str, self), separator=separator)
 
     @property
     def latest_modification(self):

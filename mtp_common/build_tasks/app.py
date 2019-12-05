@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 import pkg_resources
 
@@ -9,8 +10,8 @@ class App:
     """
     Describes an MTP app and returns derrived information and paths
     """
-    collected_assets_path = 'static'
-    node_modules_path = 'node_modules'
+    collected_assets_path = pathlib.Path('static')
+    node_modules_path = pathlib.Path('node_modules')
 
     def __init__(self, app, root_path):
         self.name = app
@@ -43,11 +44,11 @@ class App:
 
     @property
     def asset_source_path(self):
-        return os.path.join(self.django_app_name, 'assets-src')
+        return pathlib.Path(self.django_app_name) / 'assets-src'
 
     @property
     def javascript_source_path(self):
-        return os.path.join(self.asset_source_path, 'javascripts')
+        return self.asset_source_path / 'javascripts'
 
     @property
     def javascript_source_file_set(self):
@@ -55,7 +56,7 @@ class App:
 
     @property
     def scss_source_path(self):
-        return os.path.join(self.asset_source_path, 'stylesheets')
+        return self.asset_source_path / 'stylesheets'
 
     @property
     def scss_source_file_set(self):
@@ -65,19 +66,19 @@ class App:
 
     @property
     def asset_build_path(self):
-        return os.path.join(self.django_app_name, 'assets')
+        return pathlib.Path(self.django_app_name) / 'assets'
 
     @property
     def images_build_path(self):
-        return os.path.join(self.asset_build_path, 'images')
+        return self.asset_build_path / 'images'
 
     @property
     def screenshots_build_path(self):
-        return os.path.join(self.images_build_path, 'screenshots')
+        return self.images_build_path / 'screenshots'
 
     @property
     def javascript_build_path(self):
-        return os.path.join(self.asset_build_path, 'javascripts')
+        return self.asset_build_path / 'javascripts'
 
     @property
     def javascript_build_file_set(self):
@@ -87,7 +88,7 @@ class App:
 
     @property
     def scss_build_path(self):
-        return os.path.join(self.asset_build_path, 'stylesheets')
+        return self.asset_build_path / 'stylesheets'
 
     @property
     def scss_build_file_set(self):
@@ -98,44 +99,45 @@ class App:
 
     @property
     def templates_path(self):
-        return os.path.join(self.django_app_name, 'templates')
+        return pathlib.Path(self.django_app_name) / 'templates'
 
     @property
     def govuk_templates_path(self):
-        return os.path.join(self.templates_path, 'govuk_template')
+        return self.templates_path / 'govuk_template'
 
     @property
     def common_path(self):
         try:
             path = pkg_resources.get_distribution('money-to-prisoners-common').location
+            path = pathlib.Path(path)
         except (AttributeError, pkg_resources.DistributionNotFound):
             return None
-        return os.path.relpath(os.path.join(path, 'mtp_common'), self.root_path)
+        return pathlib.Path(os.path.relpath(path / 'mtp_common', self.root_path))
 
     @property
     def common_asset_source_path(self):
-        return os.path.join(self.common_path, 'assets-src')
+        return self.common_path / 'assets-src'
 
     @property
     def common_javascript_source_path(self):
-        return os.path.join(self.common_asset_source_path, 'javascripts')
+        return self.common_asset_source_path / 'javascripts'
 
     @property
     def common_scss_source_path(self):
-        return os.path.join(self.common_asset_source_path, 'stylesheets')
+        return self.common_asset_source_path / 'stylesheets'
 
     @property
     def common_templates_path(self):
-        return os.path.join(self.common_path, 'templates')
+        return self.common_path / 'templates'
 
     @property
     def additional_asset_paths(self):
-        yield os.path.join(self.node_modules_path, 'govuk_frontend_toolkit/images')
+        yield self.node_modules_path / 'govuk_frontend_toolkit/images'
 
     @property
     def javascript_include_paths(self):
-        yield os.path.join(self.common_javascript_source_path, 'modules')
-        yield os.path.join(self.javascript_source_path, 'modules')
+        yield self.common_javascript_source_path / 'modules'
+        yield self.javascript_source_path / 'modules'
 
     @property
     def scss_include_paths(self):
@@ -144,6 +146,6 @@ class App:
             'govuk-elements-sass/public/sass',
         ]
         for path in paths:
-            yield os.path.join(self.node_modules_path, path)
+            yield self.node_modules_path / path
         yield self.common_scss_source_path
         yield self.scss_source_path

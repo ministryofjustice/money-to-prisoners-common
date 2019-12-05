@@ -2,6 +2,7 @@ import contextlib
 import functools
 import io
 import os
+import pathlib
 import socket
 import sys
 import threading
@@ -228,10 +229,9 @@ def bundle_stylesheets(context: Context):
     """
     Compiles stylesheets
     """
-    def make_output_file(css_path):
-        css_name = os.path.basename(css_path)
-        base_name = os.path.splitext(css_name)[0]
-        return os.path.join(context.app.scss_build_path, f'{base_name}.css')
+    def make_output_file(scss_path: pathlib.Path):
+        css_name = scss_path.with_suffix('.css').name
+        return context.app.scss_build_path / css_name
 
     args = [
         '--output-style=compressed',
@@ -241,9 +241,9 @@ def bundle_stylesheets(context: Context):
 
     return_code = 0
     pysassc = pkg_resources.load_entry_point('libsass', 'console_scripts', 'pysassc')
-    for source_file in context.app.scss_source_file_set.paths_for_shell(separator=None):
+    for source_file in context.app.scss_source_file_set:
         context.info(f'Building {source_file}')
-        pysassc_args = [*args + [source_file, make_output_file(source_file)]]
+        pysassc_args = list(map(str, args + [source_file, make_output_file(source_file)]))
         return_code = pysassc(pysassc_args) or return_code
 
     return return_code
@@ -262,7 +262,7 @@ def lint_javascript(context: Context):
     Tests javascript for code and style errors
     """
     args = [
-        '--config', os.path.join(context.app.common_templates_path, 'mtp_common', 'build_tasks', 'eslintrc.json'),
+        '--config', context.app.common_templates_path / 'mtp_common' / 'build_tasks' / 'eslintrc.json',
         '--format', 'stylish',
     ]
     if context.verbosity == 0:
@@ -279,13 +279,13 @@ def lint_stylesheets(context: Context):
     Tests stylesheets for code and style errors
     """
     args = [
-        '--config', os.path.join(context.app.common_templates_path, 'mtp_common', 'build_tasks', 'sass-lint.yml'),
+        '--config', context.app.common_templates_path / 'mtp_common' / 'build_tasks' / 'sass-lint.yml',
         '--format', 'stylish',
         '--syntax', 'scss',
     ]
     if context.verbosity > 1:
         args.append('--verbose')
-    args.append(os.path.join(context.app.scss_source_path, '**', '*.scss'))
+    args.append(context.app.scss_source_path / '**' / '*.scss')
     return context.node_tool('sass-lint', *args)
 
 
@@ -301,7 +301,7 @@ def govuk_template(context: Context, version='0.23.0', replace_fonts=True):
     """
     Installs GOV.UK template
     """
-    if FileSet(os.path.join(context.app.govuk_templates_path, 'base.html')):
+    if FileSet(context.app.govuk_templates_path / 'base.html'):
         # NB: check is only on main template and not the assets included
         return
     url = f'https://github.com/alphagov/govuk_template/releases' \
