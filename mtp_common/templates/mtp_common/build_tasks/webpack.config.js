@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 
 module.exports = {
+  mode: 'none',
   entry: './{{ app.javascript_source_path }}/main.js',
   output: {
     path: __dirname + '/{{ app.javascript_build_path }}',

@@ -24,6 +24,7 @@
     "jquery": "~1.12",
     "js-cookie": "~2.2",
     "mailcheck": "~1.1",
-    "webpack": "~3.12"
+    "webpack": "~4.41",
+    "webpack-cli": "~3.3"
   }
 }
