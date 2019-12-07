@@ -1,7 +1,7 @@
 // Print module with confirmation dialogue box integration
 'use strict';
 
-var cookie = require('js-cookie');
+const cookie = require('js-cookie');
 
 exports.Print = {
   triggerSelector: '.js-print-trigger',

@@ -23,14 +23,14 @@ exports.Analytics = {
       this use rawSend instead.
     */
     if (this._gaExists()) {
-      var ga_data = $('span.mtp-ga-data');
-      if (ga_data) {
-        var ga_override = {
-          page: ga_data.data('page'),
-          location: ga_data.data('location'),
-          title: ga_data.data('title') || document.title
+      var gaData = $('span.mtp-ga-data');
+      if (gaData) {
+        var gaOverride = {
+          page: gaData.data('page'),
+          location: gaData.data('location'),
+          title: gaData.data('title') || document.title
         };
-        [].push.call(arguments, ga_override);
+        [].push.call(arguments, gaOverride);
       }
       [].unshift.call(arguments, 'send');
       ga.apply(window, arguments);

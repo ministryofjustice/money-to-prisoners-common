@@ -1,7 +1,7 @@
 // tabbed panels
 'use strict';
 
-var Cookies = require('js-cookie');
+const Cookies = require('js-cookie');
 
 exports.TabbedPanel = {
   init: function () {
@@ -125,11 +125,9 @@ exports.TabbedPanel = {
       var lastOpenTab = parseInt(Cookies.get(tabCookieName), 10);
       if ($.isNumeric(lastOpenTab) && lastOpenTab >= 0 && lastOpenTab < $tabButtons.length) {
         $tabButtons.eq(lastOpenTab).click().blur();
-      } else {
+      } else if (!tabCollapsable) {
         // if collapsing not allowed and first time on this page, expand first tab
-        if (!tabCollapsable) {
-          $tabButtons.eq(0).click().blur();
-        }
+        $tabButtons.eq(0).click().blur();
       }
     }
 

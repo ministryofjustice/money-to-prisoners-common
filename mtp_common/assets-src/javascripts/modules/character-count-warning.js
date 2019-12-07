@@ -1,5 +1,4 @@
 // Show a warning in the form-hint of a field when running out of space
-/* globals django */
 'use strict';
 
 exports.CharacterCountWarning = {
@@ -17,20 +16,20 @@ exports.CharacterCountWarning = {
       var $characterCountWarning = $('<span class="mtp-character-count-hint"></span>');
       $helpElement.append($characterCountWarning);
 
-      function updateCounter() {
+      function updateCounter () {
         var characterCount = $.trim($input.val()).length;
         var remainingCount = characterLimit - characterCount;
         var message = '';
         if (characterCount > characterLimit) {
           message = django.gettext('Too much text entered');
-        } else if(remainingCount <= 25) {
+        } else if (remainingCount <= 25) {
           message = django.interpolate(django.ngettext(
             '%s character remaining',
             '%s characters remaining',
             remainingCount
           ), [remainingCount]);
         }
-        $characterCountWarning.text(message)
+        $characterCountWarning.text(message);
       }
 
       updateCounter();

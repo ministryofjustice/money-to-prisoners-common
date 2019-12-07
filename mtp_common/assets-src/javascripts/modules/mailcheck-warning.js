@@ -1,8 +1,7 @@
 // Show a warning when an email address domain might be misspelled
-/* globals django */
 'use strict';
 
-var mailcheck = require('mailcheck');
+const mailcheck = require('mailcheck');
 
 exports.MailcheckWarning = {
   init: function (selector, domains, topLevelDomains, secondLevelDomains) {

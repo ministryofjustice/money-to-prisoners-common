@@ -1,7 +1,7 @@
 // Focus on search input field
 'use strict';
 
-var analytics = require('./analytics');
+const analytics = require('./analytics');
 
 exports.TrackPrinting = {
   init: function () {

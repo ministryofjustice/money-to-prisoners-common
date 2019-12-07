@@ -13,9 +13,9 @@ exports.AsyncLoad = {
       'method': 'GET',
       'dataType': 'json'
     }).success(function (data) {
-      var loaded_value = data[$elem.data('key')];
-      if (typeof loaded_value !== 'undefined') {
-        $elem.text(loaded_value);
+      var loadedValue = data[$elem.data('key')];
+      if (typeof loadedValue !== 'undefined') {
+        $elem.text(loadedValue);
       }
     });
   }

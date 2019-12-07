@@ -1,7 +1,7 @@
 // BeforeUnload module
 'use strict';
 
-var analytics = require('./analytics');
+const analytics = require('./analytics');
 
 exports.Unload = {
   selector: '.js-BeforeUnload',

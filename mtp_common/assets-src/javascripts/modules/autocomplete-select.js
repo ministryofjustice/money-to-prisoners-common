@@ -1,7 +1,7 @@
 // Find-as-you-type selection menu
 'use strict';
 
-var analytics = require('analytics');
+const analytics = require('analytics');
 
 exports.AutocompleteSelect = {
   init: function () {
@@ -86,8 +86,8 @@ exports.AutocompleteSelect = {
       var suggestions = $.map(choices, function (choice) {
         if (searchParts.length > 0) {
           var results = true;
-          $.each(searchParts, function(i, searchPart) {
-            results = results && choice.name.toLowerCase().indexOf(searchPart) !== -1
+          $.each(searchParts, function (i, searchPart) {
+            results = results && choice.name.toLowerCase().indexOf(searchPart) !== -1;
           });
           if (results) {
             return choice;
