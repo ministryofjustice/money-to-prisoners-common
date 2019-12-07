@@ -448,7 +448,7 @@ class Context:
         """
         Runs a node tool in a shell
         """
-        return self.shell(f'./node_modules/.bin/{tool}', *args)
+        return self.shell(f'npx {tool}', *args)
 
     def management_command(self, command, *args, **kwargs):
         """
