@@ -211,7 +211,7 @@ def webpack_config(context: Context):
 
 
 @tasks.register('create_build_paths', 'node_dependencies', 'webpack_config', hidden=True)
-def bundle_javascript(context: Context):
+def bundle_javascript(context: Context, production_bundle=False):
     """
     Compiles javascript
     """
@@ -220,11 +220,13 @@ def bundle_javascript(context: Context):
         args.append('--verbose')
     if not context.use_colour:
         args.append('--no-colors')
+    if production_bundle:
+        args.append('--mode=production')
     return context.node_tool('webpack', *args)
 
 
 @tasks.register('create_build_paths', 'node_dependencies', hidden=True)
-def bundle_stylesheets(context: Context):
+def bundle_stylesheets(context: Context, production_bundle=False):
     """
     Compiles stylesheets
     """
@@ -233,8 +235,10 @@ def bundle_stylesheets(context: Context):
         base_name = os.path.splitext(css_name)[0]
         return os.path.join(context.app.scss_build_path, f'{base_name}.css')
 
+    style = 'compressed' if production_bundle else 'nested'
     args = [
-        '--output-style=compressed',
+        'pysassc',  # pysassc entrypoint always removes the first item
+        f'--output-style={style}',
     ]
     for path in context.app.scss_include_paths:
         args.append(f'--include-path={path}')
