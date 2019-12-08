@@ -1,7 +1,7 @@
 // Sticky header module
 'use strict';
 
-exports.SelectAll = {
+export var SelectAll = {
   selector: '.js-SelectAll',
 
   init: function () {

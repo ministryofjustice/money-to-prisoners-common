@@ -1,7 +1,7 @@
 // Hides a long piece of text behind a "more..." link
 'use strict';
 
-exports.HideLongText = {
+export var HideLongText = {
   init: function () {
     $('.js-long-text').each(function () {
       $(this).click(function (e) {

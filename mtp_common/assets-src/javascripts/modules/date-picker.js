@@ -193,7 +193,7 @@ MTPDatePicker.prototype.drawCalendar = function () {
   }
 };
 
-exports.DatePicker = {
+export var DatePicker = {
   selector: '.mtp-date-picker__control',
   $calendar: null,
 

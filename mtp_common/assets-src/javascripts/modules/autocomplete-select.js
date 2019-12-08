@@ -1,9 +1,9 @@
 // Find-as-you-type selection menu
 'use strict';
 
-const analytics = require('analytics');
+import {Analytics} from './analytics';
 
-exports.AutocompleteSelect = {
+export var AutocompleteSelect = {
   init: function () {
     var $form = $('form.mtp-autocomplete');
     if ($form.length !== 1) {
@@ -54,19 +54,19 @@ exports.AutocompleteSelect = {
     $suggestions.attr('aria-label', django.gettext('Suggestions'));
     $suggestions.hide();
 
-    function getSearchTerm () {
+    function getSearchTerm() {
       var searchTerm = $visualInput.val() || '';
       return $.trim(searchTerm.replace(/\s+/g, ' ')).toLowerCase();
     }
 
     var lastSearchTerm = getSearchTerm();
 
-    function clearSuggestions () {
+    function clearSuggestions() {
       $suggestions.empty();
       $suggestions.hide();
     }
 
-    function setHiddenValue (value) {
+    function setHiddenValue(value) {
       $hiddenInput.val(value);
       $hiddenInput.change();
     }
@@ -102,7 +102,7 @@ exports.AutocompleteSelect = {
           $suggestion.click(function (e) {
             e.preventDefault();
             if ($hiddenInput.data('event-category')) {
-              analytics.Analytics.send(
+              Analytics.send(
                 'event', {
                   eventCategory: $hiddenInput.data('event-category'),
                   eventAction: 'Autocomplete',

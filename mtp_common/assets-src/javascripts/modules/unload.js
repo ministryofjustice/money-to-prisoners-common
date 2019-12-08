@@ -1,9 +1,9 @@
 // BeforeUnload module
 'use strict';
 
-const analytics = require('./analytics');
+import {Analytics} from './analytics';
 
-exports.Unload = {
+export var Unload = {
   selector: '.js-BeforeUnload',
 
   init: function () {
@@ -38,7 +38,7 @@ exports.Unload = {
 
   beforeUnload: function () {
     if (this.$form.serialize() !== this.initialData && !this.submitting) {
-      analytics.Analytics.send('pageview', '/-leaving_page_dialog/');
+      Analytics.send('pageview', '/-leaving_page_dialog/');
       return this.message;
     }
   }

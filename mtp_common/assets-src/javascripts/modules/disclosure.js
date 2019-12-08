@@ -1,7 +1,7 @@
 // Disclosing box that displays similarly to <details> with isn't supported on older browsers
 'use strict';
 
-exports.Disclosure = {
+export var Disclosure = {
   init: function () {
     $('.mtp-disclosure').each(function () {
       var $control = $(this);

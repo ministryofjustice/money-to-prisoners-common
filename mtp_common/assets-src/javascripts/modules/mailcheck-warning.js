@@ -1,9 +1,9 @@
 // Show a warning when an email address domain might be misspelled
 'use strict';
 
-const mailcheck = require('mailcheck');
+import Mailcheck from 'mailcheck';
 
-exports.MailcheckWarning = {
+export var MailcheckWarning = {
   init: function (selector, domains, topLevelDomains, secondLevelDomains) {
     $(selector || '.js-mailcheck').each(function () {
       var timer;
@@ -32,7 +32,7 @@ exports.MailcheckWarning = {
       }
 
       function check () {
-        mailcheck.run({
+        Mailcheck.run({
           email: $field.val(),
           domains: domains,
           topLevelDomains: topLevelDomains,

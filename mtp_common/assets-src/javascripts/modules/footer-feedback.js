@@ -1,7 +1,7 @@
 // Feedback form that goes in footer and is submitted using AJAX
 'use strict';
 
-exports.FooterFeedback = {
+export var FooterFeedback = {
   init: function () {
     $('.mtp-footer-feedback').each(this.bind);
   },

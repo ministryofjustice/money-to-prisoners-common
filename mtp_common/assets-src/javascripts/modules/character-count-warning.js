@@ -1,7 +1,7 @@
 // Show a warning in the form-hint of a field when running out of space
 'use strict';
 
-exports.CharacterCountWarning = {
+export var CharacterCountWarning = {
   init: function () {
     $('.js-character-count').each(function () {
       var $input = $(this);

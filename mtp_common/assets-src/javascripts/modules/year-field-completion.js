@@ -2,7 +2,7 @@
 // Converts a 2-digit year to a full year
 'use strict';
 
-exports.YearFieldCompletion = {
+export var YearFieldCompletion = {
   selector: '.form-year-field',
 
   init: function (selector) {

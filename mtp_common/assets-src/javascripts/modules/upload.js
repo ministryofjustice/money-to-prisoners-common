@@ -1,7 +1,7 @@
 // UploadSubmit module
 'use strict';
 
-exports.Upload = {
+export var Upload = {
   selector: '.upload-form',
 
   init: function () {

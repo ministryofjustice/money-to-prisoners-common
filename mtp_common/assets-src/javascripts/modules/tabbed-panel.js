@@ -1,9 +1,9 @@
 // tabbed panels
 'use strict';
 
-const Cookies = require('js-cookie');
+import Cookie from 'js-cookie';
 
-exports.TabbedPanel = {
+export var TabbedPanel = {
   init: function () {
     this.bindEvents($('.mtp-tab'));
   },
@@ -55,7 +55,7 @@ exports.TabbedPanel = {
           $tabContainer.addClass('mtp-tab-container--collapsed');
           $tabPanelContainer.attr('aria-expanded', 'false');
           if (tabCookieName) {
-            Cookies.remove(tabCookieName);
+            Cookie.remove(tabCookieName);
           }
         }
       } else {
@@ -72,7 +72,7 @@ exports.TabbedPanel = {
         $tabContainer.removeClass('mtp-tab-container--collapsed');
         $tabPanelContainer.attr('aria-expanded', 'true');
         if (tabCookieName) {
-          Cookies.set(tabCookieName, selectedIndex);
+          Cookie.set(tabCookieName, selectedIndex);
         }
       }
 
@@ -122,7 +122,7 @@ exports.TabbedPanel = {
     if ($tabPanelsWithErrors.length) {
       $tabPanelsWithErrors.first().data('mtp-tab').click();
     } else if (tabCookieName) {
-      var lastOpenTab = parseInt(Cookies.get(tabCookieName), 10);
+      var lastOpenTab = parseInt(Cookie.get(tabCookieName), 10);
       if ($.isNumeric(lastOpenTab) && lastOpenTab >= 0 && lastOpenTab < $tabButtons.length) {
         $tabButtons.eq(lastOpenTab).click().blur();
       } else if (!tabCollapsable) {

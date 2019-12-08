@@ -1,13 +1,13 @@
 // Focus on search input field
 'use strict';
 
-const analytics = require('./analytics');
+import {Analytics} from './analytics';
 
-exports.TrackPrinting = {
+export var TrackPrinting = {
   init: function () {
     window.print = (function (printfn) {
       return function () {
-        analytics.Analytics.send('event', 'print');
+        Analytics.send('event', 'print');
         printfn();
       };
     }(window.print));

@@ -1,7 +1,7 @@
 // Dialogue box module
 'use strict';
 
-exports.DialogueBox = {
+export var DialogueBox = {
   init: function () {
     this.dialogues = [];
     this.$window = $(window);
@@ -14,7 +14,7 @@ exports.DialogueBox = {
     var $container = $dialogue.parent('.mtp-dialogue__container');
 
     $dialogue.on('dialogue:open', function () {
-      exports.DialogueBox.showingDialogue($dialogue);
+      DialogueBox.showingDialogue($dialogue);
       $container.show();
       $dialogue.attr({
         'aria-hidden': 'false',
@@ -33,11 +33,11 @@ exports.DialogueBox = {
       });
       $dialogue.removeAttr('tabindex');
       $container.hide();
-      exports.DialogueBox.hidingDialogue();
+      DialogueBox.hidingDialogue();
     });
 
     $dialogue.on('dialogue:reposition', function () {
-      var maxHeight = exports.DialogueBox.$window.height() - 200;
+      var maxHeight = DialogueBox.$window.height() - 200;
       $dialogue.css({
         'marginBottom': '',
         'maxHeight': '',
@@ -50,7 +50,7 @@ exports.DialogueBox = {
           'overflowY': 'scroll'
         });
       }
-      $dialogue.css('marginTop', (exports.DialogueBox.$window.height() - $dialogue.outerHeight()) / 2 + 'px');
+      $dialogue.css('marginTop', (DialogueBox.$window.height() - $dialogue.outerHeight()) / 2 + 'px');
     });
 
     $dialogue.on('click', '.js-dialogue-close', function (e) {
@@ -80,13 +80,13 @@ exports.DialogueBox = {
   },
 
   showingDialogue: function ($dialogue) {
-    $.each(exports.DialogueBox.dialogues, function () {
+    $.each(DialogueBox.dialogues, function () {
       this.hide();
       this.attr('aria-hidden', 'true');
       this.removeAttr('tabindex');
     });
-    exports.DialogueBox.dialogues.push($dialogue);
-    if (exports.DialogueBox.dialogues.length === 1) {
+    DialogueBox.dialogues.push($dialogue);
+    if (DialogueBox.dialogues.length === 1) {
       // show backdrop
       var $backdrop = $('<div class="mtp-dialogue__backdrop"></div>');
       $backdrop.hide();
@@ -97,8 +97,8 @@ exports.DialogueBox = {
       });
 
       // monitor window resize
-      exports.DialogueBox.$window.on('resize.dialogue', function () {
-        $.each(exports.DialogueBox.dialogues, function () {
+      DialogueBox.$window.on('resize.dialogue', function () {
+        $.each(DialogueBox.dialogues, function () {
           this.trigger('dialogue:reposition');
         });
       });
@@ -106,10 +106,10 @@ exports.DialogueBox = {
   },
 
   hidingDialogue: function () {
-    exports.DialogueBox.dialogues.pop();
-    var dialogueCount = exports.DialogueBox.dialogues.length;
+    DialogueBox.dialogues.pop();
+    var dialogueCount = DialogueBox.dialogues.length;
     if (dialogueCount > 0) {
-      var $previousDialogue = exports.DialogueBox.dialogues[dialogueCount - 1];
+      var $previousDialogue = DialogueBox.dialogues[dialogueCount - 1];
       $previousDialogue.show();
       $previousDialogue.attr({
         'aria-hidden': 'false',
@@ -125,7 +125,7 @@ exports.DialogueBox = {
       });
 
       // stop monitoring window resize
-      exports.DialogueBox.$window.off('resize.dialogue');
+      DialogueBox.$window.off('resize.dialogue');
     }
   }
 };

@@ -1,7 +1,7 @@
 // Notifications module
 'use strict';
 
-exports.Notifications = {
+export var Notifications = {
   init: function () {
     $('a.mtp-notification__headline').each(function () {
       var $control = $(this);

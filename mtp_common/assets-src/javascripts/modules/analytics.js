@@ -1,13 +1,13 @@
 // Google Analytics Utility module
 // This module offers ways to send custom events to Google Analytics:
-// - by calling analytics.send. Eg. analytics.send('event', 'tick', 'checkbox')
+// - by calling Analytics.send. Eg. Analytics.send('event', 'tick', 'checkbox')
 // - by adding the data-analytics attribute to any element that can be clicked
 //   eg <div data-analytics="pageview,/virtual/pageview/,user clicked there"/>
 // It needs the google analytics tracking code to be enabled on the page
 /* globals ga */
 'use strict';
 
-exports.Analytics = {
+export var Analytics = {
   attrName: 'analytics',
 
   init: function () {

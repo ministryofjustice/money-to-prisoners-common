@@ -1,7 +1,7 @@
 // Async loading of page details
 'use strict';
 
-exports.AsyncLoad = {
+export var AsyncLoad = {
   init: function () {
     $('.js-async-load').each(this.load);
   },
