@@ -12,4 +12,4 @@ django:
     ENV: "local"
     DEBUG: "True"
     DJANGO_SECRET_KEY: "CHANGE_ME"
-    API_URL: "http://${HOST_MACHINE_IP}:8000"
+    API_URL: "http://127.0.0.1:8000"
