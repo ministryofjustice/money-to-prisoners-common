@@ -9,7 +9,6 @@ from mtp_common.build_tasks import tasks as shared_tasks
 from mtp_common.build_tasks.paths import paths_for_shell
 
 tasks = shared_tasks.tasks = Tasks()  # unregister all existing tasks
-tasks.register('create_build_paths')(shared_tasks.govuk_template.func)
 tasks.register(hidden=True)(shared_tasks.create_build_paths.func)
 tasks.register('python_dependencies', 'setup_django_for_testing', hidden=True)(shared_tasks.compile_messages.func)
 tasks.register('python_dependencies', 'setup_django_for_testing')(shared_tasks.make_messages.func)
@@ -119,7 +118,7 @@ def python_dependencies(context: Context, extras=None):
     return context.pip_command('install', *requirements)
 
 
-@tasks.register('python_dependencies', 'govuk_template', 'compile_messages', 'precompile_python_code', default=True)
+@tasks.register('python_dependencies', 'compile_messages', 'precompile_python_code', default=True)
 def build(_: Context):
     """
     Builds all necessary assets

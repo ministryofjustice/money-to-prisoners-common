@@ -101,10 +101,6 @@ class App:
         return os.path.join(self.django_app_name, 'templates')
 
     @property
-    def govuk_templates_path(self):
-        return os.path.join(self.templates_path, 'govuk_template')
-
-    @property
     def common_path(self):
         try:
             path = pkg_resources.get_distribution('money-to-prisoners-common').location
@@ -130,7 +126,7 @@ class App:
 
     @property
     def additional_asset_paths(self):
-        yield os.path.join(self.node_modules_path, 'govuk_frontend_toolkit/images')
+        yield os.path.join(self.node_modules_path, 'govuk-frontend/govuk/assets')
 
     @property
     def javascript_include_paths(self):
@@ -139,11 +135,6 @@ class App:
 
     @property
     def scss_include_paths(self):
-        paths = [
-            'govuk_frontend_toolkit/stylesheets',
-            'govuk-elements-sass/public/sass',
-        ]
-        for path in paths:
-            yield os.path.join(self.node_modules_path, path)
+        yield os.path.join(self.node_modules_path)
         yield self.common_scss_source_path
         yield self.scss_source_path
