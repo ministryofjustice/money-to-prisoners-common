@@ -1,9 +1,15 @@
 @charset "UTF-8";
 
-// Image asset paths required by GOV.UK styles
-$path: '/static/images/';
+// Asset paths required by GOV.UK styles
+$govuk-assets-path: '/static/';
 
-@import 'govuk-elements';
+// Removes need to put classes on all elements
+$govuk-global-styles: true;
+
+@import 'govuk-frontend/govuk/all';
+
+/*
+TODO: upgrade styles and include them if and only if needed by _all_ apps
 
 // App extensions
 @import 'base';
@@ -26,3 +32,4 @@ $path: '/static/images/';
 @import 'elements/disclosure';
 @import 'elements/important';
 @import 'elements/pagination';
+ */
