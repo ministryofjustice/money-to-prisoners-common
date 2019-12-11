@@ -380,10 +380,12 @@ def clean(context: Context, delete_dependencies: bool = False):
     """
     Deletes build outputs
     """
-    paths = [context.app.asset_build_path, context.app.collected_assets_path, context.app.govuk_templates_path,
-             'docker-compose.yml', 'package.json', 'package-lock.json', 'webpack.config.js']
+    paths = [
+        context.app.asset_build_path, context.app.collected_assets_path,
+        'docker-compose.yml', 'package.json', 'package-lock.json', 'webpack.config.js',
+    ]
     context.shell(f'rm -rf {paths_for_shell(paths)}')
-    context.shell(f'find {context.app.django_app_name} -name "*.pyc" -or -name __pycache__ -delete')
+    context.shell(f'find {context.app.django_app_name} -name __pycache__ -delete')
 
     if delete_dependencies:
         context.info(f'Cleaning app {context.app.name} dependencies')
