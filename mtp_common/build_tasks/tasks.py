@@ -1,20 +1,17 @@
-import contextlib
 import functools
-import io
 import os
-import socket
 import sys
 import threading
 
 import pkg_resources
 
 from .executor import Context, Tasks, TaskError
-from .paths import FileSet, in_dir, paths_for_shell
+from .paths import in_dir, paths_for_shell
 
 tasks = Tasks()
 
 
-@tasks.register('dependencies', 'govuk_template', 'additional_assets', 'bundles', 'collect_static_files',
+@tasks.register('dependencies', 'additional_assets', 'bundles', 'collect_static_files',
                 'take_screenshots', 'compile_messages', 'precompile_python_code', default=True)
 def build(_: Context):
     """
@@ -294,32 +291,6 @@ def lint(_: Context):
     """
     Tests javascript and stylesheets for code and style errors
     """
-
-
-@tasks.register('create_build_paths', hidden=True)
-def govuk_template(context: Context, version='0.23.0', replace_fonts=True):
-    """
-    Installs GOV.UK template
-    """
-    if FileSet(os.path.join(context.app.govuk_templates_path, 'base.html')):
-        # NB: check is only on main template and not the assets included
-        return
-    url = f'https://github.com/alphagov/govuk_template/releases' \
-          f'/download/v{version}/django_govuk_template-{version}.tgz'
-    try:
-        silent_arg = '--silent' if context.verbosity == 0 else ''
-        context.shell(f'curl --location {silent_arg} --output govuk_template.tgz {url}')
-        context.shell('tar xzf govuk_template.tgz ./govuk_template')
-        rsync_flags = '-avz' if context.verbosity == 2 else '-az'
-        context.shell(f'rsync {rsync_flags} govuk_template/static/ {context.app.asset_build_path}/')
-        context.shell(f'rsync {rsync_flags} govuk_template/templates/ {context.app.templates_path}/')
-    finally:
-        context.shell('rm -rf govuk_template.tgz ./govuk_template')
-    if replace_fonts:
-        # govuk_template includes .eot font files for IE, but they load relative to current URL not the stylesheet
-        # this option removes these files so common's fonts-ie8.css override is used
-        context.shell(f'rm -rf {context.app.asset_build_path}/stylesheets/fonts-ie8.css'
-                      f' {context.app.asset_build_path}/stylesheets/fonts/')
 
 
 @tasks.register('create_build_paths', hidden=True)
