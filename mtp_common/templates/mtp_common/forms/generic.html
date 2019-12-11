@@ -3,12 +3,12 @@
 {% load widget_tweaks %}
 
 <header>
-  <h1 class="heading-xlarge">{{ form_title }}</h1>
+  <h1 class="govuk-heading-xl">{{ form_title }}</h1>
 </header>
 
 <div class="container">
-  <div class="grid-row">
-    <div class="column-two-thirds">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
       {% include 'mtp_common/forms/error-summary.html' with form=form only %}
 
       <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}">
@@ -27,9 +27,9 @@
         {% endfor %}
 
         <div class="form-group">
-          <button type="submit" class="button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
+          <button type="submit" class="govuk-button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
           {% if cancel_url %}
-            <a class="mtp-cancel-button" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+            <a class="mtp-button--cancel" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
           {% endif %}
         </div>
       </form>

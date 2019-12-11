@@ -6,7 +6,7 @@
 
 {% block admin_header %}
   <header>
-    <h1 class="heading-xlarge">{% trans 'Manage user accounts' %}</h1>
+    <h1 class="govuk-heading-xl">{% trans 'Manage user accounts' %}</h1>
   </header>
 {% endblock %}
 
@@ -23,17 +23,17 @@
   {% endif %}
 
   <p class="print-hidden">
-    <a class="button button-secondary" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
+    <a class="govuk-button govuk-button--secondary" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
   </p>
 
   {% if account_requests %}
-    <h2 class="heading-medium">
+    <h2 class="govuk-heading-m">
       {% trans 'New user requests' %}
     </h2>
 
     <div class="mtp-account-management__container">
       <table class="mtp-table mtp-account-management__users">
-        <caption class="visually-hidden">{% trans 'Table of new user requests' %}</caption>
+        <caption class="govuk-visually-hidden">{% trans 'Table of new user requests' %}</caption>
         <thead>
           <tr>
             <th>{% trans 'Name' %}</th>
@@ -62,13 +62,13 @@
     </div>
   {% endif %}
 
-  <h2 class="heading-medium">
+  <h2 class="govuk-heading-m">
     {% trans 'Edit existing users' %}
   </h2>
 
   <div class="mtp-account-management__container">
     <table class="mtp-table mtp-account-management__users">
-      <caption class="visually-hidden">{% trans 'Table of existing users' %}</caption>
+      <caption class="govuk-visually-hidden">{% trans 'Table of existing users' %}</caption>
       <thead>
         <tr>
           <th>{% trans 'Name' %}</th>
@@ -86,7 +86,7 @@
               <td>{{ user.email }}</td>
               {% if user.user_admin %}
                 <td class="mtp-account-management__can_manage">
-                  <span class="visually-hidden">{% trans 'User can manage other accounts' %}</span>
+                  <span class="govuk-visually-hidden">{% trans 'User can manage other accounts' %}</span>
                 </td>
               {% else %}
                 <td></td>

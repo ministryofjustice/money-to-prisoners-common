@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ html_lang|default:'en' }}" class="govuk-template">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block page_title %}GOV.UK - The best place to find government services and information{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="{{ theme_color|default:'#0b0c0c' }}" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {% block head_icons %}
+      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+      <link rel="mask-icon" href="{% static 'images/govuk-mask-icon.svg' %}" color="{{ theme_color|default:'#0b0c0c' }}" />
+      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/govuk-apple-touch-icon-180x180.png' %}" />
+      <link rel="apple-touch-icon" sizes="167x167" href="{% static 'images/govuk-apple-touch-icon-167x167.png' %}" />
+      <link rel="apple-touch-icon" sizes="152x152" href="{% static 'images/govuk-apple-touch-icon-152x152.png' %}" />
+      <link rel="apple-touch-icon" href="{% static 'images/govuk-apple-touch-icon.png' %}" />
+    {% endblock %}
+
+    {% block head %}{% endblock %}
+    <meta property="og:image" content="{% static 'images/govuk-opengraph-image.png' %}" />
+  </head>
+  <body class="govuk-template__body {% block body_classes %}{% endblock %}">
+    <script>document.body.className = document.body.className + ' js-enabled';</script>
+    {% block body_start %}{% endblock %}
+
+    {% block skip_link %}
+      <a href="#main-content" class="govuk-skip-link">
+        {% trans 'Skip to main content' %}
+      </a>
+    {% endblock %}
+
+    {% block header %}
+      {% include 'govuk-frontend/components/header.html' %}
+    {% endblock %}
+
+    {% block main %}
+      <div class="govuk-width-container">
+        {% block before_content %}{% endblock %}
+        <main class="govuk-main-wrapper" id="main-content" role="main">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+    {% endblock %}
+
+    {% block footer %}
+      {% include 'govuk-frontend/components/footer.html' %}
+    {% endblock %}
+
+    {% block body_end %}{% endblock %}
+  </body>
+</html>

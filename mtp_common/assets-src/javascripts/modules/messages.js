@@ -3,6 +3,6 @@
 
 export var Messages = {
   init: function () {
-    $('.error-summary, .mtp-messages[role=alert]').focus();
+    $('.govuk-error-summary, .mtp-messages[role=alert]').focus();
   }
 };

@@ -3,7 +3,7 @@
 
 {% block page_title %}{% trans 'Request access' %} – {{ block.super }}{% endblock %}
 
-{% block inner_content %}
+{% block content %}
   <header class="govuk-box-highlight">
     <h1 class="bold-large">
       {% trans 'Your request for access has been sent' %}
@@ -11,7 +11,7 @@
   </header>
 
   {% block whats_next_message %}
-    <h2 class="heading-medium">{% trans 'What happens next?' %}</h2>
+    <h2 class="govuk-heading-m">{% trans 'What happens next?' %}</h2>
     <p>
       {% trans 'If approved, you’ll get an email with your login details.' %}
     </p>

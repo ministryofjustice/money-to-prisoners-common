@@ -86,7 +86,7 @@ def hide_long_text(text, count=5):
     if len(words) <= count:
         return text
     short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])
-    return format_html('<span class="visually-hidden">{text}</span>'
+    return format_html('<span class="govuk-visually-hidden">{text}</span>'
                        '<span aria-hidden="true">'
                        '  {short_text}'
                        '  <a href="#" class="js-long-text" data-rest="{rest_text}">{more}</a>'
@@ -110,6 +110,30 @@ def stripwhitespace(parser, token):
     node_list = parser.parse(('endstripwhitespace',))
     parser.delete_first_token()
     return StripWhitespaceNode(node_list)
+
+
+class CaptureOutputNode(template.Node):
+    def __init__(self, node_list, variable):
+        self.node_list = node_list
+        self.variable = variable
+
+    def render(self, context):
+        context[self.variable] = self.node_list.render(context)
+        return ''
+
+
+@register.tag
+def captureoutput(parser, token):
+    """
+    Use this tag to capture template output into a variable;
+    useful for including complex content into a blocktrans
+    """
+    args = token.split_contents()[1:]
+    if len(args) != 2 or args[0] != 'as':
+        raise template.TemplateSyntaxError('captureoutput requires "as variable"')
+    node_list = parser.parse(('endcaptureoutput',))
+    parser.delete_first_token()
+    return CaptureOutputNode(node_list, args[1])
 
 
 @register.filter

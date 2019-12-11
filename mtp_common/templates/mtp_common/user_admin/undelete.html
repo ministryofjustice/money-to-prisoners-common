@@ -6,7 +6,7 @@
 
 {% block admin_header %}
   <header>
-    <h1 class="heading-xlarge">{{ page_title }}</h1>
+    <h1 class="govuk-heading-xl">{{ page_title }}</h1>
   </header>
 {% endblock %}
 
@@ -19,8 +19,8 @@
   <form method="post" action=".">
     {% csrf_token %}
     <div class="form-group">
-      <button type="submit" name="submit" value="submit" class="button">{% trans 'Enable user account' %}</button>
-      <a class="mtp-cancel-button" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+      <button type="submit" name="submit" value="submit" class="govuk-button">{% trans 'Enable user account' %}</button>
+      <a class="mtp-button--cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
     </div>
   </form>
 {% endblock %}

@@ -3,7 +3,7 @@
 <div id="{{ dialogue_id }}__container" class="mtp-dialogue__container">
   <div id="{{ dialogue_id }}" class="mtp-dialogue {{ dialogue_classes }}" role="{{ dialogue_role }}" aria-hidden="true" {% if dialogue_title %}aria-labelledby="{{ dialogue_id }}__title"{% endif %} aria-describedby="{{ dialogue_id }}__contents">
     {% if dialogue_title %}
-      <header id="{{ dialogue_id }}__title" class="heading-medium">{{ dialogue_title }}</header>
+      <header id="{{ dialogue_id }}__title" class="govuk-heading-m">{{ dialogue_title }}</header>
     {% endif %}
     <div id="{{ dialogue_id }}__contents" class="mtp-dialogue__contents">
       {{ dialogue_contents }}

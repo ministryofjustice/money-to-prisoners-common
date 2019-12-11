@@ -131,7 +131,7 @@ export var TabbedPanel = {
       }
     }
 
-    $('.field-specific-error a').click(function () {
+    $('.mtp-error-summary__field-errors a').click(function () {
       var $errorLink = $(this);
       var $fieldLabel = $($errorLink.attr('href'));
       var $tabPanel = $fieldLabel.closest('.mtp-tabpanel');

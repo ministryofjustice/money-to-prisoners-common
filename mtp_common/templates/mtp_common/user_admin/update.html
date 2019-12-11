@@ -6,7 +6,7 @@
 
 {% block admin_header %}
   <header>
-    <h1 class="heading-xlarge">{{ page_title }}</h1>
+    <h1 class="govuk-heading-xl">{{ page_title }}</h1>
   </header>
 {% endblock %}
 
@@ -49,14 +49,14 @@
     {% endwith %}
 
     <div class="form-group">
-      <button type="submit" class="button" name="create">
+      <button type="submit" class="govuk-button" name="create">
         {% if form.create %}
           {% trans 'Create' %}
         {% else %}
           {% trans 'Save' %}
         {% endif %}
       </button>
-      <a href="{% url 'list-users' %}" class="mtp-cancel-button">{% trans 'Cancel' %}</a>
+      <a href="{% url 'list-users' %}" class="mtp-button--cancel">{% trans 'Cancel' %}</a>
     </div>
   </form>
 {% endblock %}

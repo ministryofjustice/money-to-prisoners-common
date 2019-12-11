@@ -4,22 +4,22 @@
 
 {% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
-{% block inner_content %}
+{% block content %}
   {% block get_help_heading %}
     <header>
-      <h1 class="heading-xlarge">{{ get_help_title|default:_('Get help') }}</h1>
+      <h1 class="govuk-heading-xl">{{ get_help_title|default:_('Get help') }}</h1>
     </header>
   {% endblock %}
 
   {% block get_help_leading %}
-    <p class="lede">
+    <p class="govuk-body-l">
       {% trans 'Ask questions about this service to the prisoner money team.' %}
-      <br>
+      <br />
       {% trans 'It’s the fastest way we can help you with a query.' %}
-      <br>
+      <br />
       {% trans 'You can send us any feedback here too.' %}
     </p>
-    <br>
+    <br />
   {% endblock %}
 
   {% block get_help_form %}
@@ -31,15 +31,15 @@
       {{ form.referer }}
 
       <fieldset>
-        <legend class="visually-hidden">{% trans 'Feedback details' %}</legend>
+        <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
 
         {% with field=form.ticket_content value=request.GET.message|default:'' %}
           <div class="form-group {% if field.errors %}form-group-error{% endif %}">
             {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
             <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
-            {% trans 'Your questions and feedback' %}
-            {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+              {% trans 'Your questions and feedback' %}
+              {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
             </label>
 
             <textarea class="form-control form-control-3-4 {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
@@ -50,7 +50,7 @@
         {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
 
         <div class="form-group">
-          <button type="submit" class="button" name="submit-feedback">{% trans 'Send' %}</button>
+          <button type="submit" class="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
         </div>
       </fieldset>
     </form>

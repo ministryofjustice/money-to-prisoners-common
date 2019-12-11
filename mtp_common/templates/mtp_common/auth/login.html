@@ -5,10 +5,10 @@
 
 {% block page_title %}{% trans 'Sign in' %} – {{ block.super }}{% endblock %}
 
-{% block inner_content %}
+{% block content %}
   <header>
-    <h1 class="heading-xlarge">
-      <span class="heading-secondary">
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-xl">
         {% block auth_title %}{% trans 'Send money to someone in prison' %}{% endblock %}
       </span>
       {% trans 'Sign in' %}
@@ -16,8 +16,8 @@
   </header>
 
   <div class="container">
-    <div class="grid-row">
-      <div class="column-two-thirds">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
         {% include 'mtp_common/forms/error-summary.html' with form=form only %}
 
         <form action="{{ app_path }}" method="post" id="login-form">
@@ -33,17 +33,14 @@
           {% endfor %}
 
           <div class="form-group">
-            <button type="submit" class="button" name="signin">{% trans 'Sign in' %}</button>
+            <button type="submit" class="govuk-button" name="signin">{% trans 'Sign in' %}</button>
           </div>
         </form>
 
-        {% if ENVIRONMENT != 'test' %}
-          {% url 'reset_password' as reset_password_url %}
-          {% if reset_password_url %}
-            <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
-          {% endif %}
+        {% url 'reset_password' as reset_password_url %}
+        {% if reset_password_url %}
+          <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
         {% endif %}
-
       </div>
     </div>
   </div>

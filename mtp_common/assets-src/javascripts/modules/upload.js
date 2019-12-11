@@ -20,7 +20,7 @@ export var Upload = {
     this.$chooseButton = $(this.selector + ' .upload-choose');
     this.$uploadFilename = $(this.selector + ' .upload-filename');
     this.$formGroups = $(this.selector + ' .form-group');
-    this.$errorMessages = $(this.selector + ' .error-message, ' + this.selector + ' .error-summary');
+    this.$errorMessages = $(this.selector + ' .govuk-error-message, ' + this.selector + ' .govuk-error-summary');
     this.$otherFileLink = $(this.selector + ' .upload-otherfilelink');
   },
 

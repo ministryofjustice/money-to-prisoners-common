@@ -2,7 +2,7 @@ input {
   font-family: inherit;
 }
 
-form a.mtp-cancel-button {
+form a.mtp-button--cancel {
   vertical-align: -0.45em;
 
   @include media(tablet) {
@@ -18,20 +18,18 @@ form a.mtp-cancel-button {
   margin-top: 0;
 }
 
-.error-summary {
-  .error-summary-list {
-    .non-field-error {
+.govuk-list govuk-error-summary__list {
+  .mtp-error-summary__non-field-error {
+    color: $error-colour;
+    font-weight: bold;
+  }
+
+  .mtp-error-summary__field-errors ul {
+    padding-left: 1em;
+
+    li {
+      list-style-type: disc;
       color: $error-colour;
-      font-weight: bold;
-    }
-
-    .field-specific-error ul {
-      padding-left: 1em;
-
-      li {
-        list-style-type: disc;
-        color: $error-colour;
-      }
     }
   }
 }

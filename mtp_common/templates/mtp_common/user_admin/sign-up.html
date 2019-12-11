@@ -3,9 +3,9 @@
 
 {% block page_title %}{% trans 'Request access' %} – {{ block.super }}{% endblock %}
 
-{% block inner_content %}
+{% block content %}
   <header>
-    <h1 class="heading-xlarge">{% trans 'Request access' %}</h1>
+    <h1 class="govuk-heading-xl">{% trans 'Request access' %}</h1>
   </header>
 
   <form action="." method="post" class="mtp-account-management__sign-up">
@@ -27,7 +27,7 @@
     {% endwith %}
 
     <div class="form-group">
-      <button type="submit" class="button">
+      <button type="submit" class="govuk-button">
         {% trans 'Submit request' %}
       </button>
     </div>

@@ -11,7 +11,7 @@
   </div>
   <div class="form-group">
     {% csrf_token %}
-    <input type="submit" value="{% trans 'Send' %}" class="button-footer">
+    <input type="submit" value="{% trans 'Send' %}" class="govuk-button-footer">
     <input type="hidden" name="contact_email" value="{{ request.user.email }}">
     <input type="hidden" name="referer" value="{{ request.get_full_path }}">
   </div>
