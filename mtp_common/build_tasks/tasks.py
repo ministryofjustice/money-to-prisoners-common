@@ -300,7 +300,7 @@ def additional_assets(context: Context):
     """
     rsync_flags = '-avz' if context.verbosity == 2 else '-az'
     for path in context.app.additional_asset_paths:
-        context.shell(f'rsync {rsync_flags} {path} {context.app.asset_build_path}/')
+        context.shell(f'rsync {rsync_flags} {path}/ {context.app.asset_build_path}/')
 
 
 @tasks.register('create_build_paths', hidden=True)
