@@ -34,7 +34,7 @@ install_requires = [
 ]
 extras_require = {
     'monitoring': [
-        'raven>=6.6,<7',
+        'sentry-sdk>0.14,<0.15',
     ],
     'testing': [
         'flake8>=3.7,<4',

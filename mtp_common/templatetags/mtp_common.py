@@ -141,7 +141,9 @@ def sentry_js():
     if sentry_client is not None:
         sentry_dsn = sentry_client.get_public_dsn('https') or None
     return {
-        'sentry_dsn': sentry_dsn
+        'sentry_dsn': sentry_dsn,
+        'ENVIRONMENT': settings.ENVIRONMENT,
+        'APP_GIT_COMMIT': settings.APP_GIT_COMMIT,
     }
 
 

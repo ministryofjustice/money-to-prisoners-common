@@ -33,6 +33,7 @@ def setup_django_for_testing(_: Context):
     settings.configure(
         APP='common',
         ENVIRONMENT='test',
+        APP_GIT_COMMIT='0000000',
         DEBUG=True,
         SECRET_KEY='a' * 24,
         ROOT_URLCONF='tests.urls',
