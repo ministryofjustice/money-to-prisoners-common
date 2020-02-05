@@ -1,0 +1,41 @@
+{% load i18n %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/date-field.html' with field=<field variable> only %}
+  optional parameters:
+    value - input element value override instead of default filtered field value (ignored if None)
+
+  TODO: the widget is not currently configurable
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset" role="group" {% if field.help_text %}aria-describedby="{{ field.id_for_label }}-hint"{% endif %}>
+    <legend class="govuk-fieldset__legend">{{ field.label }}</legend>
+    {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+    {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+
+
+    <div class="govuk-date-input">
+      <div class="govuk-date-input__item mtp-date-input__day">
+        <div class="govuk-form-group">
+          <label id="{{ field.auto_id }}_0-label" class="govuk-label govuk-date-input__label" for="{{ field.auto_id }}_0">{% trans 'Day' %}</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if field.errors %}govuk-input--error{% endif %}" id="{{ field.auto_id }}_0" name="{{ field.html_name }}_0" value="{{ field.value.0|default:'' }}" type="text" pattern="[0-9]*" inputmode="numeric" />
+        </div>
+      </div>
+      <div class="govuk-date-input__item mtp-date-input__month">
+        <div class="govuk-form-group">
+          <label id="{{ field.auto_id }}_1-label" class="govuk-label govuk-date-input__label" for="{{ field.auto_id }}_1">{% trans 'Month' %}</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if field.errors %}govuk-input--error{% endif %}" id="{{ field.auto_id }}_1" name="{{ field.html_name }}_1" value="{{ field.value.1|default:'' }}" type="text" pattern="[0-9]*" inputmode="numeric" />
+        </div>
+      </div>
+      <div class="govuk-date-input__item mtp-date-input__year">
+        <div class="govuk-form-group">
+          <label id="{{ field.auto_id }}_2-label" class="govuk-label govuk-date-input__label" for="{{ field.auto_id }}_2">{% trans 'Year' %}</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if field.errors %}govuk-input--error{% endif %} mtp-input__year-completion" id="{{ field.auto_id }}_2" name="{{ field.html_name }}_2" value="{{ field.value.2|default:'' }}" type="text" pattern="[0-9]*" inputmode="numeric" data-era-boundary="{{ field.field.fields.2.era_boundary }}" />
+        </div>
+      </div>
+    </div>
+
+  </fieldset>
+</div>

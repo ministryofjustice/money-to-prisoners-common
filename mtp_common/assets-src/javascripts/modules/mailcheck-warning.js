@@ -8,7 +8,7 @@ export var MailcheckWarning = {
     $(selector || '.js-mailcheck').each(function () {
       var timer;
       var $field = $(this);
-      var $messageBox = $('<span class="form-hint mtp-mailcheck-warning"></span>');
+      var $messageBox = $('<span class="govuk-hint mtp-mailcheck-warning"></span>');
       $field.after($messageBox);
 
       function showSuggestion (suggestion) {

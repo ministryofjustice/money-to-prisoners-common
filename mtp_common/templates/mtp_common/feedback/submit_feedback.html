@@ -30,26 +30,26 @@
 
       {{ form.referer }}
 
-      <fieldset>
+      <fieldset class="govuk-fieldset">
         <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
 
         {% with field=form.ticket_content value=request.GET.message|default:'' %}
-          <div class="form-group {% if field.errors %}form-group-error{% endif %}">
+          <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
             {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
-            <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="form-label">
+            <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-label">
               {% trans 'Your questions and feedback' %}
               {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
             </label>
 
-            <textarea class="form-control form-control-3-4 {% if field.errors %}form-control-error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
+            <textarea class="govuk-textarea form-control-3-4 {% if field.errors %}govuk-textarea--error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
 
           </div>
         {% endwith %}
 
         {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
 
-        <div class="form-group">
+        <div class="govuk-form-group">
           <button type="submit" class="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
         </div>
       </fieldset>

@@ -1,0 +1,21 @@
+{% load i18n %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/amount-field.html' with field=<field variable> only %}
+  optional parameters:
+    input_classes - classes to add to the input element
+    value - input element value override instead of default filtered field value (ignored if None)
+    attrs - dict of additional attributes
+
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  {% include 'mtp_common/forms/field-label.html' with field=field only %}
+  {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+
+  <div class="mtp-amount-input__wrapper">
+    <input id="{{ field.id_for_label }}" class="govuk-input {% if field.errors %}govuk-input--error{% endif %} mtp-amount-input {{ input_classes }}" name="{{ field.html_name }}" value="{{ value|default:field.value|default_if_none:'' }}" type="text" inputmode="decimal" {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %} />
+    <span class="mtp-amount-input__currency {% if field.errors %}mtp-amount-input__currency--error{% endif %}" aria-hidden="true">£</span>
+  </div>
+</div>

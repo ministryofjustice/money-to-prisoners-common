@@ -1,0 +1,15 @@
+@if $govuk-global-styles == true {
+  .govuk-table {
+    caption {
+      text-align: left;
+    }
+
+    th {
+      @extend .govuk-table__header;
+    }
+
+    td {
+      @extend .govuk-table__cell;
+    }
+  }
+}

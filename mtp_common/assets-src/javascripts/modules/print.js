@@ -18,7 +18,7 @@ export var Print = {
 
   bindTriggers: function () {
     var $trigger = $(this);
-    var $printHidden = $($trigger.data('do-not-print')).not('.print-hidden');
+    var $printHidden = $($trigger.data('do-not-print')).not('.mtp-print-hidden');
     var $confirmationDialogue = $($trigger.data('confirmation-dialogue'));
     var onClickAction = null;
     if ($confirmationDialogue.length === 1 && $confirmationDialogue.hasClass('mtp-dialogue')) {
@@ -68,11 +68,11 @@ export var Print = {
 
   makePrintAction: function ($printHidden) {
     return function () {
-      $printHidden.addClass('print-hidden');
+      $printHidden.addClass('mtp-print-hidden');
       try {
         window.print();
       } catch (e) {}  // eslint-disable-line
-      $printHidden.removeClass('print-hidden');
+      $printHidden.removeClass('mtp-print-hidden');
     };
   }
 };

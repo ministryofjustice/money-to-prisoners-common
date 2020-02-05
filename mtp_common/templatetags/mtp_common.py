@@ -293,14 +293,21 @@ def dialoguebox(parser, token):
     return DialogueNode(node_list, **kwargs)
 
 
-@register.inclusion_tag('mtp_common/includes/notifications.html')
-def notifications_box(request, *targets, **kwargs):
+@register.inclusion_tag('mtp_common/includes/notification-banners.html')
+def notification_banners(request, *targets, **kwargs):
+    """
+    Shows notifications banners from _first_ target that responds
+    """
     for target in targets:
         notifications = notifications_for_request(request, target, **kwargs)
         if notifications:
             return {
-                'notifications': notifications
+                'notifications_id': get_random_string(length=4),
+                'notifications': notifications,
             }
+    return {
+        'notifications': [],
+    }
 
 
 class TabbedPanelNode(template.Node):

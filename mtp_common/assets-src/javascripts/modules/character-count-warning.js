@@ -1,4 +1,4 @@
-// Show a warning in the form-hint of a field when running out of space
+// Show a warning in the govuk-hint of a field when running out of space
 'use strict';
 
 export var CharacterCountWarning = {

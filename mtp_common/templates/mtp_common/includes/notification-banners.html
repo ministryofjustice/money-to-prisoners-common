@@ -1,0 +1,24 @@
+{% for notification in notifications %}
+  <div class="mtp-banner mtp-banner--{{ notification.level }}" role="alert">
+    {% if notification.level == 'info' %}
+      {% include 'mtp_common/icons/info.svg' with class_names='mtp-banner__icon' %}
+    {% elif notification.level == 'success' %}
+      {% include 'mtp_common/icons/success.svg' with class_names='mtp-banner__icon' %}
+    {% elif notification.level == 'warning' %}
+      {% include 'mtp_common/icons/warning.svg' with class_names='mtp-banner__icon' %}
+    {% elif notification.level == 'error' %}
+      {% include 'mtp_common/icons/error.svg' with class_names='mtp-banner__icon' %}
+    {% endif %}
+
+    {% if notification.message %}
+      <h1 class="mtp-banner__title">
+        <a href="#mtp-banner-{{ notifications_id }}-{{ forloop.counter }}" data-module="govuk-button">{{ notification.headline }}</a>
+      </h1>
+      <div id="mtp-banner-{{ notifications_id }}-{{ forloop.counter }}" class="mtp-banner__body">
+        {{ notification.message|urlize|linebreaks }}
+      </div>
+    {% else %}
+      <h1 class="mtp-banner__title">{{ notification.headline }}</h1>
+    {% endif %}
+  </div>
+{% endfor %}

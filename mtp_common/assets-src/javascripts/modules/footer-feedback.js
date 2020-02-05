@@ -17,7 +17,7 @@ export var FooterFeedback = {
 
     function errorField (field) {
       $form.find('[name=' + field + ']').addClass('form-control-error')
-        .closest('.form-group').addClass('form-group-error');
+        .closest('.govuk-form-group').addClass('govuk-form-group--error');
     }
 
     $form.submit(function (e) {
@@ -26,7 +26,7 @@ export var FooterFeedback = {
       $errorMessage.hide();
       $successMessage.hide();
       $errorMessage.text($errorMessage.data('fallback-error'));
-      $form.find('.form-group-error').removeClass('form-group-error');
+      $form.find('.govuk-form-group--error').removeClass('govuk-form-group--error');
       $form.find('.form-control-error').removeClass('form-control-error');
 
       if ($ticketInput.val().replace(/^\s+|\s+$/g, '').length === 0) {

@@ -1,44 +1,42 @@
 {% load i18n %}
 
 {% if breadcrumbs or breadcrumbs_back or alt_urls %}
-  <nav class="mtp-sub-nav">
-    <div class="govuk-grid-row">
-      {% if breadcrumbs or breadcrumbs_back %}
-        <div class="mtp-breadcrumbs">
-          {% if breadcrumbs_back %}
+  <nav class="govuk-grid-row mtp-sub-nav">
+    {% if breadcrumbs or breadcrumbs_back %}
+      <div class="mtp-breadcrumbs__container">
+        {% if breadcrumbs_back %}
 
-            <a class="govuk-back-link" href="{{ breadcrumbs_back }}">
-              {% trans 'Back' %}
-            </a>
+          <a class="govuk-back-link" href="{{ breadcrumbs_back }}">
+            {% trans 'Back' %}
+          </a>
 
-          {% else %}
+        {% else %}
 
-            <div class="govuk-breadcrumbs">
-              <ol class="govuk-breadcrumbs__list">
-                {% for breadcrumb in breadcrumbs %}
-                  {% if breadcrumb.url %}
-                    <li class="govuk-breadcrumbs__list-item">
-                      <a class="govuk-breadcrumbs__link" href="{{ breadcrumb.url }}">
-                        {{ breadcrumb.name }}
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="govuk-breadcrumbs__list-item">
-                      <a class="govuk-breadcrumbs__link"> {# TODO: maybe remove empty link #}
-                        {{ breadcrumb.name }}
-                      </a>
-                    </li>
-                  {% endif %}
-                {% endfor %}
-              </ol>
-            </div>
+          <div class="govuk-breadcrumbs">
+            <ol class="govuk-breadcrumbs__list">
+              {% for breadcrumb in breadcrumbs %}
+                {% if breadcrumb.url %}
+                  <li class="govuk-breadcrumbs__list-item">
+                    <a class="govuk-breadcrumbs__link" href="{{ breadcrumb.url }}">
+                      {{ breadcrumb.name }}
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="govuk-breadcrumbs__list-item">
+                    <a class="govuk-breadcrumbs__link"> {# TODO: maybe remove empty link #}
+                      {{ breadcrumb.name }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+          </div>
 
-          {% endif %}
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
 
-      {% include 'mtp_common/includes/language-switch.html' %}
+    {% include 'mtp_common/includes/language-switch.html' %}
 
-    </div>
   </nav>
 {% endif %}

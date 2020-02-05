@@ -1,0 +1,36 @@
+@if $govuk-global-styles == true {
+  strong, b {
+    font-weight: bold;
+  }
+
+  em, i {
+    font-style: italic;
+  }
+
+  strong, em {
+    @include govuk-typography-common;
+  }
+
+  address {
+    @extend .govuk-body;
+    font-style: normal;
+  }
+
+  code {
+    font-family: Courier, "Courier New", monospace;
+  }
+}
+
+@media print {
+  .mtp-print-hidden {
+    display: none;
+  }
+}
+
+.mtp-print-only {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+}

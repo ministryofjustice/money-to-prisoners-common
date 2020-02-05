@@ -26,7 +26,7 @@
       <input type="hidden" name="{{ field.html_name }}" value="{{ field.value|default_if_none:field.initial }}">
     {% endwith %}
 
-    <div class="form-group">
+    <div class="govuk-form-group">
       <button type="submit" class="govuk-button">
         {% trans 'Submit request' %}
       </button>

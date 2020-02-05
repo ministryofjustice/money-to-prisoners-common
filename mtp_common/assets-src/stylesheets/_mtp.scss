@@ -8,11 +8,19 @@ $govuk-global-styles: true;
 
 @import 'govuk-frontend/govuk/all';
 
-// TODO: move to separate locations
+@import './settings';
 
-.mtp-tag-warning {
-  background-color: govuk-colour("red");
-}
+@import './components/global';
+@import './components/amount-field';
+@import './components/banner';
+@import './components/button';
+@import './components/error-summary';
+@import './components/fieldset';
+@import './components/link';
+@import './components/panel';
+@import './components/sub-nav';
+@import './components/table';
+@import './components/tag';
 
 /*
 TODO: upgrade styles and include them if and only if needed by _all_ apps

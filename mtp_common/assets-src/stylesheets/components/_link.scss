@@ -1,0 +1,39 @@
+input, button {
+  // TODO: rename from .mtp-link-button
+  &.govuk-link {
+    @include govuk-link-common;
+    @include govuk-link-style-default;
+
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: inherit;
+    text-decoration: underline;
+    color: $govuk-link-colour;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+
+// TODO: rename form mtp-button--cancel
+.mtp-link--form-cancel {
+  display: inline-block;
+
+  @include govuk-media-query($from: tablet) {
+    margin-top: 0.45em;
+    margin-left: 1em;
+  }
+}
+
+@media print {
+  a.mtp-print-url-hidden {
+    text-decoration: none !important;
+
+    &:after {
+      content: '' !important;
+      display: none !important;
+    }
+  }
+}

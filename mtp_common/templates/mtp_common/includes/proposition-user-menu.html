@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load mtp_common %}
 
-<nav id="mtp-user-menu" class="print-hidden" aria-label="{% trans 'User account menu' %}">
+<nav id="mtp-user-menu" class="mtp-print-hidden" aria-label="{% trans 'User account menu' %}">
   {% if request.user.is_authenticated %}
     <a href="{% url 'logout' %}" class="mtp-user-menu__link">{% trans 'Sign out' %}</a>
     <a class="mtp-user-menu__link" href="{% url 'settings' %}">

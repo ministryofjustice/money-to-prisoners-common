@@ -114,10 +114,10 @@ export var TabbedPanel = {
       e.preventDefault();
     });
 
-    var $tabPanelsWithErrors = $tabPanels.has('.error-message');
+    var $tabPanelsWithErrors = $tabPanels.has('.govuk-error-message');
     $tabPanelsWithErrors.each(function () {
       var $tabPanel = $(this);
-      $tabPanel.data('mtp-tab').addClass('error-message');
+      $tabPanel.data('mtp-tab').addClass('govuk-error-message');
     });
     if ($tabPanelsWithErrors.length) {
       $tabPanelsWithErrors.first().data('mtp-tab').click();

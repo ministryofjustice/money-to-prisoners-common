@@ -38,7 +38,7 @@ class ChromeConf:
         options.add_argument('window-size=%d,%d' % (width, height))
         if headless:
             options.add_argument('force-device-scale-factor=1')
-        options.set_headless(headless)
+        options.headless = headless
         return webdriver.Chrome(executable_path=self.executable_path, chrome_options=options)
 
     @property
@@ -79,7 +79,7 @@ class FirefoxConf:
             self.download_binary()
         options = webdriver.FirefoxOptions()
         options.add_argument('--window-size=%d,%d' % (width, height))
-        options.set_headless(headless)
+        options.headless = headless
         return webdriver.Firefox(executable_path=self.executable_path, options=options)
 
     @property

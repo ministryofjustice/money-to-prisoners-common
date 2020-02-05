@@ -39,8 +39,6 @@ class AnalyticsPolicy:
         expires = timezone.now() + datetime.timedelta(days=365)
         cookie_policy = {'usage': accepted}
         response.set_cookie(self.cookie_name, json.dumps(cookie_policy), expires=expires, secure=True, httponly=True)
-        # NB: `seen_cookie_message` is used by govuk-template JS which is not editable
-        response.set_cookie('seen_cookie_message', 'yes', expires=expires, secure=True, httponly=False)
 
 
 def _get_qs_value(qs, key):

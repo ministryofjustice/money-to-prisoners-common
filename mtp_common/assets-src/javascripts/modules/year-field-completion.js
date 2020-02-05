@@ -3,7 +3,7 @@
 'use strict';
 
 export var YearFieldCompletion = {
-  selector: '.form-year-field',
+  selector: '.mtp-input__year-completion',
 
   init: function (selector) {
     $(selector || this.selector).blur(function () {

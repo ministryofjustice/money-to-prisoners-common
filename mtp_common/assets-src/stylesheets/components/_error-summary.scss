@@ -1,0 +1,15 @@
+.govuk-list.govuk-error-summary__list {
+  .mtp-error-summary__non-field-error {
+    color: $govuk-error-colour;
+    font-weight: bold;
+  }
+
+  .mtp-error-summary__field-errors ul {
+    padding-left: 1em;
+
+    li {
+      list-style-type: disc;
+      color: $govuk-error-colour;
+    }
+  }
+}

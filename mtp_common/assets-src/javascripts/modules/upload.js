@@ -19,7 +19,7 @@ export var Upload = {
     this.$fileChooser = $(this.selector + ' input[type=file]');
     this.$chooseButton = $(this.selector + ' .upload-choose');
     this.$uploadFilename = $(this.selector + ' .upload-filename');
-    this.$formGroups = $(this.selector + ' .form-group');
+    this.$formGroups = $(this.selector + ' .govuk-form-group');
     this.$errorMessages = $(this.selector + ' .govuk-error-message, ' + this.selector + ' .govuk-error-summary');
     this.$otherFileLink = $(this.selector + ' .upload-otherfilelink');
   },
@@ -33,7 +33,7 @@ export var Upload = {
   switchToUpload: function () {
     var filePath = this.$fileChooser.val();
     var filename = filePath.replace(/^.*[\\\/]/, '');
-    this.$formGroups.removeClass('form-group-error');
+    this.$formGroups.removeClass('govuk-form-group--error');
     this.$errorMessages.remove();
     this.$uploadFilename.text(filename).show();
     this.$chooseButton.text(django.gettext('Change file'));
