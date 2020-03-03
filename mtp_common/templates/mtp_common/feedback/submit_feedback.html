@@ -11,48 +11,53 @@
     </header>
   {% endblock %}
 
-  {% block get_help_leading %}
-    <p class="govuk-body-l">
-      {% trans 'Ask questions about this service to the prisoner money team.' %}
-      <br />
-      {% trans 'It’s the fastest way we can help you with a query.' %}
-      <br />
-      {% trans 'You can send us any feedback here too.' %}
-    </p>
-    <br />
-  {% endblock %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-  {% block get_help_form %}
-    <form action="." method="post" id="mtp-feedback-form">
-      {% csrf_token %}
+      {% block get_help_leading %}
+        <p class="govuk-body-l">
+          {% trans 'Ask questions about this service to the prisoner money team.' %}
+          <br />
+          {% trans 'It’s the fastest way we can help you with a query.' %}
+          <br />
+          {% trans 'You can send us any feedback here too.' %}
+        </p>
+        <br />
+      {% endblock %}
 
-      {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+      {% block get_help_form %}
+        <form action="." method="post" id="mtp-feedback-form">
+          {% csrf_token %}
 
-      {{ form.referer }}
+          {% include 'mtp_common/forms/error-summary.html' with form=form only %}
 
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
+          {{ form.referer }}
 
-        {% with field=form.ticket_content value=request.GET.message|default:'' %}
-          <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
-            {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
 
-            <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-label">
-              {% trans 'Your questions and feedback' %}
-              {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
-            </label>
+            {% with field=form.ticket_content value=request.GET.message|default:'' %}
+              <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
 
-            <textarea class="govuk-textarea form-control-3-4 {% if field.errors %}govuk-textarea--error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
+                <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-label">
+                  {% trans 'Your questions and feedback' %}
+                </label>
+                {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+                {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+                <textarea class="govuk-textarea {% if field.errors %}govuk-textarea--error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
 
-          </div>
-        {% endwith %}
+              </div>
+            {% endwith %}
 
-        {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
+            {% include 'mtp_common/forms/field.html' with field=form.contact_email input_classes='govuk-input--width-20' value=request.GET.email|default:'' only %}
 
-        <div class="govuk-form-group">
-          <button type="submit" class="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
-        </div>
-      </fieldset>
-    </form>
-  {% endblock %}
+            <div class="govuk-form-group">
+              <button type="submit" class="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
+            </div>
+          </fieldset>
+        </form>
+      {% endblock %}
+
+    </div>
+  </div>
 {% endblock %}
