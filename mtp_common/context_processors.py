@@ -25,9 +25,9 @@ def app_environment(_):
 def govuk_localisation(_):
     moj_internal_site = getattr(settings, 'MOJ_INTERNAL_SITE', False)
     if moj_internal_site:
-        homepage_url = 'https://www.justice.gov.uk/'
-        logo_link_title = gettext('Go to the Ministry of Justice homepage')
-        global_header_text = gettext('Ministry of Justice')
+        homepage_url = 'https://intranet.noms.gsi.gov.uk/'
+        logo_link_title = gettext('Go to the HMPPS Intranet')
+        global_header_text = gettext('HMPPS')
     else:
         homepage_url = 'https://www.gov.uk/'
         logo_link_title = gettext('Go to the GOV.UK homepage')

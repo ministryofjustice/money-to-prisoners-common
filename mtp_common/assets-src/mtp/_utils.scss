@@ -1,0 +1,3 @@
+@function mtp-static-url($filename) {
+  @return url($govuk-assets-path + $filename);
+}
