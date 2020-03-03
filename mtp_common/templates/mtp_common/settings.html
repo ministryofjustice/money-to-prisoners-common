@@ -7,7 +7,7 @@
 
 {% block content %}
   <header>
-    <h1 class="govuk-heading-xl mtp-settings-heading">
+    <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">{{ request.user.get_full_name|default:request.user.username }}</span>
       {% trans 'Settings' %}
     </h1>
