@@ -18,9 +18,9 @@
 
   <form method="post" action=".">
     {% csrf_token %}
-    <div class="govuk-form-group">
+    <p>
       <button type="submit" name="submit" value="submit" class="govuk-button">{% trans 'Disable user account' %}</button>
-      <a class="mtp-button--cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
-    </div>
+      <a class="mtp-link--form-cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
+    </p>
   </form>
 {% endblock %}

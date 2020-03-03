@@ -15,33 +15,31 @@
     </h1>
   </header>
 
-  <div class="container">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% include 'mtp_common/forms/error-summary.html' with form=form only %}
 
-        <form action="{{ app_path }}" method="post" id="login-form">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ next }}">
+      <form action="{{ app_path }}" method="post" id="login-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
 
-          {% for field in form %}
-            <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
-              {% include 'mtp_common/forms/field-label.html' with field=field only %}
-              {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-              {{ field|attr:'autocomplete:off'|add_class:'form-control'|add_error_class:'form-control-error' }}
-            </div>
-          {% endfor %}
-
-          <div class="govuk-form-group">
-            <button type="submit" class="govuk-button" name="signin">{% trans 'Sign in' %}</button>
+        {% for field in form %}
+          <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+            {% include 'mtp_common/forms/field-label.html' with field=field only %}
+            {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+            {{ field|attr:'autocomplete:off'|add_class:'govuk-input govuk-input--width-20'|add_error_class:'govuk-input--error' }}
           </div>
-        </form>
+        {% endfor %}
 
-        {% url 'reset_password' as reset_password_url %}
-        {% if reset_password_url %}
-          <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
-        {% endif %}
-      </div>
+        <p>
+          <button type="submit" class="govuk-button" name="signin">{% trans 'Sign in' %}</button>
+        </p>
+      </form>
+
+      {% url 'reset_password' as reset_password_url %}
+      {% if reset_password_url %}
+        <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
