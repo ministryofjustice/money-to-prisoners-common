@@ -2,4 +2,36 @@
   .govuk-header__logotype svg {
     vertical-align: bottom;
   }
+
+  @include govuk-media-query($from: tablet) {
+    .govuk-header__content {
+      margin-top: 2px;
+    }
+  }
+
+  @include govuk-media-query($from: desktop) {
+    .govuk-header__logo {
+      width: 20%;
+    }
+    .govuk-header__content {
+      width: 80%;
+    }
+  }
+}
+
+.mtp-header-user-links {
+  float: right;
+
+  @include govuk-media-query($from: tablet) {
+    margin-top: govuk-spacing(2);
+  }
+
+  a {
+    @extend .govuk-header__link;
+    font-weight: bold;
+  }
+
+  a + a {
+    margin-left: govuk-spacing(2);
+  }
 }

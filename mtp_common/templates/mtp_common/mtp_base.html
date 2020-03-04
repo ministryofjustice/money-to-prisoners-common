@@ -50,23 +50,6 @@
   {% endblock %}
 {% endblock %}
 
-{% block proposition_header %}
-  {# TODO: needs update #}
-  <div class="header-proposition">
-    <div class="content">
-      {% if moj_internal_site %}
-        {% include 'mtp_common/includes/proposition-user-menu.html' %}
-      {% else %}
-        <div id="proposition-menu">
-          <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}</a>
-        </div>
-      {% endif %}
-    </div>
-  </div>
-
-  {% block proposition_extra %}{% endblock %}
-{% endblock %}
-
 {% block before_content %}
   {% block phase_banner %}
     {% if ENVIRONMENT != 'prod' %}
