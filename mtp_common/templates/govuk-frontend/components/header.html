@@ -31,7 +31,11 @@
       </a>
 
       {% block proposition_links %}
-        {% include 'govuk-frontend/components/header-proposition-links.html' %}
+        {% if moj_internal_site %}
+          {% include 'mtp_common/components/header-user-menu.html' %}
+        {% else %}
+          {% include 'govuk-frontend/components/header-proposition-links.html' %}
+        {% endif %}
       {% endblock %}
     </div>
 
