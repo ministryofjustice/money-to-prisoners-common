@@ -31,7 +31,10 @@
         {% if form.create %}
           {% include 'mtp_common/forms/field.html' with field=form.username input_classes='govuk-input--width-20' only %}
         {% else %}
-          <p>{% trans 'Username' %}: {{ form.username.value }}</p>
+          <p>
+            <span class="govuk-label" id="id_username-label">{% trans 'Username' %}</span>
+            <strong aria-labelledby="id_username-label">{{ form.username.value }}</strong>
+          </p>
         {% endif %}
 
         {% include 'mtp_common/forms/field.html' with field=form.first_name input_classes='govuk-input--width-20' only %}

@@ -1,32 +1,35 @@
 {% load i18n %}
 
-<table class="mtp-account-management__user-desc">
+<table class="govuk-table">
+  <caption class="govuk-visually-hidden">
+    {% trans 'Table of user’s details' %}
+  </caption>
   <tbody>
     <tr>
-      <th>{% trans 'Username' %}</th>
+      <th scope="row">{% trans 'Username' %}</th>
       <td>{{ user.username }}</td>
     </tr>
     <tr>
-      <th>{% trans 'First name' %}</th>
+      <th scope="row">{% trans 'First name' %}</th>
       <td>{{ user.first_name }}</td>
     </tr>
     <tr>
-      <th>{% trans 'Last name' %}</th>
+      <th scope="row">{% trans 'Last name' %}</th>
       <td>{{ user.last_name }}</td>
     </tr>
     <tr>
-      <th>{% trans 'Email' %}</th>
+      <th scope="row">{% trans 'Email' %}</th>
       <td>{{ user.email }}</td>
     </tr>
     {% if 'user_admin' in user %}
       <tr>
-        <th>{% trans 'Can manage other users' %}</th>
+        <th scope="row">{% trans 'Can manage other users' %}</th>
         <td>{{ user.user_admin|yesno|capfirst }}</td>
       </tr>
     {% endif %}
     {% if 'is_active' in user %}
       <tr>
-        <th>{% trans 'Can log in' %}</th>
+        <th scope="row">{% trans 'Can log in' %}</th>
         <td>{{ user.is_active|yesno|capfirst }}</td>
       </tr>
     {% endif %}
