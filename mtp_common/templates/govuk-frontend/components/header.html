@@ -52,6 +52,10 @@
       {% endblock %}
     </div>
 
-    {% block after_proposition %}{% endblock %}
+    {% block after_proposition %}
+      {% if moj_internal_site %}
+        {% include 'mtp_common/header/app-links.html' %}
+      {% endif %}
+    {% endblock %}
   </div>
 </header>
