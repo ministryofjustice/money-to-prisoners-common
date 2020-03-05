@@ -21,7 +21,7 @@
     {% endif %}
   {% endif %}
 
-  <form action="." method="post" class="mtp-account-management__user-form">
+  <form action="." method="post">
     {% csrf_token %}
 
     {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
@@ -29,7 +29,10 @@
     {% if form.create %}
       {% include 'mtp_common/forms/field.html' with field=form.username only %}
     {% else %}
-      <p>{% trans 'Username' %}: {{ form.username.value }}</p>
+      <p>
+        <span class="govuk-label" id="id_username-label">{% trans 'Username' %}</span>
+        <strong aria-labelledby="id_username-label">{{ form.username.value }}</strong>
+      </p>
     {% endif %}
 
     {% include 'mtp_common/forms/field.html' with field=form.first_name only %}
@@ -48,7 +51,7 @@
       {% endif %}
     {% endwith %}
 
-    <div class="govuk-form-group">
+    <p>
       <button type="submit" class="govuk-button" data-module="govuk-button" name="create">
         {% if form.create %}
           {% trans 'Create' %}
@@ -57,6 +60,6 @@
         {% endif %}
       </button>
       <a href="{% url 'list-users' %}" class="mtp-link--form-cancel">{% trans 'Cancel' %}</a>
-    </div>
+    </p>
   </form>
 {% endblock %}

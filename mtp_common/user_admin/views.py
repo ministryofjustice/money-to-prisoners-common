@@ -130,7 +130,7 @@ def delete_user(request, username):
             f'users/{username}/'
         ).json()
         context['user'] = user
-        context['page_title'] = _('Disable user account ‘%(username)s’') % {'username': user['username']}
+        context['page_title'] = _('Disable user')
         return render(request, 'mtp_common/user_admin/delete.html', context=context)
     except HttpNotFoundError:
         raise Http404
@@ -166,7 +166,7 @@ def undelete_user(request, username):
             f'users/{username}/'
         ).json()
         context['user'] = user
-        context['page_title'] = _('Enable user account ‘%(username)s’') % {'username': user['username']}
+        context['page_title'] = _('Enable user')
         return render(request, 'mtp_common/user_admin/undelete.html', context=context)
     except HttpNotFoundError:
         raise Http404
@@ -304,8 +304,12 @@ class UserUpdateView(UserFormView):
             raise Http404
 
     def get_context_data(self, **kwargs):
-        page_title = _('Edit user ‘%(username)s’') % {'username': self.kwargs['username']}
-        return super().get_context_data(page_title=page_title, **kwargs)
+        context_data = super().get_context_data(**kwargs)
+        if self.request.user.username == self.kwargs.get('username'):
+            context_data['page_title'] = _('Edit your account')
+        else:
+            context_data['page_title'] = _('Edit existing user')
+        return context_data
 
 
 class SignUpView(FormView):
