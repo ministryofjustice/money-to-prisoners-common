@@ -1,0 +1,18 @@
+{% if messages %}
+  {% for message in messages %}
+    {% with level=message.level_tag|default:'info' %}
+      <div class="mtp-banner mtp-banner--{{ level }}" role="alert">
+        {% if level == 'info' %}
+          {% include 'mtp_common/icons/info.svg' with class_names='mtp-banner__icon' %}
+        {% elif level == 'success' %}
+          {% include 'mtp_common/icons/success.svg' with class_names='mtp-banner__icon' %}
+        {% elif level == 'warning' %}
+          {% include 'mtp_common/icons/warning.svg' with class_names='mtp-banner__icon' %}
+        {% elif level == 'error' %}
+          {% include 'mtp_common/icons/error.svg' with class_names='mtp-banner__icon' %}
+        {% endif %}
+        <p class="mtp-banner__title">{{ message }}</p>
+      </div>
+    {% endwith %}
+  {% endfor %}
+{% endif %}

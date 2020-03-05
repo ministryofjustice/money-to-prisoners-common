@@ -1,7 +1,0 @@
-{% if messages %}
-  <ul class="mtp-messages" role="alert" tabindex="-1">
-    {% for message in messages %}
-      <li class="mtp-message mtp-message--{{ message.level_tag|default:'info' }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
