@@ -20,12 +20,23 @@ from mtp_common.user_admin.forms import UserUpdateForm, AcceptRequestForm
 logger = logging.getLogger('mtp')
 
 
-def make_breadcrumbs(section_title):
-    return [
+def make_breadcrumbs(section_title=None):
+    breadcrumbs = [
         {'name': _('Home'), 'url': '/'},
-        {'name': _('Manage user accounts'), 'url': reverse('list-users')},
-        {'name': section_title}
+        {'name': _('Settings'), 'url': reverse('settings')},
     ]
+    if section_title:
+        breadcrumbs.append(
+            {'name': _('Manage users'), 'url': reverse('list-users')}
+        )
+        breadcrumbs.append(
+            {'name': section_title}
+        )
+    else:
+        breadcrumbs.append(
+            {'name': _('Manage users')},
+        )
+    return breadcrumbs
 
 
 def ensure_compatible_admin(view):
@@ -75,6 +86,7 @@ def list_users(request):
         logger.exception(f'User {request.user.username} cannot access account requests')
         account_requests = []
     context = {
+        'breadcrumbs': make_breadcrumbs(),
         'can_delete': request.user.has_perm('auth.delete_user'),
         'locked_users_exist': any(user['is_locked_out'] for user in users),
         'users': users,

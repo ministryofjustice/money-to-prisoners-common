@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import RequestContext, Template
 
@@ -72,6 +73,7 @@ urlpatterns = [
     url(r'^users/sign-up/$', user_admin_views.SignUpView.as_view(form_class=TestingSignUpForm), name='sign-up'),
 
     # user account administration
+    url(r'^settings$', login_required(lambda request: HttpResponse('SETTINGS')), name='settings'),
     url(r'^user-admin/', include('mtp_common.user_admin.urls')),
     url(
         r'^users/request/(?P<account_request>\d+)/accept/$',
