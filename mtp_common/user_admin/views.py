@@ -105,9 +105,6 @@ def list_users(request):
 @permission_required('auth.delete_user', raise_exception=True)
 @ensure_compatible_admin
 def delete_user(request, username):
-    context = {
-        'breadcrumbs': make_breadcrumbs(_('Disable user')),
-    }
     if request.method == 'POST':
         try:
             api_client.get_api_session(request).delete(
@@ -120,12 +117,14 @@ def delete_user(request, username):
                     '@fields.username': admin_username,
                 }
             })
-            context['page_title'] = _('User account ‘%(username)s’ disabled') % {'username': username}
-            return render(request, 'mtp_common/user_admin/deleted.html', context=context)
+            messages.success(request, _('User account ‘%(username)s’ disabled') % {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be disabled'))
-            return redirect(reverse('list-users'))
+        return redirect(reverse('list-users'))
 
+    context = {
+        'breadcrumbs': make_breadcrumbs(_('Disable user')),
+    }
     try:
         user = api_client.get_api_session(request).get(
             f'users/{username}/'
@@ -141,9 +140,6 @@ def delete_user(request, username):
 @permission_required('auth.delete_user', raise_exception=True)
 @ensure_compatible_admin
 def undelete_user(request, username):
-    context = {
-        'breadcrumbs': make_breadcrumbs(_('Enable user')),
-    }
     if request.method == 'POST':
         try:
             api_client.get_api_session(request).patch(
@@ -157,12 +153,14 @@ def undelete_user(request, username):
                     '@fields.username': admin_username,
                 }
             })
-            context['page_title'] = _('User account ‘%(username)s’ enabled') % {'username': username}
-            return render(request, 'mtp_common/user_admin/undeleted.html', context=context)
+            messages.success(request, _('User account ‘%(username)s’ enabled') % {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be enabled'))
-            return redirect(reverse('list-users'))
+        return redirect(reverse('list-users'))
 
+    context = {
+        'breadcrumbs': make_breadcrumbs(_('Enable user')),
+    }
     try:
         user = api_client.get_api_session(request).get(
             f'users/{username}/'
@@ -202,6 +200,7 @@ class UserFormView(FormView):
     title = _('Edit user')
     template_name = 'mtp_common/user_admin/update.html'
     form_class = UserUpdateForm
+    success_url = reverse_lazy('list-users')
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -214,16 +213,13 @@ class UserFormView(FormView):
         return form_kwargs
 
     def form_valid(self, form):
+        username = form.cleaned_data.get('username')
         if form.create:
-            page_title = _('User account ‘%(username)s’ created')
+            message = _('User account ‘%(username)s’ created')
         else:
-            page_title = _('User account ‘%(username)s’ edited')
-        context = {
-            'user': form.cleaned_data,
-            'page_title': page_title % {'username': form.cleaned_data.get('username')},
-            'breadcrumbs': make_breadcrumbs(self.title),
-        }
-        return render(self.request, 'mtp_common/user_admin/saved.html', context=context)
+            message = _('User account ‘%(username)s’ edited')
+        messages.success(self.request, message % {'username': username})
+        return super().form_valid(form)
 
 
 @method_decorator(login_required, name='dispatch')
