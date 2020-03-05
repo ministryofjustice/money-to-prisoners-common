@@ -8,28 +8,32 @@
     <h1 class="govuk-heading-xl">{% trans 'Request access' %}</h1>
   </header>
 
-  <form action="." method="post" class="mtp-account-management__sign-up">
-    {% csrf_token %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="." method="post" class="mtp-account-management__sign-up">
+        {% csrf_token %}
 
-    {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+        {% include 'mtp_common/forms/error-summary.html' with form=form only %}
 
-    {% include 'mtp_common/forms/field.html' with field=form.first_name only %}
-    {% include 'mtp_common/forms/field.html' with field=form.last_name only %}
-    {% include 'mtp_common/forms/field.html' with field=form.email only %}
-    {% include 'mtp_common/forms/field.html' with field=form.username only %}
+        {% include 'mtp_common/forms/field.html' with field=form.first_name input_classes='govuk-input--width-20' only %}
+        {% include 'mtp_common/forms/field.html' with field=form.last_name input_classes='govuk-input--width-20' only %}
+        {% include 'mtp_common/forms/field.html' with field=form.email input_classes='govuk-input--width-20' only %}
+        {% include 'mtp_common/forms/field.html' with field=form.username input_classes='govuk-input--width-20' only %}
 
-    {% block sign_up_extras_fields %}{% endblock %}
+        {% block sign_up_extras_fields %}{% endblock %}
 
-    {% include 'mtp_common/forms/textarea.html' with field=form.reason only %}
+        {% include 'mtp_common/forms/textarea.html' with field=form.reason only %}
 
-    {% with field=form.role %}
-      <input type="hidden" name="{{ field.html_name }}" value="{{ field.value|default_if_none:field.initial }}">
-    {% endwith %}
+        {% with field=form.role %}
+          <input type="hidden" name="{{ field.html_name }}" value="{{ field.value|default_if_none:field.initial }}">
+        {% endwith %}
 
-    <div class="govuk-form-group">
-      <button type="submit" class="govuk-button">
-        {% trans 'Submit request' %}
-      </button>
+        <div class="govuk-form-group">
+          <button type="submit" class="govuk-button">
+            {% trans 'Submit request' %}
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 {% endblock %}

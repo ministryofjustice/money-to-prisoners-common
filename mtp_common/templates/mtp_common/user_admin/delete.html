@@ -11,16 +11,26 @@
 {% endblock %}
 
 {% block admin_content %}
-  <p>{% trans 'When you disable a user account, that user will be unable to log in.' %}</p>
-  {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p>
+        {% trans 'When you disable a user account, that user will be unable to log in.' %}
+      </p>
+      {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
 
-  <br />
+      <br />
 
-  <form method="post" action=".">
-    {% csrf_token %}
-    <p>
-      <button type="submit" name="submit" value="submit" class="govuk-button">{% trans 'Disable user account' %}</button>
-      <a class="mtp-link--form-cancel" href="{% url 'list-users' %}">{% trans 'Cancel' %}</a>
-    </p>
-  </form>
+      <form method="post" action=".">
+        {% csrf_token %}
+        <p>
+          <button type="submit" name="submit" value="submit" class="govuk-button">
+            {% trans 'Disable user account' %}
+          </button>
+          <a class="mtp-link--form-cancel" href="{% url 'list-users' %}">
+            {% trans 'Cancel' %}
+          </a>
+        </p>
+      </form>
+    </div>
+  </div>
 {% endblock %}
