@@ -64,13 +64,16 @@ def list_users(request):
         params={
             'limit': page_size,
             'offset': (page - 1) * page_size,
-            'ordering': '-is_active'
         }
     ).json()
     users = response.get('results', [])
-    account_requests = retrieve_all_pages_for_path(session, 'requests/')
-    for account_request in account_requests:
-        account_request['created'] = parse_datetime(account_request['created'])
+    try:
+        account_requests = retrieve_all_pages_for_path(session, 'requests/')
+        for account_request in account_requests:
+            account_request['created'] = parse_datetime(account_request['created'])
+    except HttpClientError:
+        logger.exception(f'User {request.user.username} cannot access account requests')
+        account_requests = []
     context = {
         'can_delete': request.user.has_perm('auth.delete_user'),
         'locked_users_exist': any(user['is_locked_out'] for user in users),
