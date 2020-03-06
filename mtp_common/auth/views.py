@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
@@ -259,6 +260,7 @@ def email_change(
     if request.method == 'POST':
         form = email_change_form(request, data=request.POST)
         if form.is_valid():
+            messages.success(request, _('Your email address was changed'))
             return HttpResponseRedirect(post_change_redirect)
     else:
         form = email_change_form(request)
