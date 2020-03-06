@@ -118,5 +118,14 @@
     </table>
   </div>
 
-  {% page_list page=page page_count=page_count %}
+  <div class="mtp-page-list__container">
+    {% page_list page=page page_count=page_count %}
+    <p class="mtp-page-list__count">
+      {% blocktrans trimmed count count=user_count %}
+        {{ count }} user
+      {% plural %}
+        {{ count }} users
+      {% endblocktrans %}
+    </p>
+  </div>
 {% endblock %}
