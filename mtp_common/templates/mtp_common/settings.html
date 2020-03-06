@@ -4,45 +4,46 @@
 
 {% block page_title %}{{ view.title }} – {{ block.super }}{% endblock %}
 
-
 {% block content %}
   <header>
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">{{ request.user.get_full_name|default:request.user.username }}</span>
-      {% trans 'Settings' %}
+      {{ view.title }}
     </h1>
   </header>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {% block extra_settings %}{% endblock %}
+      {% block settings %}
 
-      <div class="mtp-settings-item">
-        <h2 class="govuk-heading-l">
-          {% trans 'Change your password' %}
-        </h2>
-        <a class="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
-      </div>
-
-      <div class="mtp-settings-item">
-        <h2 class="govuk-heading-l">
-          {% trans 'Your email' %}
-        </h2>
-        <p>{{ request.user.email }}</p>
-        <a class="govuk-button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
-      </div>
-
-      {% if perms.auth.change_user %}
         <div class="mtp-settings-item">
           <h2 class="govuk-heading-l">
-            {% trans 'Manage users' %}
+            {% trans 'Change your password' %}
           </h2>
-          <p>
-            {% trans 'Add, view, edit or disable user accounts.' %}
-          </p>
-          <a class="govuk-button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
+          <a class="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
         </div>
-      {% endif %}
+
+        <div class="mtp-settings-item">
+          <h2 class="govuk-heading-l">
+            {% trans 'Your email' %}
+          </h2>
+          <p>{{ request.user.email }}</p>
+          <a class="govuk-button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
+        </div>
+
+        {% if perms.auth.change_user %}
+          <div class="mtp-settings-item">
+            <h2 class="govuk-heading-l">
+              {% trans 'Manage users' %}
+            </h2>
+            <p>
+              {% trans 'Add, view, edit or disable user accounts.' %}
+            </p>
+            <a class="govuk-button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
+          </div>
+        {% endif %}
+
+      {% endblock %}
     </div>
   </div>
 {% endblock %}

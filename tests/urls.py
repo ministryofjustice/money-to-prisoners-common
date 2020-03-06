@@ -1,12 +1,13 @@
 from django.conf.urls import include, url
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import RequestContext, Template
+from django.urls import reverse_lazy
 
 from mtp_common.auth import views
 from mtp_common.auth.basic import basic_auth
 from mtp_common.user_admin.forms import SignUpForm
 import mtp_common.user_admin.views as user_admin_views
+from mtp_common.views import SettingsView
 
 
 def mocked_template():
@@ -68,12 +69,17 @@ urlpatterns = [
             'template_name': 'mtp_common/auth/reset-password-done.html',
         }, name='reset_password_done'
     ),
+    url(
+        r'^email_change/$', views.email_change, {
+            'cancel_url': reverse_lazy('settings'),
+        }, name='email_change'
+    ),
 
     # unauthenticated user views
     url(r'^users/sign-up/$', user_admin_views.SignUpView.as_view(form_class=TestingSignUpForm), name='sign-up'),
 
     # user account administration
-    url(r'^settings$', login_required(lambda request: HttpResponse('SETTINGS')), name='settings'),
+    url(r'^settings$', SettingsView.as_view(), name='settings'),
     url(r'^user-admin/', include('mtp_common.user_admin.urls')),
     url(
         r'^users/request/(?P<account_request>\d+)/accept/$',
