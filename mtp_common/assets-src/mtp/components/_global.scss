@@ -19,6 +19,11 @@
   code {
     font-family: Courier, "Courier New", monospace;
   }
+
+  textarea {
+    resize: vertical;
+    min-height: 40px;
+  }
 }
 
 @media print {
