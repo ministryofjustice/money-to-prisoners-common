@@ -23,7 +23,7 @@
         {% endif %}
       {% endif %}
 
-      <form action="." method="post" class="mtp-account-management__user-form">
+      <form action="." method="post">
         {% csrf_token %}
 
         {% include 'mtp_common/forms/error-summary.html' with form=form only %}
