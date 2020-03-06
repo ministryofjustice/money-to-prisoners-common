@@ -6,15 +6,17 @@
 
 
 {% block content %}
-  <header>
-    <h1 class="govuk-heading-xl">
-      <span class="govuk-caption-xl">{{ request.user.get_full_name|default:request.user.username }}</span>
-      {{ view.title }}
-    </h1>
-  </header>
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {% include 'mtp_common/components/notification-banners.html' %}
+
+      <header>
+        <h1 class="govuk-heading-xl">
+          <span class="govuk-caption-xl">{{ request.user.get_full_name|default:request.user.username }}</span>
+          {{ view.title }}
+        </h1>
+      </header>
+
       {% block settings %}
 
         <div class="mtp-settings__item">

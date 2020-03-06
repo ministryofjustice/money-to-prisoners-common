@@ -216,8 +216,10 @@ class UserFormView(FormView):
         username = form.cleaned_data.get('username')
         if form.create:
             message = _('User account ‘%(username)s’ created')
+        elif self.request.user.username == self.kwargs.get('username'):
+            message = _('Your account was saved')
         else:
-            message = _('User account ‘%(username)s’ edited')
+            message = _('User account ‘%(username)s’ saved')
         messages.success(self.request, message % {'username': username})
         return super().form_valid(form)
 
