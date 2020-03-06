@@ -1,6 +1,10 @@
 .mtp-internal-site {
   .govuk-header__logotype svg {
     vertical-align: bottom;
+
+    @media print {
+      display: none;
+    }
   }
 
   @include govuk-media-query($from: tablet) {

@@ -15,6 +15,8 @@ $govuk-global-styles: true;
 @import './components/global';
 @import './components/banner';
 @import './components/error-summary';
+@import './components/footer';
+@import './components/header/overrides';
 @import './components/link';
 @import './components/panel';
 @import './components/sub-nav';
