@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load static %}
+
+{% if previous_link or next_link %}
+  <nav class="mtp-pagination" role="navigation" aria-label="{% trans 'Pagination' %}">
+    <ul>
+      {% if previous_link %}
+        <li>
+          <a href="{{ previous_link }}" rel="prev">
+            <span class="mtp-pagination__link-title">
+              <svg class="mtp-pagination__link-icon" width="17" height="13" viewBox="0 0 17 13" xmlns="http://www.w3.org/2000/svg">
+                <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                <image src="{% static 'mtp_common/images/pagination-prev@2x.png' %}" xlink:href="" width="17" height="13"></image>
+              </svg>
+              <span class="mtp-pagination__link-text">
+                {{ previous_title|default:_('Previous') }}
+              </span>
+            </span>
+            {% if previous_label %}
+              <span class="mtp-pagination__link-divider visually-hidden">:</span>
+              <span class="mtp-pagination__link-label">{{ previous_label }}</span>
+            {% endif %}
+          </a>
+        </li>
+      {% endif %}
+      {% if next_link %}
+        <li>
+          <a href="{{ next_link }}" rel="prev">
+            <span class="mtp-pagination__link-title">
+                <svg class="mtp-pagination__link-icon" width="17" height="13" viewBox="0 0 17 13" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m10.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+                  <image src="{% static 'mtp_common/images/pagination-next@2x.png' %}" xlink:href="" width="17" height="13"></image>
+                </svg>
+                <span class="mtp-pagination__link-text">
+                  {{ previous_title|default:_('Next') }}
+                </span>
+              </span>
+              {% if next_label %}
+                <span class="mtp-pagination__link-divider visually-hidden">:</span>
+                <span class="mtp-pagination__link-label">{{ next_label }}</span>
+              {% endif %}
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
