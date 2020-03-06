@@ -1,4 +1,9 @@
 @if $govuk-global-styles == true {
+  table {
+    width: auto;
+    border-collapse: collapse;
+  }
+
   .govuk-table {
     caption {
       text-align: left;
@@ -10,6 +15,82 @@
 
     td {
       @extend .govuk-table__cell;
+    }
+  }
+}
+
+$mtp-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !default;
+
+.mtp-table {
+  th, td {
+    padding: 0.75em 1em;
+    border-top: 1px solid $govuk-border-colour;
+    border-bottom: 0;
+    vertical-align: top;
+    @include govuk-font($size: 19);
+
+    @media print {
+      padding-top: 0.3em;
+      padding-bottom: 0.3em;
+    }
+  }
+
+  th {
+    text-align: left;
+    font-weight: bold;
+
+    &.govuk-table__header--numeric {
+      text-align: right;
+    }
+  }
+
+  tbody {
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+  .mtp-row-highlight {
+    background: $mtp-row-highlight-colour;
+  }
+
+  .mtp-table__secondary-row {
+    th, td, a, a:visited {
+      color: $govuk-secondary-text-colour;
+    }
+  }
+
+  .mtp-compact-cell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // TODO: fix
+  .mtp-check-cell {
+    text-align: center;
+    padding: 5px 1em 0;
+
+    input[type=checkbox] {
+      @extend .Checkbox--no-text !optional;
+    }
+  }
+
+  .mtp-numeric-left {
+    @include govuk-font($size: false, $tabular: true);
+  }
+}
+
+.mtp-table__container {
+  width: 100%;
+
+  .mtp-table {
+      width: 100%;
+  }
+
+  @include govuk-media-query($until: tablet) {
+    overflow-x: scroll;
+
+    .mtp-table {
+      margin-bottom: $govuk-gutter-half;
+      min-width: (map-get($govuk-breakpoints, desktop) + $govuk-gutter-half);
     }
   }
 }
