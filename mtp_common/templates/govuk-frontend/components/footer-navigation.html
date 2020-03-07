@@ -1,0 +1,21 @@
+{% load i18n %}
+
+{% if footer_navigation %}
+  <div class="govuk-footer__navigation">
+    {% for section in footer_navigation %}
+      <div class="govuk-footer__section">
+        <h2 class="govuk-footer__heading govuk-heading-m">{{ section.name }}</h2>
+        <ul class="govuk-footer__list {% if section.columns %}govuk-footer__list--columns-{{ section.columns }}{% endif %}">
+          {% for link in section.links %}
+            <li class="govuk-footer__list-item">
+              <a class="govuk-footer__link" href="{{ link.href }}">
+                {{ link.text }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+  <hr class="govuk-footer__section-break" />
+{% endif %}
