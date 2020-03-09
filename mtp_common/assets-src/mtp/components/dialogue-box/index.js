@@ -1,4 +1,3 @@
-// Dialogue box module
 'use strict';
 
 export var DialogueBox = {
