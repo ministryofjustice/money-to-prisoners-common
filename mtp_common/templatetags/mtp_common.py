@@ -81,16 +81,21 @@ def hide_long_text(text, count=5):
     if not text:
         return text
     count = int(count)
-    words = text.split()
+    words = str(text).split()
     if len(words) <= count:
         return text
     short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])
-    return format_html('<span class="govuk-visually-hidden">{text}</span>'
-                       '<span aria-hidden="true">'
-                       '  {short_text}'
-                       '  <a href="#" class="js-long-text" data-rest="{rest_text}">{more}</a>'
-                       '</span>',
-                       short_text=short_text, rest_text=rest_text, text=text, more=gettext('More…'))
+    return format_html(
+        '<span class="govuk-visually-hidden">{text}</span>'
+        '<span aria-hidden="true">'
+        '  {short_text}'
+        '  <a href="#" class="mtp-hidden-long-text" data-rest="{rest_text}">{more}</a>'
+        '</span>',
+        short_text=short_text,
+        rest_text=rest_text,
+        text=text,
+        more=gettext('More…'),
+    )
 
 
 class StripWhitespaceNode(template.Node):
