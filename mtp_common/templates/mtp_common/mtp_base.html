@@ -37,7 +37,7 @@
   {% endif %}
 {% endblock %}
 
-{% block body_classes %}{{ block.super }} {% if moj_internal_site %}mtp-internal-site{% endif %} {% if footer_feedback_context %}without-footer-padding{% endif %}{% endblock %}
+{% block body_classes %}{{ block.super }} {% if moj_internal_site %}mtp-internal-site{% endif %}{% endblock %}
 
 {% block body_start %}
   {% block cookie_message %}
@@ -77,10 +77,4 @@
   <!--
   {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }} at {{ APP_BUILD_DATE }}
   -->
-{% endblock %}
-
-{% block footer_support_links %}
-  {% if footer_feedback_context %}
-    {% footer_feedback_form request footer_feedback_context %}
-  {% endif %}
 {% endblock %}
