@@ -265,7 +265,7 @@ def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1
 
 
 class DialogueNode(template.Node):
-    template_name = 'mtp_common/includes/dialogue-box.html'
+    template_name = 'mtp_common/components/dialogue-box.html'
 
     def __init__(self, node_list, title=None, urgent=None, show_close_button=None, html_id=None, html_classes=None):
         self.node_list = node_list
