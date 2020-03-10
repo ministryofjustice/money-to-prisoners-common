@@ -73,3 +73,48 @@ $mtp-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !default;
     }
   }
 }
+
+.mtp-sortable-cell {
+  display: inline-block;
+  padding-right: 16px;
+  text-decoration: none;
+  background: transparent mtp-static-url('mtp_common/images/ordering-none.png') no-repeat 100% 50%;
+  color: $govuk-text-colour;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/ordering-none@2x.png');
+    background-size: 9px 9px;
+  }
+
+  @media print {
+    background-image: none;
+  }
+}
+.mtp-sortable-cell--asc, .mtp-sortable-cell:focus {
+  background-image: mtp-static-url('mtp_common/images/ordering-asc.png');
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/ordering-asc@2x.png');
+  }
+}
+.mtp-sortable-cell--desc, .mtp-sortable-cell--desc:focus  {
+  background-image: mtp-static-url('mtp_common/images/ordering-desc.png');
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/ordering-desc@2x.png');
+  }
+}
+a.mtp-sortable-cell {
+  &:link, &:visited, &:hover, &:active, &:focus {
+    color: $govuk-text-colour;
+  }
+}
+
+.mtp-sortable-cell--pad {
+  // usage: inside a td.govuk-table__cell--numeric where the column header is .govuk-table__header--numeric and .mtp-sortable-cell
+  padding-right: 16px;
+}
