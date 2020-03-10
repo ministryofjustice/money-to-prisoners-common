@@ -9,7 +9,7 @@
           <a href="{{ previous_link }}" rel="prev">
             <span class="mtp-pagination__link-title">
               <svg class="mtp-pagination__link-icon" width="17" height="13" viewBox="0 0 17 13" xmlns="http://www.w3.org/2000/svg">
-                <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                <path d="m6.8951,-0.0078125 -6.7266,6.7266 6.7441,6.4062005 1.377,-1.449L4.104,7.6991875H17v-2H4.016l4.2931,-4.293z"></path>
                 <image src="{% static 'mtp_common/images/pagination-prev@2x.png' %}" xlink:href="" width="17" height="13"></image>
               </svg>
               <span class="mtp-pagination__link-text">
@@ -32,7 +32,7 @@
                   <image src="{% static 'mtp_common/images/pagination-next@2x.png' %}" xlink:href="" width="17" height="13"></image>
                 </svg>
                 <span class="mtp-pagination__link-text">
-                  {{ previous_title|default:_('Next') }}
+                  {{ next_title|default:_('Next') }}
                 </span>
               </span>
               {% if next_label %}
