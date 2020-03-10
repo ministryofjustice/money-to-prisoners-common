@@ -1,24 +1,3 @@
-@if $govuk-global-styles == true {
-  table {
-    width: auto;
-    border-collapse: collapse;
-  }
-
-  .govuk-table {
-    caption {
-      text-align: left;
-    }
-
-    th {
-      @extend .govuk-table__header;
-    }
-
-    td {
-      @extend .govuk-table__cell;
-    }
-  }
-}
-
 $mtp-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !default;
 
 .mtp-table {

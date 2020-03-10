@@ -20,5 +20,5 @@ $govuk-global-styles: true;
 @import './components/link';
 @import './components/panel';
 @import './components/sub-nav';
-@import './components/table';
+@import './components/table/overrides';
 @import './components/tag';
