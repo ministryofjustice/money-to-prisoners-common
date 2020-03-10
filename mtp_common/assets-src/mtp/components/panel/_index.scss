@@ -1,3 +1,9 @@
+.govuk-panel--confirmation {
+  a {
+    color: govuk-colour('white');
+  }
+}
+
 .mtp-panel--pending {
   color: govuk-colour('white');
   background: govuk-colour('blue');
