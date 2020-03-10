@@ -1,4 +1,3 @@
-// tabbed panels
 'use strict';
 
 import Cookie from 'js-cookie';
