@@ -410,7 +410,7 @@ def accordionsection(parser, token):
 
 
 class TabbedPanelNode(template.Node):
-    template_name = 'mtp_common/includes/tabbed-panel.html'
+    template_name = 'mtp_common/components/tabbed-panel.html'
 
     def __init__(
         self,
@@ -422,12 +422,10 @@ class TabbedPanelNode(template.Node):
     ):
         """
         Params:
-            - cookie_name: name of the cookie in which to hold the state (selected tab, collapsed or expanded etc.)
-            - tab_label: to be used as aria-label
-            - collapsable (default True): if the selected tab should collapse when re-selected
-            - css_class: (optional) extra css class to append to the container.
-                If `govuk-grey` is specified, a alternative style similar to the GOV.UK Design System is used.
-                Alternatively, you can specify any custom value and define your own css rules.
+        - cookie_name: name of the cookie in which to hold the state (selected tab, collapsed or expanded etc.)
+        - tab_label: to be used as aria-label
+        - collapsable (default True): if the selected tab should collapse when re-selected
+        - css_class: (optional) extra css class to append to the container.
         """
         self.node_list = node_list
         self.cookie_name = cookie_name
@@ -486,7 +484,7 @@ def tabbedpanel(parser, token):
 
 
 class PanelTabNode(template.Node):
-    template_name = 'mtp_common/includes/panel-tab.html'
+    template_name = 'mtp_common/components/panel-tab.html'
 
     def __init__(self, node_list, name=None, title=None):
         self.node_list = node_list
