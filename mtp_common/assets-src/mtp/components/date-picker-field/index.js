@@ -1,4 +1,3 @@
-// Date picker module
 'use strict';
 
 function MTPDatePicker () {
