@@ -26,12 +26,14 @@
   }
 }
 
+// .govuk-!-display-none-print is also available
 @media print {
   .mtp-print-hidden {
     display: none;
   }
 }
 
+// no govuk-frontend class is available
 .mtp-print-only {
   display: none;
 
