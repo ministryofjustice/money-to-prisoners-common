@@ -14,11 +14,11 @@ $govuk-global-styles: true;
 // mtp-common base components required by all apps
 @import './components/global';
 @import './components/banner';
+@import './components/breadcrumb-bar';
 @import './components/error-summary';
 @import './components/footer';
 @import './components/header/overrides';
 @import './components/link';
 @import './components/panel';
-@import './components/sub-nav';
 @import './components/table/overrides';
 @import './components/tag';

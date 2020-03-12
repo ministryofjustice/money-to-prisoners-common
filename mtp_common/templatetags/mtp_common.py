@@ -197,10 +197,10 @@ def language_switch(context):
     }
 
 
-@register.inclusion_tag('mtp_common/sub-nav.html', takes_context=True)
-def sub_nav(context):
+@register.inclusion_tag('mtp_common/includes/breadcrumb-bar.html', takes_context=True)
+def breadcrumb_bar(context):
     """
-    Sub-nav displayed below proposition header
+    Breadcrumbs and language switcher displayed below proposition header
     - creates alternate language links if SHOW_LANGUAGE_SWITCH is set
     - takes "breadcrumbs" from the context
     - takes "breadcrumbs_back" from the context to show a back link *instead* of breadcrumbs
