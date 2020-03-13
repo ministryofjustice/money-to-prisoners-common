@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% if full_width %}
+<div class="mtp-sub-navigation__container">
+{% endif %}
+  <nav class="mtp-sub-navigation govuk-clearfix">
+    <ul class="mtp-sub-navigation__list {% if not full_width %}govuk-width-container{% endif %}">
+
+      {% for link in links %}
+        <li class="mtp-sub-navigation__list-item {% if link.active %}mtp-sub-navigation__list-item--current{% endif %}">
+          <a href="{{ link.href }}" class="mtp-sub-navigation__link">
+            {{ link.text }}
+            {% if link.active %}
+              <span class="govuk-visually-hidden">{% trans '(current page)' %}</span>
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+
+    </ul>
+  </nav>
+{% if full_width %}
+</div>
+{% endif %}
