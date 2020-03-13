@@ -1,0 +1,32 @@
+{% load i18n %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/components/sub-navigation.html' with links=<url> next_link=<url> only %}
+  where links is an iterable of dicts with href, text and active
+  optional parameters:
+    full_width - when placed outside of a .govuk-width-container
+{% endcomment %}
+
+{% if full_width %}
+<div class="mtp-sub-navigation__container">
+{% endif %}
+  <nav class="mtp-sub-navigation govuk-clearfix">
+    <ul class="mtp-sub-navigation__list {% if full_width %}govuk-width-container{% else %}mtp-sub-navigation__list--padded{% endif %}">
+
+      {% for link in links %}
+        <li class="mtp-sub-navigation__list-item {% if link.active %}mtp-sub-navigation__list-item--current{% endif %}">
+          <a href="{{ link.href }}" class="mtp-sub-navigation__link">
+            {{ link.text }}
+            {% if link.active %}
+              <span class="govuk-visually-hidden">{% trans '(current page)' %}</span>
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+
+    </ul>
+  </nav>
+{% if full_width %}
+</div>
+{% endif %}

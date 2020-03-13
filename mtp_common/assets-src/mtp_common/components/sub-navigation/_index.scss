@@ -1,0 +1,71 @@
+// based on:
+// https://github.com/alphagov/govuk-design-system/blob/5bf961e95ec9cf85f6d607b48f2e2bd9bd29c98b/src/stylesheets/components/_navigation.scss
+// https://github.com/alphagov/govuk-prototype-kit-docs/blob/master/src/stylesheets/components/_navigation.scss
+
+$mtp-sub-navigation-height: 50px;
+$mtp-sub-navigation-current-page-border-size: $govuk-border-width;  // TODO: or $govuk-border-width-narrow
+
+.mtp-sub-navigation__container {
+  background-color: $govuk-canvas-background-colour;
+}
+
+.mtp-sub-navigation {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: $govuk-canvas-background-colour;
+  @include govuk-font(19, $weight: bold);
+}
+
+.mtp-sub-navigation__list {
+  position: relative;
+  left: -(govuk-spacing(3));
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mtp-sub-navigation__list--padded {
+  margin: 0 govuk-spacing(3);
+}
+
+.mtp-sub-navigation__list-item {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  height: $mtp-sub-navigation-height;
+  padding: 0 govuk-spacing(3);
+  float: left;
+  line-height: $mtp-sub-navigation-height;
+}
+
+.mtp-sub-navigation__list-item--current {
+  border-bottom: $mtp-sub-navigation-current-page-border-size solid govuk-colour('blue');
+}
+
+.mtp-sub-navigation__link {
+  text-decoration: none;
+  @include govuk-typography-weight-bold;
+
+  &:not(:focus):visited {
+    color: $govuk-link-colour;
+  }
+
+  &:not(:focus):hover {
+    color: $govuk-link-colour;
+    text-decoration: underline;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+.mtp-sub-navigation__list-item--current .mtp-sub-navigation__link:hover {
+  text-decoration: none;
+}
