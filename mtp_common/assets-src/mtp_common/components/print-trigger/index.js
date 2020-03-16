@@ -1,10 +1,9 @@
-// Print module with confirmation dialogue box integration
 'use strict';
 
-var cookie = require('js-cookie');
+import Cookie from 'js-cookie';
 
-exports.Print = {
-  triggerSelector: '.js-print-trigger',
+export var PrintTrigger = {
+  triggerSelector: '.mtp-print-trigger',
   confirmationCookie: 'remove-print-prompt',
 
   init: function (triggerSelector) {
@@ -22,9 +21,9 @@ exports.Print = {
     var $confirmationDialogue = $($trigger.data('confirmation-dialogue'));
     var onClickAction = null;
     if ($confirmationDialogue.length === 1 && $confirmationDialogue.hasClass('mtp-dialogue')) {
-      onClickAction = exports.Print.makeConfirmationAction($confirmationDialogue, $printHidden);
+      onClickAction = PrintTrigger.makeConfirmationAction($confirmationDialogue, $printHidden);
     } else {
-      onClickAction = exports.Print.makePrintAction($printHidden);
+      onClickAction = PrintTrigger.makePrintAction($printHidden);
     }
     $trigger.click(function (e) {
       e.preventDefault();
@@ -34,21 +33,21 @@ exports.Print = {
   },
 
   makeConfirmationAction: function ($dialogue, $printHidden) {
-    var confirmationCookie = $dialogue.data('confirmation-cookie') || exports.Print.confirmationCookie;
-    var confirmedCookie = cookie.get(confirmationCookie);
-    var printAction = exports.Print.makePrintAction($printHidden);
+    var confirmationCookie = $dialogue.data('confirmation-cookie') || PrintTrigger.confirmationCookie;
+    var confirmedCookie = Cookie.get(confirmationCookie);
+    var printAction = PrintTrigger.makePrintAction($printHidden);
     if (confirmedCookie) {
       return printAction;
     }
 
-    var $dialoguePrintButton = $dialogue.find(exports.Print.triggerSelector);
+    var $dialoguePrintButton = $dialogue.find(PrintTrigger.triggerSelector);
     $dialoguePrintButton.click(function (e) {
       var $skipConfirmationInput = $dialogue.find('input[name="' + confirmationCookie + '"]');
       if ($skipConfirmationInput.length === 1) {
         if ($skipConfirmationInput.is(':checked')) {
-          cookie.set(confirmationCookie, '1');
+          Cookie.set(confirmationCookie, '1');
         } else {
-          cookie.remove(confirmationCookie);
+          Cookie.remove(confirmationCookie);
         }
       }
       $dialogue.trigger('dialogue:close');
@@ -57,7 +56,7 @@ exports.Print = {
     });
 
     return function () {
-      var confirmedCookie = cookie.get(confirmationCookie);
+      var confirmedCookie = Cookie.get(confirmationCookie);
       if (confirmedCookie) {
         printAction();
       } else {
