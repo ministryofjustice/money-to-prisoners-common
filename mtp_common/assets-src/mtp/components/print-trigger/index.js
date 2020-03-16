@@ -1,10 +1,9 @@
-// Print module with confirmation dialogue box integration
 'use strict';
 
 import Cookie from 'js-cookie';
 
-export var Print = {
-  triggerSelector: '.js-print-trigger',
+export var PrintTrigger = {
+  triggerSelector: '.mtp-print-trigger',
   confirmationCookie: 'remove-print-prompt',
 
   init: function (triggerSelector) {
@@ -22,9 +21,9 @@ export var Print = {
     var $confirmationDialogue = $($trigger.data('confirmation-dialogue'));
     var onClickAction = null;
     if ($confirmationDialogue.length === 1 && $confirmationDialogue.hasClass('mtp-dialogue')) {
-      onClickAction = Print.makeConfirmationAction($confirmationDialogue, $printHidden);
+      onClickAction = PrintTrigger.makeConfirmationAction($confirmationDialogue, $printHidden);
     } else {
-      onClickAction = Print.makePrintAction($printHidden);
+      onClickAction = PrintTrigger.makePrintAction($printHidden);
     }
     $trigger.click(function (e) {
       e.preventDefault();
@@ -34,14 +33,14 @@ export var Print = {
   },
 
   makeConfirmationAction: function ($dialogue, $printHidden) {
-    var confirmationCookie = $dialogue.data('confirmation-cookie') || Print.confirmationCookie;
+    var confirmationCookie = $dialogue.data('confirmation-cookie') || PrintTrigger.confirmationCookie;
     var confirmedCookie = Cookie.get(confirmationCookie);
-    var printAction = Print.makePrintAction($printHidden);
+    var printAction = PrintTrigger.makePrintAction($printHidden);
     if (confirmedCookie) {
       return printAction;
     }
 
-    var $dialoguePrintButton = $dialogue.find(Print.triggerSelector);
+    var $dialoguePrintButton = $dialogue.find(PrintTrigger.triggerSelector);
     $dialoguePrintButton.click(function (e) {
       var $skipConfirmationInput = $dialogue.find('input[name="' + confirmationCookie + '"]');
       if ($skipConfirmationInput.length === 1) {
