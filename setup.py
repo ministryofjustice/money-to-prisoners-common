@@ -16,11 +16,11 @@ with open('README.rst') as readme:
     README = readme.read()
 
 install_requires = [
-    'Django>=1.11,<2',
+    'Django>=2.0,<2.1',
     'django-form-error-reporting>=0.7',
     'django-widget-tweaks>=1.4,<1.5',
     'django-zendesk-tickets>=0.12',
-    'pytz>=2018.9',
+    'pytz>=2019.1',
     'requests>=2.18,<3',
     'requests-oauthlib>=1,<2',
     'slumber>=0.7,<0.8',
