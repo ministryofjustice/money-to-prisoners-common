@@ -29,7 +29,7 @@ install_requires = [
     'govuk-bank-holidays>=0.3',
     'cryptography>=2.3,<3',
     'PyJWT>=1.7,<2',
-    'kubernetes>=9,<10',  # corresponds to server version 1.13
+    'kubernetes>=11,<12',  # corresponds to server version 1.15
     'prometheus_client>=0.6,<1',
 ]
 extras_require = {
