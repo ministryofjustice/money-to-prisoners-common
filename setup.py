@@ -16,11 +16,11 @@ with open('README.rst') as readme:
     README = readme.read()
 
 install_requires = [
-    'Django>=1.11,<2',
+    'Django>=2.0,<2.1',
     'django-form-error-reporting>=0.7',
     'django-widget-tweaks>=1.4,<1.5',
     'django-zendesk-tickets>=0.12',
-    'pytz>=2018.9',
+    'pytz>=2019.1',
     'requests>=2.18,<3',
     'requests-oauthlib>=1,<2',
     'slumber>=0.7,<0.8',
@@ -29,7 +29,7 @@ install_requires = [
     'govuk-bank-holidays>=0.3',
     'cryptography>=2.3,<3',
     'PyJWT>=1.7,<2',
-    'kubernetes>=9,<10',  # corresponds to server version 1.13
+    'kubernetes>=11,<12',  # corresponds to server version 1.15
     'prometheus_client>=0.6,<1',
 ]
 extras_require = {

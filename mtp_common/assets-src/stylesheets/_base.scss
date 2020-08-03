@@ -1,4 +1,8 @@
 // GOV.UK Overrides
+a:focus {
+  outline-offset: 0;
+}
+
 strong {
   font-weight: bold;
 }
