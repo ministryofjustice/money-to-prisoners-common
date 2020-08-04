@@ -23,7 +23,8 @@
     "govuk-elements-sass": "~3.1",
     "jquery": "~1.12",
     "js-cookie": "~2.2",
-    "node-sass": "~4.11",
+    "node-sass": "~4.12",
+    "node-gyp": "~6.1",
     "mailcheck": "~1.1",
     "webpack": "~3.12"
   }
