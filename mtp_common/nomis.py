@@ -1,13 +1,11 @@
 import base64
 import datetime
 import logging
-import time
 from abc import ABC, abstractmethod
 from urllib.parse import quote_plus
 
 from django.conf import settings
 from django.core.cache import cache
-import jwt
 import requests
 from requests.exceptions import ConnectionError
 
@@ -176,37 +174,6 @@ class BaseNomisConnector(ABC):
         return self.request('post', path, json=data, timeout=timeout, retries=retries, session=session)
 
 
-class LegacyNomisConnector(BaseNomisConnector):
-    """
-    Connector for legacy NOMIS auth and API.
-    TODO: Remove once all apps move to NOMIS Elite2
-    """
-
-    def get_client_token(self):
-        return getattr(settings, 'NOMIS_API_CLIENT_TOKEN', None)
-
-    def build_nomis_api_url(self, path):
-        return urljoin(settings.NOMIS_API_BASE_URL, path)
-
-    def get_bearer_token(self):
-        encoded = jwt.encode(
-            {
-                'iat': int(time.time()),
-                'token': self.get_client_token(),
-            },
-            settings.NOMIS_API_PRIVATE_KEY,
-            'ES256',
-        )
-        return encoded.decode('utf8')
-
-    def can_access_nomis(self):
-        return bool(
-            settings.NOMIS_API_BASE_URL
-            and settings.NOMIS_API_PRIVATE_KEY
-            and self.get_client_token()
-        )
-
-
 class EliteNomisRetry(Retry):
     """
     A subclass of Retry that deletes the token from the cache and instructs
@@ -323,11 +290,7 @@ def _get_connector():
     :return: the best NOMIS connector that can be used.
     TODO: Remove once all apps move to NOMIS Elite2
     """
-    elite_connector = EliteNomisConnector()
-    if elite_connector.can_access_nomis():
-        return elite_connector
-
-    return LegacyNomisConnector()
+    return EliteNomisConnector()
 
 
 connector = _get_connector()

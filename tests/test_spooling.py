@@ -60,17 +60,17 @@ class SpoolableTestCase(unittest.TestCase):
     def test_must_accept_body_params_as_keyword_arguments(self):
         with self.assertRaises(TypeError):
             @spoolable(body_params=('a',))
-            def fails():
+            def fails_1():
                 pass
 
         with self.assertRaises(TypeError):
             @spoolable(body_params=('a',))  # noqa
-            def fails(*a):
+            def fails_2(*a):
                 pass
 
         with self.assertRaises(TypeError):
             @spoolable(body_params=('a',))  # noqa
-            def fails(*args, **kwargs):
+            def fails_3(*args, **kwargs):
                 pass
 
         @spoolable(body_params=('a',))  # noqa
@@ -92,7 +92,7 @@ class SpoolableTestCase(unittest.TestCase):
             pass
 
         @spoolable()  # noqa
-        def func():
+        def func():  # noqa: F811
             pass
 
         self.assertTrue(logger.warning.called)
