@@ -99,13 +99,8 @@ class BaseNomisConnector(ABC):
     """
     Abstract class that connects to NOMIS; to be sublassed.
     """
-
-    @abstractmethod
-    def build_nomis_api_url(self, path):
-        """
-        :return: the url to the API endpoint defined by `path`.
-        :param path: string defining the endpoint e.g. '/some/endpoint'
-        """
+    NOMIS_API_BASE_URL = None
+    NOMIS_AUTH_TOKEN_URL = None
 
     @abstractmethod
     def get_bearer_token(self):
@@ -137,7 +132,7 @@ class BaseNomisConnector(ABC):
         """
         response = request_retry(
             verb,
-            self.build_nomis_api_url(path),
+            urljoin(self.NOMIS_API_BASE_URL, path, trailing_slash=False),
             retries=retries,
             session=session,
             headers=self.build_request_api_headers(),
@@ -212,15 +207,11 @@ class EliteNomisConnector(BaseNomisConnector):
     """
 
     TOKEN_CACHE_KEY = 'NOMIS_TOKEN'
-
-    def _build_nomis_url(self, *path):
-        """
-        Can be used to build both auth and API urls.
-        """
-        return urljoin(settings.NOMIS_ELITE_BASE_URL, *path, trailing_slash=False)
-
-    def build_nomis_api_url(self, path):
-        return self._build_nomis_url('/elite2api/api/v1', path)
+    NOMIS_API_BASE_URL = urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', trailing_slash=False)
+    NOMIS_AUTH_TOKEN_URL = urljoin(
+        getattr(settings, 'NOMIS_AUTH_BASE_URL', settings.NOMIS_ELITE_BASE_URL),
+        '/auth/oauth/token', trailing_slash=False
+    )
 
     def _get_new_token_data(self):
         """
@@ -232,7 +223,7 @@ class EliteNomisConnector(BaseNomisConnector):
 
         response = request_retry(
             'post',
-            self._build_nomis_url('/auth/oauth/token'),
+            self.NOMIS_AUTH_TOKEN_URL,
             retries=3,
             params={
                 'grant_type': 'client_credentials',

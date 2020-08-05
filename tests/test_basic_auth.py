@@ -5,11 +5,12 @@ from django.test import override_settings
 from django.urls import reverse
 
 from tests.utils import SimpleTestCase
+from mtp_common.test_utils import silence_logger
 
 
 class BasicAuthTestCase(SimpleTestCase):
     def test_unconfigured(self):
-        with self.assertRaises(ImproperlyConfigured):
+        with self.assertRaises(ImproperlyConfigured), silence_logger('django.request'):
             self.client.get(reverse('basic-auth'))
 
     @override_settings(BASIC_USER='user', BASIC_PASSWORD='pword')
