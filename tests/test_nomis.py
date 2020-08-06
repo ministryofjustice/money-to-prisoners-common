@@ -170,7 +170,7 @@ class RequestRetryTestCase(SimpleTestCase):
             self.assertEqual(len(rsps.calls), 1)
 
 
-class EliteTestCaseMixin:
+class EliteTestCaseMixin(object):
     """
     Mixin related to NOMIS logic using Elite2 Auth and API.
     """
@@ -179,7 +179,7 @@ class EliteTestCaseMixin:
         rsps.add(
             responses.POST,
             urljoin(
-                settings.NOMIS_ELITE_BASE_URL,
+                settings.NOMIS_AUTH_BASE_URL,
                 '/auth/oauth/token?grant_type=client_credentials',
                 trailing_slash=False,
             ),
@@ -188,6 +188,31 @@ class EliteTestCaseMixin:
                 'expires_in': 3600,
             },
             status=200,
+        )
+
+
+class EliteNomisAuthTestCase(SimpleTestCase):
+    """
+    Tests related to generic NOMIS Elite2 auth and API.
+    """
+
+    def test_nomis_auth_hostname_used(self):
+        self.assertTrue(settings.NOMIS_AUTH_BASE_URL)
+        self.assertNotEqual(settings.NOMIS_AUTH_BASE_URL, settings.NOMIS_ELITE_BASE_URL)
+        self.assertEqual(
+            nomis.EliteNomisConnector().nomis_auth_token_url,
+            urljoin(settings.NOMIS_AUTH_BASE_URL, '/auth/oauth/token', trailing_slash=False)
+        )
+
+    @override_settings()
+    def test_fallback_to_nomis_elite_hostname(self):
+        del settings.NOMIS_AUTH_BASE_URL
+        self.assertFalse(hasattr(settings, 'NOMIS_AUTH_BASE_URL'))
+        self.assertTrue(settings.NOMIS_ELITE_BASE_URL)
+
+        self.assertEqual(
+            nomis.EliteNomisConnector().nomis_auth_token_url,
+            urljoin(settings.NOMIS_ELITE_BASE_URL, '/auth/oauth/token', trailing_slash=False)
         )
 
 

@@ -96,20 +96,10 @@ def setup_django_for_testing(_: Context):
         LOGOUT_URL=reverse_lazy('logout'),
         LOGIN_REDIRECT_URL=reverse_lazy('dummy'),
 
-        # TODO: Remove once all apps move to NOMIS Elite2
-        NOMIS_API_BASE_URL='https://noms-api-dev.local/nomisapi/',
-        NOMIS_API_CLIENT_TOKEN='hello',
-        NOMIS_API_PRIVATE_KEY=(
-            '-----BEGIN EC PRIVATE KEY-----\n'
-            'MHcCAQEEIOhhs3RXk8dU/YQE3j2s6u97mNxAM9s+13S+cF9YVgluoAoGCCqGSM49\n'
-            'AwEHoUQDQgAE6l49nl7NN6k6lJBfGPf4QMeHNuER/o+fLlt8mCR5P7LXBfMG6Uj6\n'
-            'TUeoge9H2N/cCafyhCKdFRdQF9lYB2jB+A==\n'
-            '-----END EC PRIVATE KEY-----\n'
-        ),  # this key is just for tests, doesn't do anything
-
         NOMIS_ELITE_CLIENT_ID='mtp',
         NOMIS_ELITE_CLIENT_SECRET='mtp-secret',
         NOMIS_ELITE_BASE_URL='https://noms-api-dev.local',
+        NOMIS_AUTH_BASE_URL='https://noms-auth-dev.local',
     )
     django.setup()
 

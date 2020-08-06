@@ -13,7 +13,7 @@ from mtp_common.auth import urljoin
 logger = logging.getLogger('mtp')
 
 
-class Retry:
+class Retry(object):
     """
     Object to be used with `request_retry`.
     It configures some retry options and can be subclassed to customise related logic.
@@ -132,11 +132,17 @@ class EliteNomisConnector(object):
     """
 
     TOKEN_CACHE_KEY = 'NOMIS_TOKEN'
-    NOMIS_API_BASE_URL = urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', trailing_slash=False)
-    NOMIS_AUTH_TOKEN_URL = urljoin(
-        getattr(settings, 'NOMIS_AUTH_BASE_URL', settings.NOMIS_ELITE_BASE_URL),
-        '/auth/oauth/token', trailing_slash=False
-    )
+
+    @property
+    def nomis_api_base_url(self):
+        return urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', trailing_slash=False)
+
+    @property
+    def nomis_auth_token_url(self):
+        return urljoin(
+            getattr(settings, 'NOMIS_AUTH_BASE_URL', settings.NOMIS_ELITE_BASE_URL),
+            '/auth/oauth/token', trailing_slash=False
+        )
 
     def build_request_api_headers(self):
         """
@@ -159,7 +165,7 @@ class EliteNomisConnector(object):
 
         response = request_retry(
             verb,
-            urljoin(self.NOMIS_API_BASE_URL, path, trailing_slash=False),
+            urljoin(self.nomis_api_base_url, path, trailing_slash=False),
             retries=retries,
             session=session,
             headers=self.build_request_api_headers(),
@@ -207,7 +213,7 @@ class EliteNomisConnector(object):
 
         response = request_retry(
             'post',
-            self.NOMIS_AUTH_TOKEN_URL,
+            self.nomis_auth_token_url,
             retries=3,
             params={
                 'grant_type': 'client_credentials',
