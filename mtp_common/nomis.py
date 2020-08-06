@@ -13,7 +13,7 @@ from mtp_common.auth import urljoin
 logger = logging.getLogger('mtp')
 
 
-class Retry(object):
+class Retry:
     """
     Object to be used with `request_retry`.
     It configures some retry options and can be subclassed to customise related logic.
@@ -126,7 +126,7 @@ class EliteNomisRetry(Retry):
         super().before_retrying(request_kwargs)
 
 
-class EliteNomisConnector(object):
+class EliteNomisConnector:
     """
     Connector for Elite2 NOMIS auth and API.
     """

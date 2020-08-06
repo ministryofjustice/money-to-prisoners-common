@@ -170,7 +170,7 @@ class RequestRetryTestCase(SimpleTestCase):
             self.assertEqual(len(rsps.calls), 1)
 
 
-class EliteTestCaseMixin(object):
+class EliteTestCaseMixin:
     """
     Mixin related to NOMIS logic using Elite2 Auth and API.
     """
