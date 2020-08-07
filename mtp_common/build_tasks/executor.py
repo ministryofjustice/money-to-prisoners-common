@@ -589,7 +589,7 @@ class Executor:
             print(e, file=sys.stderr)
             return 10
         except Exception as e:
-            print('Uncaught error', file=sys.stderr)
+            print('Uncaught {}'.format(type(e)), file=sys.stderr)
             print(e, file=sys.stderr)
             return 100
         finally:

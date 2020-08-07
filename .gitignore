@@ -22,3 +22,6 @@ mtp_common/assets/
 # selenium
 geckodriver.log
 ghostdriver.log
+
+# Intellisense
+.mypy_cache/
