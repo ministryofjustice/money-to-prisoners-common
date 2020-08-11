@@ -134,15 +134,12 @@ class EliteNomisConnector:
     TOKEN_CACHE_KEY = 'NOMIS_TOKEN'
 
     @property
-    def nomis_api_base_url(self):
-        return urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', trailing_slash=False)
+    def hmpps_auth_token_url(self):
+        return urljoin(settings.HMPPS_AUTH_BASE_URL, '/oauth/token', trailing_slash=False)
 
     @property
-    def nomis_auth_token_url(self):
-        return urljoin(
-            getattr(settings, 'NOMIS_AUTH_BASE_URL', settings.NOMIS_ELITE_BASE_URL),
-            '/auth/oauth/token', trailing_slash=False
-        )
+    def prison_api_v1_base_url(self):
+        return urljoin(settings.HMPPS_PRISON_API_BASE_URL, '/api/v1', trailing_slash=False)
 
     def build_request_api_headers(self):
         """
@@ -165,7 +162,7 @@ class EliteNomisConnector:
 
         response = request_retry(
             verb,
-            urljoin(self.nomis_api_base_url, path, trailing_slash=False),
+            urljoin(self.prison_api_v1_base_url, path, trailing_slash=False),
             retries=retries,
             session=session,
             headers=self.build_request_api_headers(),
@@ -208,12 +205,12 @@ class EliteNomisConnector:
         :return: bearer token to be used in API calls.
         """
         creds = base64.b64encode(
-            f'{settings.NOMIS_ELITE_CLIENT_ID}:{settings.NOMIS_ELITE_CLIENT_SECRET}'.encode('utf8')
+            f'{settings.HMPPS_CLIENT_ID}:{settings.HMPPS_CLIENT_SECRET}'.encode('utf8')
         ).decode('utf8')
 
         response = request_retry(
             'post',
-            self.nomis_auth_token_url,
+            self.hmpps_auth_token_url,
             retries=3,
             params={
                 'grant_type': 'client_credentials',
@@ -252,9 +249,10 @@ class EliteNomisConnector:
         return all(
             getattr(settings, key, None)
             for key in (
-                'NOMIS_ELITE_CLIENT_ID',
-                'NOMIS_ELITE_CLIENT_SECRET',
-                'NOMIS_ELITE_BASE_URL',
+                'HMPPS_CLIENT_ID',
+                'HMPPS_CLIENT_SECRET',
+                'HMPPS_AUTH_BASE_URL',
+                'HMPPS_PRISON_API_BASE_URL',
             )
         )
 

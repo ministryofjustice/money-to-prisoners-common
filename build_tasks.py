@@ -96,10 +96,10 @@ def setup_django_for_testing(_: Context):
         LOGOUT_URL=reverse_lazy('logout'),
         LOGIN_REDIRECT_URL=reverse_lazy('dummy'),
 
-        NOMIS_ELITE_CLIENT_ID='mtp',
-        NOMIS_ELITE_CLIENT_SECRET='mtp-secret',
-        NOMIS_ELITE_BASE_URL='https://noms-api-dev.local',
-        NOMIS_AUTH_BASE_URL='https://noms-auth-dev.local',
+        HMPPS_CLIENT_ID='mtp',
+        HMPPS_CLIENT_SECRET='mtp-secret',
+        HMPPS_AUTH_BASE_URL='https://noms-auth-dev.local',
+        HMPPS_PRISON_API_BASE_URL='https://noms-api-dev.local',
     )
     django.setup()
 

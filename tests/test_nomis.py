@@ -13,7 +13,7 @@ from mtp_common.test_utils import local_memory_cache, silence_logger
 
 
 def _build_elite_nomis_api_url(path):
-    return urljoin(settings.NOMIS_ELITE_BASE_URL, '/elite2api/api/v1', path, trailing_slash=False)
+    return urljoin(settings.HMPPS_PRISON_API_BASE_URL, '/api/v1', path, trailing_slash=False)
 
 
 class RequestRetryTestCase(SimpleTestCase):
@@ -179,8 +179,8 @@ class EliteTestCaseMixin:
         rsps.add(
             responses.POST,
             urljoin(
-                settings.NOMIS_AUTH_BASE_URL,
-                '/auth/oauth/token?grant_type=client_credentials',
+                settings.HMPPS_AUTH_BASE_URL,
+                '/oauth/token?grant_type=client_credentials',
                 trailing_slash=False,
             ),
             json={
@@ -197,22 +197,11 @@ class EliteNomisAuthTestCase(SimpleTestCase):
     """
 
     def test_nomis_auth_hostname_used(self):
-        self.assertTrue(settings.NOMIS_AUTH_BASE_URL)
-        self.assertNotEqual(settings.NOMIS_AUTH_BASE_URL, settings.NOMIS_ELITE_BASE_URL)
+        self.assertTrue(settings.HMPPS_AUTH_BASE_URL)
+        self.assertNotEqual(settings.HMPPS_AUTH_BASE_URL, settings.HMPPS_PRISON_API_BASE_URL)
         self.assertEqual(
-            nomis.EliteNomisConnector().nomis_auth_token_url,
-            urljoin(settings.NOMIS_AUTH_BASE_URL, '/auth/oauth/token', trailing_slash=False)
-        )
-
-    @override_settings()
-    def test_fallback_to_nomis_elite_hostname(self):
-        del settings.NOMIS_AUTH_BASE_URL
-        self.assertFalse(hasattr(settings, 'NOMIS_AUTH_BASE_URL'))
-        self.assertTrue(settings.NOMIS_ELITE_BASE_URL)
-
-        self.assertEqual(
-            nomis.EliteNomisConnector().nomis_auth_token_url,
-            urljoin(settings.NOMIS_ELITE_BASE_URL, '/auth/oauth/token', trailing_slash=False)
+            nomis.EliteNomisConnector().hmpps_auth_token_url,
+            urljoin(settings.HMPPS_AUTH_BASE_URL, '/oauth/token', trailing_slash=False)
         )
 
 
@@ -226,9 +215,10 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
         Test that can_access_nomis returns False if any of the required keys is not set.
         """
         required_keys = (
-            'NOMIS_ELITE_CLIENT_ID',
-            'NOMIS_ELITE_CLIENT_SECRET',
-            'NOMIS_ELITE_BASE_URL',
+            'HMPPS_CLIENT_ID',
+            'HMPPS_CLIENT_SECRET',
+            'HMPPS_AUTH_BASE_URL',
+            'HMPPS_PRISON_API_BASE_URL',
         )
         for key in required_keys:
             with override_settings(**{key: ''}):
