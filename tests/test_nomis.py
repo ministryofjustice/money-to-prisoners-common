@@ -12,7 +12,7 @@ from mtp_common.auth import urljoin
 from mtp_common.test_utils import local_memory_cache, silence_logger
 
 
-def _build_elite_nomis_api_url(path):
+def build_prison_api_v1_url(path):
     return urljoin(settings.HMPPS_PRISON_API_BASE_URL, '/api/v1', path, trailing_slash=False)
 
 
@@ -170,9 +170,9 @@ class RequestRetryTestCase(SimpleTestCase):
             self.assertEqual(len(rsps.calls), 1)
 
 
-class EliteTestCaseMixin:
+class BaseTestCase(SimpleTestCase):
     """
-    Mixin related to NOMIS logic using Elite2 Auth and API.
+    Base class for testing Prison API (i.e. NOMIS).
     """
 
     def _mock_successful_auth_request(self, rsps, token='my-token'):
@@ -191,24 +191,18 @@ class EliteTestCaseMixin:
         )
 
 
-class EliteNomisAuthTestCase(SimpleTestCase):
+class PrisonApiTestCase(BaseTestCase):
     """
-    Tests related to generic NOMIS Elite2 auth and API.
+    Tests related to basic HMPPS Auth and Prison API (i.e. NOMIS) usage.
     """
 
-    def test_nomis_auth_hostname_used(self):
+    def test_hmpps_auth_hostname_used(self):
         self.assertTrue(settings.HMPPS_AUTH_BASE_URL)
         self.assertNotEqual(settings.HMPPS_AUTH_BASE_URL, settings.HMPPS_PRISON_API_BASE_URL)
         self.assertEqual(
-            nomis.EliteNomisConnector().hmpps_auth_token_url,
+            nomis.Connector().hmpps_auth_token_url,
             urljoin(settings.HMPPS_AUTH_BASE_URL, '/oauth/token', trailing_slash=False)
         )
-
-
-class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
-    """
-    Tests related to generic NOMIS Elite2 auth and API.
-    """
 
     def test_cannot_access_nomis_if_key_not_set(self):
         """
@@ -227,10 +221,10 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
     @local_memory_cache()
     def test_token_cached(self):
         """
-        Test that the token is cached when making a NOMIS call.
+        Test that the token is cached when making a Prison API (i.e. NOMIS) call.
         """
         self.assertEqual(
-            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            django_cache.cache.get(nomis.Connector.TOKEN_CACHE_KEY),
             None,
         )
 
@@ -238,7 +232,7 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
             self._mock_successful_auth_request(rsps, token='my-token')
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/some/path'),
+                build_prison_api_v1_url('/some/path'),
                 json={},
                 status=200,
             )
@@ -246,24 +240,24 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
             nomis.connector.get('/some/path')
 
         self.assertEqual(
-            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            django_cache.cache.get(nomis.Connector.TOKEN_CACHE_KEY),
             'my-token',
         )
 
     @local_memory_cache()
     def test_gets_token_from_cache(self):
         """
-        Test that any cached token is used when making a NOMIS call.
+        Test that any cached token is used when making a Prison API (i.e. NOMIS) call.
         """
         django_cache.cache.set(
-            nomis.EliteNomisConnector.TOKEN_CACHE_KEY,
+            nomis.Connector.TOKEN_CACHE_KEY,
             'some-token',
         )
 
         with responses.RequestsMock() as rsps:
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/some/path'),
+                build_prison_api_v1_url('/some/path'),
                 json={},
                 status=200,
             )
@@ -271,7 +265,7 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
             nomis.connector.get('/some/path')
 
         self.assertEqual(
-            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            django_cache.cache.get(nomis.Connector.TOKEN_CACHE_KEY),
             'some-token',
         )
 
@@ -283,7 +277,7 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
         This happens even when the caller passes in retries == 0.
         """
         django_cache.cache.set(
-            nomis.EliteNomisConnector.TOKEN_CACHE_KEY,
+            nomis.Connector.TOKEN_CACHE_KEY,
             'invalid-token',
         )
 
@@ -291,13 +285,13 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
         with responses.RequestsMock() as rsps:
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url(path),
+                build_prison_api_v1_url(path),
                 status=401,
             )
             self._mock_successful_auth_request(rsps, token='my-token')
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url(path),
+                build_prison_api_v1_url(path),
                 json={},
                 status=200,
             )
@@ -306,7 +300,7 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
                 nomis.connector.get(path, retries=0)
 
         self.assertEqual(
-            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            django_cache.cache.get(nomis.Connector.TOKEN_CACHE_KEY),
             'my-token',
         )
 
@@ -318,7 +312,7 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
         but it doesn't invalidate the token again if the subsequent call is still in error.
         """
         django_cache.cache.set(
-            nomis.EliteNomisConnector.TOKEN_CACHE_KEY,
+            nomis.Connector.TOKEN_CACHE_KEY,
             'invalid-token',
         )
 
@@ -326,13 +320,13 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
         with responses.RequestsMock() as rsps:
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url(path),
+                build_prison_api_v1_url(path),
                 status=401,
             )
             self._mock_successful_auth_request(rsps, token='my-token')
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url(path),
+                build_prison_api_v1_url(path),
                 status=401,
             )
 
@@ -342,19 +336,19 @@ class EliteNomisApiTestCase(EliteTestCaseMixin, SimpleTestCase):
             self.assertEqual(len(rsps.calls), 3)
 
         self.assertEqual(
-            django_cache.cache.get(nomis.EliteNomisConnector.TOKEN_CACHE_KEY),
+            django_cache.cache.get(nomis.Connector.TOKEN_CACHE_KEY),
             'my-token',
         )
 
 
-class GetAccountBalancesTestCase(EliteTestCaseMixin, SimpleTestCase):
+class GetAccountBalancesTestCase(BaseTestCase):
     """
     Tests related to the get_account_balances function.
     """
 
     def test_call(self):
         """
-        Test that the function connects to NOMIS and gets the expected data.
+        Test that the function connects to Prison API (i.e. NOMIS) and gets the expected data.
         """
         actual_balances = {
             'cash': 500,
@@ -365,7 +359,7 @@ class GetAccountBalancesTestCase(EliteTestCaseMixin, SimpleTestCase):
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts'),
+                build_prison_api_v1_url('/prison/BMI/offenders/A1471AE/accounts'),
                 json=actual_balances,
                 status=200,
             )
@@ -375,7 +369,7 @@ class GetAccountBalancesTestCase(EliteTestCaseMixin, SimpleTestCase):
         self.assertEqual(balances, actual_balances)
 
 
-class GetTransactionHistoryTestCase(EliteTestCaseMixin, SimpleTestCase):
+class GetTransactionHistoryTestCase(BaseTestCase):
     """
     Tests related to the get_transaction_history function.
     """
@@ -398,7 +392,7 @@ class GetTransactionHistoryTestCase(EliteTestCaseMixin, SimpleTestCase):
         """
         Test that the the date param is converted to string and passed in as query param.
         """
-        url = _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
+        url = build_prison_api_v1_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
         from_date = datetime.date(year=2019, month=10, day=30)
 
         with responses.RequestsMock() as rsps:
@@ -418,7 +412,7 @@ class GetTransactionHistoryTestCase(EliteTestCaseMixin, SimpleTestCase):
         """
         Test that the string date param is kept untouched when passed in as query param.
         """
-        url = _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
+        url = build_prison_api_v1_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
         from_date = '2019-09-09'
 
         with responses.RequestsMock() as rsps:
@@ -439,7 +433,7 @@ class GetTransactionHistoryTestCase(EliteTestCaseMixin, SimpleTestCase):
         Test that if the date param of the function is not of type string or date,
         its value is ignored and not passed in as query param.
         """
-        url = _build_elite_nomis_api_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
+        url = build_prison_api_v1_url('/prison/BMI/offenders/A1471AE/accounts/spends/transactions')
         from_date = 1
 
         with responses.RequestsMock() as rsps:
@@ -457,14 +451,14 @@ class GetTransactionHistoryTestCase(EliteTestCaseMixin, SimpleTestCase):
         self.assertEqual(transactions, self.TRANSACTIONS_RESPONSE)
 
 
-class CreateTransactionTestCase(EliteTestCaseMixin, SimpleTestCase):
+class CreateTransactionTestCase(BaseTestCase):
     """
     Tests related to the create_transaction function.
     """
 
     def test_call(self):
         """
-        Test that the function connects to NOMIS and gets the expected data.
+        Test that the function connects to Prison API (i.e. NOMIS) and gets the expected data.
         """
         actual_transaction_data = {
             'id': '6179604-1',
@@ -473,7 +467,7 @@ class CreateTransactionTestCase(EliteTestCaseMixin, SimpleTestCase):
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.POST,
-                _build_elite_nomis_api_url('/prison/BWI/offenders/A1471AE/transactions'),
+                build_prison_api_v1_url('/prison/BWI/offenders/A1471AE/transactions'),
                 json=actual_transaction_data,
                 status=200,
             )
@@ -494,20 +488,20 @@ class CreateTransactionTestCase(EliteTestCaseMixin, SimpleTestCase):
             )
 
 
-class GetPhotographDataTestCase(EliteTestCaseMixin, SimpleTestCase):
+class GetPhotographDataTestCase(BaseTestCase):
     """
     Tests related to the get_photograph_data function.
     """
 
     def test_call(self):
         """
-        Test that the function connects to NOMIS and gets the expected data.
+        Test that the function connects to Prison API (i.e. NOMIS) and gets the expected data.
         """
         with responses.RequestsMock() as rsps:
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/offenders/A1471AE/image'),
+                build_prison_api_v1_url('/offenders/A1471AE/image'),
                 json={
                     'image': 'some-image',
                 },
@@ -520,13 +514,13 @@ class GetPhotographDataTestCase(EliteTestCaseMixin, SimpleTestCase):
 
     def test_returns_none_if_nomis_does_not_include_image(self):
         """
-        Test that the function returns None if the NOMIS response doesn't include any image.
+        Test that the function returns None if the Prison API (i.e. NOMIS) response doesn't include any image.
         """
         with responses.RequestsMock() as rsps:
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/offenders/A1471AE/image'),
+                build_prison_api_v1_url('/offenders/A1471AE/image'),
                 json={},
                 status=200,
             )
@@ -536,7 +530,7 @@ class GetPhotographDataTestCase(EliteTestCaseMixin, SimpleTestCase):
         self.assertEqual(photo_data, None)
 
 
-class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
+class GetLocationTestCase(BaseTestCase):
     """
     Tests related to the get_location function.
     """
@@ -546,7 +540,7 @@ class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/offenders/A1401AE/location'),
+                build_prison_api_v1_url('/offenders/A1401AE/location'),
                 json=nomis_mocked_response,
             )
             actual_location_dict = nomis.get_location('A1401AE')
@@ -554,8 +548,8 @@ class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
 
     def test_housing_location_no_housing(self):
         """
-        Test that if the NOMIS response doesn't include 'housing_location', the returned
-        value doesn't include that either.
+        Test that if the Prison API (i.e. NOMIS) response doesn't include 'housing_location',
+        the returned value doesn't include that either.
         """
         self._test_get_location_scenario(
             {
@@ -569,7 +563,8 @@ class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
 
     def test_housing_location_dict_housing(self):
         """
-        Test that if the NOMIS response includes 'housing_location', the returned value includes that as well.
+        Test that if the Prison API (i.e. NOMIS) response includes 'housing_location',
+        the returned value includes that as well.
         """
         self._test_get_location_scenario(
             {
@@ -602,7 +597,7 @@ class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
 
     def test_housing_location_absent_levels(self):
         """
-        Test that if the NOMIS response doesn't include housing_location.levels,
+        Test that if the Prison API (i.e. NOMIS) response doesn't include housing_location.levels,
         the returned value uses [] instead.
         """
         self._test_get_location_scenario(
@@ -623,7 +618,7 @@ class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
 
     def test_housing_location_absent_description(self):
         """
-        Test that if the NOMIS response doesn't include housing_location.description,
+        Test that if the Prison API (i.e. NOMIS) response doesn't include housing_location.description,
         the returned value uses the value from establishment.desc instead.
         """
         self._test_get_location_scenario(
@@ -654,13 +649,13 @@ class GetLocationTestCase(EliteTestCaseMixin, SimpleTestCase):
 
     def test_returns_none_if_nomis_does_not_include_establishment(self):
         """
-        Test that the function returns None if the NOMIS response doesn't include any establishment.
+        Test that the function returns None if the Prison API (i.e. NOMIS) response doesn't include any establishment.
         """
         with responses.RequestsMock() as rsps:
             self._mock_successful_auth_request(rsps)
             rsps.add(
                 responses.GET,
-                _build_elite_nomis_api_url('/offenders/A1401AE/location'),
+                build_prison_api_v1_url('/offenders/A1401AE/location'),
                 json={},
                 status=200,
             )

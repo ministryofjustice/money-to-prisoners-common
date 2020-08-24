@@ -1,3 +1,17 @@
+"""
+This module is used to access data in NOMIS (the database that hold all information in prisons).
+
+HMPPS has split the functionality that used to be in one API (called NOMIS or Elite2 in the past) into:
+- HMPPS Auth for authenticating all API calls
+- Prison API for accessing NOMIS-specific endpoints
+- and other services we do not currently use
+
+The Prison API includes "V1" endpoints (the only endpoints we use) which are from a much older "NOMIS API".
+
+Prisoner money apps are currently only interested in NOMIS data hence this module is still called `nomis`.
+If in future we need to consume other HMPPS apis, it may make sense to split this module into separate components.
+"""
+
 import base64
 import datetime
 import logging
@@ -94,9 +108,9 @@ def request_retry(
     return response
 
 
-class EliteNomisRetry(Retry):
+class AuthenticatedRetry(Retry):
     """
-    A subclass of Retry that deletes the token from the cache and instructs
+    A subclass of Retry that deletes the HMPPS Auth token from the cache and instructs
     the caller to retry again if the status code of the response is 401.
 
     This is to cache the (hopefully) rare case where the cached token is not valid.
@@ -111,7 +125,7 @@ class EliteNomisRetry(Retry):
         """
         if self.retry_count == 0:
             if response is not None and response.status_code == 401:
-                logger.warning('Deleting the cached NOMIS token because of a 401 response')
+                logger.warning('Deleting the cached HMPPS Auth token because of a 401 response')
                 cache.delete(self.connector.TOKEN_CACHE_KEY)
                 return True
         return super().should_retry(exception=exception, response=response)
@@ -126,11 +140,10 @@ class EliteNomisRetry(Retry):
         super().before_retrying(request_kwargs)
 
 
-class EliteNomisConnector:
+class Connector:
     """
-    Connector for Elite2 NOMIS auth and API.
+    Connector for HMPPS Prison API (using HMPPS Auth)
     """
-
     TOKEN_CACHE_KEY = 'NOMIS_TOKEN'
 
     @property
@@ -143,7 +156,7 @@ class EliteNomisConnector:
 
     def build_request_api_headers(self):
         """
-        :return: dict with headers to used in calls to the NOMIS API.
+        :return: dict with headers to used in calls to the Prison API (i.e. NOMIS).
         """
         bearer_token = self.get_bearer_token()
         return {
@@ -154,11 +167,11 @@ class EliteNomisConnector:
 
     def request(self, verb, path, params=None, json=None, timeout=15, retries=0, session=None):
         """
-        Makes a request call to NOMIS.
+        Makes a request call to Prison API (i.e. NOMIS).
         You probably want to use the `get` or the `post` methods instead.
         """
         if not isinstance(retries, Retry):
-            retries = EliteNomisRetry(self, retries)
+            retries = AuthenticatedRetry(self, retries)
 
         response = request_retry(
             verb,
@@ -182,7 +195,7 @@ class EliteNomisConnector:
 
     def get(self, path, params=None, timeout=15, retries=0, session=None):
         """
-        Makes a GET request to NOMIS.
+        Makes a GET request to Prison API (i.e. NOMIS).
         """
         if params:
             params = {
@@ -194,13 +207,13 @@ class EliteNomisConnector:
 
     def post(self, path, data=None, timeout=15, retries=0, session=None):
         """
-        Makes a POST request to NOMIS.
+        Makes a POST request to Prison API (i.e. NOMIS).
         """
         return self.request('post', path, json=data, timeout=timeout, retries=retries, session=session)
 
     def _get_new_token_data(self):
         """
-        Gets a new token from NOMIS.
+        Gets a new token using HMPPS Auth.
 
         :return: bearer token to be used in API calls.
         """
@@ -229,7 +242,7 @@ class EliteNomisConnector:
 
     def get_bearer_token(self):
         """
-        Gets the bearer token from cache if it exists, or from NOMIS otherwise.
+        Gets the bearer token from cache if it exists, or from HMPPS Auth otherwise.
 
         :return: bearer token to be used in API calls.
         """
@@ -244,7 +257,7 @@ class EliteNomisConnector:
 
     def can_access_nomis(self):
         """
-        :return: True if this connector has all keys in place to connect to NOMIS.
+        :return: True if this connector has all keys in place to connect to Prison API (i.e. NOMIS).
         """
         return all(
             getattr(settings, key, None)
@@ -257,7 +270,7 @@ class EliteNomisConnector:
         )
 
 
-connector = EliteNomisConnector()
+connector = Connector()
 
 
 def can_access_nomis():
