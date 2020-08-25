@@ -1,10 +1,13 @@
 {% if sentry_dsn %}
-  <script src="https://cdn.ravenjs.com/3.24.1/raven.min.js" crossorigin="anonymous"></script>
+  <script src="https://browser.sentry-cdn.com/5.11.2/bundle.min.js" integrity="sha384-FLzYisBa7tvsi/ZP1ISnzZJqBkmw5mvwk7KOmH82W9wdPZKG3bG9hSO8GQFVSlOu" crossorigin="anonymous"></script>
   <script>
-    if (Raven) {
-      Raven.config('{{ sentry_dsn }}', {
-        whitelistUrls: [/app\.bundle\.js/]
-      }).install();
+    if (Sentry) {
+      Sentry.init({
+        dsn: '{{ sentry_dsn }}',
+        release: '{{ app_git_commit|default:"unknown" }}',
+        environment: '{{ environment }}',
+        whitelistUrls: ["/javascripts/", "/app\.bundle\.js/"]
+      });
     }
   </script>
 {% endif %}
