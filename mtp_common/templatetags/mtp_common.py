@@ -17,7 +17,7 @@ from mtp_common.api import notifications_for_request
 from mtp_common.utils import and_join, format_postcode
 
 try:
-    from raven.contrib.django.models import client as sentry_client
+    from sentry_sdk import client as sentry_client
 except ImportError:
     sentry_client = None
 
@@ -137,12 +137,16 @@ def get_form_errors(form):
 
 @register.inclusion_tag('mtp_common/sentry-js.html')
 def sentry_js():
-    sentry_dsn = None
-    if sentry_client is not None:
-        sentry_dsn = sentry_client.get_public_dsn('https') or None
-    return {
-        'sentry_dsn': sentry_dsn
-    }
+    if sentry_client:
+        return {
+            'environment': settings.ENVIRONMENT,
+            'app_git_commit': settings.APP_GIT_COMMIT,
+            'sentry_dsn': sentry_client.get_options().get('dsn')
+        }
+    else:
+        return {
+            'sentry_dsn': ''
+        }
 
 
 def make_alternate_language_urls(request):

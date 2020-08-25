@@ -55,7 +55,7 @@ class TemplateTagTestCase(SimpleTestCase):
     @mock.patch('mtp_common.templatetags.mtp_common.sentry_client')
     def test_sentry_tag(self, mocked_sentry_client):
         sentry_dsn = 'http://sentry.example.com/123'
-        mocked_sentry_client.get_public_dsn.return_value = sentry_dsn
+        mocked_sentry_client.get_options.return_value.get.return_value = sentry_dsn
 
         template = """
         {% load mtp_common %}
@@ -64,7 +64,7 @@ class TemplateTagTestCase(SimpleTestCase):
         response = self.load_mocked_template(template, {})
         html = response.content.decode('utf-8')
         self.assertIn(sentry_dsn, html)
-        self.assertIn('Raven.config', html)
+        self.assertIn('Sentry.init', html)
 
     def test_page_list(self):
         template = """
