@@ -25,3 +25,6 @@ ghostdriver.log
 
 # Intellisense
 .mypy_cache/
+
+# Development environment
+.env

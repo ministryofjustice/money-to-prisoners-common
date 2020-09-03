@@ -1,0 +1,199 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: mtp_api_db
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_DB: mtp_api
+      POSTGRES_USER: mtp_api
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  api:
+    container_name: mtp_api
+    build:
+      context: ../money-to-prisoners-api
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: api
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_api.settings.base
+    ports:
+      - "8000:8000"
+      - "3000:3000"
+    volumes:
+      - ../money-to-prisoners-api:/app
+      - api_node_modules:/app/node_modules
+    links:
+      - db
+    user: mtp
+    environment:
+      ENV: local
+      DJANGO_SETTINGS_MODULE: mtp_api.settings.base
+      DEBUG: "True"
+      DB_NAME: mtp_api
+      DB_USERNAME: mtp_api
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      PUBLIC_API_HOST: http://api:8000
+      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
+      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
+      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
+      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
+      START_PAGE_URL: http://start-page:8005
+    command: '/app/docker-entrypoint.sh'
+  noms-ops:
+    container_name: mtp_noms-ops
+    build:
+      context: ../money-to-prisoners-noms-ops
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: noms-ops
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
+    ports:
+      - "8003:8003"
+      - "3003:3003"
+    volumes:
+      - ../money-to-prisoners-noms-ops:/app
+      - noms-ops_node_modules:/app/node_modules
+    links:
+      - api
+    user: mtp
+    environment:
+      ENV: local
+      DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
+      DEBUG: "True"
+      API_URL: http://api:8000
+      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
+      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
+      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
+      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
+      START_PAGE_URL: http://start-page:8005
+  send-money:
+    container_name: mtp_send-money
+    build:
+      context: ../money-to-prisoners-send-money
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: send-money
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
+    ports:
+      - "8004:8004"
+    volumes:
+      - ../money-to-prisoners-send-money:/app
+      - send-money_node_modules:/app/node_modules
+    links:
+      - api
+    user: mtp
+    environment:
+      ENV: local
+      DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
+      DEBUG: "True"
+      API_URL: http://api:8000
+      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
+      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
+      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
+      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
+      START_PAGE_URL: http://start-page:8005
+  cashbook:
+    container_name: mtp_cashbook
+    build:
+      context: ../money-to-prisoners-cashbook
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: cashbook
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
+    ports:
+      - "8001:8001"
+      - "3001:3001"
+    volumes:
+      - ../money-to-prisoners-cashbook:/app
+      - cashbook_node_modules:/app/node_modules
+    links:
+      - api
+    user: mtp
+    environment:
+      ENV: local
+      DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
+      DEBUG: "True"
+      API_URL: http://api:8000
+      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
+      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
+      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
+      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
+      START_PAGE_URL: http://start-page:8005
+  bank-admin:
+    container_name: mtp_bank-admin
+    build:
+      context: ../money-to-prisoners-bank-admin
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: bank-admin
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_bank_admin.settings.base
+    ports:
+      - "8002:8002"
+      - "3002:3002"
+    volumes:
+      - ../money-to-prisoners-bank-admin:/app
+      - bank-admin_node_modules:/app/node_modules
+    links:
+      - api
+    user: mtp
+    environment:
+      ENV: local
+      DJANGO_SETTINGS_MODULE: mtp_bank_admin.settings.base
+      DEBUG: "True"
+      API_URL: http://api:8000
+      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
+      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
+      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
+      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
+      START_PAGE_URL: http://start-page:8005
+  start-page:
+    container_name: mtp_start-page
+    build:
+      context: ../money-to-prisoners-start-page
+      dockerfile: Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: start-page
+    ports:
+      - "8005:8080"
+    links:
+      - send-money
+    user: mtp
+    environment:
+      ENV: local
+      DEBUG: "True"
+  # transaction-uploader:
+    # container_name: mtp_transaction-uploader
+    # build:
+      # context: ../money-to-prisoners-transaction-uploader
+      # dockerfile: $PWD/Dockerfile-dev
+      # args:
+        # ECR_ENDPOINT: ${ECR_ENDPOINT}
+        # SERVICE: transaction-uploader
+    # user: mtp
+    # environment:
+      # ENV: local
+      # DEBUG: "True"
+      # API_URL: http://api:8000
+      # PUBLIC_CASHBOOK_HOST: http://cashbook:8001
+      # PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
+      # PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
+      # PUBLIC_SEND_MONEY_HOST: http://send-money:8004
+      # START_PAGE_URL: http://start-page:8005
+
+volumes:
+  db_data:
+  api_node_modules:
+  noms-ops_node_modules:
+  cashbook_node_modules:
+  send-money_node_modules:
+  bank-admin_node_modules:

@@ -1,0 +1,34 @@
+ARG ECR_ENDPOINT
+ARG SERVICE
+FROM ${ECR_ENDPOINT}/prisoner-money/money-to-prisoners:${SERVICE}
+
+# We need to be root to move the venv outside the codebase
+USER root
+
+# Having a text editor in a dev container is super useful
+# Also sudo is needed to install anything further from mtp
+RUN apt-get update && apt-get install -y \
+  vim \
+  sudo
+RUN curl 'https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh' --output /wait-for-it.sh && \
+    chmod +x /wait-for-it.sh
+
+# avoid trashing venv
+RUN cp -r --preserve=ownership /app/venv /venv
+
+COPY --chown=mtp:mtp . /app/
+#This should already be the case but just to be sure...
+WORKDIR /app
+ARG LOCAL_DJANGO_SETTINGS_MODULE
+ENV DJANGO_SETTINGS_MODULE=${LOCAL_DJANGO_SETTINGS_MODULE}
+
+# The remaining build should be done as the user expected to run the service
+USER mtp
+# Always activate the venv, even when exec-ing in
+# These environment variables are equivilent to venv activation
+# For more info: https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
+ENV VIRTUAL_ENV=/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN python /app/run.py build
+CMD ["python", "/app/run.py", "serve"]
+# vim: ft=dockerfile
