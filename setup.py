@@ -55,7 +55,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     license='MIT',
-    description='Django app with common code and assets for Money to Prisoners serivces',
+    description='Django app with common code and assets for Money to Prisoners services',
     long_description=README,
     classifiers=[
         'Framework :: Django',
