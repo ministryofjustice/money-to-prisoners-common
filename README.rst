@@ -148,7 +148,7 @@ There is a docker-compose for building and setting up the development environmen
 
 .. code-block:: sh
 
-    git clone https://github.com/ministryofjustice/money-to-prisoners-common money-to-prisoners-common
+    git clone https://github.com/ministryofjustice/money-to-prisoners-common.git money-to-prisoners-common
 
 2. Change directory to the money-to-prisoners-common root directory (if you haven't already)
 
