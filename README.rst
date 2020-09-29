@@ -145,39 +145,50 @@ Development environment
 There is a docker-compose for building and setting up the development environment. Steps are as follows:
 
 1. Clone money-to-prisoners-common (if you haven't already):
-```
-git clone https://github.com/ministryofjustice/money-to-prisoners-common money-to-prisoners-common
-```
+
+.. code-block:: sh
+
+    git clone https://github.com/ministryofjustice/money-to-prisoners-common money-to-prisoners-common
+
 2. Change directory to the money-to-prisoners-common root directory (if you haven't already)
-```
-cd money-to-prisoners-common
-```
+
+.. code-block:: sh
+
+    cd money-to-prisoners-common
+
 3. Clone the above directories as sibling directories to money-to-prisoners-common:
-```
-git clone https://github.com/ministryofjustice/money-to-prisoners-api ../money-to-prisoners-api
-git clone https://github.com/ministryofjustice/money-to-prisoners-cashbook ../money-to-prisoners-cashbook
-git clone https://github.com/ministryofjustice/money-to-prisoners-bank-admin ../money-to-prisoners-bank-admin
-git clone https://github.com/ministryofjustice/money-to-prisoners-noms-ops ../money-to-prisoners-noms-ops
-git clone https://github.com/ministryofjustice/money-to-prisoners-send-money ../money-to-prisoners-send-money
-git clone https://github.com/ministryofjustice/money-to-prisoners-start-page ../money-to-prisoners-start-page
-```
-4. Create a file called `.env` in money-to-prisoners-common root directory, add the variable `ECR_ENDPOINT` to this file in the format `<key>=<value>`
+
+.. code-block:: sh
+
+    git clone https://github.com/ministryofjustice/money-to-prisoners-api ../money-to-prisoners-api
+    git clone https://github.com/ministryofjustice/money-to-prisoners-cashbook ../money-to-prisoners-cashbook
+    git clone https://github.com/ministryofjustice/money-to-prisoners-bank-admin ../money-to-prisoners-bank-admin
+    git clone https://github.com/ministryofjustice/money-to-prisoners-noms-ops ../money-to-prisoners-noms-ops
+    git clone https://github.com/ministryofjustice/money-to-prisoners-send-money ../money-to-prisoners-send-money
+    git clone https://github.com/ministryofjustice/money-to-prisoners-start-page ../money-to-prisoners-start-page
+
+4. Create a file called ``.env`` in money-to-prisoners-common root directory, add the variable ``ECR_ENDPOINT`` to this file in the format ``<key>=<value>``
+
 5. Authenticate with the docker repository
-```
-git clone https://github.com/ministryofjustice/money-to-prisoners-deploy ../money-to-prisoners-deploy
-cd money-to-prisoners-deploy
-./manage.py config docker-login
-cd ..
-```
-6. From `money-to-prisoners-common` root directory run `docker-compose up`
+
+.. code-block:: sh
+
+    git clone https://github.com/ministryofjustice/money-to-prisoners-deploy ../money-to-prisoners-deploy
+    cd ../money-to-prisoners-deploy
+    ./manage.py config docker-login
+    cd -
+
+6. From ``money-to-prisoners-common`` root directory run ``docker-compose up``
 
 You should then be able to access the services at the following URLs
-.. _money-to-prisoners-api: http://localhost:8000
-.. _money-to-prisoners-cashbook: http://localhost:8001
-.. _money-to-prisoners-bank-admin: http://localhost:8002
-.. _money-to-prisoners-noms-ops: http://localhost:8003
-.. _money-to-prisoners-send-money: http://localhost:8004
-.. _money-to-prisoners-start-page: http://localhost:8005
+
+* money-to-prisoners-api: http://localhost:8000
+* money-to-prisoners-cashbook: http://localhost:8001
+* money-to-prisoners-bank-admin: http://localhost:8002
+* money-to-prisoners-noms-ops: http://localhost:8003
+* money-to-prisoners-send-money: http://localhost:8004
+* money-to-prisoners-start-page: http://localhost:8005
 
 Caveats:
+
 * You can only log into one service at a time, this is because the cookies within which the session is stored are namespaced to domain only (which is the desired behaviour for test/prod)
