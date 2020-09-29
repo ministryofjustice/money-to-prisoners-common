@@ -162,7 +162,14 @@ git clone https://github.com/ministryofjustice/money-to-prisoners-send-money ../
 git clone https://github.com/ministryofjustice/money-to-prisoners-start-page ../money-to-prisoners-start-page
 ```
 4. Create a file called `.env` in money-to-prisoners-common root directory, add the variable `ECR_ENDPOINT` to this file in the format `<key>=<value>`
-5. From `money-to-prisoners-common` root directory run `docker-compose up`
+5. Authenticate with the docker repository
+```
+git clone https://github.com/ministryofjustice/money-to-prisoners-deploy ../money-to-prisoners-deploy
+cd money-to-prisoners-deploy
+./manage.py config docker-login
+cd ..
+```
+6. From `money-to-prisoners-common` root directory run `docker-compose up`
 
 You should then be able to access the services at the following URLs
 .. _money-to-prisoners-api: http://localhost:8000
