@@ -160,13 +160,13 @@ There is a docker-compose for building and setting up the development environmen
 
 .. code-block:: sh
 
-    git clone https://github.com/ministryofjustice/money-to-prisoners-api ../money-to-prisoners-api
-    git clone https://github.com/ministryofjustice/money-to-prisoners-cashbook ../money-to-prisoners-cashbook
-    git clone https://github.com/ministryofjustice/money-to-prisoners-bank-admin ../money-to-prisoners-bank-admin
-    git clone https://github.com/ministryofjustice/money-to-prisoners-noms-ops ../money-to-prisoners-noms-ops
-    git clone https://github.com/ministryofjustice/money-to-prisoners-send-money ../money-to-prisoners-send-money
-    git clone https://github.com/ministryofjustice/money-to-prisoners-start-page ../money-to-prisoners-start-page
-    git clone https://github.com/ministryofjustice/money-to-prisoners-transaction-uploader ../money-to-prisoners-transaction-uploader
+    git clone https://github.com/ministryofjustice/money-to-prisoners-api.git ../money-to-prisoners-api
+    git clone https://github.com/ministryofjustice/money-to-prisoners-cashbook.git ../money-to-prisoners-cashbook
+    git clone https://github.com/ministryofjustice/money-to-prisoners-bank-admin.git ../money-to-prisoners-bank-admin
+    git clone https://github.com/ministryofjustice/money-to-prisoners-noms-ops.git ../money-to-prisoners-noms-ops
+    git clone https://github.com/ministryofjustice/money-to-prisoners-send-money.git ../money-to-prisoners-send-money
+    git clone https://github.com/ministryofjustice/money-to-prisoners-start-page.git ../money-to-prisoners-start-page
+    git clone https://github.com/ministryofjustice/money-to-prisoners-transaction-uploader.git ../money-to-prisoners-transaction-uploader
 
 4. Create a file called ``.env`` in money-to-prisoners-common root directory, add the variable ``ECR_ENDPOINT`` to this file in the format ``<key>=<value>``
 
@@ -174,7 +174,7 @@ There is a docker-compose for building and setting up the development environmen
 
 .. code-block:: sh
 
-    git clone https://github.com/ministryofjustice/money-to-prisoners-deploy ../money-to-prisoners-deploy
+    git clone https://github.com/ministryofjustice/money-to-prisoners-deploy.git ../money-to-prisoners-deploy
     cd ../money-to-prisoners-deploy
     ./manage.py config docker-login
     cd -
