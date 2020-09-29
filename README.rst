@@ -166,6 +166,7 @@ There is a docker-compose for building and setting up the development environmen
     git clone https://github.com/ministryofjustice/money-to-prisoners-noms-ops ../money-to-prisoners-noms-ops
     git clone https://github.com/ministryofjustice/money-to-prisoners-send-money ../money-to-prisoners-send-money
     git clone https://github.com/ministryofjustice/money-to-prisoners-start-page ../money-to-prisoners-start-page
+    git clone https://github.com/ministryofjustice/money-to-prisoners-transaction-uploader ../money-to-prisoners-transaction-uploader
 
 4. Create a file called ``.env`` in money-to-prisoners-common root directory, add the variable ``ECR_ENDPOINT`` to this file in the format ``<key>=<value>``
 
