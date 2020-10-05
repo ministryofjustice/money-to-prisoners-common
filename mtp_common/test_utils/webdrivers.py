@@ -33,7 +33,7 @@ class ChromeConf:
         if not os.path.exists(self.executable_path):
             self.download_binary()
         options = webdriver.ChromeOptions()
-        if os.geteuid() == 0:
+        if os.geteuid() == 0 or os.path.exists('/.dockerenv'):
             options.add_argument('no-sandbox')
         options.add_argument('window-size=%d,%d' % (width, height))
         if headless:
