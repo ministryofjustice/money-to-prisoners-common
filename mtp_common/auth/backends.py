@@ -14,7 +14,7 @@ class MojBackend(object):
     Client Id and Secret can be changed in settings.
     """
 
-    def authenticate(self, username=None, password=None):
+    def authenticate(self, request, username=None, password=None):
         """
         Returns a valid `MojUser` if the authentication is successful
         or None if the credentials were wrong.
