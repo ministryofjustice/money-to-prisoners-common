@@ -16,7 +16,7 @@ with open('README.rst') as readme:
     README = readme.read()
 
 install_requires = [
-    'Django>=2.0,<2.1',
+    'Django>=2.2,<2.3',
     'django-form-error-reporting>=0.7',
     'django-widget-tweaks>=1.4,<1.5',
     'django-zendesk-tickets>=0.12',

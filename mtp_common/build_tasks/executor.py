@@ -5,6 +5,7 @@ import inspect
 import os
 import subprocess
 import sys
+import traceback
 
 import django
 from django.core.management import call_command
@@ -590,6 +591,7 @@ class Executor:
             return 10
         except Exception as e:
             print('Uncaught {}'.format(type(e)), file=sys.stderr)
+            print(traceback.print_exc(), file=sys.stderr)
             print(e, file=sys.stderr)
             return 100
         finally:
