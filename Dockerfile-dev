@@ -15,6 +15,7 @@ RUN curl 'https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-fo
 
 # avoid trashing venv
 RUN cp -r --preserve=ownership /app/venv /venv
+RUN sed -i 's:/app/venv:/venv:g' /venv/bin/[!_]**
 
 COPY --chown=mtp:mtp . /app/
 #This should already be the case but just to be sure...
@@ -29,6 +30,6 @@ USER mtp
 # For more info: https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN python /app/run.py build
-CMD ["python", "/app/run.py", "serve"]
+RUN /venv/bin/python /app/run.py build
+CMD ["/venv/bin/python", "/app/run.py", "serve"]
 # vim: ft=dockerfile

@@ -116,7 +116,7 @@ def python_dependencies(context: Context, extras=None):
         requirements = install_requires.copy()
         if extras:
             requirements.extend(extras_require[extras])
-    return context.pip_command('install', *requirements)
+    return context.pip_command('install', '--use-feature=2020-resolver', *requirements)
 
 
 @tasks.register('python_dependencies', 'govuk_template', 'compile_messages', 'precompile_python_code', default=True)
@@ -183,7 +183,7 @@ def docs(context: Context):
     try:
         from sphinx.application import Sphinx
     except ImportError:
-        context.pip_command('install', 'Sphinx')
+        context.pip_command('install', '--use-feature=2020-resolver', 'Sphinx')
         from sphinx.application import Sphinx
 
     context.shell('cp', 'README.rst', 'docs/README.rst')
