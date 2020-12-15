@@ -20,7 +20,7 @@ class FeedbackFooterView(FormView):
 
     def get_success_url(self, referer=None):
         return_to = referer or self.request.META.get('HTTP_REFERER')
-        if not is_safe_url(url=return_to, host=self.request.get_host()):
+        if not is_safe_url(url=return_to, allowed_hosts=self.request.get_host()):
             return_to = '/'
         return return_to
 

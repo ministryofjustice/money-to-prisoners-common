@@ -181,6 +181,14 @@ There is a docker-compose for building and setting up the development environmen
 
 6. From ``money-to-prisoners-common`` root directory run ``docker-compose up``
 
+7. (Optional) If you have not generated any data for the development environement, or if you have removed the docker volume associated with the database container, you will need to populate the database to be able to log into the services successfully. It will also create a minimal set of fake data to allow you to develop against existing data. However if you already have an existing docker volume with existing data, this command will delete that data.
+
+To populate your database with fake data, run the following command from ``money-to-prisoners-common`` root directory, once the api container has started successfully
+
+.. code-block:: sh
+
+   docker-compose exec api ./manage.py load_test_data
+
 You should then be able to access the services at the following URLs
 
 * money-to-prisoners-api: http://localhost:8000
@@ -193,3 +201,15 @@ You should then be able to access the services at the following URLs
 Caveats:
 
 * You can only log into one service at a time, this is because the cookies within which the session is stored are namespaced to domain only (which is the desired behaviour for test/prod)
+
+
+Additional Bespoke Packages
+---------------------------
+
+There are several dependencies of the ``money-to-prisoners-common`` python library which are maintained by this team, so they may require code-changes when the dependencies (e.g. Django) of the ``money-to-prisoners-common`` python library, or any of the Prisoner Money services are incremented.
+
+* django-form-error-reporting: https://github.com/ministryofjustice/django-form-error-reporting
+* django-zendesk-tickets: https://github.com/ministryofjustice/django-zendesk-tickets
+* govuk-bank-holidays: https://github.com/ministryofjustice/govuk-bank-holidays
+
+There are additional bespoke dependencies defined as python dependencies within the Prisoner Money Services.
