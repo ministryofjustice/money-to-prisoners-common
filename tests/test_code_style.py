@@ -48,10 +48,12 @@ class CommonCodeStyleTestCase(unittest.TestCase):
         return os.path.join(self.app.templates_path, 'mtp_common', 'build_tasks', file_name)
 
     def test_javascript_code_style(self):
-        self.run_node_tool('eslint',
-                           '--config', self.get_config_file('eslintrc.json'),
-                           '--format', 'stylish',
-                           self.app.javascript_source_path)
+        self.run_node_tool(
+            'eslint',
+            '--config', self.get_config_file('eslintrc.json'),
+            '--format', 'stylish',
+            self.app.javascript_source_path,
+        )
 
     def test_stylesheets_code_style(self):
         self.run_node_tool(

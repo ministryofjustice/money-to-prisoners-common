@@ -1,5 +1,4 @@
 // Show a warning in the form-hint of a field when running out of space
-/* globals django */
 'use strict';
 
 exports.CharacterCountWarning = {

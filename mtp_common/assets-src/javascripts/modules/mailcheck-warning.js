@@ -1,5 +1,4 @@
 // Show a warning when an email address domain might be misspelled
-/* globals django */
 'use strict';
 
 var mailcheck = require('mailcheck');
