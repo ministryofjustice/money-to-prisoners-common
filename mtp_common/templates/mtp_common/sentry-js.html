@@ -6,7 +6,7 @@
         dsn: '{{ sentry_dsn }}',
         release: '{{ app_git_commit|default:"unknown" }}',
         environment: '{{ environment }}',
-        whitelistUrls: ["/javascripts/", "/app\.bundle\.js/"]
+        whitelistUrls: [/app\.js/]
       });
     }
   </script>

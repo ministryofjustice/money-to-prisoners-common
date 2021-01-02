@@ -87,7 +87,7 @@ exports.AutocompleteSelect = {
         if (searchParts.length > 0) {
           var results = true;
           $.each(searchParts, function(i, searchPart) {
-            results = results && choice.name.toLowerCase().indexOf(searchPart) !== -1
+            results = results && choice.name.toLowerCase().indexOf(searchPart) !== -1;
           });
           if (results) {
             return choice;

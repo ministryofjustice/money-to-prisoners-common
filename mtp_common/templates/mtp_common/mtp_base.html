@@ -7,9 +7,8 @@
 
 {% block head %}
   {{ block.super }}
-  <link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" />
 
-  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}?{{ APP_GIT_COMMIT_SHORT }}" media="print"/>
+  <link href="{% static 'app.css' %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" />
   <style media="print">
     a[href^="/"]:after {
       content: " ({{ request.scheme }}://{{ request.get_host }}" attr(href) ")";
@@ -92,7 +91,7 @@
 
 {% block body_end %}
   <span class="mtp-ga-data" data-page="{% if google_analytics_pageview %}{{ google_analytics_pageview.page }}{% elif default_google_analytics_pageview %}{{ default_google_analytics_pageview.page }}{% endif %}" data-location="{% if google_analytics_pageview %}{{ google_analytics_pageview.location }}{% elif default_google_analytics_pageview %}{{ default_google_analytics_pageview.location }}{% endif %}" data-title="{% if google_analytics_pageview %}{{ google_analytics_pageview.title }}{% endif %}"></span>
-  <script src="{% static 'javascripts/app.bundle.js' %}?{{ APP_GIT_COMMIT_SHORT }}"></script>
+  <script src="{% static 'app.js' %}?{{ APP_GIT_COMMIT_SHORT }}"></script>
   <!--
   {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }}
   {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}

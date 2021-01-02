@@ -47,21 +47,17 @@ class App:
 
     @property
     def javascript_source_path(self):
-        return os.path.join(self.asset_source_path, 'javascripts')
-
-    @property
-    def javascript_source_file_set(self):
-        return FileSet('**/*.js', root=self.javascript_source_path)
+        return self.asset_source_path
 
     @property
     def scss_source_path(self):
-        return os.path.join(self.asset_source_path, 'stylesheets')
+        return self.asset_source_path
 
     @property
     def scss_source_file_set(self):
         if self.name == 'api':
             return FileSet('*.scss', root=self.scss_source_path)
-        return FileSet('app*.scss', root=self.scss_source_path)
+        return FileSet('app.scss', root=self.scss_source_path)
 
     @property
     def asset_build_path(self):
@@ -77,24 +73,11 @@ class App:
 
     @property
     def javascript_build_path(self):
-        return os.path.join(self.asset_build_path, 'javascripts')
-
-    @property
-    def javascript_build_file_set(self):
-        if self.name == 'api':
-            return FileSet()
-        return FileSet('app.bundle.js', root=self.javascript_build_path)
+        return self.asset_build_path
 
     @property
     def scss_build_path(self):
-        return os.path.join(self.asset_build_path, 'stylesheets')
-
-    @property
-    def scss_build_file_set(self):
-        # TODO: should be based on source fileset instead?
-        if self.name == 'api':
-            return FileSet('*.css', root=self.scss_build_path)
-        return FileSet('app*.css', root=self.scss_build_path)
+        return self.asset_build_path
 
     @property
     def templates_path(self):
@@ -114,11 +97,11 @@ class App:
 
     @property
     def common_javascript_source_path(self):
-        return os.path.join(self.common_asset_source_path, 'javascripts')
+        return self.common_asset_source_path
 
     @property
     def common_scss_source_path(self):
-        return os.path.join(self.common_asset_source_path, 'stylesheets')
+        return self.common_asset_source_path
 
     @property
     def common_templates_path(self):
@@ -130,11 +113,11 @@ class App:
 
     @property
     def javascript_include_paths(self):
-        yield os.path.join(self.common_javascript_source_path, 'modules')
-        yield os.path.join(self.javascript_source_path, 'modules')
+        yield self.common_javascript_source_path
+        yield self.javascript_source_path
 
     @property
     def scss_include_paths(self):
-        yield os.path.join(self.node_modules_path)
+        yield self.node_modules_path
         yield self.common_scss_source_path
         yield self.scss_source_path

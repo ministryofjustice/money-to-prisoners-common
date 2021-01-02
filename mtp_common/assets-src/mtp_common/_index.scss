@@ -1,0 +1,8 @@
+// Asset paths required by GOV.UK styles
+$govuk-assets-path: '/static/';
+
+// Removes need to put classes on all elements
+$govuk-global-styles: true;
+
+// All govuk-frontend components
+@import 'govuk-frontend/govuk/all';

@@ -29,7 +29,7 @@ exports.CharacterCountWarning = {
             remainingCount
           ), [remainingCount]);
         }
-        $characterCountWarning.text(message)
+        $characterCountWarning.text(message);
       }
 
       updateCounter();

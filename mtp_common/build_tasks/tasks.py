@@ -344,7 +344,7 @@ def make_messages(context: Context, javascript=False, fuzzy=False):
     if fuzzy:
         kwargs['allow_fuzzy'] = True
     if javascript:
-        kwargs.update(domain='djangojs', ignore_patterns=['*.bundle.js'])
+        kwargs.update(domain='djangojs', ignore_patterns=['app.js'])
     with in_dir(context.app.django_app_name):
         return context.management_command('makemessages', **kwargs)
 
