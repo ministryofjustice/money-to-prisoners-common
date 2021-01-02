@@ -54,8 +54,10 @@ class CommonCodeStyleTestCase(unittest.TestCase):
                            self.app.javascript_source_path)
 
     def test_stylesheets_code_style(self):
-        self.run_node_tool('sass-lint',
-                           '--config', self.get_config_file('sass-lint.yml'),
-                           '--format', 'stylish',
-                           '--syntax', 'scss',
-                           os.path.join(self.app.scss_source_path, '**', '*.scss'))
+        self.run_node_tool(
+            'sass-lint',
+            '--config', self.get_config_file('sass-lint.yml'),
+            '--format', 'stylish',
+            '--syntax', 'scss',
+            os.path.join(self.app.scss_source_path, '**', '*.scss'),
+        )
