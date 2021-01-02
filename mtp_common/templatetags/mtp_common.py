@@ -112,6 +112,30 @@ def stripwhitespace(parser, token):
     return StripWhitespaceNode(node_list)
 
 
+class CaptureOutputNode(template.Node):
+    def __init__(self, node_list, variable):
+        self.node_list = node_list
+        self.variable = variable
+
+    def render(self, context):
+        context[self.variable] = self.node_list.render(context)
+        return ''
+
+
+@register.tag
+def captureoutput(parser, token):
+    """
+    Use this tag to capture template output into a variable;
+    useful for including complex content into a blocktrans
+    """
+    args = token.split_contents()[1:]
+    if len(args) != 2 or args[0] != 'as':
+        raise template.TemplateSyntaxError('captureoutput requires "as variable"')
+    node_list = parser.parse(('endcaptureoutput',))
+    parser.delete_first_token()
+    return CaptureOutputNode(node_list, args[1])
+
+
 @register.filter
 def field_from_name(form, name):
     if name in form.fields:
