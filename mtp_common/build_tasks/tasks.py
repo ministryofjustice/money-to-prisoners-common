@@ -216,10 +216,8 @@ def bundle_javascript(context: Context):
     Compiles javascript
     """
     args = ['--bail']
-    if context.verbosity > 0:
-        args.append('--verbose')
     if not context.use_colour:
-        args.append('--no-colors')
+        args.append('--no-color')
     return context.node_tool('webpack', *args)
 
 
