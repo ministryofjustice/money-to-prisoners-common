@@ -11,5 +11,5 @@
   {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
 
   <p><a href="{% url "edit-user" username=user.username %}">{% trans 'Edit again' %}</a></p>
-  <p><a class="link-back" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a></p>
+  <p><a class="govuk-link-back" href="{% url "list-users" %}">{% trans 'Return to user management' %}</a></p>
 {% endblock %}
