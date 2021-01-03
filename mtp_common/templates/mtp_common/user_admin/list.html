@@ -33,7 +33,7 @@
 
     <div class="mtp-account-management__container">
       <table class="mtp-table mtp-account-management__users">
-        <caption class="visually-hidden">{% trans 'Table of new user requests' %}</caption>
+        <caption class="govuk-visually-hidden">{% trans 'Table of new user requests' %}</caption>
         <thead>
           <tr>
             <th>{% trans 'Name' %}</th>
@@ -68,7 +68,7 @@
 
   <div class="mtp-account-management__container">
     <table class="mtp-table mtp-account-management__users">
-      <caption class="visually-hidden">{% trans 'Table of existing users' %}</caption>
+      <caption class="govuk-visually-hidden">{% trans 'Table of existing users' %}</caption>
       <thead>
         <tr>
           <th>{% trans 'Name' %}</th>
@@ -86,7 +86,7 @@
               <td>{{ user.email }}</td>
               {% if user.user_admin %}
                 <td class="mtp-account-management__can_manage">
-                  <span class="visually-hidden">{% trans 'User can manage other accounts' %}</span>
+                  <span class="govuk-visually-hidden">{% trans 'User can manage other accounts' %}</span>
                 </td>
               {% else %}
                 <td></td>

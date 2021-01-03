@@ -86,7 +86,7 @@ def hide_long_text(text, count=5):
     if len(words) <= count:
         return text
     short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])
-    return format_html('<span class="visually-hidden">{text}</span>'
+    return format_html('<span class="govuk-visually-hidden">{text}</span>'
                        '<span aria-hidden="true">'
                        '  {short_text}'
                        '  <a href="#" class="js-long-text" data-rest="{rest_text}">{more}</a>'

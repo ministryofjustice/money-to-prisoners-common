@@ -8,7 +8,7 @@
         {% if page != 1 %}
           <li>
             <a class="mtp-page-list__item mtp-page-list__item--prev" href="?{{ query_string }}page={{ page|add:-1 }}">
-              <span class="visually-hidden">{% trans 'Previous page' %}</span>
+              <span class="govuk-visually-hidden">{% trans 'Previous page' %}</span>
               <span aria-hidden="true">{% trans 'Previous' %}</span>
             </a>
           </li>
@@ -22,7 +22,7 @@
           {% elif page_index == page %}
             <li>
               <span class="mtp-page-list__item">
-                <span class="visually-hidden">{% blocktrans trimmed with page=page_index|separate_thousands %}Page {{ page }}{% endblocktrans %}</span>
+                <span class="govuk-visually-hidden">{% blocktrans trimmed with page=page_index|separate_thousands %}Page {{ page }}{% endblocktrans %}</span>
                 <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
               </span>
             </li>
@@ -30,13 +30,13 @@
             <li>
               <a class="mtp-page-list__item" href="?{{ query_string }}page={{ page_index }}">
                 {% if page_index == 1 %}
-                  <span class="visually-hidden">{% trans 'First page' %}</span>
+                  <span class="govuk-visually-hidden">{% trans 'First page' %}</span>
                   <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
                 {% elif page_index == page_count %}
-                  <span class="visually-hidden">{% trans 'Last page' %}</span>
+                  <span class="govuk-visually-hidden">{% trans 'Last page' %}</span>
                   <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
                 {% else %}
-                  <span class="visually-hidden">{% blocktrans trimmed with page=page_index|separate_thousands %}Page {{ page }}{% endblocktrans %}</span>
+                  <span class="govuk-visually-hidden">{% blocktrans trimmed with page=page_index|separate_thousands %}Page {{ page }}{% endblocktrans %}</span>
                   <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
                 {% endif %}
               </a>
@@ -47,7 +47,7 @@
         {% if page != page_count %}
           <li>
             <a class="mtp-page-list__item mtp-page-list__item--next" href="?{{ query_string }}page={{ page|add:1 }}">
-              <span class="visually-hidden">{% trans 'Next page' %}</span>
+              <span class="govuk-visually-hidden">{% trans 'Next page' %}</span>
               <span aria-hidden="true">{% trans 'Next' %}</span>
             </a>
           </li>
