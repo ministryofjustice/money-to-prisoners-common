@@ -8,7 +8,7 @@
 
 {% if form.errors %}
   <div class="error-summary" aria-labelledby="error-summary-heading" tabindex="-1" role="alert">
-    <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+    <h2 class="govuk-heading-m error-summary-heading" id="error-summary-heading">
       {% trans 'There was a problem' as error_summary_title %}
       {{ form.error_summary_title|default:error_summary_title }}
     </h2>
