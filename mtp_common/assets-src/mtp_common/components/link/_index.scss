@@ -1,0 +1,43 @@
+// for styling a button as a link
+// renamed from .mtp-link-button
+input, button {
+  &.govuk-link {
+    @include govuk-link-common;
+    @include govuk-link-style-default;
+
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: inherit;
+    text-decoration: underline;
+    color: $govuk-link-colour;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+
+// for placing a cancel link next to a submit button
+// renamed form .mtp-cancel-button and .mtp-button--cancel
+a.mtp-link--form-cancel {
+  display: inline-block;
+
+  @include govuk-media-query($from: tablet) {
+    margin-top: 0.45em;
+    margin-left: 1em;
+  }
+}
+
+// hides link underline and url when printing
+// renamed from .mtp-print-url-hidden
+@media print {
+  a.mtp-link--print-plain {
+    text-decoration: none !important;
+
+    &:after {
+      content: '' !important;
+      display: none !important;
+    }
+  }
+}

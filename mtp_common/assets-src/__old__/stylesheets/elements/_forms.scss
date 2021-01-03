@@ -2,18 +2,6 @@ input {
   font-family: inherit;
 }
 
-form a.mtp-cancel-button {
-  vertical-align: -0.45em;
-
-  @include media(tablet) {
-    margin-left: 1em;
-  }
-
-  &:visited {
-    color: $link-colour;
-  }
-}
-
 .main-content label + * {
   margin-top: 0;
 }

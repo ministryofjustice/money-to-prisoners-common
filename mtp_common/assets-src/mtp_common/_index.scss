@@ -9,4 +9,5 @@ $govuk-global-styles: true;
 
 // mtp-common components required by all apps
 @import './display';
+@import './components/link';
 @import './components/tag';
