@@ -37,9 +37,7 @@ def govuk_localisation(_):
         'moj_internal_site': moj_internal_site,
         'html_lang': html_lang or settings.LANGUAGE_CODE,
         'home_url': '/%s/' % html_lang if html_lang else '/',
-        'skip_link_message': gettext('Skip to main content'),
         'homepage_url': homepage_url,
         'logo_link_title': logo_link_title,
         'global_header_text': global_header_text,
-        'crown_copyright_message': gettext('© Crown copyright'),
     }

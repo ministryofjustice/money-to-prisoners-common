@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% if footer_support_links %}
+  <h2 class="govuk-visually-hidden">
+    {% trans 'Support links' %}
+  </h2>
+  <ul class="govuk-footer__inline-list">
+    {% for link in footer_support_links %}
+      <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="{{ link.href }}">
+          {{ link.text }}
+        </a>
+      </li>
+    {% endfor %}
+    {% if not hide_built_by_moj %}
+      <li class="govuk-footer__inline-list-item">
+        {% trans 'Built by' %}
+        <a class="govuk-footer__link" href="https://mojdigital.blog.gov.uk/">
+          <abbr title="{% trans 'Ministry of Justice' %}">MOJ</abbr> Digital
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+{% endif %}

@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% if proposition_links %}
+  <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="{% trans 'Show or hide navigation menu' %}">{% trans 'Menu' %}</button>
+  <nav>
+    <ul id="navigation" class="govuk-header__navigation" aria-label="{% trans 'Navigation menu' %}">
+      {% for link in proposition_links %}
+        <li class="govuk-header__navigation-item {% if link.active %}govuk-header__navigation-item--active{% endif %}">
+          <a class="govuk-header__link" href="{{ link.href }}">
+            {{ link.text }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}
