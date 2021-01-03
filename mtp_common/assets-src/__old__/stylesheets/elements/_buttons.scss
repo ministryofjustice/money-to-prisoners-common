@@ -1,9 +1,5 @@
 // Fixes
 
-.button-secondary {
-  @include button($grey-3);
-}
-
 .button-footer {
   @include button($govuk-blue);
 }

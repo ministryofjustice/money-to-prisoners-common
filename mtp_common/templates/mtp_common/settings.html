@@ -21,7 +21,7 @@
         <h2 class="govuk-heading-l">
           {% trans 'Change your password' %}
         </h2>
-        <a class="button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
       </div>
 
       <div class="mtp-settings-item">
@@ -29,7 +29,7 @@
           {% trans 'Your email' %}
         </h2>
         <p>{{ request.user.email }}</p>
-        <a class="button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
       </div>
 
       {% if perms.auth.change_user %}
@@ -40,7 +40,7 @@
           <p>
             {% trans 'Add, view, edit or disable user accounts.' %}
           </p>
-          <a class="button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
+          <a class="govuk-button" data-module="govuk-button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
         </div>
       {% endif %}
     </div>

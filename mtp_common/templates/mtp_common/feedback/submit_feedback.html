@@ -50,7 +50,7 @@
         {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
 
         <div class="form-group">
-          <button type="submit" class="button" name="submit-feedback">{% trans 'Send' %}</button>
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
         </div>
       </fieldset>
     </form>
