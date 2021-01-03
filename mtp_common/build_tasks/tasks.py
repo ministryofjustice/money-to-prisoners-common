@@ -38,7 +38,7 @@ def serve(context: Context, port=8000, browsersync_port=3000, browsersync_ui_por
     try:
         from watchdog.observers import Observer
     except ImportError:
-        context.pip_command('install', '--use-feature=2020-resolver', 'watchdog>0.8,<0.9')
+        context.pip_command('install', 'watchdog>0.8,<0.9')
         from watchdog.observers import Observer
 
     from watchdog.events import PatternMatchingEventHandler
@@ -132,10 +132,10 @@ def python_dependencies(context: Context, common_path=None):
     """
     Updates python dependencies
     """
-    context.pip_command('install', '--use-feature=2020-resolver', '-r', context.requirements_file)
+    context.pip_command('install', '-r', context.requirements_file)
     if common_path:
         context.pip_command('uninstall', '--yes', 'money-to-prisoners-common')
-        context.pip_command('install', '--use-feature=2020-resolver', '--force-reinstall', '-e', common_path)
+        context.pip_command('install', '--force-reinstall', '-e', common_path)
         context.shell('rm', '-rf', 'webpack.config.js')  # because it refers to path to common
 
 
