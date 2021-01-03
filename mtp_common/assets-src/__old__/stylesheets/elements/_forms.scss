@@ -6,24 +6,6 @@ input {
   margin-top: 0;
 }
 
-.error-summary {
-  .error-summary-list {
-    .non-field-error {
-      color: $error-colour;
-      font-weight: bold;
-    }
-
-    .field-specific-error ul {
-      padding-left: 1em;
-
-      li {
-        list-style-type: disc;
-        color: $error-colour;
-      }
-    }
-  }
-}
-
 .mtp-detail-label {
   color: $secondary-text-colour;
   font-size: 16px;

@@ -26,7 +26,7 @@
     <form action="." method="post" id="mtp-feedback-form">
       {% csrf_token %}
 
-      {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+      {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 
       {{ form.referer }}
 

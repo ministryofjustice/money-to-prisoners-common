@@ -3,6 +3,6 @@
 
 exports.Messages = {
   init: function () {
-    $('.error-summary, .mtp-messages[role=alert]').focus();
+    $('.mtp-messages[role=alert]').focus();
   }
 };
