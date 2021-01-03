@@ -6,3 +6,6 @@ $govuk-global-styles: true;
 
 // All govuk-frontend components
 @import 'govuk-frontend/govuk/all';
+
+// mtp-common components required by all apps
+@import './components/tag';
