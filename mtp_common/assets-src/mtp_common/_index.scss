@@ -7,8 +7,12 @@ $govuk-global-styles: true;
 // All govuk-frontend components
 @import 'govuk-frontend/govuk/all';
 
+// Global utils and settings
+@import './settings';
+
 // mtp-common components required by all apps
 @import './display';
+@import './components/breadcrumb-bar';
 @import './components/error-summary';
 @import './components/link';
 @import './components/table';

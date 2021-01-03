@@ -6,7 +6,7 @@
   <div class="mtp-language-switch govuk-body-s govuk-!-display-none-print">
     <span class="govuk-visually-hidden">{% trans 'Switch language' %}</span>
     {% for lang_code, lang_name, url in alt_urls %}
-      <span class="mtp-language-switch__item {% if forloop.first %}mtp-language-switch__item--first{% elif forloop.last %}mtp-language-switch__item--last{% endif %}">
+      <span class="mtp-language-switch__item {% if forloop.first %}mtp-language-switch__item--first{% elif forloop.last %}mtp-language-switch__item--last{% endif %}" lang="{{ lang_code }}">
         {% if current_language == lang_code %}
           {{ lang_name }}
         {% else %}
