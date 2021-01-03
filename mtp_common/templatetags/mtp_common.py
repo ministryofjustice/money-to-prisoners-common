@@ -10,7 +10,7 @@ from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
 from django.utils.html import format_html
 from django.utils.http import urlencode
-from django.utils.translation import gettext, override
+from django.utils.translation import gettext, gettext_lazy as _, override
 
 from mtp_common.api import notifications_for_request
 from mtp_common.utils import and_join, format_postcode
@@ -44,6 +44,7 @@ def postcode(value):
 
 @register.filter
 def to_string(value):
+    # TODO: use force_text?
     return str(value)
 
 
@@ -281,14 +282,27 @@ def dialoguebox(parser, token):
     return DialogueNode(node_list, **kwargs)
 
 
-@register.inclusion_tag('mtp_common/includes/notifications.html')
-def notifications_box(request, *targets, **kwargs):
+@register.inclusion_tag('mtp_common/components/notification-banners.html')
+def notification_banners(request, *targets, **kwargs):
+    """
+    Shows notifications banners from _first_ target that responds
+    """
     for target in targets:
         notifications = notifications_for_request(request, target, **kwargs)
         if notifications:
+            for notification in notifications:
+                notification['level_name'] = {
+                    'info': _('Information'),
+                    'warning': _('Warning'),
+                    'error': _('Error'),
+                    'success': _('Success'),
+                }.get(notification['level'], None)
             return {
-                'notifications': notifications
+                'notifications': notifications,
             }
+    return {
+        'notifications': [],
+    }
 
 
 class TabbedPanelNode(template.Node):

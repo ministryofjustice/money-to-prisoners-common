@@ -1,0 +1,3 @@
+{% for notification in notifications %}
+  {% include 'mtp_common/components/notification-banner.html' with banner_level=notification.level banner_title=notification.level_name banner_heading=notification.headline banner_message=notification.message only %}
+{% endfor %}

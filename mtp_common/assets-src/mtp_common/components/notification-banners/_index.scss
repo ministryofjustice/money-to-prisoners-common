@@ -1,0 +1,28 @@
+$mtp-notification-banner-warning-colour: govuk-colour('orange') !default;
+
+.mtp-notification-banner--warning {
+  border-color: $mtp-notification-banner-warning-colour;
+  background-color: $mtp-notification-banner-warning-colour;
+}
+
+.mtp-notification-banner--error {
+  border-color: $govuk-error-colour;
+  background-color: $govuk-error-colour;
+
+  .govuk-notification-banner__content {
+    a, .govuk-notification-banner__link {
+      @include govuk-link-style-error;
+    }
+  }
+}
+
+.mtp-notification-banner--success {
+  border-color: $govuk-success-colour;
+  background-color: $govuk-success-colour;
+
+  .govuk-notification-banner__content {
+    a, .govuk-notification-banner__link {
+      @include govuk-link-style-success;
+    }
+  }
+}

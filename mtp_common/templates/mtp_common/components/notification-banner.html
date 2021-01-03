@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load mtp_common %}
+
+{% random_string as banner_id %}
+<div class="govuk-notification-banner {% if banner_level %}mtp-notification-banner--{{ banner_level }}{% endif %}" role="{% if banner_level == 'success' or banner_level == 'error' %}alert{% else %}region{% endif %}" aria-labelledby="govuk-notification-banner-title-{{ banner_id }}" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-{{ banner_id }}">
+      {{ banner_title|default:_('Important') }}
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-notification-banner__heading">
+      {{ banner_heading }}
+    </p>
+    {% if banner_message %}
+      {{ banner_message|urlize|linebreaks }}
+    {% endif %}
+  </div>
+</div>
