@@ -1,6 +1,5 @@
 from collections import OrderedDict
 from itertools import chain
-import json
 import re
 
 from django import template
@@ -238,21 +237,6 @@ def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1
         'page_range': pages_with_ellipses,
         'query_string': f'{query_string}&' if query_string else '',
     }
-
-
-@register.inclusion_tag('mtp_common/includes/footer-feedback.html')
-def footer_feedback_form(request, context):
-    return_errors_param = context.get('return_errors_param', 'feedback_errors')
-    try:
-        errors = json.loads(request.GET[return_errors_param])
-    except (KeyError, TypeError, ValueError):
-        errors = None
-    return dict(
-        context,
-        request=request,
-        return_errors_param=return_errors_param,
-        errors=errors,
-    )
 
 
 class DialogueNode(template.Node):

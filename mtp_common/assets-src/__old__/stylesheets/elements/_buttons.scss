@@ -1,9 +1,5 @@
 // Fixes
 
-.button-footer {
-  @include button($govuk-blue);
-}
-
 .button + .button {
   margin-top: 0;
   margin-left: .5em;
