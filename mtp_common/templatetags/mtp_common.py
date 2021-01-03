@@ -4,6 +4,7 @@ import re
 
 from django import template
 from django.conf import settings
+from django.contrib import messages
 from django.forms.utils import flatatt
 from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
@@ -285,24 +286,33 @@ def dialoguebox(parser, token):
 @register.inclusion_tag('mtp_common/components/notification-banners.html')
 def notification_banners(request, *targets, **kwargs):
     """
-    Shows notifications banners from _first_ target that responds
+    Shows notification banners from:
+    - mtp-api's _first_ target that responds
+    - django messages
     """
+    context_data = {
+        'notifications': [],
+        'messages': messages.get_messages(request),
+    }
     for target in targets:
         notifications = notifications_for_request(request, target, **kwargs)
         if notifications:
-            for notification in notifications:
-                notification['level_name'] = {
-                    'info': _('Information'),
-                    'warning': _('Warning'),
-                    'error': _('Error'),
-                    'success': _('Success'),
-                }.get(notification['level'], None)
-            return {
-                'notifications': notifications,
-            }
-    return {
-        'notifications': [],
-    }
+            context_data['notifications'] = notifications
+            break
+    return context_data
+
+
+NOTIFICATION_LEVELS = {
+    'info': _('Information'),
+    'success': _('Success'),
+    'warning': _('Warning'),
+    'error': _('Error'),
+}
+
+
+@register.filter
+def notification_level(level_name):
+    return NOTIFICATION_LEVELS.get(level_name, _('Important'))
 
 
 class TabbedPanelNode(template.Node):
