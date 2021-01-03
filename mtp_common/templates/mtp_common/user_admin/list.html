@@ -22,7 +22,7 @@
     </p>
   {% endif %}
 
-  <p class="print-hidden">
+  <p class="govuk-!-display-none-print">
     <a class="govuk-button govuk-button--secondary" data-module="govuk-button" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
   </p>
 
@@ -39,7 +39,7 @@
             <th>{% trans 'Name' %}</th>
             <th>{% trans 'Email' %}</th>
             <th class="mtp-account-management__request_date">{% trans 'Requested' %}</th>
-            <th class="mtp-account-management__actions print-hidden">{% trans 'Actions' %}</th>
+            <th class="mtp-account-management__actions govuk-!-display-none-print">{% trans 'Actions' %}</th>
           </tr>
         </thead>
         <tbody>
@@ -50,7 +50,7 @@
               <td class="mtp-account-management__request_date mtp-numeric-left">
                 {{ account_request.created|date:'d/m/Y' }}
               </td>
-              <td class="mtp-account-management__actions print-hidden">
+              <td class="mtp-account-management__actions govuk-!-display-none-print">
                 <a href="{% url 'accept-request' account_request=account_request.id %}">
                   {% trans 'Manage' %}
                 </a>
@@ -74,7 +74,7 @@
           <th>{% trans 'Name' %}</th>
           <th>{% trans 'Email' %}</th>
           <th class="mtp-account-management__is_manager">{% trans 'Can manage accounts' %}</th>
-          <th class="mtp-account-management__actions print-hidden">{% trans 'Actions' %}</th>
+          <th class="mtp-account-management__actions govuk-!-display-none-print">{% trans 'Actions' %}</th>
         </tr>
       </thead>
 
@@ -91,7 +91,7 @@
               {% else %}
                 <td></td>
               {% endif %}
-              <td class="mtp-account-management__actions print-hidden">
+              <td class="mtp-account-management__actions govuk-!-display-none-print">
                 <a href="{% url 'edit-user' username=user.username %}" class="mtp-account-management__action">
                   {% trans 'Edit' %}
                 </a>
