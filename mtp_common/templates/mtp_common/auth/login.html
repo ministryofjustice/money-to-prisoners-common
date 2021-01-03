@@ -15,7 +15,7 @@
     </h1>
   </header>
 
-  <div class="container">
+  <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         {% include 'mtp_common/forms/error-summary.html' with form=form only %}
@@ -37,11 +37,9 @@
           </div>
         </form>
 
-        {% if ENVIRONMENT != 'test' %}
-          {% url 'reset_password' as reset_password_url %}
-          {% if reset_password_url %}
-            <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
-          {% endif %}
+        {% url 'reset_password' as reset_password_url %}
+        {% if reset_password_url %}
+          <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
         {% endif %}
 
       </div>
