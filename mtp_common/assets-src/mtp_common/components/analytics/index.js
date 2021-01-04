@@ -25,9 +25,12 @@ export var Analytics = {
     if (this._gaExists()) {
       var gaData = $('span.mtp-ga-data');
       if (gaData) {
-        // TODO: should not override "page" if specifically provided
+        var page = gaData.data('page');
+        if (arguments[0] === 'pageview' && arguments.length > 1 && $.type(arguments[1]) === 'string') {
+          page = arguments[1];
+        }
         var gaOverride = {
-          page: gaData.data('page'),
+          page: page,
           location: gaData.data('location'),
           title: gaData.data('title') || document.title
         };
