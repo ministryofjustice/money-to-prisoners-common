@@ -34,26 +34,6 @@ link:
 
   <a href="#some-dialog" class="js-Dialog">Print</a>
 
-Disclosure box
-~~~~~~~~~~~~~~
-
-Does what `<details>` does in modern browsers but works in IE8.
-C.f. `progressive disclosure <http://govuk-elements.herokuapp.com/typography/#typography-hidden-text>`_
-
-.. image:: static/help-popup-closed.png
-  :align: center
-
-.. image:: static/help-popup-open.png
-  :align: center
-
-.. code-block:: html
-
-  <a class="mtp-disclosure" href="#" aria-controls="id-of-container" aria-expanded="false" role="button">
-    <span></span>Help
-  </a>
-  ...
-  <div id="id-of-container" class="mtp-disclosure__contents"></div>
-
 Check boxes
 -----------
 
