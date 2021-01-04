@@ -30,7 +30,7 @@
 
       {{ form.referer }}
 
-      <fieldset>
+      <fieldset class="govuk-fieldset">
         <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
 
         {% with field=form.ticket_content value=request.GET.message|default:'' %}
