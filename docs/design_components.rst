@@ -107,7 +107,7 @@ Turn a 2-digits year into a 4-digit year when focus leaves a field. E.g. 83 -> 1
 
 .. code-block:: html
 
-  <input class="form-control form-year-field" id="id_prisoner_dob_2" name="prisoner_dob_2" value="" type="number">
+  <input class="mtp-date-input__year-completion …" … type="number" />
 
 Pagination
 ----------
