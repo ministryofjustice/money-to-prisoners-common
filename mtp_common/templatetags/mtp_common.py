@@ -9,6 +9,7 @@ from django.forms.utils import flatatt
 from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
+from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.http import urlencode
 from django.utils.translation import gettext, gettext_lazy as _, override
@@ -83,16 +84,21 @@ def hide_long_text(text, count=5):
     if not text:
         return text
     count = int(count)
-    words = text.split()
+    words = force_text(text).split()
     if len(words) <= count:
         return text
     short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])
-    return format_html('<span class="govuk-visually-hidden">{text}</span>'
-                       '<span aria-hidden="true">'
-                       '  {short_text}'
-                       '  <a href="#" class="js-long-text" data-rest="{rest_text}">{more}</a>'
-                       '</span>',
-                       short_text=short_text, rest_text=rest_text, text=text, more=gettext('More…'))
+    return format_html(
+        '<span class="govuk-visually-hidden">{text}</span>'
+        '<span aria-hidden="true">'
+        '  {short_text}'
+        '  <a href="#" class="mtp-hidden-long-text" data-rest="{rest_text}">{more}</a>'
+        '</span>',
+        short_text=short_text,
+        rest_text=rest_text,
+        text=text,
+        more=gettext('More…'),
+    )
 
 
 class StripWhitespaceNode(template.Node):
