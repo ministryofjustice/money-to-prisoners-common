@@ -1,10 +1,17 @@
 {% load i18n %}
 {% load mtp_common %}
 
+{% comment %}
+  USAGE:
+  {% page_list page=page page_count=page_count %}
+  optional parameters:
+    query_string - optional parameters to include in links
+{% endcomment %}
+
 {% if page_count > 1 %}
   {% spaceless %}
-    <nav>
-      <ul class="mtp-page-list">
+    <nav class="mtp-page-list" role="navigation" aria-label="{% trans 'Pagination' %}">
+      <ul>
         {% if page != 1 %}
           <li>
             <a class="mtp-page-list__item mtp-page-list__item--prev" href="?{{ query_string }}page={{ page|add:-1 }}">

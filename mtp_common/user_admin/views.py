@@ -67,6 +67,7 @@ def list_users(request):
             'ordering': '-is_active'
         }
     ).json()
+    user_count = response.get('count', 0)
     users = response.get('results', [])
     account_requests = retrieve_all_pages_for_path(session, 'requests/')
     for account_request in account_requests:
@@ -76,7 +77,8 @@ def list_users(request):
         'locked_users_exist': any(user['is_locked_out'] for user in users),
         'users': users,
         'page': page,
-        'page_count': int(math.ceil(response.get('count', 0) / page_size)),
+        'page_count': int(math.ceil(user_count / page_size)),
+        'user_count': user_count,
         'account_requests': account_requests,
     }
     return render(request, 'mtp_common/user_admin/list.html', context=context)

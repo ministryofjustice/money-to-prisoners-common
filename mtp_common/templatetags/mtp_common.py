@@ -220,7 +220,7 @@ def breadcrumb_bar(context):
     }
 
 
-@register.inclusion_tag('mtp_common/includes/page-list.html')
+@register.inclusion_tag('mtp_common/components/page-list.html')
 def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1):
     if page_count < 7:
         pages_with_ellipses = range(1, page_count + 1)
