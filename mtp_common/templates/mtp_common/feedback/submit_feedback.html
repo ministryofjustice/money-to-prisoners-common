@@ -34,7 +34,7 @@
         <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
 
         {% with field=form.ticket_content value=request.GET.message|default:'' %}
-          <div class="form-group {% if field.errors %}form-group-error{% endif %}">
+          <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
             {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
             <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-label">
@@ -49,7 +49,7 @@
 
         {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
 
-        <div class="form-group">
+        <div class="govuk-form-group">
           <button type="submit" class="govuk-button" data-module="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
         </div>
       </fieldset>

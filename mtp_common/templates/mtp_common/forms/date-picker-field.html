@@ -11,7 +11,7 @@
   TODO: the widget is not currently configurable
 {% endcomment %}
 
-<div id="{{ field.id_for_label }}-wrapper" class="form-group {% if field.errors %}form-group-error{% endif %}">
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
   {% include 'mtp_common/forms/field-label.html' with field=field only %}
   {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
