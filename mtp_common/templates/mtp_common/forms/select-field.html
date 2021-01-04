@@ -16,7 +16,7 @@
   {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
   {% with selected=value|default:field.value|default:field.field.initial %}
-    <select id="{{ field.id_for_label }}" class="form-control {% if field.errors %}form-control-error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" {% if field.field.widget.allow_multiple_selected %}multiple="multiple"{% endif %} {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %}>
+    <select id="{{ field.id_for_label }}" class="govuk-select {% if field.errors %}govuk-select--error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" {% if field.field.widget.allow_multiple_selected %}multiple="multiple"{% endif %} {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %}>
       {% for key, title in field.field.choices %}
         {% if field.field.widget.allow_multiple_selected %}
           <option value="{{ key }}" {% if key in selected %}selected{% endif %}>{{ title }}</option>
