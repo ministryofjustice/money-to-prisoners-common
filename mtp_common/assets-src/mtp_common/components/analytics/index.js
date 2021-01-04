@@ -1,13 +1,13 @@
 // Google Analytics Utility module
 // This module offers ways to send custom events to Google Analytics:
-// - by calling analytics.send. Eg. analytics.send('event', 'tick', 'checkbox')
+// - by calling Analytics.send. Eg. Analytics.send('event', 'tick', 'checkbox')
 // - by adding the data-analytics attribute to any element that can be clicked
 //   eg <div data-analytics="pageview,/virtual/pageview/,user clicked there"/>
 // It needs the google analytics tracking code to be enabled on the page
 /* globals ga */
 'use strict';
 
-exports.Analytics = {
+export var Analytics = {
   attrName: 'analytics',
 
   init: function () {
@@ -23,14 +23,15 @@ exports.Analytics = {
       this use rawSend instead.
     */
     if (this._gaExists()) {
-      var ga_data = $('span.mtp-ga-data');
-      if (ga_data) {
-        var ga_override = {
-          page: ga_data.data('page'),
-          location: ga_data.data('location'),
-          title: ga_data.data('title') || document.title
+      var gaData = $('span.mtp-ga-data');
+      if (gaData) {
+        // TODO: should not override "page" if specifically provided
+        var gaOverride = {
+          page: gaData.data('page'),
+          location: gaData.data('location'),
+          title: gaData.data('title') || document.title
         };
-        [].push.call(arguments, ga_override);
+        [].push.call(arguments, gaOverride);
       }
       [].unshift.call(arguments, 'send');
       ga.apply(window, arguments);
@@ -57,5 +58,4 @@ exports.Analytics = {
   _gaExists: function () {
     return typeof ga === typeof Function;
   }
-
 };
