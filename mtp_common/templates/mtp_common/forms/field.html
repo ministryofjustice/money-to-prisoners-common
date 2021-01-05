@@ -7,6 +7,8 @@
     input_classes - classes to add to the input element
     value - input element value override instead of default filtered field value (ignored if None)
     prefix/suffix - visually label the input element with text
+    input_type - override widget's input type
+    integer_input - when asking for whole numbers
     autocomplete - WCAG input purpose
     attrs - dict of additional attributes
 
@@ -19,7 +21,7 @@
 
   {% if prefix or suffix %}<div class="govuk-input__wrapper">{% endif %}
   {% if prefix %}<div class="govuk-input__prefix" aria-hidden="true">{{ prefix }}</div>{% endif %}
-  <input id="{{ field.id_for_label }}" class="govuk-input {% if field.errors %}govuk-input--error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" value="{{ value|default:field.value|default_if_none:'' }}" type="{{ field.field.widget.input_type|default:'text' }}" {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %} {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %} />
+  <input id="{{ field.id_for_label }}" class="govuk-input {% if field.errors %}govuk-input--error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" value="{{ value|default:field.value|default_if_none:'' }}" type="{% if integer_input %}text{% else %}{{ input_type|default:field.field.widget.input_type|default:'text' }}{% endif %}" {% if integer_input %}pattern="[0-9]*" inputmode="numeric"{% endif %} {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %} {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %} />
   {% if suffix %}<div class="govuk-input__suffix" aria-hidden="true">{{ suffix }}</div>{% endif %}
   {% if prefix or suffix %}</div>{% endif %}
 </div>
