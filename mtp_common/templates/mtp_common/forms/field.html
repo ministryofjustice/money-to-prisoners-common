@@ -6,6 +6,7 @@
   optional parameters:
     input_classes - classes to add to the input element
     value - input element value override instead of default filtered field value (ignored if None)
+    prefix/suffix - visually label the input element with text
     autocomplete - WCAG input purpose
     attrs - dict of additional attributes
 
@@ -16,5 +17,9 @@
   {% include 'mtp_common/forms/field-label.html' with field=field only %}
   {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
+  {% if prefix or suffix %}<div class="govuk-input__wrapper">{% endif %}
+  {% if prefix %}<div class="govuk-input__prefix" aria-hidden="true">{{ prefix }}</div>{% endif %}
   <input id="{{ field.id_for_label }}" class="govuk-input {% if field.errors %}govuk-input--error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" value="{{ value|default:field.value|default_if_none:'' }}" type="{{ field.field.widget.input_type|default:'text' }}" {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %} {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %} />
+  {% if suffix %}<div class="govuk-input__suffix" aria-hidden="true">{{ suffix }}</div>{% endif %}
+  {% if prefix or suffix %}</div>{% endif %}
 </div>
