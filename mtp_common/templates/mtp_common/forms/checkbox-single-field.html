@@ -1,0 +1,33 @@
+{% load i18n %}
+
+{% comment %}
+  Single checkbox field with no wrapping fieldset
+  USAGE:
+  {% include 'mtp_common/forms/checkbox-single-field.html' with field=<field variable> only %}
+  optional parameters:
+    input_classes - classes to add to the input element
+    value - input element value override instead of default filtered field value (ignored if None)
+    small - whether smaller boxes should be used
+
+  TODO: the widget is not currently configurable
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+
+  <div class="govuk-checkboxes {% if small %}govuk-checkboxes--small{% endif %}" data-module="govuk-checkboxes">
+    {% with checked=value|default:field.value|default:field.field.initial %}
+      <div class="govuk-checkboxes__item">
+        <input id="{{ field.id_for_label }}" class="govuk-checkboxes__input {{ input_classes }}" name="{{ field.html_name }}" type="checkbox" {% if checked %}checked{% endif %} />
+        <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-label govuk-checkboxes__label">
+          {{ field.label }}
+        </label>
+        {% if field.help_text %}
+          <span id="{{ field.id_for_label }}-hint" class="govuk-hint govuk-checkboxes__hint">
+            {{ field.help_text }}
+          </span>
+        {% endif %}
+      </div>
+    {% endwith %}
+  </div>
+</div>
