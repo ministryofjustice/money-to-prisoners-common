@@ -1,0 +1,23 @@
+.govuk-panel {
+  @media print {
+    background: none !important;
+    color: #000 !important;
+    border: $govuk-border-width solid #000;
+  }
+}
+
+.govuk-panel--confirmation {
+  a {
+    color: govuk-colour('white');
+  }
+}
+
+.mtp-panel--information {
+  color: govuk-colour('white');
+  background: govuk-colour('blue');
+}
+
+.mtp-panel--success {
+  color: govuk-colour('white');
+  background: govuk-colour('green');
+}
