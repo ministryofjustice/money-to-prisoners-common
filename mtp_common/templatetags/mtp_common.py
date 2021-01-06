@@ -50,6 +50,18 @@ def to_string(value):
     return str(value)
 
 
+@register.simple_tag(takes_context=True)
+def create_counter(context, var):
+    context[var] = 0
+    return ''
+
+
+@register.simple_tag(takes_context=True)
+def increment_counter(context, var):
+    context[var] += 1
+    return context[var]
+
+
 @register.simple_tag
 def random_string(length=4):
     return get_random_string(length=length)

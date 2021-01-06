@@ -129,3 +129,29 @@ class TemplateTagTestCase(SimpleTestCase):
         render('abc123', 'ABC123')
         render('75008', '75008')
         render(75008, '75008')
+
+    def test_counter(self):
+        response = self.load_mocked_template("""
+            {% load mtp_common %}
+            {% create_counter 'test' %}
+            {% increment_counter 'test' %}
+        """, {})
+        html = response.content.decode().strip()
+        self.assertEqual(html, '1')
+
+        response = self.load_mocked_template("""
+            {% load mtp_common %}
+            {% create_counter 'test' %}
+            {% increment_counter 'test' %},{% increment_counter 'test' %},{% increment_counter 'test' %}
+        """, {})
+        html = response.content.decode().strip()
+        self.assertEqual(html, '1,2,3')
+
+        response = self.load_mocked_template("""
+            {% load mtp_common %}
+            {% create_counter a %}
+            {% create_counter b %}
+            {% increment_counter a %},{% increment_counter a %},{% increment_counter b %},{% increment_counter a %}
+        """, {'a': 'test1', 'b': 'test2'})
+        html = response.content.decode().strip()
+        self.assertEqual(html, '1,2,1,3')
