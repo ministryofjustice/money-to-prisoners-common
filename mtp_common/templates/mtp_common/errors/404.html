@@ -4,15 +4,17 @@
 {% block page_title %}{% trans 'Page not found' %} – {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl">{% trans 'Page not found' %}</h1>
-  <div class="govuk-width-container">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <p>
-          {% trans 'If you entered a web address please check it was correct.' %}
-        </p>
-        <p><a href="/">{% trans 'Return to the home page' %}</a></p>
-      </div>
+  <header>
+    <h1 class="govuk-heading-xl">
+      {% trans 'Page not found' %}
+    </h1>
+  </header>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p>
+        {% trans 'If you entered a web address please check it was correct.' %}
+      </p>
+      <p><a href="/">{% trans 'Return to the home page' %}</a></p>
     </div>
   </div>
 {% endblock %}
