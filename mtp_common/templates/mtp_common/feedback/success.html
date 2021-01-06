@@ -4,22 +4,24 @@
 {% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
 {% block content %}
-  {% block get_help_heading %}
-    <header>
-      <h1 class="govuk-heading-xl">
-        <span class="govuk-caption-xl">
-          {{ get_help_title|default:_('Get help') }}
-        </span>
-        {% trans 'Thanks for your query' %}
-      </h1>
-    </header>
-  {% endblock %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
+      {% block get_help_heading %}
+        <header>
+          <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl">
+              {{ get_help_title|default:_('Get help') }}
+            </span>
+            {% trans 'Thanks for your query' %}
+          </h1>
+        </header>
+      {% endblock %}
+
       {% block get_help_message %}
         <p>{% trans 'The prisoner money team received your request and will try to reply in one working day.' %}</p>
       {% endblock %}
+
     </div>
   </div>
 {% endblock %}

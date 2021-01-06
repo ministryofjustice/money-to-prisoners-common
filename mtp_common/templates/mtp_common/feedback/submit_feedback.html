@@ -1,57 +1,47 @@
 {% extends base_template_name %}
 {% load i18n %}
-{% load mtp_common %}
 
 {% block page_title %}{{ get_help_title|default:_('Get help') }} – {{ block.super }}{% endblock %}
 
 {% block content %}
-  {% block get_help_heading %}
-    <header>
-      <h1 class="govuk-heading-xl">{{ get_help_title|default:_('Get help') }}</h1>
-    </header>
-  {% endblock %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-  {% block get_help_leading %}
-    <p class="govuk-body-l">
-      {% trans 'Ask questions about this service to the prisoner money team.' %}
-      <br />
-      {% trans 'It’s the fastest way we can help you with a query.' %}
-      <br />
-      {% trans 'You can send us any feedback here too.' %}
-    </p>
-    <br />
-  {% endblock %}
+      {% block get_help_heading %}
+        <header>
+          <h1 class="govuk-heading-xl">{{ get_help_title|default:_('Get help') }}</h1>
+        </header>
+      {% endblock %}
 
-  {% block get_help_form %}
-    <form action="." method="post" id="mtp-feedback-form">
-      {% csrf_token %}
+      {% block get_help_leading %}
+        <p class="govuk-body-l govuk-!-margin-bottom-9">
+          {% trans 'Ask questions about this service to the prisoner money team.' %}
+          <br />
+          {% trans 'It’s the fastest way we can help you with a query.' %}
+          <br />
+          {% trans 'You can send us any feedback here too.' %}
+        </p>
+      {% endblock %}
 
-      {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
+      {% block get_help_form %}
+        <form action="." method="post" id="mtp-feedback-form">
+          {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 
-      {{ form.referer }}
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-visually-hidden">{% trans 'Your message or feedback' %}</legend>
 
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-visually-hidden">{% trans 'Feedback details' %}</legend>
+            {% include 'mtp_common/forms/textarea.html' with field=form.ticket_content value=request.GET.message|default:None rows=6 only %}
+            {% include 'mtp_common/forms/field.html' with field=form.contact_email input_classes='govuk-input--width-20' autocomplete='email' value=request.GET.email|default:'' only %}
 
-        {% with field=form.ticket_content value=request.GET.message|default:'' %}
-          <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
-            {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+            <div class="govuk-form-group">
+              {% csrf_token %}
+              {{ form.referer }}
+              <button type="submit" class="govuk-button" data-module="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
+            </div>
+          </fieldset>
+        </form>
+      {% endblock %}
 
-            <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-label">
-              {% trans 'Your questions and feedback' %}
-            </label>
-            {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
-
-            <textarea class="govuk-textarea {% if field.errors %}govuk-textarea--error{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}" cols="40" rows="10">{{ field.value|default:value }}</textarea>
-          </div>
-        {% endwith %}
-
-        {% include 'mtp_common/forms/field.html' with field=form.contact_email value=request.GET.email|default:'' only %}
-
-        <div class="govuk-form-group">
-          <button type="submit" class="govuk-button" data-module="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>
-        </div>
-      </fieldset>
-    </form>
-  {% endblock %}
+    </div>
+  </div>
 {% endblock %}
