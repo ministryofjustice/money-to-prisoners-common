@@ -1,0 +1,9 @@
+{% comment %}
+  USAGE:
+  {% include 'govuk-frontend/components/section-break.html' %}
+  optional parameters:
+    visible - make division line display
+    size - one of m l or xl
+{% endcomment %}
+
+<hr class="govuk-section-break {% if size %}govuk-section-break--{{ size }}{% endif %} {% if visible %}govuk-section-break--visible{% endif %}" />
