@@ -114,7 +114,7 @@ def test(context: Context, test_labels=None, functional_tests=False, accessibili
     if webdriver:
         os.environ['WEBDRIVER'] = webdriver
     test_labels = (test_labels or '').split()
-    return context.management_command('test', args=test_labels, interactive=False)
+    return context.management_command('test', *test_labels, interactive=False)
 
 
 @tasks.register(hidden=True)
