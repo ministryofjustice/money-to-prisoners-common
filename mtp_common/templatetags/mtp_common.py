@@ -333,6 +333,77 @@ def notification_level(level_name):
     return NOTIFICATION_LEVELS.get(level_name, _('Important'))
 
 
+class AccordionNode(template.Node):
+    template_name = 'mtp_common/components/accordion.html'
+
+    def __init__(self, node_list, name):
+        self.node_list = node_list
+        self.name = name
+
+    def render(self, context):
+        name = self.name.resolve(context)
+        accordion_content = ''
+        other_nodes = template.NodeList()
+        counter = 0
+        for node in self.node_list:
+            if isinstance(node, AccordionSectionNode):
+                counter += 1
+                context.push()
+                context['name'] = name
+                context['section_counter'] = counter
+                accordion_content += node.render(context)
+                context.pop()
+            else:
+                other_nodes.append(node)
+        other_content = other_nodes.render(context)
+        context.push()
+        context['accordion_content'] = accordion_content
+        context['other_content'] = other_content
+        accordion_template = context.template.engine.get_template(self.template_name)
+        rendered_html = accordion_template.render(context)
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def accordion(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    if not kwargs.get('name'):
+        raise template.TemplateSyntaxError('accordion requires name argument')
+    node_list = parser.parse(('endaccordion',))
+    parser.delete_first_token()
+    return AccordionNode(node_list, **kwargs)
+
+
+class AccordionSectionNode(template.Node):
+    template_name = 'mtp_common/components/accordion-section.html'
+
+    def __init__(self, node_list, heading):
+        self.node_list = node_list
+        self.heading = heading
+
+    def render(self, context):
+        heading = self.heading.resolve(context)
+        content = self.node_list.render(context)
+        context.push()
+        context['heading'] = heading
+        context['content'] = content
+        tab_template = context.template.engine.get_template(self.template_name)
+        rendered_html = tab_template.render(context)
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def accordionsection(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    if 'heading' not in kwargs:
+        raise template.TemplateSyntaxError('accordion section requires heading argument')
+    node_list = parser.parse(('endaccordionsection',))
+    parser.delete_first_token()
+    return AccordionSectionNode(node_list, **kwargs)
+
+
 class TabbedPanelNode(template.Node):
     template_name = 'mtp_common/includes/tabbed-panel.html'
 
