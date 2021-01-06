@@ -1,0 +1,20 @@
+// make accordion sections all properly visible when printed
+@media print {
+  .govuk-accordion__open-all {
+    display: none;
+  }
+
+  .govuk-accordion__icon {
+    &, &::before, &::after {
+      display: none;
+    }
+  }
+
+  .govuk-accordion__section-header {
+    color: #000 !important;
+  }
+
+  .govuk-accordion__section-content {
+    display: block !important;
+  }
+}
