@@ -1,4 +1,3 @@
-// Date picker module
 'use strict';
 
 function MTPDatePicker () {
@@ -71,7 +70,7 @@ MTPDatePicker.prototype.showForField = function ($field) {
   if (matches) {
     var year = parseInt(matches[3], 10);
     if (year < 100) {
-      var currentYear = (new Date()).getFullYear();
+      var currentYear = new Date().getFullYear();
       year += 100 * Math.floor(currentYear / 100);
       if (year > currentYear) {
         year -= 100;
@@ -115,11 +114,9 @@ MTPDatePicker.prototype.showForField = function ($field) {
 MTPDatePicker.prototype.reposition = function () {
   var $field = this.$field;
   var position = $field.offset();
-  position.top += (
-    $field.height() +
+  position.top += $field.height() +
     parseInt($field.css('paddingTop'), 10) + parseInt($field.css('paddingBottom'), 10) +
-    parseInt($field.css('borderTopWidth'), 10)
-  );
+    parseInt($field.css('borderTopWidth'), 10);
   this.$picker.offset(position);
 };
 
@@ -195,7 +192,7 @@ MTPDatePicker.prototype.drawCalendar = function () {
   }
 };
 
-exports.DatePicker = {
+export var DatePicker = {
   selector: '.mtp-date-picker__control',
   $calendar: null,
 
