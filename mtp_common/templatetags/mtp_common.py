@@ -515,7 +515,7 @@ def paneltab(parser, token):
     return PanelTabNode(node_list, **kwargs)
 
 
-@register.inclusion_tag('mtp_common/includes/sortable-cell.html')
+@register.inclusion_tag('mtp_common/components/sortable-cell.html')
 def sortable_cell(title, params, field, url_prefix='', cell_classes='', ignored_fields=('page',)):
     current_ordering = params.get('ordering')
     reversed_params = {

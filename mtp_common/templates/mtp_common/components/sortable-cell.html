@@ -1,0 +1,24 @@
+{% comment %}
+  Constructs a th element for mtp-table component with a link to switch ordering by given field,
+  where the table contents are filtered by query string and sorted by ordering field
+  USAGE:
+  {% sortable_cell title, params, field %}
+  where params is a dictionary (typically form.cleaned_data) and field is one of the ordering options
+  optional parameters:
+    url_prefix - prepend to link
+    cell_classes - classes to put on th element
+    ignored_fields - ignore these fields when constructing query string
+  EXAMPLE:
+  {% sortable_cell _('Date received') form.cleaned_data 'received_at' %}
+{% endcomment %}
+
+<th class="{{ cell_classes }}">
+  <a href="{{ url_prefix }}?{{ query_string }}" class="{{ link_classes }}">
+    {{ title }}
+    {% if screenreader_description %}
+      <span class="govuk-visually-hidden">
+        ({{ screenreader_description }})
+      </span>
+    {% endif %}
+  </a>
+</th>
