@@ -39,10 +39,20 @@ class CommonCodeStyleTestCase(unittest.TestCase):
         ))
 
     def run_node_tool(self, tool, *args):
+        error = None
         try:
-            subprocess.check_output([self.get_tool_bin(tool)] + list(args), cwd=self.root_path, env=os.environ)
+            subprocess.run(
+                [self.get_tool_bin(tool)] + list(args),
+                cwd=self.root_path,
+                env=os.environ,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True,
+            )
         except subprocess.CalledProcessError as e:
-            self.fail_with_output(e.output.decode('utf-8'))
+            error = e
+        if error:
+            self.fail_with_output(error.stdout.decode() + '\n' + error.stderr.decode())
 
     def get_config_file(self, file_name):
         return os.path.join(self.app.templates_path, 'mtp_common', 'build_tasks', file_name)
@@ -58,6 +68,7 @@ class CommonCodeStyleTestCase(unittest.TestCase):
     def test_stylesheets_code_style(self):
         self.run_node_tool(
             'sass-lint',
+            '--verbose',
             '--config', self.get_config_file('sass-lint.yml'),
             '--format', 'stylish',
             '--syntax', 'scss',
