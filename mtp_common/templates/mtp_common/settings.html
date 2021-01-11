@@ -7,7 +7,7 @@
 
 {% block content %}
   <header>
-    <h1 class="govuk-heading-xl mtp-settings-heading">
+    <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">{{ request.user.get_full_name|default:request.user.username }}</span>
       {% trans 'Settings' %}
     </h1>
@@ -17,14 +17,14 @@
     <div class="govuk-grid-column-two-thirds">
       {% block extra_settings %}{% endblock %}
 
-      <div class="mtp-settings-item">
+      <div class="mtp-settings__item">
         <h2 class="govuk-heading-l">
           {% trans 'Change your password' %}
         </h2>
         <a class="govuk-button" data-module="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
       </div>
 
-      <div class="mtp-settings-item">
+      <div class="mtp-settings__item">
         <h2 class="govuk-heading-l">
           {% trans 'Your email' %}
         </h2>
@@ -33,7 +33,7 @@
       </div>
 
       {% if perms.auth.change_user %}
-        <div class="mtp-settings-item">
+        <div class="mtp-settings__item">
           <h2 class="govuk-heading-l">
             {% trans 'Manage users' %}
           </h2>

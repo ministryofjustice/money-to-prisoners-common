@@ -25,16 +25,3 @@ a.mtp-user-menu__link {
     text-decoration: underline;
   }
 }
-
-.mtp-settings-item {
-  border-bottom: 1px solid $border-colour;
-  padding-bottom: 2em;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.mtp-settings-heading {
-  margin-bottom: 0em;
-}
