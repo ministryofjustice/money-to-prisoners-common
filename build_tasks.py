@@ -73,6 +73,7 @@ def setup_django_for_testing(_: Context):
                     'django.contrib.messages.context_processors.messages',
                     'mtp_common.context_processors.analytics',
                     'mtp_common.context_processors.app_environment',
+                    'mtp_common.context_processors.govuk_localisation',
                 ],
             },
         }],
