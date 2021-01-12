@@ -2,37 +2,43 @@
 {% load i18n %}
 {% load mtp_common %}
 
-{% block page_title %}{% trans 'Manage user accounts' %} – {{ block.super }}{% endblock %}
+{% block page_title %}{% trans 'Manage users' %} – {{ block.super }}{% endblock %}
 
 {% block admin_header %}
   <header>
-    <h1 class="govuk-heading-xl">{% trans 'Manage user accounts' %}</h1>
+    <h1 class="govuk-heading-xl">{% trans 'Manage users' %}</h1>
   </header>
 {% endblock %}
 
 {% block admin_content %}
-  <p>
-    {% trans 'Add, view, edit or disable user accounts.' %}
-    {% trans 'When you disable a user account, that user will be unable to log in.' %}
-  </p>
-  {% if locked_users_exist %}
-    <p>
-      {% trans 'If a user enters a wrong password too many times, they are locked out for a short period.' %}
-      {% trans 'You can allow them to log in now by clicking ‘Unlock’.' %}
-    </p>
-  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-  <p class="govuk-!-display-none-print">
-    <a class="govuk-button govuk-button--secondary" data-module="govuk-button" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
-  </p>
+      <p>
+        {% trans 'Add, view, edit or disable user accounts.' %}
+        {% trans 'When you disable a user account, that user will be unable to log in.' %}
+      </p>
+      {% if locked_users_exist %}
+        <p>
+          {% trans 'If a user enters a wrong password too many times, they are locked out for a short period.' %}
+          {% trans 'You can allow them to log in now by clicking ‘Unlock’.' %}
+        </p>
+      {% endif %}
+
+      <p class="govuk-!-display-none-print">
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'new-user' %}">{% trans 'Add a new user' %}</a>
+      </p>
+
+    </div>
+  </div>
 
   {% if account_requests %}
     <h2 class="govuk-heading-m">
       {% trans 'New user requests' %}
     </h2>
 
-    <div class="mtp-account-management__container">
-      <table class="mtp-table mtp-account-management__users">
+    <div class="mtp-table__container govuk-!-margin-bottom-9">
+      <table class="mtp-table">
         <caption class="govuk-visually-hidden">{% trans 'Table of new user requests' %}</caption>
         <thead>
           <tr>
@@ -66,8 +72,8 @@
     {% trans 'Edit existing users' %}
   </h2>
 
-  <div class="mtp-account-management__container">
-    <table class="mtp-table mtp-account-management__users">
+  <div class="mtp-table__container">
+    <table class="mtp-table">
       <caption class="govuk-visually-hidden">{% trans 'Table of existing users' %}</caption>
       <thead>
         <tr>
@@ -81,7 +87,7 @@
       <tbody>
         {% for user in users %}
           {% if can_delete or user.is_active %}
-            <tr class="{% if not user.is_active %}mtp-inactive-user{% endif %}">
+            <tr class="{% if not user.is_active %}mtp-table__secondary-row{% endif %}">
               <td>{{ user.first_name }} {{ user.last_name }}</td>
               <td>{{ user.email }}</td>
               {% if user.user_admin %}
@@ -92,20 +98,20 @@
                 <td></td>
               {% endif %}
               <td class="mtp-account-management__actions govuk-!-display-none-print">
-                <a href="{% url 'edit-user' username=user.username %}" class="mtp-account-management__action">
+                <a href="{% url 'edit-user' username=user.username %}">
                   {% trans 'Edit' %}
                 </a>
                 {% if can_delete and request.user.username.lower != user.username.lower %}
                   {% if not user.is_active %}
-                    <a class="mtp-account-management__action" href="{% url 'undelete-user' username=user.username %}">
+                    <a href="{% url 'undelete-user' username=user.username %}">
                       {% trans 'Enable' %}
                     </a>
                   {% elif user.is_locked_out %}
-                    <a class="mtp-account-management__action" href="{% url 'unlock-user' username=user.username %}">
+                    <a href="{% url 'unlock-user' username=user.username %}">
                       {% trans 'Unlock' %}
                     </a>
                   {% else %}
-                    <a class="mtp-account-management__action" href="{% url 'delete-user' username=user.username %}">
+                    <a href="{% url 'delete-user' username=user.username %}">
                       {% trans 'Disable' %}
                     </a>
                   {% endif %}

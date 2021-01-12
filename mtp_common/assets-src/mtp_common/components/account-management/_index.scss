@@ -1,0 +1,26 @@
+.mtp-account-management__is_manager, .mtp-account-management__request_date {
+  width: 19ex;
+}
+
+.mtp-account-management__can_manage {
+  min-width: 50px;
+  min-height: 25px;
+  background: mtp-static-url('mtp_common/images/checkmark.png') no-repeat 20px 50%;
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/checkmark@2x.png');
+    background-size: 25px 20px;
+  }
+}
+
+.mtp-account-management__actions {
+  width: 12ex;
+
+  a {
+    display: inline-block;
+  }
+
+  a + a {
+    margin-left: govuk-spacing(2);
+  }
+}
