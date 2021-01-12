@@ -41,12 +41,16 @@
 
 {% block body_start %}
   {% block cookie_message %}
-    <p>
-      {% trans 'GOV.UK uses cookies to make the site simpler.' %}
-      <a href="https://www.gov.uk/help/cookies">
-        {% trans 'Find out more about cookies' %}
-      </a>
-    </p>
+    <aside class="mtp-cookie-banner">
+      <div class="mtp-cookie-banner__container govuk-width-container">
+        <p>
+          {% trans 'GOV.UK uses cookies to make the site simpler.' %}
+          <a href="https://www.gov.uk/help/cookies">
+            {% trans 'Find out more about cookies' %}
+          </a>
+        </p>
+      </div>
+    </aside>
   {% endblock %}
 {% endblock %}
 

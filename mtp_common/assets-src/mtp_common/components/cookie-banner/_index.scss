@@ -1,0 +1,10 @@
+.mtp-cookie-banner {
+  display: none;
+  background: $govuk-canvas-background-colour;
+  color: $govuk-text-colour;
+}
+
+.mtp-cookie-banner__container {
+  @include govuk-responsive-padding(4, 'top');
+  overflow: hidden;
+}
