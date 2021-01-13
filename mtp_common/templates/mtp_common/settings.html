@@ -19,31 +19,29 @@
 
       {% block settings %}
 
-        <div class="mtp-settings__item">
-          <h2 class="govuk-heading-l">
-            {% trans 'Change your password' %}
-          </h2>
-          <a class="govuk-button" data-module="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
-        </div>
+        <h2 class="govuk-heading-l">
+          {% trans 'Change your password' %}
+        </h2>
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
 
-        <div class="mtp-settings__item">
-          <h2 class="govuk-heading-l">
-            {% trans 'Your email' %}
-          </h2>
-          <p>{{ request.user.email }}</p>
-          <a class="govuk-button" data-module="govuk-button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
-        </div>
+        {% include 'govuk-frontend/components/section-break.html' with visible=True size='l' %}
+
+        <h2 class="govuk-heading-l">
+          {% trans 'Your email' %}
+        </h2>
+        <p>{{ request.user.email }}</p>
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
 
         {% if perms.auth.change_user %}
-          <div class="mtp-settings__item">
-            <h2 class="govuk-heading-l">
-              {% trans 'Manage users' %}
-            </h2>
-            <p>
-              {% trans 'Add, view, edit or disable user accounts.' %}
-            </p>
-            <a class="govuk-button" data-module="govuk-button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
-          </div>
+          {% include 'govuk-frontend/components/section-break.html' with visible=True size='l' %}
+
+          <h2 class="govuk-heading-l">
+            {% trans 'Manage users' %}
+          </h2>
+          <p>
+            {% trans 'Add, view, edit or disable user accounts.' %}
+          </p>
+          <a class="govuk-button" data-module="govuk-button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
         {% endif %}
 
       {% endblock %}

@@ -1,9 +1,0 @@
-.mtp-settings__item {
-  @include govuk-responsive-margin(6, 'bottom');
-  @include govuk-responsive-padding(4, 'bottom');
-  border-bottom: 1px solid $govuk-border-colour;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
