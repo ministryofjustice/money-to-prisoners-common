@@ -10,7 +10,7 @@
 
     {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 
-    <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}">
+    <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}" novalidate>
       {% csrf_token %}
 
       {% for field in form.hidden_fields %}
