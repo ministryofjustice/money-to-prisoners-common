@@ -4,13 +4,11 @@
 
 {% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
 
-{% block admin_header %}
+{% block admin_content %}
   <header>
     <h1 class="govuk-heading-xl">{{ page_title }}</h1>
   </header>
-{% endblock %}
 
-{% block admin_content %}
   {% if form.create %}
     <p>
       {% trans 'Fill in a user’s details to allow them access.' %}

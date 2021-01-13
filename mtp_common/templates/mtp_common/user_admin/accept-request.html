@@ -4,13 +4,10 @@
 
 {% block page_title %}{% trans 'New user request' %} – {{ block.super }}{% endblock %}
 
-{% block admin_header %}
+{% block admin_content %}
   <header>
     <h1 class="govuk-heading-xl">{% trans 'New user request' %}</h1>
   </header>
-{% endblock %}
-
-{% block admin_content %}
   <p>
     {% trans 'Requested' %}: {{ account_request.created|date:'d/m/Y' }}
   </p>

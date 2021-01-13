@@ -4,13 +4,11 @@
 
 {% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
 
-{% block admin_header %}
+{% block admin_content %}
   <header>
     <h1 class="govuk-heading-xl">{{ page_title }}</h1>
   </header>
-{% endblock %}
 
-{% block admin_content %}
   <p>{% trans 'When you disable a user account, that user will be unable to log in.' %}</p>
   {% include 'mtp_common/user_admin/user-description.html' with user=user only %}
 
