@@ -5,59 +5,65 @@
 {% block page_title %}{{ page_title }} – {{ block.super }}{% endblock %}
 
 {% block admin_content %}
-  <header>
-    <h1 class="govuk-heading-xl">{{ page_title }}</h1>
-  </header>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-  {% if form.create %}
-    <p>
-      {% trans 'Fill in a user’s details to allow them access.' %}
-      {% trans 'You can give them a general user or an account management role.' %}
-    </p>
-    {% if permissions_note %}
-      <p>{{ permissions_note }}</p>
-    {% endif %}
-  {% endif %}
+      <header>
+        <h1 class="govuk-heading-xl">{{ page_title }}</h1>
+      </header>
 
-  <form action="." method="post">
-    {% csrf_token %}
-
-    {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
-
-    {% if form.create %}
-      {% include 'mtp_common/forms/field.html' with field=form.username only %}
-    {% else %}
-      <p>
-        <span class="govuk-label" id="id_username-label">{% trans 'Username' %}</span>
-        <strong aria-labelledby="id_username-label">{{ form.username.value }}</strong>
-      </p>
-    {% endif %}
-
-    {% include 'mtp_common/forms/field.html' with field=form.first_name only %}
-    {% include 'mtp_common/forms/field.html' with field=form.last_name only %}
-    {% include 'mtp_common/forms/field.html' with field=form.email only %}
-
-    {% with field=form.role %}
-      {% if field.field.choices %}
-        <input type="hidden" name="{{ field.html_name }}" value="{{ field.field.choices.0.0 }}" />
-      {% endif %}
-    {% endwith %}
-
-    {% with field=form.user_admin %}
-      {% if field %}
-        {% include 'mtp_common/forms/checkbox-field.html' with field=field only %}
-      {% endif %}
-    {% endwith %}
-
-    <p>
-      <button type="submit" class="govuk-button" data-module="govuk-button" name="create">
-        {% if form.create %}
-          {% trans 'Create' %}
-        {% else %}
-          {% trans 'Save' %}
+      {% if form.create %}
+        <p>
+          {% trans 'Fill in a user’s details to allow them access.' %}
+          {% trans 'You can give them a general user or an account management role.' %}
+        </p>
+        {% if permissions_note %}
+          <p>{{ permissions_note }}</p>
         {% endif %}
-      </button>
-      <a href="{% url 'list-users' %}" class="mtp-link--form-cancel">{% trans 'Cancel' %}</a>
-    </p>
-  </form>
+      {% endif %}
+
+      <form action="." method="post">
+        {% csrf_token %}
+
+        {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
+
+        {% if form.create %}
+          {% include 'mtp_common/forms/field.html' with field=form.username input_classes='govuk-input--width-10' only %}
+        {% else %}
+          <p>
+            <span class="govuk-label" id="id_username-label">{% trans 'Username' %}</span>
+            <strong aria-labelledby="id_username-label">{{ form.username.value }}</strong>
+          </p>
+        {% endif %}
+
+        {% include 'mtp_common/forms/field.html' with field=form.first_name input_classes='govuk-input--width-20' only %}
+        {% include 'mtp_common/forms/field.html' with field=form.last_name input_classes='govuk-input--width-20' only %}
+        {% include 'mtp_common/forms/field.html' with field=form.email input_classes='govuk-input--width-20' only %}
+
+        {% with field=form.role %}
+          {% if field.field.choices %}
+            <input type="hidden" name="{{ field.html_name }}" value="{{ field.field.choices.0.0 }}" />
+          {% endif %}
+        {% endwith %}
+
+        {% with field=form.user_admin %}
+          {% if field %}
+            {% include 'mtp_common/forms/checkbox-field.html' with field=field only %}
+          {% endif %}
+        {% endwith %}
+
+        <p>
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="create">
+            {% if form.create %}
+              {% trans 'Create' %}
+            {% else %}
+              {% trans 'Save' %}
+            {% endif %}
+          </button>
+          <a href="{% url 'list-users' %}" class="mtp-link--form-cancel">{% trans 'Cancel' %}</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
 {% endblock %}
