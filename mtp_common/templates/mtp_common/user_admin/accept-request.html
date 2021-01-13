@@ -5,51 +5,56 @@
 {% block page_title %}{% trans 'New user request' %} – {{ block.super }}{% endblock %}
 
 {% block admin_content %}
-  <header>
-    <h1 class="govuk-heading-xl">{% trans 'New user request' %}</h1>
-  </header>
-  <p>
-    {% trans 'Requested' %}: {{ account_request.created|date:'d/m/Y' }}
-  </p>
-
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-column-one-third">
-      {% labelled_data _('Name') account_request.full_name tag='strong' %}
-    </div>
-    <div class="govuk-grid-column-column-one-third">
-      {% labelled_data _('Email') account_request.email tag='strong' %}
-    </div>
-    <div class="govuk-grid-column-column-one-third">
-      {% labelled_data _('Username') account_request.username tag='strong' %}
+    <div class="govuk-grid-column-two-thirds">
+
+      <header>
+        <h1 class="govuk-heading-xl">{% trans 'New user request' %}</h1>
+      </header>
+      <p>
+        {% trans 'Requested' %}: {{ account_request.created|date:'d/m/Y' }}
+      </p>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-column-one-third">
+          {% labelled_data _('Name') account_request.full_name tag='strong' %}
+        </div>
+        <div class="govuk-grid-column-column-one-third">
+          {% labelled_data _('Email') account_request.email tag='strong' %}
+        </div>
+        <div class="govuk-grid-column-column-one-third">
+          {% labelled_data _('Username') account_request.username tag='strong' %}
+        </div>
+      </div>
+
+      {% block sign_up_extras_fields %}{% endblock %}
+
+      {% if account_request.reason %}
+        <br />
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            {% labelled_data _('Reason for access') account_request.reason|linebreaksbr tag='strong' %}
+          </div>
+        </div>
+      {% endif %}
+
+      <br />
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% include 'mtp_common/forms/checkbox-field.html' with field=form.user_admin only %}
+
+        <p>
+          <button type="submit" class="govuk-button" data-module="govuk-button">
+            {% trans 'Approve request' %}
+          </button>
+          <a href="{% url 'decline-request' account_request=account_request.id %}" class="mtp-link--form-cancel">
+            {% trans 'Decline request' %}
+          </a>
+        </p>
+      </form>
+
     </div>
   </div>
-
-  {% block sign_up_extras_fields %}{% endblock %}
-
-  {% if account_request.reason %}
-    <br />
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        {% labelled_data _('Reason for access') account_request.reason|linebreaksbr tag='strong' %}
-      </div>
-    </div>
-  {% endif %}
-
-  <br />
-
-  <form method="post">
-    {% csrf_token %}
-
-    {% include 'mtp_common/forms/checkbox-field.html' with field=form.user_admin only %}
-
-    <div class="govuk-form-group">
-      <button type="submit" class="govuk-button" data-module="govuk-button">
-        {% trans 'Approve request' %}
-      </button>
-      <a href="{% url 'decline-request' account_request=account_request.id %}" class="mtp-link--form-cancel">
-        {% trans 'Decline request' %}
-      </a>
-    </div>
-  </form>
-
 {% endblock %}

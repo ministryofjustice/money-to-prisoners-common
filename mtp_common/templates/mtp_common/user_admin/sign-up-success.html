@@ -4,17 +4,22 @@
 {% block page_title %}{% trans 'Request access' %} – {{ block.super }}{% endblock %}
 
 {% block content %}
-  <header class="govuk-box-highlight">
-    <h1 class="bold-large">
+  <header class="govuk-panel mtp-panel--success">
+    <h1 class="govuk-panel__title">
       {% trans 'Your request for access has been sent' %}
     </h1>
   </header>
 
-  {% block whats_next_message %}
-    <h2 class="govuk-heading-m">{% trans 'What happens next?' %}</h2>
-    <p>
-      {% trans 'If approved, you’ll get an email with your login details.' %}
-    </p>
-  {% endblock %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
+      {% block whats_next_message %}
+        <h2 class="govuk-heading-m">{% trans 'What happens next?' %}</h2>
+        <p>
+          {% trans 'If approved, you’ll get an email with your login details.' %}
+        </p>
+      {% endblock %}
+
+    </div>
+  </div>
 {% endblock %}
