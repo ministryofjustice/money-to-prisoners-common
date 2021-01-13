@@ -1,14 +1,14 @@
 // Show a warning when an email address domain might be misspelled
 'use strict';
 
-var mailcheck = require('mailcheck');
+import Mailcheck from 'mailcheck';
 
-exports.MailcheckWarning = {
+export var MailcheckWarning = {
   init: function (selector, domains, topLevelDomains, secondLevelDomains) {
-    $(selector || '.js-mailcheck').each(function () {
+    $(selector || '.mtp-mailcheck-warning__input').each(function () {
       var timer;
       var $field = $(this);
-      var $messageBox = $('<span class="govuk-hint mtp-mailcheck-warning"></span>');
+      var $messageBox = $('<span class="govuk-hint mtp-mailcheck-warning" aria-live="polite"></span>');
       $field.after($messageBox);
 
       function showSuggestion (suggestion) {
@@ -32,7 +32,7 @@ exports.MailcheckWarning = {
       }
 
       function check () {
-        mailcheck.run({
+        Mailcheck.run({
           email: $field.val(),
           domains: domains,
           topLevelDomains: topLevelDomains,
