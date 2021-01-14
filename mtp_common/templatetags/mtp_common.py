@@ -237,6 +237,16 @@ def breadcrumb_bar(context):
     }
 
 
+@register.inclusion_tag('mtp_common/components/card-group.html')
+def card_group(cards, columns=3):
+    if columns not in (2, 3, 4):
+        raise template.TemplateSyntaxError('columns must be 2, 3 or 4')
+    return {
+        'cards': cards,
+        'columns': columns,
+    }
+
+
 @register.inclusion_tag('mtp_common/components/page-list.html')
 def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1):
     if page_count < 7:

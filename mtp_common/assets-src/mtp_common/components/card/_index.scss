@@ -1,0 +1,87 @@
+// based on https://github.com/ministryofjustice/prisonstaffhub/blob/2b9b511e758e13e6ef3290c1c1f3db3748339ce1/sass/components/_card.scss
+
+$mtp-card-border-width: 1px;
+$mtp-card-border-bottom-width: govuk-spacing(1);
+$mtp-card-border-hover-color: $govuk-border-colour;
+$mtp-card-border-color: govuk-tint($mtp-card-border-hover-color, 50%);
+
+.mtp-card {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  margin-bottom: govuk-spacing(7);
+  padding: govuk-spacing(5);
+  background: $govuk-body-background-colour;
+  border: $mtp-card-border-width solid $mtp-card-border-color;
+}
+
+.mtp-card__heading {
+  @extend .govuk-heading-m;
+  margin-top: 0;
+  margin-bottom: govuk-spacing(3);
+}
+
+.mtp-card__description {
+  @extend %govuk-body-m;
+  margin-bottom: 0;
+}
+
+.mtp-card--clickable {
+  border-bottom-width: $mtp-card-border-bottom-width;
+
+  &:hover, &:active {
+    cursor: pointer;
+
+    .mtp-card__heading a {
+      color: $govuk-link-hover-colour;
+
+      &:focus {
+        @include govuk-focused-text;
+      }
+    }
+  }
+
+  &:hover {
+    border-color: $mtp-card-border-hover-color;
+  }
+
+  &:active {
+    top: $mtp-card-border-width;
+    border-color: $mtp-card-border-hover-color;
+  }
+}
+
+.mtp-card-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: govuk-spacing(3);
+  padding: 0;
+
+  @include govuk-media-query($until: desktop) {
+    margin-bottom: govuk-spacing(6);
+  }
+}
+
+.mtp-card-group__item {
+  display: flex;
+  list-style-type: none;
+  margin-bottom: 0;
+
+  @include govuk-media-query($until: desktop) {
+    flex: 0 0 100%;
+  }
+
+  .mtp-card {
+    margin-bottom: govuk-spacing(5);
+  }
+
+  @include govuk-media-query($until: desktop) {
+    .mtp-card {
+      margin-bottom: govuk-spacing(3);
+    }
+
+    &:last-child .mtp-card {
+      margin-bottom: 0;
+    }
+  }
+}

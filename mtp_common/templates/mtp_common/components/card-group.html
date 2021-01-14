@@ -1,0 +1,23 @@
+{% comment %}
+  USAGE:
+  {% card_group <cards> %}
+  where cards is an iterable of dicts with heading (and, optionally, link and description)
+  optional parameters:
+    columns - 2, 3 or 4
+{% endcomment %}
+
+<div class="govuk-grid-row mtp-card-group">
+  {% for card in cards %}
+
+    <div class="govuk-grid-column-one-{% if columns == 2 %}half{% elif columns == 3 %}third{% else %}quarter{% endif %} mtp-card-group__item">
+      {% include 'mtp_common/components/card.html' with heading=card.heading link=card.link description=card.description only %}
+    </div>
+
+    {% if forloop.counter|divisibleby:columns %}
+      {# start a new row #}
+      </div>
+      <div class="govuk-grid-row mtp-card-group">
+    {% endif %}
+
+  {% endfor %}
+</div>
