@@ -202,6 +202,18 @@ Caveats:
 
 * You can only log into one service at a time, this is because the cookies within which the session is stored are namespaced to domain only (which is the desired behaviour for test/prod)
 
+8. (Optional) If you want to set up some virtualenv's for money-to-prisoners, to help with things like running tests outside docker containers (e.g. as part of githooks), I would very much recommend using virtualenvwrapper. It's essentially a set of aliases that make managing virtualenv's a lot easier. See https://virtualenvwrapper.readthedocs.io/en/latest/install.html#basic-installation for installation instructions. Once you've got that installed, it's just a matter of running this command from the parent directory, that contains all of your checked-out ``money-to-prisoners-*`` repos:
+
+.. code-block:: sh
+
+    repos=(money-to-prisoners-api  money-to-prisoners-bank-admin  money-to-prisoners-cashbook  money-to-prisoners-deploy money-to-prisoners-noms-ops  money-to-prisoners-send-money  money-to-prisoners-transaction-uploader)
+    for d in ${repos[@]}; do cd $d && mkvirtualenv -a . $d && pip install -r requirements/base.txt  -r requirements/dev.txt && cd -; done
+
+Once you've run the above commands successfully, then to enter a virtual environment and at the same time ``cd`` into the directory of that repository, you can just run, for example:
+
+.. code-block:: sh
+
+    workon money-to-prisoners-api
 
 Additional Bespoke Packages
 ---------------------------
