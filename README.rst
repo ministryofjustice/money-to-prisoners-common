@@ -21,11 +21,10 @@ Features
 Usage
 -----
 
-Add ``money-to-prisoners-common==<version>`` to the Money to Prisoners application’s requirements.txt.
-There are two variations as setuptools *extras*:
-
-* Use ``money-to-prisoners-common[testing]==<version>`` for environments requiring testing
-* Use ``money-to-prisoners-common[monitoring]==<version>`` for the deployed version
+Add ``money-to-prisoners-common==<version>`` to the Money to Prisoners application’s requirements base.txt.
+There is an additional variant installed as a setuptools *extra*:
+Use ``money-to-prisoners-common[testing]==<version>`` for environments requiring testing; this is placed into
+the application’s requirements dev.txt.
 
 Add url patterns:
 

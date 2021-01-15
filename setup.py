@@ -31,11 +31,9 @@ install_requires = [
     'PyJWT>=1.7,<2',
     'kubernetes>=11,<12',  # corresponds to server version 1.15
     'prometheus_client>=0.6,<1',
+    'sentry_sdk==0.16.5',
 ]
 extras_require = {
-    'monitoring': [
-        'sentry_sdk==0.16.5',
-    ],
     'testing': [
         'flake8>=3.7,<4',
         'pep8-naming>=0.8.2,<1',
