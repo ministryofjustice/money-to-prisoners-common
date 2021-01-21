@@ -335,7 +335,7 @@ def create_transaction(prison_id, prisoner_number, amount, record_id,
     )
 
 
-def get_photograph_data(prisoner_number, retries=2, session=None):
+def get_photograph_data(prisoner_number, retries=0, session=None):
     result = connector.get(
         '/offenders/{prisoner_number}/image'.format(
             prisoner_number=quote_plus(prisoner_number)
