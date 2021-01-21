@@ -285,7 +285,7 @@ def convert_date_param(param):
     return None
 
 
-def get_account_balances(prison_id, prisoner_number, retries=0, session=None):
+def get_account_balances(prison_id, prisoner_number, retries=2, session=None):
     return connector.get(
         '/prison/{prison_id}/offenders/{prisoner_number}/accounts'.format(
             prison_id=quote_plus(prison_id),
@@ -297,7 +297,7 @@ def get_account_balances(prison_id, prisoner_number, retries=0, session=None):
 
 
 def get_transaction_history(prison_id, prisoner_number, account_code,
-                            from_date, to_date=None, retries=0, session=None):
+                            from_date, to_date=None, retries=2, session=None):
     params = {
         'from_date': convert_date_param(from_date),
         'to_date': convert_date_param(to_date),
@@ -347,7 +347,7 @@ def get_photograph_data(prisoner_number, retries=0, session=None):
     return result.get('image', None)
 
 
-def get_location(prisoner_number, retries=0, session=None):
+def get_location(prisoner_number, retries=2, session=None):
     result = connector.get(
         '/offenders/{prisoner_number}/location'.format(
             prisoner_number=quote_plus(prisoner_number)
