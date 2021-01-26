@@ -5,11 +5,13 @@
   {% include 'govuk-frontend/components/details.html' with summary=<text> body=<text> only %}
   optional parameters:
     id - id to use on the details element, auto-generated otherwise
+    classes - additional classes for details element
     analytics - send page view or event when opened; see analytics component
+    open - whether the summary should be visible
   NB: body can contain HTML using safe filter or nested tags by using captureoutput tag
 {% endcomment %}
 
-<details id="{% if id %}{{ id }}{% else %}id_govuk-details_{% random_string %}{% endif %}" class="govuk-details" data-module="govuk-details">
+<details id="{% if id %}{{ id }}{% else %}id_govuk-details_{% random_string %}{% endif %}" class="govuk-details {{ classes }}" {% if open %}open{% endif %} data-module="govuk-details">
   <summary class="govuk-details__summary" {% if analytics %}data-analytics="{{ analytics }}"{% endif %}>
     <span class="govuk-details__summary-text">
       {{ summary }}
