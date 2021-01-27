@@ -38,3 +38,24 @@
     display: block;
   }
 }
+
+// no govuk-frontend classes are available for secondary text
+.govuk-body-l--secondary {
+  @extend %govuk-body-l;
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-body-m--secondary {
+  @extend %govuk-body-m;
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-body-s--secondary {
+  @extend %govuk-body-s;
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-body-xs--secondary {
+  @extend %govuk-body-xs;
+  color: $govuk-secondary-text-colour;
+}
