@@ -12,7 +12,7 @@
   {% sortable_cell _('Date received') form.cleaned_data 'received_at' %}
 {% endcomment %}
 
-<th class="{{ cell_classes }}">
+<th class="{{ cell_classes }}" scope="col">
   <a href="{{ url_prefix }}?{{ query_string }}" class="{{ link_classes }}">
     {{ title }}
     {% if screenreader_description %}
