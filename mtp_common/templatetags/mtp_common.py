@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from itertools import chain
+from itertools import chain, repeat
 import re
 
 from django import template
@@ -181,6 +181,21 @@ def get_form_errors(form):
             if field.name in form.errors
         )
     }
+
+
+@register.simple_tag()
+def choices_with_help_text(choices, choices_help_text=None):
+    """
+    Adds a third member to choices lists for multiple radio and checkbox fields
+    so that help text can be added to individual options
+    """
+    if choices_help_text is None:
+        choices_help_text = []
+    choices_help_text = chain(choices_help_text, repeat(''))
+    return [
+        (value, label, next(choices_help_text))
+        for value, label in choices
+    ]
 
 
 @register.inclusion_tag('mtp_common/sentry-js.html')

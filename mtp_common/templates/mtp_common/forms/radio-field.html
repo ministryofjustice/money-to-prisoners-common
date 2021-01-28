@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load mtp_common %}
 
 {% comment %}
   USAGE:
@@ -7,6 +8,7 @@
     input_classes - classes to add to the input element
     label_classes - classes to add to the fieldset legend element
     value - input element value override instead of default filtered field value (ignored if None)
+    choices_help_text - list of hints added to choices
     inline - whether options should show in one row
     small - whether smaller circles should be used
 
@@ -23,13 +25,19 @@
 
     <div class="govuk-radios {% if small %}govuk-radios--small{% endif %} {% if inline %}govuk-radios--inline{% endif %}" data-module="govuk-radios">
       {% with initial=value|default:field.value|default:field.field.initial %}
-        {% for choice, label in field.field.choices %}
+        {% choices_with_help_text field.field.choices choices_help_text as choices %}
+        {% for choice, label, help_text in choices %}
           {% with choice_slug=choice|slugify %}
             <div class="govuk-radios__item">
-              <input id="{{ field.id_for_label }}-{{ choice_slug }}" class="govuk-radios__input {{ input_classes }}" type="radio" name="{{ field.html_name }}" value="{{ choice }}" {% if choice == initial %}checked{% endif %} />
+              <input id="{{ field.id_for_label }}-{{ choice_slug }}" class="govuk-radios__input {{ input_classes }}" type="radio" name="{{ field.html_name }}" value="{{ choice }}" {% if choice == initial %}checked{% endif %} {% if help_text %}aria-describedby="{{ field.id_for_label }}-{{ choice_slug }}-hint"{% endif %} />
               <label for="{{ field.id_for_label }}-{{ choice_slug }}" id="{{ field.id_for_label }}-{{ choice_slug }}-label" class="govuk-label govuk-radios__label">
                 {{ label }}
               </label>
+              {% if help_text %}
+                <div id="{{ field.id_for_label }}-{{ choice_slug }}-hint" class="govuk-hint govuk-radios__hint">
+                  {{ help_text }}
+                </div>
+              {% endif %}
             </div>
           {% endwith %}
         {% endfor %}
