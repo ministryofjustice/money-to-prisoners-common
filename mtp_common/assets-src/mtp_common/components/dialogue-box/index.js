@@ -5,7 +5,7 @@ export var DialogueBox = {
     this.dialogues = [];
     this.$window = $(window);
     $('.mtp-dialogue').each(this.bindDialogues);
-    $('.js-dialogue-open').each(this.bindDialogueTriggers);
+    $('.mtp-dialogue__open-trigger-link').each(this.bindDialogueTriggers);
   },
 
   bindDialogues: function (i, dialogue) {
@@ -52,7 +52,7 @@ export var DialogueBox = {
       $dialogue.css('marginTop', (DialogueBox.$window.height() - $dialogue.outerHeight()) / 2 + 'px');
     });
 
-    $dialogue.on('click', '.js-dialogue-close', function (e) {
+    $dialogue.on('click', '.mtp-dialogue__close-trigger', function (e) {
       $dialogue.trigger('dialogue:close');
       e.preventDefault();
       return false;

@@ -312,7 +312,7 @@ class DialogueNode(template.Node):
             context['dialogue_title'] = self.title.resolve(context)
         if self.show_close_button:
             context['dialogue_close_button'] = self.show_close_button.resolve(context)
-        context['dialogue_close_class'] = 'js-dialogue-close'
+        context['dialogue_close_class'] = 'mtp-dialogue__close-trigger'
 
         context['dialogue_contents'] = self.node_list.render(context)
 
