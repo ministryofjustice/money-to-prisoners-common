@@ -38,12 +38,12 @@ $mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !de
     }
   }
 
-  .mtp-compact-cell {
+  .mtp-table__header--compact, .mtp-table__cell--compact {
     padding-left: 0;
     padding-right: 0;
   }
 
-  .mtp-numeric-left {
+  .mtp-table__header--numeric-left, .mtp-table__cell--numeric-left {
     @include govuk-font($size: false, $tabular: true);
   }
 }
