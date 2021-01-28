@@ -24,12 +24,14 @@
     <div class="govuk-radios {% if small %}govuk-radios--small{% endif %} {% if inline %}govuk-radios--inline{% endif %}" data-module="govuk-radios">
       {% with initial=value|default:field.value|default:field.field.initial %}
         {% for choice, label in field.field.choices %}
-          <div class="govuk-radios__item">
-            <input id="{{ field.id_for_label }}-{{ choice }}" class="govuk-radios__input {{ input_classes }}" type="radio" name="{{ field.html_name }}" value="{{ choice }}" {% if choice == initial %}checked{% endif %} />
-            <label for="{{ field.id_for_label }}-{{ choice }}" id="{{ field.id_for_label }}-{{ choice }}-label" class="govuk-label govuk-radios__label">
-              {{ label }}
-            </label>
-          </div>
+          {% with choice_slug=choice|slugify %}
+            <div class="govuk-radios__item">
+              <input id="{{ field.id_for_label }}-{{ choice_slug }}" class="govuk-radios__input {{ input_classes }}" type="radio" name="{{ field.html_name }}" value="{{ choice }}" {% if choice == initial %}checked{% endif %} />
+              <label for="{{ field.id_for_label }}-{{ choice_slug }}" id="{{ field.id_for_label }}-{{ choice_slug }}-label" class="govuk-label govuk-radios__label">
+                {{ label }}
+              </label>
+            </div>
+          {% endwith %}
         {% endfor %}
       {% endwith %}
     </div>

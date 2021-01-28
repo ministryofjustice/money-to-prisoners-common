@@ -25,12 +25,14 @@
     <div class="govuk-checkboxes {% if small %}govuk-checkboxes--small{% endif %} {% if inline %}mtp-checkboxes--inline{% endif %}" data-module="govuk-checkboxes">
       {% with initial=value|default:field.value|default:field.field.initial %}
         {% for choice, label in field.field.choices %}
-          <div class="govuk-checkboxes__item">
-            <input id="{{ field.id_for_label }}-{{ choice }}" class="govuk-checkboxes__input {{ input_classes }}" type="checkbox" name="{{ field.html_name }}" value="{{ choice }}" {% if choice in initial %}checked{% endif %} />
-            <label for="{{ field.id_for_label }}-{{ choice }}" id="{{ field.id_for_label }}-{{ choice }}-label" class="govuk-label govuk-checkboxes__label">
-              {{ label }}
-            </label>
-          </div>
+          {% with choice_slug=choice|slugify %}
+            <div class="govuk-checkboxes__item">
+              <input id="{{ field.id_for_label }}-{{ choice_slug }}" class="govuk-checkboxes__input {{ input_classes }}" type="checkbox" name="{{ field.html_name }}" value="{{ choice }}" {% if choice in initial %}checked{% endif %} />
+              <label for="{{ field.id_for_label }}-{{ choice_slug }}" id="{{ field.id_for_label }}-{{ choice_slug }}-label" class="govuk-label govuk-checkboxes__label">
+                {{ label }}
+              </label>
+            </div>
+          {% endwith %}
         {% endfor %}
       {% endwith %}
     </div>
