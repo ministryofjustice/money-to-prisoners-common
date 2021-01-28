@@ -43,16 +43,6 @@ $mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !de
     padding-right: 0;
   }
 
-  // TODO: fix once checkbox component is updated
-  .mtp-check-cell {
-    text-align: center;
-    padding: 5px 1em 0;
-
-    input[type=checkbox] {
-      @extend .Checkbox--no-text !optional;
-    }
-  }
-
   .mtp-numeric-left {
     @include govuk-font($size: false, $tabular: true);
   }
