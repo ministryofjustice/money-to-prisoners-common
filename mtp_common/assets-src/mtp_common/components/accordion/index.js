@@ -1,4 +1,5 @@
 // allow linking directly to an expanded accordion section
+/* globals Sentry */
 'use strict';
 
 export var AccordionDirectLink = {
@@ -25,8 +26,10 @@ export var AccordionDirectLink = {
           }
           $sectionHeader.find('button').focus();
         }
-      } catch (e) {
-        // eslint-disable-line no-empty
+      } catch (error) {
+        if (Sentry !== undefined) {
+          Sentry.captureException(error);
+        }
       }
     }
   }
