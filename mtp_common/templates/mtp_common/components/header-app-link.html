@@ -1,0 +1,3 @@
+<a href="{% url view_name %}" class="{% if request.resolver_match.view_name == view_name or request.resolver_match.view_name in subview_names.split %}mtp-header-app-link--current{% endif %}">
+  {{ link_text }}
+</a>

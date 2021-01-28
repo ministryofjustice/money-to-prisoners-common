@@ -7,7 +7,8 @@ import build_tasks  # noqa
 
 
 def main():
-    exit(Executor(root_path=os.path.dirname(__file__)).run())
+    root_path = os.path.abspath(os.path.dirname(__file__))
+    exit(Executor(root_path=root_path).run())
 
 
 def test():

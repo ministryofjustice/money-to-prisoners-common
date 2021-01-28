@@ -14,7 +14,7 @@ class TestForm(forms.Form):
 
 
 template = """
-{% include 'mtp_common/forms/error-summary.html' with form=form only %}
+{% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 """
 
 

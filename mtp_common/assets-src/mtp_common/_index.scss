@@ -1,0 +1,25 @@
+// Asset paths required by GOV.UK styles
+$govuk-assets-path: '/static/';
+
+// Removes need to put classes on all elements
+$govuk-global-styles: true;
+
+// All govuk-frontend components
+@import 'govuk-frontend/govuk/all';
+
+// Global utils and settings
+@import './settings';
+@import './utils';
+
+// mtp-common components required by all apps
+@import './display';
+@import './components/breadcrumb-bar';
+@import './components/checkboxes';
+@import './components/error-summary';
+@import './components/footer';
+@import './components/header';
+@import './components/link';
+@import './components/notification-banners';
+@import './components/panel';
+@import './components/table';
+@import './components/tag';

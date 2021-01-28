@@ -1,0 +1,13 @@
+@media print {
+  .govuk-template, .govuk-footer {
+    background: none;
+  }
+
+  .govuk-footer__copyright-logo {
+    &::after {
+      display: block;
+      text-align: center;
+      white-space: normal;
+    }
+  }
+}

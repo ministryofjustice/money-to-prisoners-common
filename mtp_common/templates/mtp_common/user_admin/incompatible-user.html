@@ -4,14 +4,24 @@
 {% block page_title %}{% trans 'Sorry, something went wrong' %} – {{ block.super }}{% endblock %}
 
 {% block admin_content %}
-  <p>
-    {% blocktrans trimmed %}
-      You cannot edit the user account for ‘{{ target_username }}’.
-    {% endblocktrans %}
-  </p>
-  <p>
-    <a href="{% url 'submit_ticket' %}?message={{ message|urlencode }}&amp;email={{ request.user.email|urlencode }}">
-      {% trans 'Please contact us if you need to change it.' %}
-    </a>
-  </p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <header>
+        <h1 class="govuk-heading-xl">{% trans 'Manage users' %}</h1>
+      </header>
+
+      <p>
+        {% blocktrans trimmed %}
+          You cannot edit the user account for ‘{{ target_username }}’.
+        {% endblocktrans %}
+      </p>
+      <p>
+        <a href="{% url 'submit_ticket' %}?message={{ message|urlencode }}&amp;email={{ request.user.email|urlencode }}">
+          {% trans 'Please contact us if you need to change it.' %}
+        </a>
+      </p>
+
+    </div>
+  </div>
 {% endblock %}

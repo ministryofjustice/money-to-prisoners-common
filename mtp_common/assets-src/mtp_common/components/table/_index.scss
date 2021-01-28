@@ -1,0 +1,28 @@
+@if $govuk-global-styles == true {
+  table {
+    width: auto;
+    border-collapse: collapse;
+  }
+
+  .govuk-table {
+    caption {
+      text-align: left;
+    }
+
+    th {
+      @extend .govuk-table__header;
+
+      &.govuk-table__header--numeric {
+        text-align: right;
+      }
+    }
+
+    td {
+      @extend .govuk-table__cell;
+
+      &.govuk-table__cell--numeric {
+        text-align: right;
+      }
+    }
+  }
+}

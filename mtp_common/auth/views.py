@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
@@ -20,11 +21,18 @@ from .forms import (
 )
 
 
-def make_breadcrumbs(section_title):
-    return [
+def make_breadcrumbs(request, section_title):
+    breadcrumbs = [
         {'name': _('Home'), 'url': '/'},
-        {'name': section_title},
     ]
+    if request.user.is_authenticated:
+        breadcrumbs.append(
+            {'name': _('Settings'), 'url': reverse('settings')}
+        )
+    breadcrumbs.append(
+        {'name': section_title}
+    )
+    return breadcrumbs
 
 
 @sensitive_post_parameters()
@@ -141,7 +149,7 @@ def password_change(request,
     context = {
         'form': form,
         'cancel_url': cancel_url,
-        'breadcrumbs': make_breadcrumbs(_('Change password')),
+        'breadcrumbs': make_breadcrumbs(request, _('Change password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -169,7 +177,7 @@ def password_change_with_code(request,
     context = {
         'form': form,
         'cancel_url': cancel_url,
-        'breadcrumbs': make_breadcrumbs(_('Change password')),
+        'breadcrumbs': make_breadcrumbs(request, _('Change password')),
         'google_analytics_pageview': genericised_pageview(request, _('Set a new password')),
     }
     context.update(extra_context or {})
@@ -183,7 +191,7 @@ def password_change_done(request,
     cancel_url = resolve_url(cancel_url or '/')
     context = {
         'cancel_url': cancel_url,
-        'breadcrumbs': make_breadcrumbs(_('Change password')),
+        'breadcrumbs': make_breadcrumbs(request, _('Change password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -213,7 +221,7 @@ def reset_password(request,
     context = {
         'form': form,
         'cancel_url': cancel_url,
-        'breadcrumbs': make_breadcrumbs(_('Reset password')),
+        'breadcrumbs': make_breadcrumbs(request, _('Reset password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -228,7 +236,7 @@ def reset_password_done(request,
         return HttpResponseRedirect(cancel_url)
     context = {
         'cancel_url': cancel_url,
-        'breadcrumbs': make_breadcrumbs(_('Reset password')),
+        'breadcrumbs': make_breadcrumbs(request, _('Reset password')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)
@@ -252,13 +260,14 @@ def email_change(
     if request.method == 'POST':
         form = email_change_form(request, data=request.POST)
         if form.is_valid():
+            messages.success(request, _('Your email address was changed'))
             return HttpResponseRedirect(post_change_redirect)
     else:
         form = email_change_form(request)
     context = {
         'form': form,
         'cancel_url': cancel_url,
-        'breadcrumbs': make_breadcrumbs(_('Change email')),
+        'breadcrumbs': make_breadcrumbs(request, _('Change email')),
     }
     context.update(extra_context or {})
     return TemplateResponse(request, template_name, context)

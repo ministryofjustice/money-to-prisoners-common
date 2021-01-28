@@ -89,7 +89,7 @@ def prepare_email(from_address, to, subject, text_template, html_template, templ
         from_email=from_address,
         to=to
     )
-    if anymail_tags and isinstance(email, AnymailMessage):
+    if anymail_tags and AnymailMessage is not None and isinstance(email, AnymailMessage):
         email.tags = list(map(force_text, anymail_tags))
     if html_template:
         html_body = loader.get_template(html_template).render(template_context)

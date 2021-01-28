@@ -17,11 +17,11 @@ class App:
         self.root_path = root_path
 
     def __repr__(self):
-        return '<App: %s>' % self.name
+        return f'<App: {self.name}>'
 
     @property
     def django_app_name(self):
-        return 'mtp_%s' % self.name
+        return f'mtp_{self.name}'
 
     @property
     def hyphenated_name(self):
@@ -29,7 +29,7 @@ class App:
 
     @property
     def complete_hyphenated_name(self):
-        return 'money-to-prisoners-%s' % self.hyphenated_name
+        return f'money-to-prisoners-{self.hyphenated_name}'
 
     @property
     def title(self):
@@ -47,21 +47,17 @@ class App:
 
     @property
     def javascript_source_path(self):
-        return os.path.join(self.asset_source_path, 'javascripts')
-
-    @property
-    def javascript_source_file_set(self):
-        return FileSet('**/*.js', root=self.javascript_source_path)
+        return self.asset_source_path
 
     @property
     def scss_source_path(self):
-        return os.path.join(self.asset_source_path, 'stylesheets')
+        return self.asset_source_path
 
     @property
     def scss_source_file_set(self):
         if self.name == 'api':
             return FileSet('*.scss', root=self.scss_source_path)
-        return FileSet('app*.scss', root=self.scss_source_path)
+        return FileSet('app.scss', root=self.scss_source_path)
 
     @property
     def asset_build_path(self):
@@ -77,32 +73,15 @@ class App:
 
     @property
     def javascript_build_path(self):
-        return os.path.join(self.asset_build_path, 'javascripts')
-
-    @property
-    def javascript_build_file_set(self):
-        if self.name == 'api':
-            return FileSet()
-        return FileSet('app.bundle.js', root=self.javascript_build_path)
+        return self.asset_build_path
 
     @property
     def scss_build_path(self):
-        return os.path.join(self.asset_build_path, 'stylesheets')
-
-    @property
-    def scss_build_file_set(self):
-        # TODO: should be based on source fileset instead?
-        if self.name == 'api':
-            return FileSet('*.css', root=self.scss_build_path)
-        return FileSet('app*.css', root=self.scss_build_path)
+        return self.asset_build_path
 
     @property
     def templates_path(self):
         return os.path.join(self.django_app_name, 'templates')
-
-    @property
-    def govuk_templates_path(self):
-        return os.path.join(self.templates_path, 'govuk_template')
 
     @property
     def common_path(self):
@@ -118,11 +97,11 @@ class App:
 
     @property
     def common_javascript_source_path(self):
-        return os.path.join(self.common_asset_source_path, 'javascripts')
+        return self.common_asset_source_path
 
     @property
     def common_scss_source_path(self):
-        return os.path.join(self.common_asset_source_path, 'stylesheets')
+        return self.common_asset_source_path
 
     @property
     def common_templates_path(self):
@@ -130,20 +109,15 @@ class App:
 
     @property
     def additional_asset_paths(self):
-        yield os.path.join(self.node_modules_path, 'govuk_frontend_toolkit/images')
+        yield os.path.join(self.node_modules_path, 'govuk-frontend/govuk/assets')
 
     @property
     def javascript_include_paths(self):
-        yield os.path.join(self.common_javascript_source_path, 'modules')
-        yield os.path.join(self.javascript_source_path, 'modules')
+        yield self.common_javascript_source_path
+        yield self.javascript_source_path
 
     @property
     def scss_include_paths(self):
-        paths = [
-            'govuk_frontend_toolkit/stylesheets',
-            'govuk-elements-sass/public/sass',
-        ]
-        for path in paths:
-            yield os.path.join(self.node_modules_path, path)
+        yield self.node_modules_path
         yield self.common_scss_source_path
         yield self.scss_source_path

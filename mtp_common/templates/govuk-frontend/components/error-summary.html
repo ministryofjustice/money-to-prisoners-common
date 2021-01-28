@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load mtp_common %}
+
+{% comment %}
+  USAGE:
+  {% include 'govuk-frontend/components/error-summary.html' with form=<form variable> only %}
+{% endcomment %}
+
+{% if form.errors %}
+  {% random_string as error_summary_id %}
+  <div class="govuk-error-summary" aria-labelledby="error-summary-title__{{ error_summary_id }}" role="alert" tabindex="-1" data-module="govuk-error-summary">
+    <h2 class="govuk-error-summary__title" id="error-summary-title__{{ error_summary_id }}">
+      {{ form.error_summary_title|default:_('There was a problem') }}
+    </h2>
+    <div class="govuk-error-summary__body">
+      <ul class="govuk-list govuk-error-summary__list">
+        {% get_form_errors form as errors %}
+
+        {% for error in errors.non_field %}
+          <li class="mtp-error-summary__non-field-error">
+            {{ error }}<span class="govuk-visually-hidden">.</span>
+          </li>
+        {% endfor %}
+
+        {% for field, field_errors in errors.field_specific.items %}
+          <li class="mtp-error-summary__field-error">
+            <a href="#{{ field.id_for_label }}-label">{{ field.label }}</a>
+            <ul>
+              {% for field_error in field_errors %}
+                <li>{{ field_error }}<span class="govuk-visually-hidden">.</span></li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

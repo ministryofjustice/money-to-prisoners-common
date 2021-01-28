@@ -1,0 +1,61 @@
+.mtp-dialogue__container {
+  box-sizing: border-box;
+  display: none;
+  position: fixed;
+  z-index: 5000;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.mtp-dialogue {
+  box-sizing: border-box;
+  display: none;
+  position: relative;
+  width: 600px;
+  max-width: 90%;
+  max-height: 80%;
+  margin: 4em auto;
+  padding: 1em;
+  overflow: hidden;
+  background: $govuk-body-background-colour;
+  color: $govuk-text-colour;
+  border: $govuk-border-width solid $govuk-text-colour;
+
+  &:focus {
+    outline: $govuk-focus-width solid $govuk-focus-colour;
+  }
+
+  header {
+    margin: 0 0 1em;
+  }
+}
+
+.mtp-dialogue__backdrop {
+  display: block;
+  position: fixed;
+  z-index: 4999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: ' ';
+  background: $govuk-canvas-background-colour;
+  opacity: 0.75;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  @media print {
+    display: none !important;
+  }
+}
+
+.js-dialogue-open {
+  visibility: hidden;
+
+  .js-enabled & {
+    visibility: visible;
+  }
+}

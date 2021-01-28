@@ -4,21 +4,35 @@
   USAGE:
   {% include 'mtp_common/forms/radio-field.html' with field=<field variable> only %}
   optional parameters:
+    input_classes - classes to add to the input element
+    label_classes - classes to add to the fieldset legend element
     value - input element value override instead of default filtered field value (ignored if None)
+    inline - whether options should show in one row
+    small - whether smaller circles should be used
 
   TODO: the widget is not currently configurable
 {% endcomment %}
 
-<div id="{{ field.id_for_label }}-wrapper" class="form-group {% if field.errors %}form-group-error{% endif %}">
-  {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-  {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset" {% if field.help_text %}aria-describedby="{{ field.id_for_label }}-hint"{% endif %}>
+    <legend id="{{ field.id_for_label }}-label" class="govuk-fieldset__legend {{ label_classes }}">
+      {{ field.label }}
+    </legend>
+    {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+    {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
-  {% with initial=value|default:field.value %}
-    {% for value, label in field.field.choices %}
-      <div class="multiple-choice">
-        <input id="{{ field.html_name }}-{{ value }}" type="radio" name="{{ field.html_name }}" value="{{ value }}" {% if value == initial %}checked{% endif %} />
-        <label for="{{ field.html_name }}-{{ value }}" id="{{ field.id_for_label }}-label" class="form-label">{{ label }}</label>
-      </div>
-    {% endfor %}
-  {% endwith %}
+    <div class="govuk-radios {% if small %}govuk-radios--small{% endif %} {% if inline %}govuk-radios--inline{% endif %}" data-module="govuk-radios">
+      {% with initial=value|default:field.value|default:field.field.initial %}
+        {% for choice, label in field.field.choices %}
+          <div class="govuk-radios__item">
+            <input id="{{ field.id_for_label }}-{{ choice }}" class="govuk-radios__input {{ input_classes }}" type="radio" name="{{ field.html_name }}" value="{{ choice }}" {% if choice == initial %}checked{% endif %} />
+            <label for="{{ field.id_for_label }}-{{ choice }}" id="{{ field.id_for_label }}-{{ choice }}-label" class="govuk-label govuk-radios__label">
+              {{ label }}
+            </label>
+          </div>
+        {% endfor %}
+      {% endwith %}
+    </div>
+
+  </fieldset>
 </div>

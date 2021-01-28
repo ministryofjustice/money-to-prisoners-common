@@ -1,0 +1,39 @@
+{% load i18n %}
+
+{% comment %}
+  Multiple checkbox fields wrapped in a fieldset similarly to radio field
+  USAGE:
+  {% include 'mtp_common/forms/checkbox-multiple-field.html' with field=<field variable> only %}
+  optional parameters:
+    input_classes - classes to add to the input element
+    label_classes - classes to add to the fieldset legend element
+    value - input element value override instead of default filtered field value (ignored if None)
+    inline - whether options should show in one row
+    small - whether smaller boxes should be used
+
+  TODO: the widget is not currently configurable
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset" {% if field.help_text %}aria-describedby="{{ field.id_for_label }}-hint"{% endif %}>
+    <legend id="{{ field.id_for_label }}-label" class="govuk-fieldset__legend {{ label_classes }}">
+      {{ field.label }}
+    </legend>
+    {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+    {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+
+    <div class="govuk-checkboxes {% if small %}govuk-checkboxes--small{% endif %} {% if inline %}mtp-checkboxes--inline{% endif %}" data-module="govuk-checkboxes">
+      {% with initial=value|default:field.value|default:field.field.initial %}
+        {% for choice, label in field.field.choices %}
+          <div class="govuk-checkboxes__item">
+            <input id="{{ field.id_for_label }}-{{ choice }}" class="govuk-checkboxes__input {{ input_classes }}" type="checkbox" name="{{ field.html_name }}" value="{{ choice }}" {% if choice in initial %}checked{% endif %} />
+            <label for="{{ field.id_for_label }}-{{ choice }}" id="{{ field.id_for_label }}-{{ choice }}-label" class="govuk-label govuk-checkboxes__label">
+              {{ label }}
+            </label>
+          </div>
+        {% endfor %}
+      {% endwith %}
+    </div>
+
+  </fieldset>
+</div>

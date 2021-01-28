@@ -1,0 +1,170 @@
+$mtp-tabbed-panel-style: govuk !default;
+
+.mtp-tab-container {
+  margin-bottom: govuk-spacing(6);
+
+  .mtp-tab-wrapper {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mtp-tab {
+    @include govuk-font($size: 19);
+    text-align: center;
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &.govuk-error-message {
+      color: $govuk-error-colour !important;
+      font-weight: bold;
+    }
+  }
+
+  .mtp-tab-item {
+    display: inline-block;
+  }
+}
+
+@if ($mtp-tabbed-panel-style == mtp) {
+  // original mtp-common style
+  $tab-border-width: 3px;
+  $tab-colour: $govuk-brand-colour;
+
+  .mtp-tab-container {
+    .mtp-tab-wrapper {
+      @include govuk-media-query($until: tablet) {
+        margin-bottom: $tab-border-width * 2;
+      }
+    }
+
+    .mtp-tab {
+      display: block;
+      margin-right: $tab-border-width;
+      margin-bottom: $tab-border-width;
+      padding: $tab-border-width * 3;
+      border: $tab-border-width solid $tab-colour;
+      border-bottom-width: 0;
+      background-color: $tab-colour;
+      color: $govuk-body-background-colour;
+      outline: none;
+      text-decoration: none;
+
+      @include govuk-media-query($until: tablet) {
+        border-bottom-width: $tab-border-width;
+      }
+
+      &.govuk-error-message {
+        border-color: govuk-colour('light-grey');
+        background: govuk-colour('light-grey');
+      }
+
+      &:focus {
+        border-color: $govuk-focus-colour;
+        background: $govuk-focus-colour;
+        color: $govuk-focus-text-colour;
+      }
+
+      &.mtp-tab--selected {
+        padding-bottom: $tab-border-width * 5;
+        border-color: $govuk-border-colour;
+        background: $govuk-body-background-colour;
+        color: $govuk-text-colour;
+
+        @include govuk-media-query($until: tablet) {
+          padding-bottom: $tab-border-width * 3;
+        }
+
+        &:focus {
+          background: $govuk-focus-colour;
+          color: $govuk-focus-text-colour;
+        }
+      }
+    }
+
+    .mtp-tabpanels {
+      margin-top: $tab-border-width * -2;
+    }
+
+    .mtp-tabpanel {
+      padding: 1em;
+      border: $tab-border-width solid $govuk-border-colour;
+    }
+
+    &.mtp-tab-container--collapsed {
+      display: inline-block;
+
+      .mtp-tabpanels {
+        display: none;
+      }
+    }
+  }
+} @else if($mtp-tabbed-panel-style == govuk) {
+  // default version, based on govuk-frontend tabs component
+  $tab-spacing: 5px;
+  $tab-border-width: 1px;
+  $tab-border-colour: $govuk-border-colour;
+
+  .mtp-tab-container {
+    .mtp-tab-wrapper {
+      border-bottom: $tab-border-width solid $tab-border-colour;
+
+      &:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+
+      @include govuk-media-query($until: tablet) {
+        margin-bottom: 0;
+      }
+    }
+
+    &.mtp-tab-container--collapsed .mtp-tab-wrapper {
+      border-bottom: 0;
+    }
+
+    .mtp-tab {
+      display: inline-block;
+      margin-right: $tab-spacing;
+      padding: ($tab-spacing * 2) ($tab-spacing * 4);
+      background-color: govuk-colour('light-grey');
+      color: $govuk-text-colour;
+
+      @include govuk-media-query($until: tablet) {
+        margin-bottom: ($tab-spacing + 2 * $tab-border-width);
+      }
+
+      &:focus {
+        outline: $govuk-focus-width solid $govuk-focus-colour;
+        text-decoration: underline;
+      }
+
+      &.mtp-tab--selected {
+        margin-top: -$tab-spacing;
+        padding: ($tab-spacing * 3 - $tab-border-width) ($tab-spacing * 4 - $tab-border-width) ($tab-spacing * 3 + $tab-border-width);
+        border: $tab-border-width solid $tab-border-colour;
+        background-color: $govuk-body-background-colour;
+        color: $govuk-text-colour;
+
+        @include govuk-media-query($from: tablet) {
+          margin-bottom: -$tab-border-width;
+          border-bottom: 0;
+        }
+      }
+    }
+
+    .mtp-tabpanel {
+      padding: ($tab-spacing * 6) ($tab-spacing * 4);
+      border: $tab-border-width solid $tab-border-colour;
+      border-top: 0;
+
+      & > :last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+.mtp-input-with-date-picker {
+  width: 16ex;
+
+  @include govuk-media-query($from: tablet) {
+    padding-right: 30px;
+  }
+}
+
+.mtp-date-picker__control {
+  display: none;
+}
+
+.js-enabled .mtp-date-picker__control {
+  @include govuk-media-query($from: tablet) {
+    display: inline-block;
+  }
+
+  width: 24px;
+  height: 24px;
+  margin-left: -33px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+  background: mtp-static-url('mtp_common/images/date-picker.png') 0 0 no-repeat;
+  color: transparent !important;
+  overflow: hidden;
+  text-indent: -500px;
+  font-size: 1px;
+  text-decoration: none;
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/date-picker@2x.png');
+    background-size: 24px 24px;
+  }
+
+  &:focus {
+    background-color: $govuk-focus-colour;
+    outline: $govuk-focus-width solid $govuk-focus-colour;
+    box-shadow: none;
+  }
+}
+
+.mtp-date-picker {
+  display: none;
+  position: absolute;
+  width: 14em;
+  border: 2px solid $govuk-text-colour;
+  background: $govuk-body-background-colour;
+  color: $govuk-text-colour;
+  @include govuk-font($size: 19);
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.mtp-date-picker__top {
+  overflow: hidden;
+  border-bottom: 2px solid $govuk-border-colour;
+  text-align: center;
+}
+
+.mtp-date-picker__prev, .mtp-date-picker__next {
+  display: inline-block;
+  float: left;
+  width: 2em;
+  height: 1.6em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  background: transparent mtp-static-url('mtp_common/images/pagination-prev@2x.png') 50% 50% no-repeat;
+  background-size: 17px 13px;
+}
+
+.mtp-date-picker__next {
+  float: right;
+  margin-left: 1em;
+  margin-right: 0.5em;
+  background-image: mtp-static-url('mtp_common/images/pagination-next@2x.png');
+
+}
+
+.mtp-date-picker__label {
+  line-height: 1.6;
+}
+
+.mtp-date-picker__days span, .mtp-date-picker__dates span, .mtp-date-picker__dates a {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 2em;
+  line-height: 1.6;
+  text-align: center;
+  border: 2px solid $govuk-body-background-colour;
+  text-decoration: none;
+}
+
+.mtp-date-picker__dates a {
+  &.mtp-date-picker__initial {
+    border-color: $govuk-link-colour;
+
+    &:focus {
+      border-color: $govuk-link-colour;
+    }
+  }
+
+  &.mtp-date-picker__today {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: $govuk-link-colour;
+  }
+
+  &:focus {
+    border-color: $govuk-focus-colour;
+    outline: none;
+    box-shadow: none;
+    color: $govuk-focus-text-colour;
+  }
+}

@@ -1,4 +1,8 @@
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views import defaults
+from django.views.generic import TemplateView
+from django.utils.translation import gettext_lazy as _
 from zendesk_tickets.forms import EmailTicketForm
 from zendesk_tickets.views import TicketView, TicketSentView
 
@@ -43,4 +47,18 @@ class GetHelpSuccessView(TicketSentView):
         context = super().get_context_data(**kwargs)
         if 'return_to' in context:
             context['breadcrumbs_back'] = context['return_to']
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
+class SettingsView(TemplateView):
+    title = _('Settings')
+    template_name = 'mtp_common/settings.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['breadcrumbs'] = [
+            {'name': _('Home'), 'url': '/'},
+            {'name': _('Settings')},
+        ]
         return context

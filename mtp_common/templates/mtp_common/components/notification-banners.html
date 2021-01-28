@@ -1,0 +1,19 @@
+{% load mtp_common %}
+
+{% comment %}
+  USAGE:
+  {% notification_banners request <targets> %}
+  Shows notification banners from:
+  - mtp-api for given target
+  - django messages
+{% endcomment %}
+
+{% for notification in notifications %}
+  {% include 'mtp_common/components/notification-banner.html' with banner_level=notification.level banner_title=notification.level|notification_level banner_heading=notification.headline banner_message=notification.message only %}
+{% endfor %}
+
+{% for message in messages %}
+  {% if message.level_tag != 'debug' %}
+    {% include 'mtp_common/components/notification-banner.html' with banner_level=message.level_tag banner_title=message.level_tag|notification_level banner_heading=message only %}
+  {% endif %}
+{% endfor %}

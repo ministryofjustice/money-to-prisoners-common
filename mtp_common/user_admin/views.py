@@ -20,12 +20,23 @@ from mtp_common.user_admin.forms import UserUpdateForm, AcceptRequestForm
 logger = logging.getLogger('mtp')
 
 
-def make_breadcrumbs(section_title):
-    return [
+def make_breadcrumbs(section_title=None):
+    breadcrumbs = [
         {'name': _('Home'), 'url': '/'},
-        {'name': _('Manage user accounts'), 'url': reverse('list-users')},
-        {'name': section_title}
+        {'name': _('Settings'), 'url': reverse('settings')},
     ]
+    if section_title:
+        breadcrumbs.append(
+            {'name': _('Manage users'), 'url': reverse('list-users')}
+        )
+        breadcrumbs.append(
+            {'name': section_title}
+        )
+    else:
+        breadcrumbs.append(
+            {'name': _('Manage users')},
+        )
+    return breadcrumbs
 
 
 def ensure_compatible_admin(view):
@@ -38,8 +49,10 @@ def ensure_compatible_admin(view):
         user_roles = request.user.user_data.get('roles', [])
         if len(user_roles) != 1:
             context = {
-                'message': 'I need to be able to manage user accounts. '
-                           'My username is %s' % request.user.username
+                'message': (
+                    f'I need to be able to manage user accounts. '
+                    f'My username is {request.user.username}'
+                )
             }
             return render(request, 'mtp_common/user_admin/incompatible-admin.html', context=context)
         return view(request, *args, **kwargs)
@@ -64,19 +77,25 @@ def list_users(request):
         params={
             'limit': page_size,
             'offset': (page - 1) * page_size,
-            'ordering': '-is_active'
         }
     ).json()
+    user_count = response.get('count', 0)
     users = response.get('results', [])
-    account_requests = retrieve_all_pages_for_path(session, 'requests/')
-    for account_request in account_requests:
-        account_request['created'] = parse_datetime(account_request['created'])
+    try:
+        account_requests = retrieve_all_pages_for_path(session, 'requests/')
+        for account_request in account_requests:
+            account_request['created'] = parse_datetime(account_request['created'])
+    except HttpClientError:
+        logger.exception(f'User {request.user.username} cannot access account requests')
+        account_requests = []
     context = {
+        'breadcrumbs': make_breadcrumbs(),
         'can_delete': request.user.has_perm('auth.delete_user'),
         'locked_users_exist': any(user['is_locked_out'] for user in users),
         'users': users,
         'page': page,
-        'page_count': int(math.ceil(response.get('count', 0) / page_size)),
+        'page_count': int(math.ceil(user_count / page_size)),
+        'user_count': user_count,
         'account_requests': account_requests,
     }
     return render(request, 'mtp_common/user_admin/list.html', context=context)
@@ -86,36 +105,32 @@ def list_users(request):
 @permission_required('auth.delete_user', raise_exception=True)
 @ensure_compatible_admin
 def delete_user(request, username):
-    context = {
-        'breadcrumbs': make_breadcrumbs(_('Disable user')),
-    }
     if request.method == 'POST':
         try:
             api_client.get_api_session(request).delete(
-                'users/{username}/'.format(username=username)
+                f'users/{username}/'
             )
 
             admin_username = request.user.user_data.get('username', 'Unknown')
-            logger.info('Admin %(admin_username)s disabled user %(username)s' % {
-                'admin_username': admin_username,
-                'username': username,
-            }, extra={
+            logger.info(f'Admin {admin_username} disabled user {username}', extra={
                 'elk_fields': {
                     '@fields.username': admin_username,
                 }
             })
-            context['page_title'] = _('User account ‘%(username)s’ disabled') % {'username': username}
-            return render(request, 'mtp_common/user_admin/deleted.html', context=context)
+            messages.success(request, _('User account ‘%(username)s’ disabled') % {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be disabled'))
-            return redirect(reverse('list-users'))
+        return redirect(reverse('list-users'))
 
+    context = {
+        'breadcrumbs': make_breadcrumbs(_('Disable user')),
+    }
     try:
         user = api_client.get_api_session(request).get(
-            'users/{username}/'.format(username=username)
+            f'users/{username}/'
         ).json()
         context['user'] = user
-        context['page_title'] = _('Disable user account ‘%(username)s’') % {'username': user['username']}
+        context['page_title'] = _('Disable user')
         return render(request, 'mtp_common/user_admin/delete.html', context=context)
     except HttpNotFoundError:
         raise Http404
@@ -125,37 +140,33 @@ def delete_user(request, username):
 @permission_required('auth.delete_user', raise_exception=True)
 @ensure_compatible_admin
 def undelete_user(request, username):
-    context = {
-        'breadcrumbs': make_breadcrumbs(_('Enable user')),
-    }
     if request.method == 'POST':
         try:
             api_client.get_api_session(request).patch(
-                'users/{username}/'.format(username=username),
+                f'users/{username}/',
                 json={'is_active': True}
             )
 
             admin_username = request.user.user_data.get('username', 'Unknown')
-            logger.info('Admin %(admin_username)s enabled user %(username)s' % {
-                'admin_username': admin_username,
-                'username': username,
-            }, extra={
+            logger.info(f'Admin {admin_username} enabled user {username}', extra={
                 'elk_fields': {
                     '@fields.username': admin_username,
                 }
             })
-            context['page_title'] = _('User account ‘%(username)s’ enabled') % {'username': username}
-            return render(request, 'mtp_common/user_admin/undeleted.html', context=context)
+            messages.success(request, _('User account ‘%(username)s’ enabled') % {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be enabled'))
-            return redirect(reverse('list-users'))
+        return redirect(reverse('list-users'))
 
+    context = {
+        'breadcrumbs': make_breadcrumbs(_('Enable user')),
+    }
     try:
         user = api_client.get_api_session(request).get(
-            'users/{username}/'.format(username=username)
+            f'users/{username}/'
         ).json()
         context['user'] = user
-        context['page_title'] = _('Enable user account ‘%(username)s’') % {'username': user['username']}
+        context['page_title'] = _('Enable user')
         return render(request, 'mtp_common/user_admin/undelete.html', context=context)
     except HttpNotFoundError:
         raise Http404
@@ -167,15 +178,12 @@ def undelete_user(request, username):
 def unlock_user(request, username):
     try:
         api_client.get_api_session(request).patch(
-            'users/{username}/'.format(username=username),
+            f'users/{username}/',
             json={'is_locked_out': False}
         )
 
         admin_username = request.user.user_data.get('username', 'Unknown')
-        logger.info('Admin %(admin_username)s removed lock-out for user %(username)s' % {
-            'admin_username': admin_username,
-            'username': username,
-        }, extra={
+        logger.info(f'Admin {admin_username} removed lock-out for user {username}', extra={
             'elk_fields': {
                 '@fields.username': admin_username,
             }
@@ -192,6 +200,7 @@ class UserFormView(FormView):
     title = _('Edit user')
     template_name = 'mtp_common/user_admin/update.html'
     form_class = UserUpdateForm
+    success_url = reverse_lazy('list-users')
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -204,16 +213,15 @@ class UserFormView(FormView):
         return form_kwargs
 
     def form_valid(self, form):
+        username = form.cleaned_data.get('username')
         if form.create:
-            page_title = _('User account ‘%(username)s’ created')
+            message = _('User account ‘%(username)s’ created')
+        elif self.request.user.username == self.kwargs.get('username'):
+            message = _('Your account was saved')
         else:
-            page_title = _('User account ‘%(username)s’ edited')
-        context = {
-            'user': form.cleaned_data,
-            'page_title': page_title % {'username': form.cleaned_data.get('username')},
-            'breadcrumbs': make_breadcrumbs(self.title),
-        }
-        return render(self.request, 'mtp_common/user_admin/saved.html', context=context)
+            message = _('User account ‘%(username)s’ saved')
+        messages.success(self.request, message % {'username': username})
+        return super().form_valid(form)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -266,8 +274,10 @@ class UserUpdateView(UserFormView):
             target_username = self.kwargs.get('username')
             context = {
                 'target_username': target_username,
-                'message': 'My username is %s. '
-                           'I need to be able to edit the account for %s' % (admin_username, target_username),
+                'message': (
+                    f'My username is {admin_username}. '
+                    f'I need to be able to edit the account for {target_username}'
+                ),
             }
             return render(request, 'mtp_common/user_admin/incompatible-user.html', context=context)
 
@@ -275,7 +285,7 @@ class UserUpdateView(UserFormView):
         username = self.kwargs['username']
         try:
             response = api_client.get_api_session(self.request).get(
-                'users/{username}/'.format(username=username)
+                f'users/{username}/'
             ).json()
             initial = {
                 'username': response.get('username', ''),
@@ -294,8 +304,12 @@ class UserUpdateView(UserFormView):
             raise Http404
 
     def get_context_data(self, **kwargs):
-        page_title = _('Edit user ‘%(username)s’') % {'username': self.kwargs['username']}
-        return super().get_context_data(page_title=page_title, **kwargs)
+        context_data = super().get_context_data(**kwargs)
+        if self.request.user.username == self.kwargs.get('username'):
+            context_data['page_title'] = _('Edit your account')
+        else:
+            context_data['page_title'] = _('Edit existing user')
+        return context_data
 
 
 class SignUpView(FormView):
@@ -395,7 +409,7 @@ class AcceptRequestView(FormView):
         account_request = context_data['form'].account_request
         account_request.update(
             created=parse_datetime(account_request['created']),
-            full_name='%s %s' % (account_request['first_name'], account_request['last_name']),
+            full_name=f"{account_request['first_name']} {account_request['last_name']}".strip(),
         )
         context_data.update(
             breadcrumbs_back=self.success_url,
@@ -413,7 +427,7 @@ class AcceptRequestView(FormView):
 @permission_required('auth.change_user', raise_exception=True)
 @ensure_compatible_admin
 def decline_request(request, account_request):
-    response = api_client.get_api_session(request).delete('requests/%s/' % account_request)
+    response = api_client.get_api_session(request).delete(f'requests/{account_request}/')
     if response.status_code == 204:
         messages.success(request, gettext('New user request was declined'))
     else:

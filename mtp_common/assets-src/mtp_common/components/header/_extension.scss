@@ -1,0 +1,25 @@
+.mtp-internal-site {
+  .govuk-header__logotype svg {
+    vertical-align: bottom;
+
+    @media print {
+      display: none;
+    }
+  }
+
+  @include govuk-media-query($from: tablet) {
+    .govuk-header__content {
+      margin-top: 2px;
+    }
+  }
+
+  @include govuk-media-query($from: desktop) {
+    .govuk-header__logo {
+      width: 25%;
+    }
+
+    .govuk-header__content {
+      width: 75%;
+    }
+  }
+}

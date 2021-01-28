@@ -4,16 +4,17 @@
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './{{ app.javascript_source_path }}/main.js',
+  mode: 'none',  // overridden with 'production' when app Docker images are built
+  entry: '{{ app.root_path }}/{{ app.javascript_source_path }}/app.js',
   output: {
-    path: __dirname + '/{{ app.javascript_build_path }}',
-    filename: 'app.bundle.js'
+    path: '{{ app.root_path }}/{{ app.javascript_build_path }}',
+    filename: 'app.js'
   },
   resolve: {
     modules: [
-      __dirname + '/node_modules',
+      '{{ app.root_path }}/node_modules',
       {% for path in app.javascript_include_paths %}
-        '{{ path }}'{% if not forloop.last %},{% endif %}
+        '{{ app.root_path }}/{{ path }}'{% if not forloop.last %},{% endif %}
       {% endfor %}
     ]
   },

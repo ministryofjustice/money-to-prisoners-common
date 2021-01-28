@@ -1,18 +1,17 @@
-import contextlib
 import functools
-import io
 import os
-import socket
 import sys
 import threading
 
+import pkg_resources
+
 from .executor import Context, Tasks, TaskError
-from .paths import FileSet, in_dir, paths_for_shell
+from .paths import in_dir, paths_for_shell
 
 tasks = Tasks()
 
 
-@tasks.register('dependencies', 'govuk_template', 'additional_assets', 'bundles', 'collect_static_files',
+@tasks.register('dependencies', 'additional_assets', 'bundles', 'collect_static_files',
                 'take_screenshots', 'compile_messages', 'precompile_python_code', default=True)
 def build(_: Context):
     """
@@ -26,8 +25,8 @@ def start(context: Context, port=8000):
     Starts a development server
     """
     # NB: if called in the same interpreter, cannot use auto-reloading else all tasks re-run
-    # context.management_command('runserver', addrport='0:%s' % port, use_reloader=False)
-    return context.shell(sys.executable, 'manage.py', 'runserver', '0:%s' % port)
+    # context.management_command('runserver', addrport=f'0:{port}', use_reloader=False)
+    return context.shell(sys.executable, 'manage.py', 'runserver', f'0:{port}')
 
 
 @tasks.register('build')
@@ -73,7 +72,7 @@ def serve(context: Context, port=8000, browsersync_port=3000, browsersync_ui_por
                 context.debug('Triggering stylesheet build')
                 bundle_stylesheets(context)
             context.debug('Reloading browsers')
-            context.node_tool('browser-sync', 'reload', '--port=%s' % browsersync_port)
+            context.node_tool('browser-sync', 'reload', f'--port={browsersync_port}')
 
     context.info('Watching sources')
     observer = Observer()
@@ -92,8 +91,8 @@ def serve(context: Context, port=8000, browsersync_port=3000, browsersync_ui_por
     context.info('Starting browser sync')
     browsersync_args = ['start', '--host=localhost', '--no-open',
                         '--logLevel', {0: 'silent', 1: 'info', 2: 'debug'}[context.verbosity],
-                        '--port=%s' % browsersync_port, '--proxy=localhost:%s' % port,
-                        '--ui-port=%s' % browsersync_ui_port]
+                        f'--port={browsersync_port}', f'--proxy=localhost:{port}',
+                        f'--ui-port={browsersync_ui_port}']
     browsersync = functools.partial(context.node_tool, 'browser-sync', *browsersync_args)
     threading.Thread(target=browsersync, daemon=True).start()
 
@@ -122,7 +121,12 @@ def create_build_paths(context: Context):
     """
     Creates directories needed for build outputs
     """
-    paths = [context.app.asset_build_path, context.app.screenshots_build_path, context.app.collected_assets_path]
+    paths = [
+        context.app.asset_build_path,
+        context.app.scss_build_path,
+        context.app.screenshots_build_path,
+        context.app.collected_assets_path,
+    ]
     for path in filter(None, paths):
         os.makedirs(path, exist_ok=True)
 
@@ -182,17 +186,13 @@ def local_docker(context: Context):
     Runs the app in a docker container; for local development only!
     Once performed, `docker-compose up` can be used directly
     """
-    output = io.StringIO()
-    with contextlib.redirect_stdout(output):
-        context.shell('docker-machine', 'ip', 'default')
-    host_machine_ip = output.getvalue().strip() or socket.gethostbyname(socket.gethostname())
     args = ()
     if context.verbosity > 1:
         args += ('--verbose',)
     args += ('up', '--build', '--remove-orphans')
     if not context.use_colour:
         args += ('--no-color',)
-    context.shell('docker-compose', *args, environment={'HOST_MACHINE_IP': host_machine_ip})
+    context.shell('docker-compose', *args)
 
 
 @tasks.register(hidden=True)
@@ -204,37 +204,43 @@ def webpack_config(context: Context):
 
 
 @tasks.register('create_build_paths', 'node_dependencies', 'webpack_config', hidden=True)
-def bundle_javascript(context: Context):
+def bundle_javascript(context: Context, production_bundle=False):
     """
     Compiles javascript
     """
     args = ['--bail']
-    if context.verbosity > 0:
-        args.append('--verbose')
     if not context.use_colour:
-        args.append('--no-colors')
+        args.append('--no-color')
+    if production_bundle:
+        args.append('--mode=production')
     return context.node_tool('webpack', *args)
 
 
 @tasks.register('create_build_paths', 'node_dependencies', hidden=True)
-def bundle_stylesheets(context: Context):
+def bundle_stylesheets(context: Context, production_bundle=False):
     """
     Compiles stylesheets
     """
+    def make_output_file(css_path):
+        css_name = os.path.basename(css_path)
+        base_name = os.path.splitext(css_name)[0]
+        return os.path.join(context.app.scss_build_path, f'{base_name}.css')
+
+    style = 'compressed' if production_bundle else 'nested'
     args = [
-        '--output', context.app.scss_build_path,
-        '--output-style', 'compressed',
+        'pysassc',  # pysassc entrypoint always removes the first item
+        f'--output-style={style}',
     ]
-    if context.verbosity == 0:
-        args.append('--quiet')
-    if not context.use_colour:
-        args.append('--no-color')
     for path in context.app.scss_include_paths:
-        args.append('--include-path')
-        args.append(path)
+        args.append(f'--include-path={path}')
+
     return_code = 0
+    pysassc = pkg_resources.load_entry_point('libsass', 'console_scripts', 'pysassc')
     for source_file in context.app.scss_source_file_set.paths_for_shell(separator=None):
-        return_code = context.node_tool('node-sass', *args + [source_file]) or return_code
+        context.info(f'Building {source_file}')
+        pysassc_args = [*args + [source_file, make_output_file(source_file)]]
+        return_code = pysassc(pysassc_args) or return_code
+
     return return_code
 
 
@@ -286,41 +292,13 @@ def lint(_: Context):
 
 
 @tasks.register('create_build_paths', hidden=True)
-def govuk_template(context: Context, version='0.23.0', replace_fonts=True):
-    """
-    Installs GOV.UK template
-    """
-    if FileSet(os.path.join(context.app.govuk_templates_path, 'base.html')):
-        # NB: check is only on main template and not the assets included
-        return
-    url = 'https://github.com/alphagov/govuk_template/releases' \
-          '/download/v{0}/django_govuk_template-{0}.tgz'.format(version)
-    try:
-        context.shell('curl --location %(silent)s --output govuk_template.tgz %(url)s' % {
-            'silent': '--silent' if context.verbosity == 0 else '',
-            'url': url,
-        })
-        context.shell('tar xzf govuk_template.tgz ./govuk_template')
-        rsync_flags = '-avz' if context.verbosity == 2 else '-az'
-        context.shell('rsync %s govuk_template/static/ %s/' % (rsync_flags, context.app.asset_build_path))
-        context.shell('rsync %s govuk_template/templates/ %s/' % (rsync_flags, context.app.templates_path))
-    finally:
-        context.shell('rm -rf govuk_template.tgz ./govuk_template')
-    if replace_fonts:
-        # govuk_template includes .eot font files for IE, but they load relative to current URL not the stylesheet
-        # this option removes these files so common's fonts-ie8.css override is used
-        context.shell('rm -rf %s/stylesheets/fonts-ie8.css'
-                      ' %s/stylesheets/fonts/' % (context.app.asset_build_path, context.app.asset_build_path))
-
-
-@tasks.register('create_build_paths', hidden=True)
 def additional_assets(context: Context):
     """
     Collects assets from GOV.UK frontend toolkit
     """
     rsync_flags = '-avz' if context.verbosity == 2 else '-az'
     for path in context.app.additional_asset_paths:
-        context.shell('rsync %s %s %s/' % (rsync_flags, path, context.app.asset_build_path))
+        context.shell(f'rsync {rsync_flags} {path}/ {context.app.asset_build_path}/')
 
 
 @tasks.register('create_build_paths', hidden=True)
@@ -366,7 +344,7 @@ def make_messages(context: Context, javascript=False, fuzzy=False):
     if fuzzy:
         kwargs['allow_fuzzy'] = True
     if javascript:
-        kwargs.update(domain='djangojs', ignore_patterns=['*.bundle.js'])
+        kwargs.update(domain='djangojs', ignore_patterns=['app.js'])
     with in_dir(context.app.django_app_name):
         return context.management_command('makemessages', **kwargs)
 
@@ -400,12 +378,14 @@ def clean(context: Context, delete_dependencies: bool = False):
     """
     Deletes build outputs
     """
-    paths = [context.app.asset_build_path, context.app.collected_assets_path, context.app.govuk_templates_path,
-             'docker-compose.yml', 'package.json', 'package-lock.json', 'webpack.config.js']
-    context.shell('rm -rf %s' % paths_for_shell(paths))
-    context.shell('find %s -name "*.pyc" -or -name __pycache__ -delete' % context.app.django_app_name)
+    paths = [
+        context.app.asset_build_path, context.app.collected_assets_path,
+        'docker-compose.yml', 'package.json', 'package-lock.json', 'webpack.config.js',
+    ]
+    context.shell(f'rm -rf {paths_for_shell(paths)}')
+    context.shell(f'find {context.app.django_app_name} -name "*.pyc" -or -name __pycache__ -delete')
 
     if delete_dependencies:
-        context.info('Cleaning app %s dependencies' % context.app.name)
+        context.info(f'Cleaning app {context.app.name} dependencies')
         paths = ['node_modules', 'venv']
-        context.shell('rm -rf %s' % paths_for_shell(paths))
+        context.shell(f'rm -rf {paths_for_shell(paths)}')

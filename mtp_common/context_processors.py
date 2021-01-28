@@ -25,9 +25,9 @@ def app_environment(_):
 def govuk_localisation(_):
     moj_internal_site = getattr(settings, 'MOJ_INTERNAL_SITE', False)
     if moj_internal_site:
-        homepage_url = 'https://www.justice.gov.uk/'
-        logo_link_title = gettext('Go to the Ministry of Justice homepage')
-        global_header_text = gettext('Ministry of Justice')
+        homepage_url = 'https://intranet.noms.gsi.gov.uk/'
+        logo_link_title = gettext('Go to the HMPPS Intranet')
+        global_header_text = gettext('HMPPS')
     else:
         homepage_url = 'https://www.gov.uk/'
         logo_link_title = gettext('Go to the GOV.UK homepage')
@@ -37,9 +37,7 @@ def govuk_localisation(_):
         'moj_internal_site': moj_internal_site,
         'html_lang': html_lang or settings.LANGUAGE_CODE,
         'home_url': '/%s/' % html_lang if html_lang else '/',
-        'skip_link_message': gettext('Skip to main content'),
         'homepage_url': homepage_url,
         'logo_link_title': logo_link_title,
         'global_header_text': global_header_text,
-        'crown_copyright_message': gettext('© Crown copyright'),
     }

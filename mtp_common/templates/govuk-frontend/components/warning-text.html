@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% comment %}
+  USAGE:
+  {% include 'govuk-frontend/components/warning-text.html' with text=<text> only %}
+  optional parameters:
+    accessible_label - to use instead of "Warning"
+{% endcomment %}
+
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <span class="govuk-warning-text__assistive">{{ accessible_label|default:_('Warning') }}</span>
+    {{ text }}
+  </strong>
+</div>

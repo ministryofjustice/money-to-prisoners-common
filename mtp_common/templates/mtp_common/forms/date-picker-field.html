@@ -11,12 +11,12 @@
   TODO: the widget is not currently configurable
 {% endcomment %}
 
-<div id="{{ field.id_for_label }}-wrapper" class="form-group {% if field.errors %}form-group-error{% endif %}">
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
   {% include 'mtp_common/forms/field-label.html' with field=field only %}
   {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
   {% with value=value|default:field.value %}
-    <input id="{{ field.id_for_label }}" class="form-control mtp-control-with-date-picker {% if field.errors %}form-control-error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" value="{{ value|date:'SHORT_DATE_FORMAT'|default:value|default_if_none:'' }}" type="{{ field.field.widget.input_type|default:'text' }}" {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %} />
+    <input id="{{ field.id_for_label }}" class="govuk-input mtp-input-with-date-picker {% if field.errors %}govuk-input--error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" value="{{ value|date:'SHORT_DATE_FORMAT'|default:value|default_if_none:'' }}" type="{{ input_type|default:field.field.widget.input_type|default:'text' }}" {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %} />
   {% endwith %}
   <a href="#{{ field.id_for_label }}" class="mtp-date-picker__control" aria-hidden="true" title="{% trans 'Pick a date' %}">{% trans 'Pick a date' %}</a>
 </div>

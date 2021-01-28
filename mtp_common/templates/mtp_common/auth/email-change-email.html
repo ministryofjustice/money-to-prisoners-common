@@ -3,7 +3,7 @@
 
 {% block title %}{% trans 'Prisoner money' %}{% endblock %}
 
-{% block inner_content %}
+{% block content %}
   <p>
     {% blocktrans trimmed with name=user.first_name %}
       Dear {{ name }},
@@ -23,7 +23,8 @@
   </p>
 
   <p>
-    Kind regards,<br />
-    Prisoner money team
+    {% trans 'Kind regards,' %}
+    <br />
+    {% trans 'Prisoner money team' %}
   </p>
 {% endblock %}

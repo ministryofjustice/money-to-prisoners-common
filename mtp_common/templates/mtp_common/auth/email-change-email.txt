@@ -11,5 +11,5 @@ The email address associated with your account at {{ site_url }} was recently ch
 If this action was not taken by you, please contact us at {{ feedback_url }} immediately.
 {% endblocktrans %}
 
-Kind regards,
-Prisoner money team
+{% trans 'Kind regards,' %}
+{% trans 'Prisoner money team' %}

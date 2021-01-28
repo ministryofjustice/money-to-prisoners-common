@@ -1,0 +1,20 @@
+// replicate radio field's inline display (.govuk-checkboxes--inline does not exist)
+.mtp-checkboxes--inline {
+  @include govuk-media-query ($from: tablet) {
+    @include govuk-clearfix;
+
+    .govuk-checkboxes__item {
+      margin-right: govuk-spacing(4);
+      float: left;
+      clear: none;
+    }
+  }
+
+  // Prevent inline modifier being used with conditional reveals
+  &.govuk-checkboxes--conditional {
+    .govuk-checkboxes__item {
+      margin-right: 0;
+      float: none;
+    }
+  }
+}

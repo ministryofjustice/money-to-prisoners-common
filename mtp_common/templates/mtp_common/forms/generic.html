@@ -1,38 +1,36 @@
 {% load i18n %}
-{% load mtp_common %}
 {% load widget_tweaks %}
 
-<header>
-  <h1 class="heading-xlarge">{{ form_title }}</h1>
-</header>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-<div class="container">
-  <div class="grid-row">
-    <div class="column-two-thirds">
-      {% include 'mtp_common/forms/error-summary.html' with form=form only %}
+    <header>
+      <h1 class="govuk-heading-xl">{{ form_title }}</h1>
+    </header>
 
-      <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}">
-        {% csrf_token %}
+    {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 
-        {% for field in form.hidden_fields %}
-          {{ field }}
-        {% endfor %}
+    <form action="{{ app_path }}" method="post" id="{{ form_title|slugify }}" novalidate>
+      {% csrf_token %}
 
-        {% for field in form.visible_fields %}
-          <div class="form-group {% if field.errors %}form-group-error{% endif %}">
-            {% include 'mtp_common/forms/field-label.html' with field=field only %}
-            {% include 'mtp_common/forms/field-errors.html' with field=field only %}
-            {{ field|add_class:'form-control'|add_error_class:'form-control-error' }}
-          </div>
-        {% endfor %}
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
 
-        <div class="form-group">
-          <button type="submit" class="button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
-          {% if cancel_url %}
-            <a class="mtp-cancel-button" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
-          {% endif %}
+      {% for field in form.visible_fields %}
+        <div class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+          {% include 'mtp_common/forms/field-label.html' with field=field only %}
+          {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+          {{ field|add_class:'govuk-input govuk-input--width-20'|add_error_class:'govuk-input--error' }}
         </div>
-      </form>
-    </div>
+      {% endfor %}
+
+      <p>
+        <button type="submit" class="govuk-button" data-module="govuk-button" name="{{ submit_text|slugify }}">{{ submit_text }}</button>
+        {% if cancel_url %}
+          <a class="mtp-link--form-cancel" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+        {% endif %}
+      </p>
+    </form>
   </div>
 </div>

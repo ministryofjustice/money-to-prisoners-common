@@ -5,44 +5,46 @@
 {% block page_title %}{{ view.title }} – {{ block.super }}{% endblock %}
 
 
-{% block inner_content %}
-  <header>
-    <h1 class="heading-xlarge mtp-settings-heading">
-      <span class="heading-secondary">{{ request.user.get_full_name|default:request.user.username }}</span>
-      {% trans 'Settings' %}
-    </h1>
-  </header>
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% include 'mtp_common/components/notification-banners.html' %}
 
-  <div class="grid-row">
-    <div class="column-two-thirds">
-      {% block extra_settings %}{% endblock %}
+      <header>
+        <h1 class="govuk-heading-xl">
+          <span class="govuk-caption-xl">{{ request.user.get_full_name|default:request.user.username }}</span>
+          {{ view.title }}
+        </h1>
+      </header>
 
-      <div class="mtp-settings-item">
-        <h2 class="heading-large">
+      {% block settings %}
+
+        <h2 class="govuk-heading-l">
           {% trans 'Change your password' %}
         </h2>
-        <a class="button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
-      </div>
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
 
-      <div class="mtp-settings-item">
-        <h2 class="heading-large">
+        {% include 'govuk-frontend/components/section-break.html' with visible=True size='l' %}
+
+        <h2 class="govuk-heading-l">
           {% trans 'Your email' %}
         </h2>
         <p>{{ request.user.email }}</p>
-        <a class="button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
-      </div>
+        <a class="govuk-button" data-module="govuk-button" href="{% url 'email_change' %}">{% trans 'Change email' %}</a>
 
-      {% if perms.auth.change_user %}
-        <div class="mtp-settings-item">
-          <h2 class="heading-large">
+        {% if perms.auth.change_user %}
+          {% include 'govuk-frontend/components/section-break.html' with visible=True size='l' %}
+
+          <h2 class="govuk-heading-l">
             {% trans 'Manage users' %}
           </h2>
           <p>
             {% trans 'Add, view, edit or disable user accounts.' %}
           </p>
-          <a class="button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
-        </div>
-      {% endif %}
+          <a class="govuk-button" data-module="govuk-button" href="{% url 'list-users' %}">{% trans 'Manage users' %}</a>
+        {% endif %}
+
+      {% endblock %}
     </div>
   </div>
 {% endblock %}

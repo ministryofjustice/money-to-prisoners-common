@@ -1,0 +1,20 @@
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/components/card.html' with heading=<heading> only %}
+  optional parameters:
+    link - makes the whole card into a link
+    description - additional description
+{% endcomment %}
+
+<div class="mtp-card {% if link %}mtp-card--clickable{% endif %}">
+  <h2 class="mtp-card__heading">
+    {% if link %}
+      <a class="mtp-card__link" href="{{ link }}">{{ heading }}</a>
+    {% else %}
+      {{ heading }}
+    {% endif %}
+  </h2>
+  {% if description %}
+    <p class="mtp-card__description">{{ description }}</p>
+  {% endif %}
+</div>

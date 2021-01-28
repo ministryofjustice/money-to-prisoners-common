@@ -33,7 +33,8 @@ class FileSet(collections.Iterable, collections.Sized):
         self.root = root
 
     def __repr__(self):
-        return '<File set: %s>' % ' '.join(self.include)
+        paths = ' '.join(self.include)
+        return f'<File set: {paths}>'
 
     def include(self, pattern):
         self.include.append(pattern)

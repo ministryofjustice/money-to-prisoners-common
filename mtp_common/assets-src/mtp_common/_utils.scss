@@ -1,0 +1,4 @@
+// govuk-frontend static url utils only provide predefined image and font paths
+@function mtp-static-url($filename) {
+  @return url($govuk-assets-path + $filename);
+}

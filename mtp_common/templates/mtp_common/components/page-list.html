@@ -1,0 +1,71 @@
+{% load i18n %}
+{% load mtp_common %}
+
+{% comment %}
+  USAGE:
+  {% page_list page=page page_count=page_count %}
+  optional parameters:
+    query_string - optional parameters to include in links
+{% endcomment %}
+
+{% if page_count > 1 %}
+  {% spaceless %}
+    <nav class="mtp-page-list" role="navigation" aria-label="{% trans 'Pagination' %}">
+      <ul>
+        {% if page != 1 %}
+          <li>
+            <a class="mtp-page-list__item mtp-page-list__item--prev" href="?{{ query_string }}page={{ page|add:-1 }}">
+              <span class="govuk-visually-hidden">{% trans 'Previous page' %}</span>
+              <span aria-hidden="true">{% trans 'Previous' %}</span>
+            </a>
+          </li>
+        {% endif %}
+
+        {% for page_index in page_range %}
+          {% if not page_index %}
+            <li aria-hidden="true">
+              <span class="mtp-page-list__item">…</span>
+            </li>
+          {% elif page_index == page %}
+            <li>
+              <span class="mtp-page-list__item">
+                <span class="govuk-visually-hidden">{% blocktrans trimmed with page=page_index|separate_thousands %}Page {{ page }}{% endblocktrans %}</span>
+                <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
+              </span>
+            </li>
+          {% else %}
+            <li>
+              <a class="mtp-page-list__item" href="?{{ query_string }}page={{ page_index }}">
+                {% if page_index == 1 %}
+                  <span class="govuk-visually-hidden">{% trans 'First page' %}</span>
+                  <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
+                {% elif page_index == page_count %}
+                  <span class="govuk-visually-hidden">{% trans 'Last page' %}</span>
+                  <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
+                {% else %}
+                  <span class="govuk-visually-hidden">{% blocktrans trimmed with page=page_index|separate_thousands %}Page {{ page }}{% endblocktrans %}</span>
+                  <span aria-hidden="true">{{ page_index|separate_thousands }}</span>
+                {% endif %}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page != page_count %}
+          <li>
+            <a class="mtp-page-list__item mtp-page-list__item--next" href="?{{ query_string }}page={{ page|add:1 }}">
+              <span class="govuk-visually-hidden">{% trans 'Next page' %}</span>
+              <span aria-hidden="true">{% trans 'Next' %}</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endspaceless %}
+{% endif %}
+
+<p class="mtp-page-list__description">
+  {% blocktrans trimmed with page=page|separate_thousands page_count=page_count|separate_thousands %}
+    Page {{ page }} of {{ page_count }}.
+{% endblocktrans %}
+</p>

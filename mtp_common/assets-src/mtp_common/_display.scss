@@ -1,0 +1,40 @@
+@if $govuk-global-styles == true {
+  a:focus {
+    outline-offset: 0;
+  }
+
+  strong, b {
+    font-weight: bold;
+  }
+
+  em, i {
+    font-style: italic;
+  }
+
+  strong, em, b, i {
+    @include govuk-typography-common;
+  }
+
+  address {
+    @extend .govuk-body;
+    font-style: normal;
+  }
+
+  code {
+    font-family: Courier, "Courier New", monospace;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 40px;
+  }
+}
+
+// no govuk-frontend class is available for the inverse of .govuk-!-display-none-print
+.mtp-\!-display-print-only {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+}

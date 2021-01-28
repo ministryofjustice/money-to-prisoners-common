@@ -1,4 +1,4 @@
-{% extends 'govuk_template/base.html' %}
+{% extends 'govuk-frontend/template.html' %}
 {% load i18n %}
 {% load static %}
 {% load mtp_common %}
@@ -7,9 +7,8 @@
 
 {% block head %}
   {{ block.super }}
-  <link href="{% static "stylesheets/app.css" %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" />
 
-  <link rel="stylesheet" href="{% static "stylesheets/app-print.css" %}?{{ APP_GIT_COMMIT_SHORT }}" media="print"/>
+  <link href="{% static 'app.css' %}?{{ APP_GIT_COMMIT_SHORT }}" rel="stylesheet" type="text/css" />
   <style media="print">
     a[href^="/"]:after {
       content: " ({{ request.scheme }}://{{ request.get_host }}" attr(href) ")";
@@ -38,77 +37,48 @@
   {% endif %}
 {% endblock %}
 
-{% block body_classes %}{{ block.super }} {% if moj_internal_site %}mtp-internal-site{% endif %} {% if footer_feedback_context %}without-footer-padding{% endif %}{% endblock %}
+{% block body_classes %}{{ block.super }} {% if moj_internal_site %}mtp-internal-site{% endif %}{% endblock %}
 
-{% block cookie_message %}
-  <p>
-    {% trans 'GOV.UK uses cookies to make the site simpler.' %}
-    <a href="https://www.gov.uk/help/cookies">
-      {% trans 'Find out more about cookies' %}
-    </a>
-  </p>
+{% block body_start %}
+  {% block cookie_message %}
+    <aside class="mtp-cookie-banner">
+      <div class="mtp-cookie-banner__container govuk-width-container">
+        <p>
+          {% trans 'GOV.UK uses cookies to make the site simpler.' %}
+          <a href="https://www.gov.uk/help/cookies">
+            {% trans 'Find out more about cookies' %}
+          </a>
+        </p>
+      </div>
+    </aside>
+  {% endblock %}
 {% endblock %}
 
-{% block header_class %}with-proposition{% endblock %}
-
-{% block proposition_header %}
-  <div class="header-proposition">
-    <div class="content">
-      {% if moj_internal_site %}
-        {% include 'mtp_common/includes/proposition-user-menu.html' %}
-      {% else %}
-        <div id="proposition-menu">
-          <a href="{{ home_url }}" id="proposition-name">{% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}</a>
-        </div>
-      {% endif %}
-    </div>
-  </div>
-
-  {% block proposition_extra %}{% endblock %}
-{% endblock %}
-
-{% block content %}
+{% block before_content %}
   {% block phase_banner %}
     {% if ENVIRONMENT != 'prod' %}
-      <div class="phase-banner">
-        <strong class="phase-tag phase-tag-dev" title="{{ APP }}-{{ ENVIRONMENT }}:{{ APP_GIT_COMMIT_SHORT }}{% if APP_BUILD_DATE %}, built {{ APP_BUILD_DATE }}{% endif %}">
-          {% trans 'Warning' %}
-        </strong>
-        {% blocktrans trimmed with name=ENVIRONMENT %}
-          This “{{ name }}” website is for testing only.
-        {% endblocktrans %}
+      <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+          <strong class="govuk-tag mtp-tag--error govuk-phase-banner__content__tag">
+            {% trans 'Warning' %}
+          </strong>
+          <span class="govuk-phase-banner__text">
+            {% trans 'This website is only for testing!' %}
+          </span>
+        </p>
       </div>
     {% endif %}
   {% endblock %}
 
-  {% block sub_nav %}
-    {% sub_nav %}
+  {% block breadcrumb_bar %}
+    {% breadcrumb_bar %}
   {% endblock %}
-
-  <main role="main" id="content" tabindex="-1">
-    {% block inner_content %}{% endblock %}
-  </main>
 {% endblock %}
 
 {% block body_end %}
   <span class="mtp-ga-data" data-page="{% if google_analytics_pageview %}{{ google_analytics_pageview.page }}{% elif default_google_analytics_pageview %}{{ default_google_analytics_pageview.page }}{% endif %}" data-location="{% if google_analytics_pageview %}{{ google_analytics_pageview.location }}{% elif default_google_analytics_pageview %}{{ default_google_analytics_pageview.location }}{% endif %}" data-title="{% if google_analytics_pageview %}{{ google_analytics_pageview.title }}{% endif %}"></span>
-  <script src="{% static 'javascripts/app.bundle.js' %}?{{ APP_GIT_COMMIT_SHORT }}"></script>
+  <script src="{% static 'app.js' %}?{{ APP_GIT_COMMIT_SHORT }}"></script>
   <!--
-  {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }}
-  {% if APP_BUILD_DATE %}built {{ APP_BUILD_DATE }}{% endif %}
+  {{ APP }}-{{ ENVIRONMENT }} / {{ APP_GIT_COMMIT_SHORT }} at {{ APP_BUILD_DATE }}
   -->
-{% endblock %}
-
-{% block licence_message %}
-  <p>
-    {% blocktrans trimmed with url='https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/' %}
-      All content is available under the <a href="{{ url }}" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
-    {% endblocktrans %}
-  </p>
-{% endblock %}
-
-{% block footer_support_links %}
-  {% if footer_feedback_context %}
-    {% footer_feedback_form request footer_feedback_context %}
-  {% endif %}
 {% endblock %}

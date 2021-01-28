@@ -1,12 +1,12 @@
 {% if sentry_dsn %}
-  <script src="https://browser.sentry-cdn.com/5.11.2/bundle.min.js" integrity="sha384-FLzYisBa7tvsi/ZP1ISnzZJqBkmw5mvwk7KOmH82W9wdPZKG3bG9hSO8GQFVSlOu" crossorigin="anonymous"></script>
+  <script src="https://browser.sentry-cdn.com/5.29.2/bundle.min.js" integrity="sha384-ir4+BihBClNpjZk3UKgHTr0cwRhujAjy/M5VEGvcOzjhM1Db79GAg9xLxYn4uVK4" crossorigin="anonymous"></script>
   <script>
     if (Sentry) {
       Sentry.init({
         dsn: '{{ sentry_dsn }}',
         release: '{{ app_git_commit|default:"unknown" }}',
         environment: '{{ environment }}',
-        whitelistUrls: ["/javascripts/", "/app\.bundle\.js/"]
+        whitelistUrls: [/app\.js/]
       });
     }
   </script>

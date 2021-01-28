@@ -16,15 +16,15 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "~2.26",
-    "eslint": "~5.10",
-    "sass-lint": "~1.12"
+    "eslint": "~7.17",
+    "sass-lint": "~1.13"
   },
   "dependencies": {
-    "govuk-elements-sass": "~3.1",
-    "jquery": "~1.12",
+    "govuk-frontend": "~3.10",
+    "jquery": "~3.5",
     "js-cookie": "~2.2",
-    "node-sass": "~4.12",
     "mailcheck": "~1.1",
-    "webpack": "~3.12"
+    "webpack": "~5.4",
+    "webpack-cli": "~4.2"
   }
 }

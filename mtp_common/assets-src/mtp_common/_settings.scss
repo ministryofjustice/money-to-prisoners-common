@@ -1,0 +1,6 @@
+$mtp-grid-widths: (
+  breadcrumbs: 70%,
+  breadcrumbs-aside: 30%,
+) !default;
+
+$govuk-grid-widths: map-merge($govuk-grid-widths, $mtp-grid-widths);

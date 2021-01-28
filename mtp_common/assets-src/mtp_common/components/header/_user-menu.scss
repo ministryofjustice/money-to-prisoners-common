@@ -1,0 +1,17 @@
+.mtp-header-user-menu {
+  float: right;
+
+  @include govuk-media-query($from: tablet) {
+    margin-top: govuk-spacing(2);
+  }
+
+  a {
+    @extend .govuk-header__link;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  a + a {
+    margin-left: govuk-spacing(2);
+  }
+}

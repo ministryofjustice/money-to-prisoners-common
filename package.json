@@ -1,7 +1,7 @@
 {
   "name": "money-to-prisoners-common",
   "description": "Prisoner Money - Common",
-  "version": "10.1.0",
+  "version": "11.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "eslint": "~5.10",
-    "sass-lint": "~1.12"
+    "eslint": "~7.17",
+    "sass-lint": "~1.13"
   }
 }

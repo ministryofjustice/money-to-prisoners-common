@@ -1,0 +1,9 @@
+.mtp-labelled-data__label {
+  @extend %govuk-body-s;
+  @include govuk-responsive-margin(1, 'bottom');
+  color: $govuk-secondary-text-colour;
+}
+
+.mtp-labelled-data__data {
+  @extend %govuk-body-m;
+}

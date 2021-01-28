@@ -2,7 +2,11 @@
   "env": {
     "browser": true,
     "commonjs": true,
+    "es6": true,
     "jquery": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
   },
   "extends": "eslint:recommended",
   "globals": {
@@ -14,6 +18,9 @@
     "eol-last": ["error"],
     "max-len": ["error", 120],
     "radix": ["error", "always"],
+    "semi": ["error"],
+    "semi-spacing": ["error"],
+    "semi-style": ["error", "last"],
 
     "array-bracket-spacing": ["warn"],
     "brace-style": ["warn", "1tbs"],
@@ -53,8 +60,6 @@
     "no-whitespace-before-property": ["warn"],
     "no-with": ["warn"],
     "object-property-newline": ["warn"],
-    "semi": ["warn"],
-    "semi-spacing": ["warn"],
     "space-before-function-paren": ["warn"],
     "space-infix-ops": ["warn"],
     "space-unary-ops": ["warn"],

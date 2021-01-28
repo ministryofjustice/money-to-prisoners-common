@@ -1,17 +1,18 @@
 from collections import OrderedDict
 from itertools import chain
-import json
 import re
 
 from django import template
 from django.conf import settings
+from django.contrib import messages
 from django.forms.utils import flatatt
 from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
+from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.http import urlencode
-from django.utils.translation import gettext, override
+from django.utils.translation import gettext, gettext_lazy as _, override
 
 from mtp_common.api import notifications_for_request
 from mtp_common.utils import and_join, format_postcode
@@ -45,7 +46,20 @@ def postcode(value):
 
 @register.filter
 def to_string(value):
+    # TODO: use force_text?
     return str(value)
+
+
+@register.simple_tag(takes_context=True)
+def create_counter(context, var):
+    context[var] = 0
+    return ''
+
+
+@register.simple_tag(takes_context=True)
+def increment_counter(context, var):
+    context[var] += 1
+    return context[var]
 
 
 @register.simple_tag
@@ -64,16 +78,21 @@ def wraplink(text, url):
 
 
 @register.simple_tag
-def labelled_data(label, value, tag='div', url=None):
-    element_id = get_random_string(length=4)
+def labelled_data(label, value, tag='div', url=None, element_id=None):
+    element_id = element_id or f'mtp-labelled-data-{get_random_string(length=4)}'
     if url:
         value = format_html('<a href="{url}">{value}</a>', value=value, url=url)
     return format_html(
         """
-        <div id="mtp-label-{element_id}" class="mtp-detail-label">{label}</div>
-        <{tag} aria-labelledby="mtp-label-{element_id}">{value}</{tag}>
+        <div class="mtp-labelled-data">
+        <div id="{element_id}" class="mtp-labelled-data__label">{label}</div>
+        <{tag} class="mtp-labelled-data__data" aria-labelledby="{element_id}">{value}</{tag}>
+        </div>
         """,
-        element_id=element_id, label=label, value=value, tag=tag
+        element_id=element_id,
+        label=label,
+        value=value,
+        tag=tag,
     )
 
 
@@ -82,16 +101,21 @@ def hide_long_text(text, count=5):
     if not text:
         return text
     count = int(count)
-    words = text.split()
+    words = force_text(text).split()
     if len(words) <= count:
         return text
     short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])
-    return format_html('<span class="visually-hidden">{text}</span>'
-                       '<span aria-hidden="true">'
-                       '  {short_text}'
-                       '  <a href="#" class="js-long-text" data-rest="{rest_text}">{more}</a>'
-                       '</span>',
-                       short_text=short_text, rest_text=rest_text, text=text, more=gettext('More…'))
+    return format_html(
+        '<span class="govuk-visually-hidden">{text}</span>'
+        '<span aria-hidden="true">'
+        '  {short_text}'
+        '  <a href="#" class="mtp-hidden-long-text" data-rest="{rest_text}">{more}</a>'
+        '</span>',
+        short_text=short_text,
+        rest_text=rest_text,
+        text=text,
+        more=gettext('More…'),
+    )
 
 
 class StripWhitespaceNode(template.Node):
@@ -110,6 +134,30 @@ def stripwhitespace(parser, token):
     node_list = parser.parse(('endstripwhitespace',))
     parser.delete_first_token()
     return StripWhitespaceNode(node_list)
+
+
+class CaptureOutputNode(template.Node):
+    def __init__(self, node_list, variable):
+        self.node_list = node_list
+        self.variable = variable
+
+    def render(self, context):
+        context[self.variable] = self.node_list.render(context)
+        return ''
+
+
+@register.tag
+def captureoutput(parser, token):
+    """
+    Use this tag to capture template output into a variable;
+    useful for including complex content into a blocktrans
+    """
+    args = token.split_contents()[1:]
+    if len(args) != 2 or args[0] != 'as':
+        raise template.TemplateSyntaxError('captureoutput requires "as variable"')
+    node_list = parser.parse(('endcaptureoutput',))
+    parser.delete_first_token()
+    return CaptureOutputNode(node_list, args[1])
 
 
 @register.filter
@@ -165,7 +213,7 @@ def make_alternate_language_urls(request):
     return alt_urls
 
 
-@register.inclusion_tag('mtp_common/includes/language-switch.html', takes_context=True)
+@register.inclusion_tag('mtp_common/components/language-switch.html', takes_context=True)
 def language_switch(context):
     request = context.get('request')
     return {
@@ -173,10 +221,10 @@ def language_switch(context):
     }
 
 
-@register.inclusion_tag('mtp_common/sub-nav.html', takes_context=True)
-def sub_nav(context):
+@register.inclusion_tag('mtp_common/components/breadcrumb-bar.html', takes_context=True)
+def breadcrumb_bar(context):
     """
-    Sub-nav displayed below proposition header
+    Breadcrumbs and language switcher displayed below proposition header
     - creates alternate language links if SHOW_LANGUAGE_SWITCH is set
     - takes "breadcrumbs" from the context
     - takes "breadcrumbs_back" from the context to show a back link *instead* of breadcrumbs
@@ -189,7 +237,17 @@ def sub_nav(context):
     }
 
 
-@register.inclusion_tag('mtp_common/includes/page-list.html')
+@register.inclusion_tag('mtp_common/components/card-group.html')
+def card_group(cards, columns=3):
+    if columns not in (2, 3, 4):
+        raise template.TemplateSyntaxError('columns must be 2, 3 or 4')
+    return {
+        'cards': cards,
+        'columns': columns,
+    }
+
+
+@register.inclusion_tag('mtp_common/components/page-list.html')
 def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1):
     if page_count < 7:
         pages_with_ellipses = range(1, page_count + 1)
@@ -216,23 +274,8 @@ def page_list(page, page_count, query_string=None, end_padding=0, page_padding=1
     }
 
 
-@register.inclusion_tag('mtp_common/includes/footer-feedback.html')
-def footer_feedback_form(request, context):
-    return_errors_param = context.get('return_errors_param', 'feedback_errors')
-    try:
-        errors = json.loads(request.GET[return_errors_param])
-    except (KeyError, TypeError, ValueError):
-        errors = None
-    return dict(
-        context,
-        request=request,
-        return_errors_param=return_errors_param,
-        errors=errors,
-    )
-
-
 class DialogueNode(template.Node):
-    template_name = 'mtp_common/includes/dialogue-box.html'
+    template_name = 'mtp_common/components/dialogue-box.html'
 
     def __init__(self, node_list, title=None, urgent=None, show_close_button=None, html_id=None, html_classes=None):
         self.node_list = node_list
@@ -273,18 +316,111 @@ def dialoguebox(parser, token):
     return DialogueNode(node_list, **kwargs)
 
 
-@register.inclusion_tag('mtp_common/includes/notifications.html')
-def notifications_box(request, *targets, **kwargs):
+@register.inclusion_tag('mtp_common/components/notification-banners.html')
+def notification_banners(request, *targets, **kwargs):
+    """
+    Shows notification banners from:
+    - mtp-api's _first_ target that responds
+    - django messages
+    """
+    context_data = {
+        'notifications': [],
+        'messages': messages.get_messages(request),
+    }
     for target in targets:
         notifications = notifications_for_request(request, target, **kwargs)
         if notifications:
-            return {
-                'notifications': notifications
-            }
+            context_data['notifications'] = notifications
+            break
+    return context_data
+
+
+NOTIFICATION_LEVELS = {
+    'info': _('Information'),
+    'success': _('Success'),
+    'warning': _('Warning'),
+    'error': _('Error'),
+}
+
+
+@register.filter
+def notification_level(level_name):
+    return NOTIFICATION_LEVELS.get(level_name, _('Important'))
+
+
+class AccordionNode(template.Node):
+    template_name = 'mtp_common/components/accordion.html'
+
+    def __init__(self, node_list, name):
+        self.node_list = node_list
+        self.name = name
+
+    def render(self, context):
+        name = self.name.resolve(context)
+        accordion_content = ''
+        other_nodes = template.NodeList()
+        counter = 0
+        for node in self.node_list:
+            if isinstance(node, AccordionSectionNode):
+                counter += 1
+                context.push()
+                context['name'] = name
+                context['section_counter'] = counter
+                accordion_content += node.render(context)
+                context.pop()
+            else:
+                other_nodes.append(node)
+        other_content = other_nodes.render(context)
+        context.push()
+        context['accordion_content'] = accordion_content
+        context['other_content'] = other_content
+        accordion_template = context.template.engine.get_template(self.template_name)
+        rendered_html = accordion_template.render(context)
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def accordion(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    if not kwargs.get('name'):
+        raise template.TemplateSyntaxError('accordion requires name argument')
+    node_list = parser.parse(('endaccordion',))
+    parser.delete_first_token()
+    return AccordionNode(node_list, **kwargs)
+
+
+class AccordionSectionNode(template.Node):
+    template_name = 'mtp_common/components/accordion-section.html'
+
+    def __init__(self, node_list, heading):
+        self.node_list = node_list
+        self.heading = heading
+
+    def render(self, context):
+        heading = self.heading.resolve(context)
+        content = self.node_list.render(context)
+        context.push()
+        context['heading'] = heading
+        context['content'] = content
+        tab_template = context.template.engine.get_template(self.template_name)
+        rendered_html = tab_template.render(context)
+        context.pop()
+        return rendered_html
+
+
+@register.tag
+def accordionsection(parser, token):
+    kwargs = token_kwargs(token.split_contents()[1:], parser)
+    if 'heading' not in kwargs:
+        raise template.TemplateSyntaxError('accordion section requires heading argument')
+    node_list = parser.parse(('endaccordionsection',))
+    parser.delete_first_token()
+    return AccordionSectionNode(node_list, **kwargs)
 
 
 class TabbedPanelNode(template.Node):
-    template_name = 'mtp_common/includes/tabbed-panel.html'
+    template_name = 'mtp_common/components/tabbed-panel.html'
 
     def __init__(
         self,
@@ -296,12 +432,10 @@ class TabbedPanelNode(template.Node):
     ):
         """
         Params:
-            - cookie_name: name of the cookie in which to hold the state (selected tab, collapsed or expanded etc.)
-            - tab_label: to be used as aria-label
-            - collapsable (default True): if the selected tab should collapse when re-selected
-            - css_class: (optional) extra css class to append to the container.
-                If `govuk-grey` is specified, a alternative style similar to the GOV.UK Design System is used.
-                Alternatively, you can specify any custom value and define your own css rules.
+        - cookie_name: name of the cookie in which to hold the state (selected tab, collapsed or expanded etc.)
+        - tab_label: to be used as aria-label
+        - collapsable (default True): if the selected tab should collapse when re-selected
+        - css_class: (optional) extra css class to append to the container.
         """
         self.node_list = node_list
         self.cookie_name = cookie_name
@@ -360,7 +494,7 @@ def tabbedpanel(parser, token):
 
 
 class PanelTabNode(template.Node):
-    template_name = 'mtp_common/includes/panel-tab.html'
+    template_name = 'mtp_common/components/panel-tab.html'
 
     def __init__(self, node_list, name=None, title=None):
         self.node_list = node_list
@@ -389,7 +523,7 @@ def paneltab(parser, token):
     return PanelTabNode(node_list, **kwargs)
 
 
-@register.inclusion_tag('mtp_common/includes/sortable-cell.html')
+@register.inclusion_tag('mtp_common/components/sortable-cell.html')
 def sortable_cell(title, params, field, url_prefix='', cell_classes='', ignored_fields=('page',)):
     current_ordering = params.get('ordering')
     reversed_params = {

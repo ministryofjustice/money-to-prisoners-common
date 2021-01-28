@@ -1,0 +1,7 @@
+.mtp-print-trigger {
+  @include govuk-link-style-no-visited-state;
+
+  @media print {
+    display: none;
+  }
+}

@@ -1,0 +1,125 @@
+$mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !default;
+
+// used for data-heavy tables
+.mtp-table {
+  th, td {
+    padding: 0.75em 1em;
+    border-top: 1px solid $govuk-border-colour;
+    border-bottom: 0;
+    vertical-align: top;
+    @include govuk-font($size: 19);
+
+    @media print {
+      padding-top: 0.3em;
+      padding-bottom: 0.3em;
+    }
+  }
+
+  th {
+    text-align: left;
+    font-weight: bold;
+
+    &.govuk-table__header--numeric {
+      text-align: right;
+    }
+  }
+
+  tbody {
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+  .mtp-table__highlighted-row {
+    background: $mtp-table-row-highlight-colour;
+  }
+
+  .mtp-table__secondary-row {
+    th, td, a, a:visited {
+      color: $govuk-secondary-text-colour;
+    }
+  }
+
+  .mtp-compact-cell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // TODO: fix once checkbox component is updated
+  .mtp-check-cell {
+    text-align: center;
+    padding: 5px 1em 0;
+
+    input[type=checkbox] {
+      @extend .Checkbox--no-text !optional;
+    }
+  }
+
+  .mtp-numeric-left {
+    @include govuk-font($size: false, $tabular: true);
+  }
+}
+
+// allows tables to scroll horizontally on small screens
+.mtp-table__container {
+  width: 100%;
+
+  .mtp-table {
+    width: 100%;
+  }
+
+  @include govuk-media-query($until: tablet) {
+    overflow-x: scroll;
+
+    .mtp-table {
+      margin-bottom: $govuk-gutter-half;
+      min-width: (map-get($govuk-breakpoints, desktop) + $govuk-gutter-half);
+    }
+  }
+}
+
+.mtp-sortable-cell {
+  display: inline-block;
+  padding-right: 16px;
+  text-decoration: none;
+  background: transparent mtp-static-url('mtp_common/images/ordering-none.png') no-repeat 100% 50%;
+  color: $govuk-text-colour;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/ordering-none@2x.png');
+    background-size: 9px 9px;
+  }
+
+  @media print {
+    background-image: none;
+  }
+}
+
+.mtp-sortable-cell--asc, .mtp-sortable-cell:focus {
+  background-image: mtp-static-url('mtp_common/images/ordering-asc.png');
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/ordering-asc@2x.png');
+  }
+}
+
+.mtp-sortable-cell--desc, .mtp-sortable-cell--desc:focus  {
+  background-image: mtp-static-url('mtp_common/images/ordering-desc.png');
+
+  @include govuk-device-pixel-ratio {
+    background-image: mtp-static-url('mtp_common/images/ordering-desc@2x.png');
+  }
+}
+
+a.mtp-sortable-cell {
+  &:link, &:visited, &:hover, &:active, &:focus {
+    color: $govuk-text-colour;
+  }
+}
+
+// usage: inside a td.govuk-table__cell--numeric where the column header is .govuk-table__header--numeric and .mtp-sortable-cell
+.mtp-sortable-cell--pad {
+  padding-right: 16px;
+}

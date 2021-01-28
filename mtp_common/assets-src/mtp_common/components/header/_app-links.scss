@@ -1,0 +1,59 @@
+.mtp-header-app-links {
+  clear: left;
+  padding-top: govuk-spacing(1);
+
+  ul {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+  }
+
+  a {
+    display: block;
+    padding: govuk-spacing(2) govuk-spacing(3);
+
+    &:link, &:visited {
+      color: govuk-colour('white');
+      text-decoration: none;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      background-color: $govuk-focus-colour;
+      color: $govuk-focus-text-colour;
+      outline: none;
+      box-shadow: none;
+    }
+
+    &.mtp-header-app-link--current {
+      // cannot reference govuk-frontend variable directly
+      $govuk-header-border-width: govuk-spacing(2);
+
+      background-color: $govuk-body-background-colour;
+      color: $govuk-text-colour;
+      box-shadow: 0 0 $govuk-body-background-colour, 0 $govuk-header-border-width $govuk-body-background-colour;
+
+      &:focus {
+        background-color: $govuk-focus-colour;
+        color: $govuk-focus-text-colour;
+        box-shadow: 0 0 $govuk-focus-colour, 0 $govuk-header-border-width $govuk-focus-colour;
+        // TODO: maybe use $govuk-focus-colour for border
+      }
+
+      @include govuk-media-query($until: tablet) {
+        box-shadow: none;
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}

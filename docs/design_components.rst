@@ -34,26 +34,6 @@ link:
 
   <a href="#some-dialog" class="js-Dialog">Print</a>
 
-Disclosure box
-~~~~~~~~~~~~~~
-
-Does what `<details>` does in modern browsers but works in IE8.
-C.f. `progressive disclosure <http://govuk-elements.herokuapp.com/typography/#typography-hidden-text>`_
-
-.. image:: static/help-popup-closed.png
-  :align: center
-
-.. image:: static/help-popup-open.png
-  :align: center
-
-.. code-block:: html
-
-  <a class="mtp-disclosure" href="#" aria-controls="id-of-container" aria-expanded="false" role="button">
-    <span></span>Help
-  </a>
-  ...
-  <div id="id-of-container" class="mtp-disclosure__contents"></div>
-
 Check boxes
 -----------
 
@@ -107,7 +87,7 @@ Turn a 2-digits year into a 4-digit year when focus leaves a field. E.g. 83 -> 1
 
 .. code-block:: html
 
-  <input class="form-control form-year-field" id="id_prisoner_dob_2" name="prisoner_dob_2" value="" type="number">
+  <input class="mtp-date-input__year-completion …" … type="number" />
 
 Pagination
 ----------

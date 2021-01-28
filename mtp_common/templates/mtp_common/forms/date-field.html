@@ -1,0 +1,43 @@
+{% load i18n %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/date-field.html' with field=<field variable> only %}
+  optional parameters:
+    value - input element value override instead of default filtered field value (ignored if None)
+    autocomplete_dob - auto-complete date of birth
+    year_field_completion - whether 2-digit years should auto-complete
+    year_field_completion_era_bounday - see YearFieldCompletion component
+
+  TODO: the widget is not currently configurable
+{% endcomment %}
+
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset" role="group" {% if field.help_text %}aria-describedby="{{ field.id_for_label }}-hint"{% endif %}>
+    <legend class="govuk-fieldset__legend">{{ field.label }}</legend>
+    {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+    {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+
+    <div class="govuk-date-input">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label id="{{ field.auto_id }}_0-label" class="govuk-label govuk-date-input__label" for="{{ field.auto_id }}_0">{% trans 'Day' %}</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 mtp-date-input__day {% if field.errors %}govuk-input--error{% endif %}" id="{{ field.auto_id }}_0" name="{{ field.html_name }}_0" value="{{ field.value.0|default:'' }}" type="text" pattern="[0-9]*" inputmode="numeric" {% if autocomplete_dob %}autocomplete="bday-day"{% endif %} />
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label id="{{ field.auto_id }}_1-label" class="govuk-label govuk-date-input__label" for="{{ field.auto_id }}_1">{% trans 'Month' %}</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 mtp-date-input__month {% if field.errors %}govuk-input--error{% endif %}" id="{{ field.auto_id }}_1" name="{{ field.html_name }}_1" value="{{ field.value.1|default:'' }}" type="text" pattern="[0-9]*" inputmode="numeric" {% if autocomplete_dob %}autocomplete="bday-month"{% endif %} />
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label id="{{ field.auto_id }}_2-label" class="govuk-label govuk-date-input__label" for="{{ field.auto_id }}_2">{% trans 'Year' %}</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4 mtp-date-input__year {% if field.errors %}govuk-input--error{% endif %} {% if year_field_completion %}mtp-date-input__year-completion{% endif %}" id="{{ field.auto_id }}_2" name="{{ field.html_name }}_2" value="{{ field.value.2|default:'' }}" type="text" pattern="[0-9]*" inputmode="numeric" {% if autocomplete_dob %}autocomplete="bday-year"{% endif %} {% if year_field_completion %}data-era-boundary="{{ year_field_completion_era_bounday|default:field.field.fields.2.era_boundary }}"{% endif %} />
+        </div>
+      </div>
+    </div>
+
+  </fieldset>
+</div>
