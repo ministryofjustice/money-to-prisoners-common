@@ -197,7 +197,8 @@ def upload(context: Context):
     """
     Builds and uploads MTP-common to pypi
     """
-    return context.shell(sys.executable, 'setup.py', 'sdist', 'bdist_wheel', 'upload')
+    context.shell(sys.executable, 'setup.py', 'sdist', 'bdist_wheel')
+    context.shell('twine', 'upload', '--non-interactive', 'dist/*')
 
 
 @tasks.register()
