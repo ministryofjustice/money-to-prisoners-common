@@ -23,7 +23,7 @@ jobs:
       - name: Install python dependencies
         run: |
           pip install -U setuptools pip wheel
-          pip install .[testing]
+          pip install --editable .[testing]
       - name: Build and upload to PYPI
         run: python run.py upload
         env:
