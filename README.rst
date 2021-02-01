@@ -91,10 +91,13 @@ Developing
 .. image:: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common.svg?style=svg
     :target: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common
 
+* Make code changes and add any tests necessary
 * Test using ``./run.py test`` or ``python setup.py test``
-* Update the version with ``./run.py set_version --version [?.?.?]``
-* Commit and push changes to github
-* Submit to PyPi with by making a new release on github (or ``./run.py upload`` locally if necessary)
+* Update the package version with ``./run.py set_version --version [?.?.?]``
+* Commit and push changes to Github
+* Submit to PyPi by
+  * making a new release on Github (package version comes from the code, not Github release title)
+  * or ``./run.py upload`` locally (if release cannot be made on Github for some reason)
 
 Translating
 -----------
