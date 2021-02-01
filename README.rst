@@ -95,7 +95,8 @@ Developing
 * Test using ``./run.py test`` or ``python setup.py test``
 * Update the package version with ``./run.py set_version --version [?.?.?]``
 * Commit and push changes to Github
-* Submit to PyPi by
+* Submit to PyPi by:
+
   * making a new release on Github (package version comes from the code, not Github release title)
   * or ``./run.py upload`` locally (if release cannot be made on Github for some reason)
 
