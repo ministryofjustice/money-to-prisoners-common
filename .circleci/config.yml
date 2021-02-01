@@ -16,8 +16,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -U setuptools pip wheel
-            pip install .
-            python run.py python_dependencies --extras testing
+            pip install --editable .[testing]
       - save_cache:
           key: py-v1-{{ checksum "setup.py" }}
           paths:

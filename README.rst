@@ -94,7 +94,7 @@ Developing
 * Test using ``./run.py test`` or ``python setup.py test``
 * Update the version with ``./run.py set_version --version [?.?.?]``
 * Commit and push changes to github
-* Submit to PyPi with ``./run.py upload``
+* Submit to PyPi with by making a new release on github (or ``./run.py upload`` locally if necessary)
 
 Translating
 -----------

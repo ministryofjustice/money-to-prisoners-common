@@ -47,6 +47,7 @@ extras_require = {
         'flake8-blind-except~=0.1.1',
         'flake8-debugger~=4.0',
         'responses~=0.12.0',
+        'twine~=3.3.0',
     ],
 }
 
