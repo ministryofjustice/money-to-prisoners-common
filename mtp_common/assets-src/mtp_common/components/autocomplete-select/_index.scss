@@ -1,0 +1,26 @@
+.mtp-autocomplete-suggestions__container {
+  position: relative;
+}
+
+.mtp-autocomplete-suggestions {
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 100%;
+  z-index: 100;
+
+  border: $govuk-border-width-form-element solid $govuk-border-colour;
+  background-color: $govuk-body-background-colour;
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    display: block;
+    padding: 5px;
+    border: 0;
+    box-shadow: none;
+  }
+}
