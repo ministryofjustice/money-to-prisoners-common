@@ -11,7 +11,7 @@
         <h1 class="govuk-heading-xl">{% trans 'Request access' %}</h1>
       </header>
 
-      <form action="." method="post">
+      <form action="." method="post" novalidate>
         {% csrf_token %}
 
         {% include 'govuk-frontend/components/error-summary.html' with form=form only %}

@@ -12,7 +12,7 @@
       </header>
 
       {% block confirm_changes %}
-        <form action="." method="post">
+        <form action="." method="post" novalidate>
           {% csrf_token %}
 
           <input type="hidden" name="change-role" value="true" />
