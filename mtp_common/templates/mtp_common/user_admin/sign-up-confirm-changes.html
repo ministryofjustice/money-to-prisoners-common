@@ -15,7 +15,7 @@
         <form action="." method="post">
           {% csrf_token %}
 
-          <input type="hidden" name="change-role" value="true">
+          <input type="hidden" name="change-role" value="true" />
           {% for field, value in form.cleaned_data.items %}
             <input type="hidden" name="{{ field }}" value="{{ value }}" />
           {% endfor %}
