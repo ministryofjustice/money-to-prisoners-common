@@ -342,7 +342,8 @@ class Context:
     """
 
     def __init__(self, app: App,
-                 print_task_names: bool = False,
+                 print_task_names: bool = True,
+                 print_task_paths: bool = True,
                  colour: bool = True,
                  django_settings: str = '',
                  requirements_file: str = 'requirements/dev.txt',
@@ -350,6 +351,7 @@ class Context:
         self.app = app
 
         self.print_task_names = print_task_names
+        self.print_task_paths = print_task_paths
         self.verbosity = verbosity
         self.use_colour = colour and supports_color()
 
@@ -559,8 +561,15 @@ class Executor:
                 print_parameter(printer, parameter)
 
     def run_task(self, context, task):
-        if context.print_task_names and task.name != 'help':
-            context.info(context.blue_style(f'\n> Running {task.name} task...'))
+        if task.name != 'help':
+            if context.print_task_names:
+                context.info(context.blue_style(f'\n> Running {task.name} task...'))
+            if context.print_task_paths:
+                path = inspect.getfile(task.func)
+                line = inspect.getsourcelines(task.func)[1]
+
+                context.info(context.blue_style(f'File "{path}", line {line}'))
+
         os.chdir(self.root_path)
         context.overidden_tasks = self.available_tasks.get_overidden_tasks(task.name)
         return task(context)
