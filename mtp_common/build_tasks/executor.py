@@ -346,7 +346,7 @@ class Context:
                  colour: bool = True,
                  django_settings: str = '',
                  requirements_file: str = 'requirements/dev.txt',
-                 verbosity: Parameter.constraint_from_choices(int, (0, 1, 2)) = 1):
+                 verbosity: Parameter.constraint_from_choices(int, (0, 1, 2)) = 2):
         self.app = app
 
         self.print_task_names = print_task_names
