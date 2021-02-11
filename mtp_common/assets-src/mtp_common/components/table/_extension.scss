@@ -48,6 +48,12 @@ $mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 90%) !de
   }
 }
 
+.mtp-table--small {
+  th, td {
+    @include govuk-font($size: 16, $weight: false);
+  }
+}
+
 // allows tables to scroll horizontally on small screens
 .mtp-table__container {
   width: 100%;
