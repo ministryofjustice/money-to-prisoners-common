@@ -4,6 +4,7 @@
   USAGE:
   {% include 'mtp_common/forms/date-field.html' with field=<field variable> only %}
   optional parameters:
+    label_classes - classes to add to the fieldset legend element
     value - input element value override instead of default filtered field value (ignored if None)
     autocomplete_dob - auto-complete date of birth
     year_field_completion - whether 2-digit years should auto-complete
@@ -14,7 +15,7 @@
 
 <div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
   <fieldset class="govuk-fieldset" role="group" {% if field.help_text %}aria-describedby="{{ field.id_for_label }}-hint"{% endif %}>
-    <legend class="govuk-fieldset__legend">{{ field.label }}</legend>
+    <legend class="govuk-fieldset__legend {{ label_classes }}">{{ field.label }}</legend>
     {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
     {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 

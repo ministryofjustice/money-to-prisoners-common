@@ -4,8 +4,9 @@
   USAGE:
   {% include 'mtp_common/forms/amount-field.html' with field=<field variable> only %}
   optional parameters:
+    label_classes - classes to add to the label element
     value - input element value override instead of default filtered field value (ignored if None)
     attrs - dict of additional attributes
 {% endcomment %}
 
-{% include 'mtp_common/forms/field.html' with field=field value=value prefix='£' input_classes='mtp-amount-input govuk-input--width-5' input_type='text' autocomplete='off' attrs=attrs only %}
+{% include 'mtp_common/forms/field.html' with field=field value=value prefix='£' input_classes='mtp-amount-input govuk-input--width-5' label_classes=label_classes input_type='text' autocomplete='off' attrs=attrs only %}
