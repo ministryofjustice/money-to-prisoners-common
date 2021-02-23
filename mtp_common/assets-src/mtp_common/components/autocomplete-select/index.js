@@ -12,6 +12,9 @@ export var AutocompleteSelect = {
     var $select = $(this);
     var selectID = $select.attr('id');
     var initialValue = $select.val();
+    if ($.isArray(initialValue)) {
+      initialValue = initialValue.length > 0 ? initialValue[0] : '';
+    }
     var initialText = null;
     var choices = $select.find('option').map(function () {
       var $option = $(this);
