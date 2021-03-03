@@ -18,6 +18,8 @@ with open('README.rst') as readme:
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
     'Django>=2.2,<2.3',
+    'django-anymail[mailgun]~=7.2',
+    'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
     'pytz>=2019.1',
     'requests>=2.18,<3',
@@ -31,9 +33,11 @@ install_requires = [
     'prometheus_client>=0.6,<1',
     'sentry_sdk~=0.19.0',
     'libsass~=0.20',
+    'uWSGI==2.0.19.1',
 
     # moj-built dependencies (should be locked versions)
     'django-form-error-reporting==0.9',
+    'django-moj-irat==0.6',
     'django-zendesk-tickets==0.14',
     'govuk-bank-holidays==0.8',
 ]
