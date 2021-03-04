@@ -40,10 +40,10 @@
         <caption class="govuk-visually-hidden">{% trans 'Table of new user requests' %}</caption>
         <thead>
           <tr>
-            <th>{% trans 'Name' %}</th>
-            <th>{% trans 'Email' %}</th>
-            <th class="mtp-account-management__request_date">{% trans 'Requested' %}</th>
-            <th class="mtp-account-management__actions govuk-!-display-none-print">{% trans 'Actions' %}</th>
+            <th scope="col">{% trans 'Name' %}</th>
+            <th scope="col">{% trans 'Email' %}</th>
+            <th class="mtp-account-management__request_date" scope="col">{% trans 'Requested' %}</th>
+            <th class="mtp-account-management__actions govuk-!-display-none-print" scope="col">{% trans 'Actions' %}</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@
             <tr>
               <td>{{ account_request.first_name }} {{ account_request.last_name }}</td>
               <td>{{ account_request.email }}</td>
-              <td class="mtp-account-management__request_date mtp-numeric-left">
+              <td class="mtp-account-management__request_date mtp-table__cell--numeric-left">
                 {{ account_request.created|date:'d/m/Y' }}
               </td>
               <td class="mtp-account-management__actions govuk-!-display-none-print">
@@ -75,10 +75,10 @@
       <caption class="govuk-visually-hidden">{% trans 'Table of existing users' %}</caption>
       <thead>
         <tr>
-          <th>{% trans 'Name' %}</th>
-          <th>{% trans 'Email' %}</th>
-          <th class="mtp-account-management__is_manager">{% trans 'Can manage accounts' %}</th>
-          <th class="mtp-account-management__actions govuk-!-display-none-print">{% trans 'Actions' %}</th>
+          <th scope="col">{% trans 'Name' %}</th>
+          <th scope="col">{% trans 'Email' %}</th>
+          <th class="mtp-account-management__is_manager" scope="col">{% trans 'Can manage accounts' %}</th>
+          <th class="mtp-account-management__actions govuk-!-display-none-print" scope="col">{% trans 'Actions' %}</th>
         </tr>
       </thead>
 

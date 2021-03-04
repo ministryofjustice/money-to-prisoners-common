@@ -52,10 +52,7 @@
   }
 }
 
-.js-dialogue-open {
-  visibility: hidden;
-
-  .js-enabled & {
-    visibility: visible;
-  }
+.mtp-dialogue__open-trigger-link {
+  // used on a elements hence display is inline
+  @extend .mtp-\!-display-inline-js-enabled-only;
 }

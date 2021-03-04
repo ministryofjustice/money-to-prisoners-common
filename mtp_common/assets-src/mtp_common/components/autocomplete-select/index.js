@@ -1,22 +1,20 @@
 // Find-as-you-type selection menu
 'use strict';
 
-var analytics = require('analytics');
+import {Analytics} from '../analytics';
 
-exports.AutocompleteSelect = {
+export var AutocompleteSelect = {
   init: function () {
-    var $form = $('form.mtp-autocomplete');
-    if ($form.length !== 1) {
-      return;
-    }
-    var $select = $form.find('select.mtp-autocomplete');
-    $select.map(this.replaceSelect);
+    $('.mtp-select--autocomplete').each(this.replaceSelect);
   },
 
   replaceSelect: function () {
     var $select = $(this);
     var selectID = $select.attr('id');
     var initialValue = $select.val();
+    if ($.isArray(initialValue)) {
+      initialValue = initialValue.length > 0 ? initialValue[0] : '';
+    }
     var initialText = null;
     var choices = $select.find('option').map(function () {
       var $option = $(this);
@@ -32,13 +30,17 @@ exports.AutocompleteSelect = {
         };
       }
     }).get();
-    var $container = $('<div class="mtp-autocomplete-field"></div>');
-    var $visualInput = $('<input type="text" autocomplete="off" />');
-    var $suggestions = $('<ul class="mtp-autocomplete-suggestions"></ul>');
+    var $container = $('<div class="mtp-autocomplete-suggestions__container"></div>');
+    var $visualInput = $('<input class="govuk-input" type="text" autocomplete="off" />');
+    var $suggestions = $('<ul class="mtp-autocomplete-suggestions govuk-list"></ul>');
     var $hiddenInput = $('<input type="hidden" class="mtp-autocomplete-hidden"/>');
     $hiddenInput.data($select.data());
     $hiddenInput.data('visualInput', $visualInput);
-    $visualInput.attr('class', $select.attr('class'));
+    $visualInput.addClass($select.attr('class'));
+    if ($visualInput.hasClass('govuk-select--error')) {
+      $visualInput.addClass('govuk-input--error');
+    }
+    $visualInput.removeClass('govuk-select govuk-select--error');
     $hiddenInput.attr('name', $select.attr('name'));
     if (initialText) {
       $visualInput.val(initialText);
@@ -86,7 +88,7 @@ exports.AutocompleteSelect = {
       var suggestions = $.map(choices, function (choice) {
         if (searchParts.length > 0) {
           var results = true;
-          $.each(searchParts, function(i, searchPart) {
+          $.each(searchParts, function (i, searchPart) {
             results = results && choice.name.toLowerCase().indexOf(searchPart) !== -1;
           });
           if (results) {
@@ -102,7 +104,7 @@ exports.AutocompleteSelect = {
           $suggestion.click(function (e) {
             e.preventDefault();
             if ($hiddenInput.data('event-category')) {
-              analytics.Analytics.send(
+              Analytics.send(
                 'event', {
                   eventCategory: $hiddenInput.data('event-category'),
                   eventAction: 'Autocomplete',

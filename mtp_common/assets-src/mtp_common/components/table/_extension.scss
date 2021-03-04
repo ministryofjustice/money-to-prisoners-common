@@ -1,4 +1,4 @@
-$mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !default;
+$mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 90%) !default;
 
 // used for data-heavy tables
 .mtp-table {
@@ -38,23 +38,19 @@ $mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 75%) !de
     }
   }
 
-  .mtp-compact-cell {
+  .mtp-table__header--compact, .mtp-table__cell--compact {
     padding-left: 0;
     padding-right: 0;
   }
 
-  // TODO: fix once checkbox component is updated
-  .mtp-check-cell {
-    text-align: center;
-    padding: 5px 1em 0;
-
-    input[type=checkbox] {
-      @extend .Checkbox--no-text !optional;
-    }
-  }
-
-  .mtp-numeric-left {
+  .mtp-table__header--numeric-left, .mtp-table__cell--numeric-left {
     @include govuk-font($size: false, $tabular: true);
+  }
+}
+
+.mtp-table--small {
+  th, td {
+    @include govuk-font($size: 16, $weight: false);
   }
 }
 

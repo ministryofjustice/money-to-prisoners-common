@@ -30,6 +30,7 @@
   }
 }
 
+
 // no govuk-frontend class is available for the inverse of .govuk-!-display-none-print
 .mtp-\!-display-print-only {
   display: none;
@@ -37,4 +38,58 @@
   @media print {
     display: block;
   }
+}
+
+
+// no govuk-frontend classes are available for showing/hiding whether javascript is enabled
+.mtp-\!-display-none-js-enabled-only {
+  .js-enabled & {
+    display: none;
+  }
+}
+
+.mtp-\!-display-inline-js-enabled-only {
+  display: none;
+
+  .js-enabled & {
+    display: inline;
+  }
+}
+
+.mtp-\!-display-inline-block-js-enabled-only {
+  display: none;
+
+  .js-enabled & {
+    display: inline-block;
+  }
+}
+
+.mtp-\!-display-block-js-enabled-only {
+  display: none;
+
+  .js-enabled & {
+    display: block;
+  }
+}
+
+
+// no govuk-frontend classes are available for secondary text
+.govuk-body-l--secondary {
+  @extend %govuk-body-l;
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-body-m--secondary {
+  @extend %govuk-body-m;
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-body-s--secondary {
+  @extend %govuk-body-s;
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-body-xs--secondary {
+  @extend %govuk-body-xs;
+  color: $govuk-secondary-text-colour;
 }

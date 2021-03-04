@@ -52,6 +52,42 @@ class TemplateTagTestCase(SimpleTestCase):
         self.assertIn('--', html)
         self.assertIn('+123+', html)
 
+    def test_choices_with_help_text(self):
+        def render(help_texts):
+            class TestForm(forms.Form):
+                option = forms.ChoiceField(choices=[('a', 'A'), ('b', 'B')])
+                option_choices_help_text = help_texts
+
+            template = """
+            {% load mtp_common %}
+            {% choices_with_help_text form.option.field.choices form.option_choices_help_text as choices %}
+            """
+            response = self.load_mocked_template(template, {
+                'form': TestForm(),
+            })
+            return response.context['choices']
+
+        # usual case where there are equal numbers of choices and help texts
+        choices_with_help_text = render(['first', 'second'])
+        self.assertSequenceEqual(
+            choices_with_help_text,
+            [('a', 'A', 'first'), ('b', 'B', 'second')],
+        )
+
+        # no help texts
+        choices_with_help_text = render(None)
+        self.assertSequenceEqual(
+            choices_with_help_text,
+            [('a', 'A', ''), ('b', 'B', '')],
+        )
+
+        # length mismatch
+        choices_with_help_text = render(['first'])
+        self.assertSequenceEqual(
+            choices_with_help_text,
+            [('a', 'A', 'first'), ('b', 'B', '')],
+        )
+
     @mock.patch('mtp_common.templatetags.mtp_common.sentry_client')
     def test_sentry_tag(self, mocked_sentry_client):
         sentry_dsn = 'http://sentry.example.com/123'

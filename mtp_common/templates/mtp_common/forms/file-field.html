@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% comment %}
+  USAGE:
+  {% include 'mtp_common/forms/file-field.html' with field=<field variable> only %}
+{% endcomment %}
+
+
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+  {% include 'mtp_common/forms/field-errors.html' with field=field only %}
+  {% include 'mtp_common/forms/field-help-text.html' with field=field only %}
+  {{ field|add_class:'mtp-upload' }}
+  <label for="{{ field.id_for_label }}" id="{{ field.id_for_label }}-label" class="govuk-button govuk-button--secondary">
+    {% trans 'Choose file' %}
+  </label>
+</div>

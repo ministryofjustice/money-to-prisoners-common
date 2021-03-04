@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load mtp_common %}
 
 {% comment %}
   Multiple checkbox fields wrapped in a fieldset similarly to radio field
@@ -8,6 +9,7 @@
     input_classes - classes to add to the input element
     label_classes - classes to add to the fieldset legend element
     value - input element value override instead of default filtered field value (ignored if None)
+    choices_help_text - list of hints added to choices
     inline - whether options should show in one row
     small - whether smaller boxes should be used
 
@@ -24,13 +26,21 @@
 
     <div class="govuk-checkboxes {% if small %}govuk-checkboxes--small{% endif %} {% if inline %}mtp-checkboxes--inline{% endif %}" data-module="govuk-checkboxes">
       {% with initial=value|default:field.value|default:field.field.initial %}
-        {% for choice, label in field.field.choices %}
-          <div class="govuk-checkboxes__item">
-            <input id="{{ field.id_for_label }}-{{ choice }}" class="govuk-checkboxes__input {{ input_classes }}" type="checkbox" name="{{ field.html_name }}" value="{{ choice }}" {% if choice in initial %}checked{% endif %} />
-            <label for="{{ field.id_for_label }}-{{ choice }}" id="{{ field.id_for_label }}-{{ choice }}-label" class="govuk-label govuk-checkboxes__label">
-              {{ label }}
-            </label>
-          </div>
+        {% choices_with_help_text field.field.choices choices_help_text as choices %}
+        {% for choice, label in choices %}
+          {% with choice_slug=choice|slugify %}
+            <div class="govuk-checkboxes__item">
+              <input id="{{ field.id_for_label }}-{{ choice_slug }}" class="govuk-checkboxes__input {{ input_classes }}" type="checkbox" name="{{ field.html_name }}" value="{{ choice }}" {% if choice in initial %}checked{% endif %} {% if help_text %}aria-describedby="{{ field.id_for_label }}-{{ choice_slug }}-hint"{% endif %} />
+              <label for="{{ field.id_for_label }}-{{ choice_slug }}" id="{{ field.id_for_label }}-{{ choice_slug }}-label" class="govuk-label govuk-checkboxes__label">
+                {{ label }}
+              </label>
+              {% if help_text %}
+                <div id="{{ field.id_for_label }}-{{ choice_slug }}-hint" class="govuk-hint govuk-checkboxes__hint">
+                  {{ help_text }}
+                </div>
+              {% endif %}
+            </div>
+          {% endwith %}
         {% endfor %}
       {% endwith %}
     </div>

@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from itertools import chain
+from itertools import chain, repeat
 import re
 
 from django import template
@@ -183,6 +183,21 @@ def get_form_errors(form):
     }
 
 
+@register.simple_tag()
+def choices_with_help_text(choices, choices_help_text=None):
+    """
+    Adds a third member to choices lists for multiple radio and checkbox fields
+    so that help text can be added to individual options
+    """
+    if choices_help_text is None:
+        choices_help_text = []
+    choices_help_text = chain(choices_help_text, repeat(''))
+    return [
+        (value, label, next(choices_help_text))
+        for value, label in choices
+    ]
+
+
 @register.inclusion_tag('mtp_common/sentry-js.html')
 def sentry_js():
     if sentry_client:
@@ -297,7 +312,7 @@ class DialogueNode(template.Node):
             context['dialogue_title'] = self.title.resolve(context)
         if self.show_close_button:
             context['dialogue_close_button'] = self.show_close_button.resolve(context)
-        context['dialogue_close_class'] = 'js-dialogue-close'
+        context['dialogue_close_class'] = 'mtp-dialogue__close-trigger'
 
         context['dialogue_contents'] = self.node_list.render(context)
 
