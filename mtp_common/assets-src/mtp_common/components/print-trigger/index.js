@@ -71,7 +71,7 @@ export var PrintTrigger = {
       try {
         window.print();
       } catch (error) {
-        if (Sentry !== undefined) {
+        if (typeof Sentry !== 'undefined') {
           Sentry.captureException(error);
         }
       }
