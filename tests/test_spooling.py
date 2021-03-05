@@ -240,19 +240,18 @@ class SendEmailTestCase(SimpleTestCase):
 
     @override_settings(ENVIRONMENT='prod')
     @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.tasks.mail_class')
+    @mock.patch('mtp_common.tasks.AnymailMessage')
     def test_synchronous_send_email_does_not_retry(self, mocked_email, logger):
-        from mtp_common.tasks import mail_errors, send_email
+        from mtp_common.tasks import AnymailRequestsAPIError, send_email
 
-        mail_error = mail_errors[0]
         state = {'calls': 0}
 
         def mock_send_email():
             state['calls'] += 1
-            raise mail_error
+            raise AnymailRequestsAPIError
 
         mocked_email().send = mock_send_email
-        with self.assertRaises(mail_error):
+        with self.assertRaises(AnymailRequestsAPIError):
             send_email('admin@mtp.local', 'dummy-email.txt', 'email subject', retry_attempts=10)
         self.assertEqual(state['calls'], 1)
         self.assertTrue(logger.exception.called, True)
@@ -260,17 +259,16 @@ class SendEmailTestCase(SimpleTestCase):
     @override_settings(ENVIRONMENT='prod')
     @mock.patch.object(spooler, 'installed', True)
     @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.tasks.mail_class')
+    @mock.patch('mtp_common.tasks.AnymailMessage')
     @mock.patch('mtp_common.spooling.uwsgi')
     def test_asynchronous_send_email_retries(self, uwsgi, mocked_email, logger):
-        from mtp_common.tasks import mail_errors, send_email
+        from mtp_common.tasks import AnymailRequestsAPIError, send_email
 
-        mail_error = mail_errors[0]
         state = {'calls': 0}
 
         def mock_send_email():
             state['calls'] += 1
-            raise mail_error
+            raise AnymailRequestsAPIError
 
         mocked_email().send = mock_send_email
         uwsgi.spool = spooler.__call__

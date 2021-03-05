@@ -1,16 +1,10 @@
 from email.utils import parseaddr
 import logging
-import smtplib
 from urllib.parse import urljoin
 
-try:
-    from anymail.exceptions import AnymailRequestsAPIError
-    from anymail.message import AnymailMessage
-except ImportError:
-    AnymailRequestsAPIError = None
-    AnymailMessage = None
+from anymail.exceptions import AnymailRequestsAPIError
+from anymail.message import AnymailMessage
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 from django.core.mail.backends.console import EmailBackend as ConsoleEmailBackend
 from django.template import loader
 from django.utils.encoding import force_text
@@ -19,11 +13,6 @@ from django.utils.translation import activate, get_language
 from mtp_common.spooling import Context, spoolable
 
 logger = logging.getLogger('mtp')
-if AnymailRequestsAPIError:
-    mail_errors = (AnymailRequestsAPIError,)
-else:
-    mail_errors = (smtplib.SMTPException,)
-mail_class = AnymailMessage if AnymailMessage else EmailMultiAlternatives
 
 
 @spoolable()
@@ -43,7 +32,7 @@ def send_email(to, text_template, subject, context=None, html_template=None, fro
 
     try:
         email.send()
-    except mail_errors as e:
+    except AnymailRequestsAPIError as e:
         if hasattr(e, 'status_code') and e.status_code == 400:
             try:
                 message = e.response.json()['message']
@@ -83,13 +72,13 @@ def prepare_email(from_address, to, subject, text_template, html_template, templ
         activate(language)
 
     text_body = loader.get_template(text_template).render(template_context)
-    email = mail_class(
+    email = AnymailMessage(
         subject=subject,
         body=text_body.strip('\n'),
         from_email=from_address,
         to=to
     )
-    if anymail_tags and AnymailMessage is not None and isinstance(email, AnymailMessage):
+    if anymail_tags:
         email.tags = list(map(force_text, anymail_tags))
     if html_template:
         html_body = loader.get_template(html_template).render(template_context)
