@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "govuk-frontend": "~3.11",
-    "jquery": "~3.5",
+    "jquery": "~3.6",
     "js-cookie": "~2.2",
     "mailcheck": "~1.1",
     "webpack": "~5.4",
