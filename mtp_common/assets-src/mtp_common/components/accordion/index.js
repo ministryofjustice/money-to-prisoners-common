@@ -1,5 +1,4 @@
 // allow linking directly to an expanded accordion section
-/* globals Sentry */
 'use strict';
 
 export var AccordionDirectLink = {

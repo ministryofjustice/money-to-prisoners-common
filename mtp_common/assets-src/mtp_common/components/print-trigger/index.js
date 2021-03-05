@@ -1,4 +1,3 @@
-/* globals Sentry */
 'use strict';
 
 import Cookie from 'js-cookie';
