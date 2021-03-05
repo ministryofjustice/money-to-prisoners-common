@@ -13,7 +13,7 @@
       {% include 'mtp_common/components/card.html' with heading=card.heading link=card.link description=card.description only %}
     </div>
 
-    {% if forloop.counter|divisibleby:columns %}
+    {% if not forloop.last and forloop.counter|divisibleby:columns %}
       {# start a new row #}
       </div>
       <div class="govuk-grid-row mtp-card-group">
