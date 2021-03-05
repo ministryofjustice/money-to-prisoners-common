@@ -70,6 +70,15 @@ $mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 90%) !de
       min-width: (map-get($govuk-breakpoints, desktop) + $govuk-gutter-half);
     }
   }
+
+  @media print {
+    width: auto;
+    overflow-x: visible;
+
+    .mtp-table {
+      width: auto;
+    }
+  }
 }
 
 .mtp-sortable-cell {
