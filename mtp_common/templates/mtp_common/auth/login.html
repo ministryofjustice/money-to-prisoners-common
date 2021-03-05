@@ -31,9 +31,9 @@
           </div>
         {% endfor %}
 
-        <p>
+        <div class="govuk-button-group">
           <button type="submit" class="govuk-button" data-module="govuk-button" name="signin">{% trans 'Sign in' %}</button>
-        </p>
+        </div>
       </form>
 
       {% url 'reset_password' as reset_password_url %}

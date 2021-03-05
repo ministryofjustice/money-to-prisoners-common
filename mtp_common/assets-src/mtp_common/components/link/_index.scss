@@ -19,17 +19,6 @@ input, button {
   }
 }
 
-// for placing a cancel link next to a submit button
-// renamed form .mtp-cancel-button and .mtp-button--cancel
-a.mtp-link--form-cancel {
-  display: inline-block;
-
-  @include govuk-media-query($from: tablet) {
-    margin-top: 0.45em;
-    margin-left: 1em;
-  }
-}
-
 // hides link underline and url when printing
 // renamed from .mtp-print-url-hidden
 @media print {

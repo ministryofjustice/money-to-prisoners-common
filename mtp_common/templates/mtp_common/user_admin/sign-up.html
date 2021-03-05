@@ -29,11 +29,11 @@
           <input type="hidden" name="{{ field.html_name }}" value="{{ field.value|default_if_none:field.initial }}" />
         {% endwith %}
 
-        <p>
+        <div  class="govuk-button-group">
           <button type="submit" class="govuk-button" data-module="govuk-button">
             {% trans 'Submit request' %}
           </button>
-        </p>
+        </div>
       </form>
 
     </div>

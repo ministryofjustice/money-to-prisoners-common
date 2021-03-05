@@ -65,14 +65,14 @@
 
         {% include 'mtp_common/forms/checkbox-field.html' with field=form.user_admin only %}
 
-        <p>
+        <div class="govuk-button-group">
           <button type="submit" class="govuk-button" data-module="govuk-button">
             {% trans 'Approve request' %}
           </button>
-          <a href="{% url 'decline-request' account_request=account_request.id %}" class="mtp-link--form-cancel">
+          <a href="{% url 'decline-request' account_request=account_request.id %}" class="govuk-link">
             {% trans 'Decline request' %}
           </a>
-        </p>
+        </div>
       </form>
 
     </div>
