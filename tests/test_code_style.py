@@ -40,13 +40,9 @@ class CommonCodeStyleTestCase(unittest.TestCase):
         except subprocess.CalledProcessError as error:
             self.fail_with_output(error.stdout.decode() + '\n' + error.stderr.decode())
 
-    def get_config_file(self, file_name):
-        return os.path.join(self.app.templates_path, 'mtp_common', 'build_tasks', file_name)
-
     def test_javascript_code_style(self):
         self.run_node_tool(
             'eslint',
-            '--config', self.get_config_file('eslintrc.json'),
             '--format', 'stylish',
             self.app.javascript_source_path,
         )
@@ -55,7 +51,6 @@ class CommonCodeStyleTestCase(unittest.TestCase):
         self.run_node_tool(
             'sass-lint',
             '--verbose',
-            '--config', self.get_config_file('sass-lint.yml'),
             '--format', 'stylish',
             '--syntax', 'scss',
             os.path.join(self.app.scss_source_path, '**', '*.scss'),

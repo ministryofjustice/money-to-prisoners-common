@@ -14,6 +14,7 @@ tasks.register('python_dependencies', 'setup_django_for_testing', hidden=True)(s
 tasks.register('python_dependencies', 'setup_django_for_testing')(shared_tasks.make_messages.func)
 tasks.register(hidden=True)(shared_tasks.precompile_python_code.func)
 tasks.register('python_dependencies')(shared_tasks.translations.func)
+tasks.register(hidden=True)(shared_tasks.lint_config.func)
 
 root_path = os.path.abspath(os.path.dirname(__file__))
 
@@ -126,7 +127,7 @@ def build(_: Context):
     """
 
 
-@tasks.register('setup_django_for_testing', 'build')
+@tasks.register('setup_django_for_testing', 'lint_config', 'build')
 def test(context: Context, test_labels=None):
     """
     Tests the app
