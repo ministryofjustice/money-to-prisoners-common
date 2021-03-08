@@ -16,6 +16,6 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "~7.17",
-    "sass-lint": "~1.13"
+    "sass-lint": "~1.13.1"
   }
 }

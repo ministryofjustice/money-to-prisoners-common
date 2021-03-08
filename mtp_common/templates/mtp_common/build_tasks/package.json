@@ -17,7 +17,7 @@
   "devDependencies": {
     "browser-sync": "~2.26",
     "eslint": "~7.17",
-    "sass-lint": "~1.13"
+    "sass-lint": "~1.13.1"
   },
   "dependencies": {
     "govuk-frontend": "~3.11",
