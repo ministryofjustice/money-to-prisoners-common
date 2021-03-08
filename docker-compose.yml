@@ -25,6 +25,9 @@ services:
     volumes:
       - ../money-to-prisoners-api:/app
       - api_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: /venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common serve
     links:
       - db
     user: mtp
@@ -60,6 +63,9 @@ services:
     volumes:
       - ../money-to-prisoners-noms-ops:/app
       - noms-ops_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: /venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common serve
     links:
       - api
     user: mtp
@@ -89,6 +95,9 @@ services:
     volumes:
       - ../money-to-prisoners-send-money:/app
       - send-money_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: /venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common serve
     links:
       - api
     user: mtp
@@ -118,6 +127,9 @@ services:
     volumes:
       - ../money-to-prisoners-cashbook:/app
       - cashbook_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: /venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common serve
     links:
       - api
     user: mtp
@@ -147,6 +159,9 @@ services:
     volumes:
       - ../money-to-prisoners-bank-admin:/app
       - bank-admin_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: /venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common serve
     links:
       - api
     user: mtp
