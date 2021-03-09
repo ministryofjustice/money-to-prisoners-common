@@ -139,6 +139,7 @@ services:
       DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
       DEBUG: "True"
       API_URL: http://api:8000
+      FIU_EMAIL: fiu-example@example.com
       PUBLIC_CASHBOOK_HOST: http://cashbook:8001
       PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
       PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
