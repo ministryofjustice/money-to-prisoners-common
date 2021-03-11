@@ -25,6 +25,7 @@ ghostdriver.log
 
 # Intellisense
 .mypy_cache/
+pyrightconfig.json
 
 # Development environment
 .env
