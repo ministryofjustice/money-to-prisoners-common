@@ -123,7 +123,7 @@ class SignUpForm(ApiForm):
     last_name = forms.CharField(label=_('Last name'))
     username = forms.CharField(label=_('Username'), help_text=_('Enter your Quantum ID'))
     email = forms.EmailField(label=_('Email'))
-    reason = forms.CharField(label=_('Reason for access'), required=False)
+    reason = forms.CharField(label=_('Reason for needing an account'), required=False)
     role = forms.ChoiceField(label=_('Role'))
 
     def __init__(self, *args, **kwargs):
