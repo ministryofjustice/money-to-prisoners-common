@@ -33,7 +33,7 @@
             {% include 'mtp_common/forms/textarea.html' with field=form.ticket_content value=request.GET.message|default:None rows=6 only %}
             {% include 'mtp_common/forms/field.html' with field=form.contact_email input_classes='govuk-input--width-20' autocomplete='email' value=request.GET.email|default:'' only %}
 
-            <div class="govuk-form-group">
+            <div class="govuk-button-group">
               {% csrf_token %}
               {{ form.referer }}
               <button type="submit" class="govuk-button" data-module="govuk-button" name="submit-feedback">{% trans 'Send' %}</button>

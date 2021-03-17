@@ -10,7 +10,8 @@
   },
   "extends": "eslint:recommended",
   "globals": {
-    "django": true
+    "django": true,
+    "Sentry": true
   },
   "rules": {
     "indent": ["error", 2, {"SwitchCase": 1}],

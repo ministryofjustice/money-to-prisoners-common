@@ -251,15 +251,21 @@ def bundles(_: Context):
     """
 
 
-@tasks.register('node_dependencies', hidden=True)
+@tasks.register(hidden=True)
+def lint_config(context: Context):
+    """
+    Generates javasript and stylesheet linting configuration files
+    """
+    context.write_template('eslintrc.json', path='.eslintrc.json')
+    context.write_template('sass-lint.yml', path='.sass-lint.yml')
+
+
+@tasks.register('node_dependencies', 'lint_config', hidden=True)
 def lint_javascript(context: Context):
     """
     Tests javascript for code and style errors
     """
-    args = [
-        '--config', os.path.join(context.app.common_templates_path, 'mtp_common', 'build_tasks', 'eslintrc.json'),
-        '--format', 'stylish',
-    ]
+    args = ['--format', 'stylish']
     if context.verbosity == 0:
         args.append('--quiet')
     if not context.use_colour:
@@ -268,16 +274,12 @@ def lint_javascript(context: Context):
     return context.node_tool('eslint', *args)
 
 
-@tasks.register('node_dependencies', hidden=True)
+@tasks.register('node_dependencies', 'lint_config', hidden=True)
 def lint_stylesheets(context: Context):
     """
     Tests stylesheets for code and style errors
     """
-    args = [
-        '--config', os.path.join(context.app.common_templates_path, 'mtp_common', 'build_tasks', 'sass-lint.yml'),
-        '--format', 'stylish',
-        '--syntax', 'scss',
-    ]
+    args = ['--format', 'stylish', '--syntax', 'scss']
     if context.verbosity > 1:
         args.append('--verbose')
     args.append(os.path.join(context.app.scss_source_path, '**', '*.scss'))

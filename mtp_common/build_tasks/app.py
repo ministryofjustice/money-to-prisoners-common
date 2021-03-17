@@ -47,10 +47,14 @@ class App:
 
     @property
     def javascript_source_path(self):
+        if self.name == 'api':
+            return os.path.join(self.asset_source_path, 'javascripts')
         return self.asset_source_path
 
     @property
     def scss_source_path(self):
+        if self.name == 'api':
+            return os.path.join(self.asset_source_path, 'stylesheets')
         return self.asset_source_path
 
     @property
@@ -73,10 +77,14 @@ class App:
 
     @property
     def javascript_build_path(self):
+        if self.name == 'api':
+            return os.path.join(self.asset_build_path, 'javascripts')
         return self.asset_build_path
 
     @property
     def scss_build_path(self):
+        if self.name == 'api':
+            return os.path.join(self.asset_build_path, 'stylesheets')
         return self.asset_build_path
 
     @property

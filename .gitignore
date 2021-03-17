@@ -17,6 +17,8 @@ npm-debug.log
 package-lock.json
 
 # app-specific
+.eslintrc.json
+.sass-lint.yml
 mtp_common/assets/
 
 # selenium

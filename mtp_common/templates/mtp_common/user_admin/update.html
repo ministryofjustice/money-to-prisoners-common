@@ -52,7 +52,7 @@
           {% endif %}
         {% endwith %}
 
-        <p>
+        <div class="govuk-button-group">
           <button type="submit" class="govuk-button" data-module="govuk-button" name="create">
             {% if form.create %}
               {% trans 'Create' %}
@@ -60,8 +60,8 @@
               {% trans 'Save' %}
             {% endif %}
           </button>
-          <a href="{% url 'list-users' %}" class="mtp-link--form-cancel">{% trans 'Cancel' %}</a>
-        </p>
+          <a href="{% url 'list-users' %}" class="govuk-link">{% trans 'Cancel' %}</a>
+        </div>
       </form>
 
     </div>
