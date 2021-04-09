@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load mtp_common %}
+
+
+{% if user_request_count > 0 %}
+    {% url 'list-users' as link %}
+    {% captureoutput as manage_requests %}
+        <a href="{{ link }}">
+            {% blocktrans count count=user_request_count %}
+            Manage request
+            {% plural %}
+            Manage requests
+            {% endblocktrans %}
+        </a>
+    {% endcaptureoutput %}
+
+    {% captureoutput as account_requests_heading %}
+        {% blocktrans trimmed count count=user_request_count %}
+            There is {{ count }} new account request
+        {% plural %}
+            There are {{ count }} new account requests
+        {% endblocktrans %}
+        {{ manage_requests }}.
+    {% endcaptureoutput %}
+
+    {% include 'mtp_common/components/notification-banner.html' with banner_level=_('Important') banner_title=_('Important') banner_heading=account_requests_heading only %}
+{% endif %}
