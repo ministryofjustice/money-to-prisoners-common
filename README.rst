@@ -218,6 +218,18 @@ Once you've run the above commands successfully, then to enter a virtual environ
 
     workon money-to-prisoners-api
 
+Troubleshooting Development Environement
+----------------------------------------
+
+If you run into issues with the dockerisesd development environemnt, the following troubleshooting steps should reset the state.
+
+* Remove existing service containers if they exist via ``docker-compose rm`` from money-to-prisoners-common root directory
+* Pull fresh base images via ``./manage.py config docker-login && ./manage.py image pull-ecr`` from from money-to-prisoners-deploy root directory
+* Rebuild the service images without cache via ``docker-compose --no-cache build`` from money-to-prisoners-common root directory
+* Restart the services in the background via ``docker-compose up -d`` from money-to-prisoners-common root directory,
+* Tail the logs at your leisure via ``docker-compose logs <service_name>`` from money-to-prisoners-common root directory, where ``<service_name>`` is an optional argument corresponding to a ``services`` key in the ``docker-compose.yml`` (e.g. api, noms-ops etc)
+* If this doesn't work, try dropping the database and restarting the ``api`` container via: ``docker-compose exec db psql postgres -c "DROP DATABASE mtp_api" && docker-compose restart api`` from money-to-prisoners-common root directory,
+
 Additional Bespoke Packages
 ---------------------------
 
