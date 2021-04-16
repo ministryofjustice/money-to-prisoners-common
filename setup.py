@@ -21,7 +21,7 @@ install_requires = [
     'django-anymail[mailgun]~=7.2',
     'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
-    'pytz>=2019.1',
+    'pytz>=2021.1',
     'requests>=2.18,<3',
     'requests-oauthlib>=1,<2',
     'slumber>=0.7,<0.8',
@@ -31,7 +31,7 @@ install_requires = [
     'PyJWT>=1.7,<2',
     'kubernetes>=12,<13',  # corresponds to server version 1.16
     'prometheus_client>=0.6,<1',
-    'sentry_sdk~=0.19.0',
+    'sentry-sdk~=1.0.0',
     'libsass~=0.20',
     'uWSGI==2.0.19.1',
 
