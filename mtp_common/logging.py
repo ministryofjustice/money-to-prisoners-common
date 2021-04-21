@@ -7,13 +7,14 @@ class ELKFormatter(logging.Formatter):
     Formats log records as JSON for shipping to ELK
     """
 
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         if not hasattr(record, 'asctime'):
             record.asctime = self.formatTime(record, self.datefmt)
         log = {
             'timestamp': record.asctime,
             'timestamp_msec': record.created * 1000,
             'message': record.getMessage(),
+            'variables': record.args,
             '@fields.level': record.levelname or 'NONE',
             '@fields.logger': 'app-%s' % record.name or 'unknown',
             '@fields.source_path': '%s#%s' % (record.pathname or '?', record.lineno or '0'),

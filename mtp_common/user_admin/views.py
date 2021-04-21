@@ -86,7 +86,10 @@ def list_users(request):
         for account_request in account_requests:
             account_request['created'] = parse_datetime(account_request['created'])
     except HttpClientError:
-        logger.exception(f'User {request.user.username} cannot access account requests')
+        logger.exception(
+            'User %(username)s cannot access account requests',
+            {'username': request.user.username},
+        )
         account_requests = []
     context = {
         'breadcrumbs': make_breadcrumbs(),
@@ -112,11 +115,15 @@ def delete_user(request, username):
             )
 
             admin_username = request.user.user_data.get('username', 'Unknown')
-            logger.info(f'Admin {admin_username} disabled user {username}', extra={
-                'elk_fields': {
-                    '@fields.username': admin_username,
+            logger.info(
+                'Admin %(admin_username)s disabled user %(username)s',
+                {'admin_username': admin_username, 'username': username},
+                extra={
+                    'elk_fields': {
+                        '@fields.username': admin_username,
+                    }
                 }
-            })
+            )
             messages.success(request, _('User account ‘%(username)s’ disabled') % {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be disabled'))
@@ -148,11 +155,15 @@ def undelete_user(request, username):
             )
 
             admin_username = request.user.user_data.get('username', 'Unknown')
-            logger.info(f'Admin {admin_username} enabled user {username}', extra={
-                'elk_fields': {
-                    '@fields.username': admin_username,
+            logger.info(
+                'Admin %(admin_username)s enabled user %(username)s',
+                {'admin_username': admin_username, 'username': username},
+                extra={
+                    'elk_fields': {
+                        '@fields.username': admin_username,
+                    }
                 }
-            })
+            )
             messages.success(request, _('User account ‘%(username)s’ enabled') % {'username': username})
         except HttpClientError as e:
             api_errors_to_messages(request, e, gettext('This user could not be enabled'))
@@ -183,11 +194,15 @@ def unlock_user(request, username):
         )
 
         admin_username = request.user.user_data.get('username', 'Unknown')
-        logger.info(f'Admin {admin_username} removed lock-out for user {username}', extra={
-            'elk_fields': {
-                '@fields.username': admin_username,
+        logger.info(
+            'Admin %(admin_username)s removed lock-out for user %(username)s',
+            {'admin_username': admin_username, 'username': username},
+            extra={
+                'elk_fields': {
+                    '@fields.username': admin_username,
+                }
             }
-        })
+        )
         messages.success(request, gettext('Unlocked user ‘%(username)s’, they can now log in again') % {
             'username': username,
         })

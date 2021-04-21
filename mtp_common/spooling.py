@@ -48,7 +48,7 @@ class Spooler:
 
         task_name = env[self.identifier]
         if task_name not in self._registry:
-            logger.error('Spooler task `%s` not registered' % task_name)
+            logger.error('Spooler task `%s` not registered', task_name)
             return uwsgi.SPOOL_IGNORE
 
         task = self._registry[task_name]
@@ -73,7 +73,7 @@ class Spooler:
                 kwargs[task.context_name] = Context(spooled=True)
             task.func(*args, **kwargs)
         except:  # noqa: E722,B001
-            logger.exception('Spooler task %s failed with uncaught exception' % task.name)
+            logger.exception('Spooler task %s failed with uncaught exception', task.name)
 
         return uwsgi.SPOOL_OK
 
@@ -88,7 +88,7 @@ class Spooler:
 
     def register(self, task):
         if task.name in self._registry:
-            logger.warning('%s is already registered as a spooler task' % task.name)
+            logger.warning('%s is already registered as a spooler task', task.name)
         self._registry[task.name] = task
 
     def schedule(self, task, args, kwargs, **spool_kwargs):
@@ -137,7 +137,7 @@ class Task:
                 kwargs[self.context_name] = Context(spooled=False)
             self.func(*args, **kwargs)
         except:  # noqa: E722,B001
-            logger.exception('Spooler task %s failed with uncaught exception' % self.name)
+            logger.exception('Spooler task %s failed with uncaught exception', self.name)
             raise
 
 

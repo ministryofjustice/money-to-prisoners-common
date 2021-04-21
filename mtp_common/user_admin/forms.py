@@ -91,7 +91,7 @@ class UserUpdateForm(ApiForm):
                     data['username'] = self.cleaned_data['username']
                     self.api_session.post('users/', json=data)
 
-                    logger.info('Admin %(admin_username)s created user %(username)s' % {
+                    logger.info('Admin %(admin_username)s created user %(username)s', {
                         'admin_username': admin_username,
                         'username': data['username'],
                     }, extra={
@@ -105,7 +105,7 @@ class UserUpdateForm(ApiForm):
                         'users/{username}/'.format(username=username), json=data
                     )
 
-                    logger.info('Admin %(admin_username)s edited user %(username)s' % {
+                    logger.info('Admin %(admin_username)s edited user %(username)s', {
                         'admin_username': admin_username,
                         'username': username,
                     }, extra={
@@ -149,7 +149,7 @@ class SignUpForm(ApiForm):
             try:
                 response = self.api_session.post('requests/', data=self.payload)
                 if response.status_code != 201:
-                    logger.error('Sign up api error: %r' % response.content)
+                    logger.error('Sign up api error: %r', {'api_response': response.content})
                     raise forms.ValidationError(self.error_messages['generic'])
             except HttpClientError as e:
                 self.api_validation_error(e)
@@ -176,7 +176,7 @@ class AcceptRequestForm(ApiForm):
                 user_admin = str(self.cleaned_data.get('user_admin'))
                 response = self.api_session.patch(self.url, data={'user_admin': user_admin})
                 if response.status_code != 200:
-                    logger.error('Accept account request api error: %r' % response.content)
+                    logger.error('Accept account request api error: %r', {'api_response': response.content})
                     raise forms.ValidationError(self.error_messages['generic'])
             except HttpClientError as e:
                 self.api_validation_error(e)
