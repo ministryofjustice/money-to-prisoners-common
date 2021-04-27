@@ -105,3 +105,18 @@ class ELKLoggingTestCase(unittest.TestCase):
         self.assertEqual(logs['@fields.extra_field'], 123)
         self.assertEqual(logs['@fields.extra_field2'], ['a', 'b'])
         self.assertNotIn('excluded', logs)
+
+    def test_elk_formatter_serialises_arguments(self):
+        class Obj:
+            def __str__(self):
+                return '🌍'
+
+        self.setup_logging(formatter='elk')
+
+        mtp_logger = logging.getLogger('mtp')
+        mtp_logger.info('This %d object cannot be serialised to JSON: %s', 1, Obj())
+        logs = get_log_text()
+        logs = json.loads(logs)
+        self.assertIsInstance(logs, dict)
+        self.assertEqual(logs['message'], 'This 1 object cannot be serialised to JSON: 🌍')
+        self.assertSequenceEqual(logs['variables'], [1, '🌍'])

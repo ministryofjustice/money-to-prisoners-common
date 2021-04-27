@@ -34,4 +34,4 @@ class ELKFormatter(logging.Formatter):
             # ensure that any data passed can be json-serialised
             log.update(record.elk_fields)
 
-        return json.dumps(log)
+        return json.dumps(log, default=str, ensure_ascii=False)
