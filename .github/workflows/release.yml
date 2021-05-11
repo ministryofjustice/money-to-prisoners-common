@@ -16,7 +16,7 @@ jobs:
       - name: Setup nodejs
         uses: actions/setup-node@v2
         with:
-          node-version: 10
+          node-version: 16
       - name: Install os dependencies
         run: sudo apt-get install gettext
       - name: Install python dependencies
