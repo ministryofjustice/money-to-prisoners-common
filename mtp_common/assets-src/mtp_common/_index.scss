@@ -4,6 +4,9 @@ $govuk-assets-path: '/static/';
 // Removes need to put classes on all elements
 $govuk-global-styles: true;
 
+// Improve link readability
+$govuk-new-link-styles: true;
+
 // All govuk-frontend components
 @import 'govuk-frontend/govuk/all';
 
