@@ -1,3 +1,7 @@
+span.govuk-breadcrumbs__link {
+  text-decoration: none;
+}
+
 .mtp-breadcrumbs__container {
   @include govuk-grid-column(breadcrumbs);
 
