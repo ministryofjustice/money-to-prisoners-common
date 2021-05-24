@@ -15,12 +15,12 @@
   background: $govuk-brand-colour;
   color: $govuk-body-background-colour;
 
-  .govuk-heading-xl, .govuk-body, .govuk-body-s, p, li, a {
+  .govuk-heading-xl, .govuk-body, .govuk-body-s, p, li {
     color: $govuk-body-background-colour;
   }
 
-  a:focus {
-    color: $govuk-focus-text-colour;
+  a {
+    @include govuk-link-style-inverse;
   }
 
   .mtp-language-switch__item {

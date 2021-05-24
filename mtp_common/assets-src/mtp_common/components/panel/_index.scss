@@ -8,7 +8,7 @@
 
 .govuk-panel--confirmation {
   a {
-    color: govuk-colour('white');
+    @include govuk-link-style-inverse;
   }
 }
 
