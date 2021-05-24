@@ -23,10 +23,9 @@
                   </li>
                 {% else %}
                   <li class="govuk-breadcrumbs__list-item">
-                    {# TODO: maybe remove empty link #}
-                    <a class="govuk-breadcrumbs__link">
+                    <span class="govuk-breadcrumbs__link">
                       {{ breadcrumb.name }}
-                    </a>
+                    </span>
                   </li>
                 {% endif %}
               {% endfor %}
