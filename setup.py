@@ -31,7 +31,7 @@ install_requires = [
     'PyJWT>=1.7,<2',
     'kubernetes>=12,<13',  # corresponds to server version 1.16
     'prometheus_client>=0.6,<1',
-    'sentry-sdk~=1.0.0',
+    'sentry-sdk~=1.1.0',
     'libsass~=0.20',
     'uWSGI==2.0.19.1',
 
