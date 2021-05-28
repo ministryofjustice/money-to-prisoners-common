@@ -1,5 +1,21 @@
 version: "3.8"
 
+x-environment: &default-environment
+  # apps should define their own environment variables and fallbacks;
+  # only docker-compose-specific overrides should go here
+  PYTHONUNBUFFERED: "1"
+
+  DEBUG: "True"
+  ENV: local
+
+  PUBLIC_API_HOST: api:8000
+  PUBLIC_CASHBOOK_HOST: cashbook:8001
+  PUBLIC_BANK_ADMIN_HOST: bank-admin:8002
+  PUBLIC_NOMS_OPS_HOST: noms-ops:8003
+  PUBLIC_SEND_MONEY_HOST: send-money:8004
+
+  START_PAGE_URL: http://start-page:8005
+
 services:
   db:
     container_name: mtp_api_db
@@ -36,21 +52,12 @@ services:
       - db
     user: mtp
     environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_api.settings.base
-      DEBUG: "True"
+      <<: *default-environment
       DB_NAME: mtp_api
       DB_USERNAME: mtp_api
       DB_PASSWORD: postgres
       DB_HOST: db
       DB_PORT: 5432
-      PUBLIC_API_HOST: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
     command: '/app/docker-entrypoint.sh'
   noms-ops:
     container_name: mtp_noms_ops
@@ -77,17 +84,7 @@ services:
     links:
       - api
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
   send-money:
     container_name: mtp_send_money
     stdin_open: true
@@ -113,17 +110,7 @@ services:
     links:
       - api
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
   cashbook:
     container_name: mtp_cashbook
     stdin_open: true
@@ -149,18 +136,7 @@ services:
     links:
       - api
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      FIU_EMAIL: fiu-example@example.com
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
   bank-admin:
     container_name: mtp_bank_admin
     stdin_open: true
@@ -186,17 +162,7 @@ services:
     links:
       - api
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_bank_admin.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
   start-page:
     container_name: mtp_start_page
     stdin_open: true
@@ -212,10 +178,7 @@ services:
     links:
       - send-money
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DEBUG: "True"
+    environment: *default-environment
   # transaction-uploader:
     # container_name: mtp_transaction-uploader
     # build:
