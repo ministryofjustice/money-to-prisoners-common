@@ -34,11 +34,9 @@ services:
     tty: true
     build:
       context: ../money-to-prisoners-api
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: api
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_api.settings.base
     ports:
       - "8000:8000"
       - "3000:3000"
@@ -62,7 +60,6 @@ services:
       DB_PASSWORD: postgres
       DB_HOST: db
       DB_PORT: 5432
-    command: '/app/docker-entrypoint.sh'
 
   cashbook:
     container_name: mtp-cashbook
@@ -70,11 +67,9 @@ services:
     tty: true
     build:
       context: ../money-to-prisoners-cashbook
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: cashbook
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
     ports:
       - "8001:8001"
       - "3001:3001"
@@ -99,11 +94,9 @@ services:
     tty: true
     build:
       context: ../money-to-prisoners-bank-admin
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: bank-admin
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_bank_admin.settings.base
     ports:
       - "8002:8002"
       - "3002:3002"
@@ -128,11 +121,9 @@ services:
     tty: true
     build:
       context: ../money-to-prisoners-noms-ops
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: noms-ops
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
     ports:
       - "8003:8003"
       - "3003:3003"
@@ -157,11 +148,9 @@ services:
     tty: true
     build:
       context: ../money-to-prisoners-send-money
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: send-money
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
     ports:
       - "8004:8004"
       - "3004:3004"
@@ -189,7 +178,6 @@ services:
       dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: start-page
     ports:
       - "8005:8080"
     user: mtp
