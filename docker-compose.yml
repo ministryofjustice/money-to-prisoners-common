@@ -17,6 +17,7 @@ x-environment: &default-environment
   START_PAGE_URL: http://start-page:8005
 
 services:
+
   db:
     container_name: mtp_api_db
     image: postgres:10-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
@@ -26,6 +27,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - db_data:/var/lib/postgresql/data
+
   api:
     container_name: mtp_api
     stdin_open: true
@@ -59,58 +61,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
     command: '/app/docker-entrypoint.sh'
-  noms-ops:
-    container_name: mtp_noms_ops
-    stdin_open: true
-    tty: true
-    build:
-      context: ../money-to-prisoners-noms-ops
-      dockerfile: $PWD/Dockerfile-dev
-      args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: noms-ops
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
-    ports:
-      - "8003:8003"
-      - "3003:3003"
-    volumes:
-      - ../money-to-prisoners-noms-ops:/app
-      - noms-ops_node_modules:/app/node_modules
-    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
-    #   - ../money-to-prisoners-common:/money-to-prisoners-common
-    # command: >
-    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
-    #   && /venv/bin/python /app/run.py serve"
-    links:
-      - api
-    user: mtp
-    environment: *default-environment
-  send-money:
-    container_name: mtp_send_money
-    stdin_open: true
-    tty: true
-    build:
-      context: ../money-to-prisoners-send-money
-      dockerfile: $PWD/Dockerfile-dev
-      args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: send-money
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
-    ports:
-      - "8004:8004"
-      - "3004:3004"
-    volumes:
-      - ../money-to-prisoners-send-money:/app
-      - send-money_node_modules:/app/node_modules
-    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
-    #   - ../money-to-prisoners-common:/money-to-prisoners-common
-    # command: >
-    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
-    #   && /venv/bin/python /app/run.py serve"
-    links:
-      - api
-    user: mtp
-    environment: *default-environment
+
   cashbook:
     container_name: mtp_cashbook
     stdin_open: true
@@ -137,6 +88,7 @@ services:
       - api
     user: mtp
     environment: *default-environment
+
   bank-admin:
     container_name: mtp_bank_admin
     stdin_open: true
@@ -163,6 +115,61 @@ services:
       - api
     user: mtp
     environment: *default-environment
+
+  noms-ops:
+    container_name: mtp_noms_ops
+    stdin_open: true
+    tty: true
+    build:
+      context: ../money-to-prisoners-noms-ops
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: noms-ops
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
+    ports:
+      - "8003:8003"
+      - "3003:3003"
+    volumes:
+      - ../money-to-prisoners-noms-ops:/app
+      - noms-ops_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: >
+    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
+    #   && /venv/bin/python /app/run.py serve"
+    links:
+      - api
+    user: mtp
+    environment: *default-environment
+
+  send-money:
+    container_name: mtp_send_money
+    stdin_open: true
+    tty: true
+    build:
+      context: ../money-to-prisoners-send-money
+      dockerfile: $PWD/Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        SERVICE: send-money
+        LOCAL_DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
+    ports:
+      - "8004:8004"
+      - "3004:3004"
+    volumes:
+      - ../money-to-prisoners-send-money:/app
+      - send-money_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: >
+    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
+    #   && /venv/bin/python /app/run.py serve"
+    links:
+      - api
+    user: mtp
+    environment: *default-environment
+
   start-page:
     container_name: mtp_start_page
     stdin_open: true
@@ -179,30 +186,11 @@ services:
       - send-money
     user: mtp
     environment: *default-environment
-  # transaction-uploader:
-    # container_name: mtp_transaction-uploader
-    # build:
-      # context: ../money-to-prisoners-transaction-uploader
-      # dockerfile: $PWD/Dockerfile-dev
-      # args:
-        # ECR_ENDPOINT: ${ECR_ENDPOINT}
-        # SERVICE: transaction-uploader
-    # user: mtp
-    # environment:
-      # PYTHONUNBUFFERED: 1
-      # ENV: local
-      # DEBUG: "True"
-      # API_URL: http://api:8000
-      # PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      # PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      # PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      # PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      # START_PAGE_URL: http://start-page:8005
 
 volumes:
   db_data:
   api_node_modules:
-  noms-ops_node_modules:
   cashbook_node_modules:
-  send-money_node_modules:
   bank-admin_node_modules:
+  noms-ops_node_modules:
+  send-money_node_modules:
