@@ -19,7 +19,7 @@ x-environment: &default-environment
 services:
   db:
     container_name: mtp_api_db
-    image: postgres:10-alpine
+    image: postgres:10-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
     environment:
       POSTGRES_DB: mtp_api
       POSTGRES_USER: mtp_api
