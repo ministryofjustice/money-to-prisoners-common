@@ -8,13 +8,7 @@ x-environment: &default-environment
   DEBUG: "True"
   ENV: local
 
-  PUBLIC_API_HOST: api:8000
-  PUBLIC_CASHBOOK_HOST: cashbook:8001
-  PUBLIC_BANK_ADMIN_HOST: bank-admin:8002
-  PUBLIC_NOMS_OPS_HOST: noms-ops:8003
-  PUBLIC_SEND_MONEY_HOST: send-money:8004
-
-  START_PAGE_URL: http://start-page:8005
+  API_URL: http://api:8000
 
 services:
 
