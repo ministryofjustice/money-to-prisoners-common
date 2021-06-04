@@ -143,6 +143,8 @@ Each app describes its own installation in its read-me file, but here’s a quic
      # OR if it’s the api, this automatically alternative also creates a fresh database with sample data
      ./run.py start --test-mode
 
+After this has been done once, bringing up apps again only requires repeating step 5.
+
 **Running using docker-compose (requires access to the private deploy repository)**
 
 1. Get access to `money-to-prisoners-deploy`_ and see read-me inside to unlock it.
@@ -193,9 +195,9 @@ If you run into issues with the dockerised development environment, the followin
 
 * Shutdown existing docker-compose containers, and remove volumes/networks/images with ``docker-compose down -v --rmi all`` from this repo’s root directory (note this will wipe your local database, omit the ``-v`` to prevent this)
 * Pull fresh base images (step 3 above)
-* Rebuild the service images without cache via ``docker-compose build --no-cache`` from this repo’s root directory
-* Restart the services in the background via ``docker-compose up -d`` from this repo’s root directory
-* Tail the logs at your leisure via ``docker-compose logs <app>`` from money-to-prisoners-common root directory, where ``<app>`` is an optional argument corresponding to a ``services`` key in the ``docker-compose.yml``
+* Rebuild the app images without cache via ``docker-compose build --no-cache`` from this repo’s root directory
+* Restart the apps in the background via ``docker-compose up -d`` from this repo’s root directory
+* Tail the logs at your leisure via ``docker-compose logs <app>`` from money-to-prisoners-common root directory
 
 **Accessing the apps**
 
@@ -208,7 +210,7 @@ Irrespective of how the apps were run, those exposing a web interface will be ac
 * send-money: http://localhost:3004/
 * start-page: http://localhost:8005/
 
-Caveat: You can only log into one service at a time locally because the cookies within which the session is stored are namespaced to domain only.
+Caveat: You can only log into one app at a time locally because the cookies within which the session is stored are namespaced to domain only.
 
 Additional Bespoke Packages
 ---------------------------
