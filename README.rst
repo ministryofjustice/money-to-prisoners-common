@@ -1,104 +1,52 @@
-Money to Prisoners
-==================
+Money to Prisoners Common
+=========================
 
-A Django app containing utilities and assets common to all Money to Prisoners services/applications.
-
-Features
---------
-
-* Build pipeline with actions that depend on others
-* Base SCSS, JS and static assets
-* Base templates for staff and public apps
-* Reusable templates for form fields and errors
-* Authentication utilities and views for connecting to `money-to-prisoners-api`_
-* User account management forms and views
-* REST utilities for retrieving information from `money-to-prisoners-api`_
-* Utility for communicating with NOMIS api
-* Integration and accessibility testing with selenium
-* Python code style testing
-* Log formatting for shipping to ELK
-
-Usage
------
-
-Add ``money-to-prisoners-common==<version>`` to the Money to Prisoners application’s requirements base.txt.
-There is an additional variant installed as a setuptools *extra*:
-Use ``money-to-prisoners-common[testing]==<version>`` for environments requiring testing; this is placed into
-the application’s requirements dev.txt.
-
-Add url patterns:
-
-.. code-block:: python
-
-    from django.conf.urls import url
-
-    from mtp_common.auth import views
-
-    urlpatterns = [
-        url(r'^login/$', views.login, {
-            'template_name': 'login.html',
-            }, name='login'),
-        url(
-            r'^logout/$', views.logout, {
-                'template_name': 'login.html',
-                'next_page': reverse_lazy('login'),
-            }, name='logout'
-        ),
-    ]
-
-Configure Django settings:
-
-.. code-block:: python
-
-    MIDDLEWARE = (
-        ...
-        # instead of django.middleware.csrf.CsrfViewMiddleware
-        'mtp_common.auth.csrf.CsrfViewMiddleware',
-        ...
-        # instead of django.contrib.auth.middleware.AuthenticationMiddleware
-        'mtp_common.auth.middleware.AuthenticationMiddleware',
-        ...
-    )
-
-    AUTHENTICATION_BACKENDS = (
-        'mtp_common.auth.backends.MojBackend',
-    )
-
-    CSRF_FAILURE_VIEW = 'mtp_common.auth.csrf.csrf_failure'
-
-If you wish for additional interface methods, you can extend ``mtp_common.auth.models.MojUser``,
-and specify your subclass as ``MOJ_USER_MODEL``. An example would be adding a property to
-access a key in the ``user_data`` dict.
-
-.. code-block:: python
-
-    MOJ_USER_MODEL = 'myapp.models.MyCustomUser'
-
-Specify the parameters of the API authentication. ``API_CLIENT_ID`` and ``API_CLIENT_SECRET``
-should be unique to your application.
-
-.. code-block:: python
-
-    API_CLIENT_ID = 'xxx'
-    API_CLIENT_SECRET = os.environ.get('API_CLIENT_SECRET', 'xxx')
-    API_URL = os.environ.get('API_URL', 'http://localhost:8000')
-
-    OAUTHLIB_INSECURE_TRANSPORT = True
-
-Developing
-----------
+A Django app containing utilities and assets common to all Prisoner Money applications.
 
 .. image:: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common.svg?style=svg
     :target: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common
 
+Features
+--------
+
+* Build pipeline CLI with actions that can depend on others (inspired by invoke/fabric)
+* Base SCSS, JS and static assets
+* Base templates for staff and public apps
+* Build action to include GOV.UK Design System assets
+* Reusable templates for form fields and errors
+* Authentication utilities and views for connecting to `money-to-prisoners-api`_
+* User account management forms and views
+* REST utilities for communicating with `money-to-prisoners-api`_
+* Utility for communicating with HMPPS Prison API (NOMIS)
+* Integration and accessibility testing with selenium
+* Python code style testing
+* Log formatting for shipping to ELK
+* Cookie management tools to anonymise users and allow them to opt in
+* Prometheus metrics view providing app version information
+* Constants shared between apps
+
+Usage
+-----
+
+This is not a standalone Django application and is included as a requirement of Prisoner Money apps.
+
 * Make code changes and add any tests necessary
 * Test using ``./run.py test`` or ``python setup.py test``
 * Update the package version with ``./run.py set_version --version [?.?.?]``
-* Commit and push changes to Github
+* Commit, tag with the version and push changes to Github
 * Submit to PyPi by:
 
   * making a new release on Github (package version comes from the code, not Github release title)
   * or ``./run.py upload`` locally (if release cannot be made on Github for some reason)
+
+Add or update ``money-to-prisoners-common~=<major version>.<minor version>.0`` to the app’s requirements base.txt.
+There is an additional variant installed as a setuptools *extra*:
+Use ``money-to-prisoners-common[testing]~=<major version>.<minor version>.0`` for environments requiring testing;
+this is placed into the app’s requirements dev.txt.
+Incrementing the build/patch version is used to push minor fixes so these above requirements will automatically include them.
+
+While making changes to this library, you can install it locally in "editable" mode.
+See ``python_dependencies --common-path …`` build task.
 
 Translating
 -----------
@@ -107,135 +55,187 @@ Update translation files with ``./run.py make_messages`` – you need to do this
 
 Compile messages ``./run.py compile_messages`` – only needed during local testing or development, it happens automatically during build or upload.
 
-Pull updates from Transifex with ``./run.py translations --pull``. You'll need to update translation files afterwards and manually check that the merges occurred correctly.
+Pull updates from Transifex with ``./run.py translations --pull``. You’ll need to update translation files afterwards and manually check that the merges occurred correctly.
 
 Push latest English to Transifex with ``./run.py translations --push``. NB: you should pull updates before pushing to merge correctly.
 
-Common assets
--------------
+Assets
+------
 
-All shared assets used for `money-to-prisoners-cashbook`_, `money-to-prisoners-bank-admin`_,
-`money-to-prisoners-noms-ops`_ and `money-to-prisoners-send-money`_ are kept in this package.
+All shared assets used by Prisoner Money apps are kept in this package.
+Each app’s build scripts install this package automatically which also bring in the GOV.UK Design System.
 
-Each application’s build scripts install this package automatically.
+Assets that need compiling are in ``mtp_common/assets-src/mtp_common``.
+Static assets are in ``mtp_common/static/mtp_common``.
 
-SCSS, JavaScript, images
-------------------------
+Common templates used by the client apps are kept in ``mtp_common/templates/(govuk-frontend|mtp_common)``.
+The ones in ``govuk-frontend`` are essentially translated from the GOV.UK Design System whereas those in ``mtp_common``
+are custom components or are heavily modified.
 
-Assets that need compiling are in ``mtp_common/assets-src/(images|javascripts|scss)``.
-The base sass file, ``_mtp.scss``, is used to include the sass includes from this packge into each frontend app.
+Local Development Environment
+-----------------------------
 
-Static assets are in ``mtp_common/static/(images|javascripts|css)``.
+Prisoner Money apps can be run natively (i.e. directly by python on your machine) or using docker-compose.
+Using docker-compose is perhaps the easiest way to bring up all Prisoner Money apps in concert,
+but it requires access to the private `money-to-prisoners-deploy`_ infrastructure.
+However, when editing this common library, it’s easier to run them natively
+because this package can be installed in "editable" mode.
 
-There is a `separate guide to the various visual elements`_
-defined in this repository and used by the various MTP apps.
+Check out each app and helper repository side-by-side in one directory using git:
 
-Django templates
-----------------
+* `money-to-prisoners-api`_
+* `money-to-prisoners-cashbook`_
+* `money-to-prisoners-bank-admin`_
+* `money-to-prisoners-noms-ops`_
+* `money-to-prisoners-transaction-uploader`_ – NB: this app does not expose a web interface
+* `money-to-prisoners-send-money`_
+* `money-to-prisoners-start-page`_
+* `money-to-prisoners-common`_
+* `money-to-prisoners-deploy`_ – NB: this is a private repository
 
-Common templates used by the client applications are kept in ``mtp_common/templates``.
+**Running natively (does not require access to the private deploy repository)**
 
-.. _separate guide to the various visual elements: mtp_common/docs/README.md
-.. _money-to-prisoners-api: https://github.com/ministryofjustice/money-to-prisoners-api
-.. _money-to-prisoners-cashbook: https://github.com/ministryofjustice/money-to-prisoners-cashbook
-.. _money-to-prisoners-bank-admin: https://github.com/ministryofjustice/money-to-prisoners-bank-admin
-.. _money-to-prisoners-noms-ops: https://github.com/ministryofjustice/money-to-prisoners-noms-ops
-.. _money-to-prisoners-send-money: https://github.com/ministryofjustice/money-to-prisoners-send-money
+Each app describes its own installation in its read-me file, but here’s a quick guide:
 
-Development environment
------------------------
+1. Setup local postgres database server. There’s no need to create a user or database if using default settings.
 
-There is a docker-compose for building and setting up the development environment. Steps are as follows:
+2. Install python version 3.8.
 
-1. Clone money-to-prisoners-common (if you haven't already):
+3. Install nodejs version 16.
+
+4. Setup a python virtual environment for each app. These are used to isolate python dependency libraries for each app.
+
+   1. You can either make one directly in *each* repository directory:
+
+   .. code-block:: sh
+
+     python3 -m venv venv
+
+   2. Or install and use `virtualenvwrapper`_ which allows activating a virtual environment by name from any location.
+      This option is particularly helpful for git hooks or when you normally run the apps in docker-compose.
+      In the directory containing all repos:
+
+   .. code-block:: sh
+
+     for app in api cashbook bank-admin noms-ops transaction-uploader send-money start-page deploy; do
+       cd money-to-prisoners-$app
+       mkvirtualenv -a . money-to-prisoners-$app
+       [[ -f requirements/dev.txt ]] && pip install -r requirements/dev.txt
+       [[ -f requirements.txt ]] && pip install -r requirements.txt
+       cd -
+     done
+     cd money-to-prisoners-common
+     mkvirtualenv -a . money-to-prisoners-common
+     pip install -e '.[testing]'
+
+5. Run the apps. The ``api`` always needs to be running when any of the other apps are used other than ``start-page``.
+
+   .. code-block:: sh
+
+     cd <app repository root>
+     # activate the virtual environment if one was made directly
+     . venv/bin/activate
+     # OR activate the virtual environment using virtualenvwrapper
+     workon money-to-prisoners-<app name>
+
+     # run the app
+     ./run.py serve
+     # OR if it’s the api, this automatically alternative also creates a fresh database with sample data
+     ./run.py start --test-mode
+
+After this has been done once, bringing up apps again only requires repeating step 5.
+
+**Running using docker-compose (requires access to the private deploy repository)**
+
+1. Get access to `money-to-prisoners-deploy`_ and see read-me inside to unlock it.
+
+2. Setup local environment:
+
+   1. Get the docker registry address of ECR used for deployed environment in Cloud Platform. In the ``deploy`` repo:
+
+   .. code-block:: sh
+
+     ./manage.py config docker-login  # log into ECR
+     ./manage.py app ci-settings [any mtp app name]  # note the $ECR_ENDPOINT value
+
+   Alternatively, this value can be derived from the ``ecr`` kubernetes secret in the production namespace in Cloud Platform.
+   Use the value of ``repo_url`` up to the first ``/``.
+
+   2. Create a ``.env`` file in this repository’s root directory adding this ``ECR_ENDPOINT`` value:
+
+   .. code-block::
+
+     ECR_ENDPOINT=?????????.amazonaws.com
+
+3. Pull images from private docker registry in Cloud Platform. In the ``deploy`` repo:
 
 .. code-block:: sh
 
-    git clone https://github.com/ministryofjustice/money-to-prisoners-common.git money-to-prisoners-common
+  ./manage.py config docker-login  # only necessary if not done above
+  ./manage.py image pull-ecr
 
-2. Change directory to the money-to-prisoners-common root directory (if you haven't already)
-
-.. code-block:: sh
-
-    cd money-to-prisoners-common
-
-3. Clone the above directories as sibling directories to money-to-prisoners-common:
+4. Launch all apps in concert. In this repo:
 
 .. code-block:: sh
 
-    git clone https://github.com/ministryofjustice/money-to-prisoners-api.git ../money-to-prisoners-api
-    git clone https://github.com/ministryofjustice/money-to-prisoners-cashbook.git ../money-to-prisoners-cashbook
-    git clone https://github.com/ministryofjustice/money-to-prisoners-bank-admin.git ../money-to-prisoners-bank-admin
-    git clone https://github.com/ministryofjustice/money-to-prisoners-noms-ops.git ../money-to-prisoners-noms-ops
-    git clone https://github.com/ministryofjustice/money-to-prisoners-send-money.git ../money-to-prisoners-send-money
-    git clone https://github.com/ministryofjustice/money-to-prisoners-start-page.git ../money-to-prisoners-start-page
-    git clone https://github.com/ministryofjustice/money-to-prisoners-transaction-uploader.git ../money-to-prisoners-transaction-uploader
+  docker-compose up
 
-4. Create a file called ``.env`` in money-to-prisoners-common root directory, add the variable ``ECR_ENDPOINT`` to this file in the format ``<key>=<value>``
+   NB: The newer ``docker compose up`` form only works after the ``docker-compose up`` has already built the containers the first time!
 
-5. Authenticate with the docker repository
+5. Create standard users and populate database with sample data. In this repo:
 
 .. code-block:: sh
 
-    git clone https://github.com/ministryofjustice/money-to-prisoners-deploy.git ../money-to-prisoners-deploy
-    cd ../money-to-prisoners-deploy
-    ./manage.py config docker-login
-    cd -
+  docker-compose exec api ./manage.py load_test_data
 
-6. From ``money-to-prisoners-common`` root directory run ``docker-compose up``
+After this has been done once, bringing up the full stack in future only requires running ``docker-compose up``
+or ``docker compose up`` in this repo. Deleting docker images, containers or volumes will require repeating steps 3 to 5.
 
-7. (Optional) If you have not generated any data for the development environement, or if you have removed the docker volume associated with the database container, you will need to populate the database to be able to log into the services successfully. It will also create a minimal set of fake data to allow you to develop against existing data. However if you already have an existing docker volume with existing data, this command will delete that data.
+If you run into issues with the dockerised development environment, the following troubleshooting steps should reset the state:
 
-To populate your database with fake data, run the following command from ``money-to-prisoners-common`` root directory, once the api container has started successfully
+* Shutdown existing docker-compose containers, and remove volumes/networks/images with ``docker-compose down -v --rmi all`` from this repo’s root directory (note this will wipe your local database, omit the ``-v`` to prevent this)
+* Pull fresh base images (step 3 above)
+* Rebuild the app images without cache via ``docker-compose build --no-cache`` from this repo’s root directory
+* Restart the apps in the background via ``docker-compose up -d`` from this repo’s root directory
+* Tail the logs at your leisure via ``docker-compose logs <app>`` from money-to-prisoners-common root directory
 
-.. code-block:: sh
+**Accessing the apps**
 
-   docker-compose exec api ./manage.py load_test_data
+Irrespective of how the apps were run, those exposing a web interface will be accessible:
 
-You should then be able to access the services at the following URLs
+* api: http://localhost:8000/admin/
+* cashbook: http://localhost:3001/
+* bank-admin: http://localhost:3002/
+* noms-ops: http://localhost:3003/
+* send-money: http://localhost:3004/
+* start-page: http://localhost:8005/
 
-* money-to-prisoners-api: http://localhost:8000
-* money-to-prisoners-cashbook: http://localhost:8001
-* money-to-prisoners-bank-admin: http://localhost:8002
-* money-to-prisoners-noms-ops: http://localhost:8003
-* money-to-prisoners-send-money: http://localhost:8004
-* money-to-prisoners-start-page: http://localhost:8005
-
-Caveats:
-
-* You can only log into one service at a time, this is because the cookies within which the session is stored are namespaced to domain only (which is the desired behaviour for test/prod)
-
-8. (Optional) If you want to set up some virtualenv's for money-to-prisoners, to help with things like running tests outside docker containers (e.g. as part of githooks), I would very much recommend using virtualenvwrapper. It's essentially a set of aliases that make managing virtualenv's a lot easier. See https://virtualenvwrapper.readthedocs.io/en/latest/install.html#basic-installation for installation instructions. Once you've got that installed, it's just a matter of running this command from the parent directory, that contains all of your checked-out ``money-to-prisoners-*`` repos:
-
-.. code-block:: sh
-
-    repos=(money-to-prisoners-api  money-to-prisoners-bank-admin  money-to-prisoners-cashbook  money-to-prisoners-deploy money-to-prisoners-noms-ops  money-to-prisoners-send-money  money-to-prisoners-transaction-uploader)
-    for d in ${repos[@]}; do cd $d && mkvirtualenv -a . $d && pip install -r requirements/base.txt  -r requirements/dev.txt && cd -; done
-
-Once you've run the above commands successfully, then to enter a virtual environment and at the same time ``cd`` into the directory of that repository, you can just run, for example:
-
-.. code-block:: sh
-
-    workon money-to-prisoners-api
-
-Troubleshooting Development Environement
-----------------------------------------
-
-If you run into issues with the dockeriesd development environment, the following troubleshooting steps should reset the state.
-
-* Shutdown existing docker-compose containers, and remove volumes/networks/images with ``docker-compose down -v --rmi all`` from money-to-prisoners-common root directory (note this will wipe your local database, omit the ``-v`` to prevent this)
-* Pull fresh base images via ``./manage.py config docker-login && ./manage.py image pull-ecr`` from from money-to-prisoners-deploy root directory
-* Rebuild the service images without cache via ``docker-compose build --no-cache`` from money-to-prisoners-common root directory
-* Restart the services in the background via ``docker-compose up -d`` from money-to-prisoners-common root directory,
-* Tail the logs at your leisure via ``docker-compose logs <service_name>`` from money-to-prisoners-common root directory, where ``<service_name>`` is an optional argument corresponding to a ``services`` key in the ``docker-compose.yml`` (e.g. api, noms-ops etc)
+Caveat: You can only log into one app at a time locally because the cookies within which the session is stored are namespaced to domain only.
 
 Additional Bespoke Packages
 ---------------------------
 
-There are several dependencies of the ``money-to-prisoners-common`` python library which are maintained by this team, so they may require code-changes when the dependencies (e.g. Django) of the ``money-to-prisoners-common`` python library, or any of the Prisoner Money services are incremented.
+There are several dependencies of the ``money-to-prisoners-common`` python library which are maintained by this team, so they may require code-changes when the dependencies (e.g. Django) of the ``money-to-prisoners-common`` python library, or any of the Prisoner Money apps, are incremented.
 
-* django-form-error-reporting: https://github.com/ministryofjustice/django-form-error-reporting
-* django-zendesk-tickets: https://github.com/ministryofjustice/django-zendesk-tickets
-* govuk-bank-holidays: https://github.com/ministryofjustice/govuk-bank-holidays
+* `django-form-error-reporting`_
+* `django-zendesk-tickets`_
+* `govuk-bank-holidays`_
 
-There are additional bespoke dependencies defined as python dependencies within the Prisoner Money Services.
+There are additional bespoke dependencies defined as python dependencies within the Prisoner Money apps.
+
+
+
+.. Links referenced in document above:
+.. _money-to-prisoners-api: https://github.com/ministryofjustice/money-to-prisoners-api
+.. _money-to-prisoners-cashbook: https://github.com/ministryofjustice/money-to-prisoners-cashbook
+.. _money-to-prisoners-bank-admin: https://github.com/ministryofjustice/money-to-prisoners-bank-admin
+.. _money-to-prisoners-noms-ops: https://github.com/ministryofjustice/money-to-prisoners-noms-ops
+.. _money-to-prisoners-transaction-uploader: https://github.com/ministryofjustice/money-to-prisoners-transaction-uploader
+.. _money-to-prisoners-send-money: https://github.com/ministryofjustice/money-to-prisoners-send-money
+.. _money-to-prisoners-start-page: https://github.com/ministryofjustice/money-to-prisoners-start-page
+.. _money-to-prisoners-common: https://github.com/ministryofjustice/money-to-prisoners-common
+.. _money-to-prisoners-deploy: https://github.com/ministryofjustice/money-to-prisoners-deploy
+.. _django-form-error-reporting: https://github.com/ministryofjustice/django-form-error-reporting
+.. _django-zendesk-tickets: https://github.com/ministryofjustice/django-zendesk-tickets
+.. _govuk-bank-holidays: https://github.com/ministryofjustice/govuk-bank-holidays
+.. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/

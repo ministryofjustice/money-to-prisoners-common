@@ -1,26 +1,36 @@
 version: "3.8"
 
+x-environment: &default-environment
+  # apps should define their own environment variables and fallbacks;
+  # only docker-compose-specific overrides should go here
+  PYTHONUNBUFFERED: "1"
+
+  DEBUG: "True"
+  ENV: local
+
+  API_URL: http://api:8000
+
 services:
+
   db:
-    container_name: mtp_api_db
-    image: postgres:10-alpine
+    container_name: mtp-api-db
+    image: postgres:10-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
     environment:
       POSTGRES_DB: mtp_api
       POSTGRES_USER: mtp_api
       POSTGRES_PASSWORD: postgres
     volumes:
       - db_data:/var/lib/postgresql/data
+
   api:
-    container_name: mtp_api
+    container_name: mtp-api
     stdin_open: true
     tty: true
     build:
       context: ../money-to-prisoners-api
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: api
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_api.settings.base
     ports:
       - "8000:8000"
       - "3000:3000"
@@ -34,107 +44,26 @@ services:
     #   && /venv/bin/python /app/run.py serve"
     links:
       - db
+    depends_on:
+      - db
     user: mtp
     environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_api.settings.base
-      DEBUG: "True"
+      <<: *default-environment
       DB_NAME: mtp_api
       DB_USERNAME: mtp_api
       DB_PASSWORD: postgres
       DB_HOST: db
       DB_PORT: 5432
-      PUBLIC_API_HOST: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
-    command: '/app/docker-entrypoint.sh'
-  noms-ops:
-    container_name: mtp_noms_ops
-    stdin_open: true
-    tty: true
-    build:
-      context: ../money-to-prisoners-noms-ops
-      dockerfile: $PWD/Dockerfile-dev
-      args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: noms-ops
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
-    ports:
-      - "8003:8003"
-      - "3003:3003"
-    volumes:
-      - ../money-to-prisoners-noms-ops:/app
-      - noms-ops_node_modules:/app/node_modules
-    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
-    #   - ../money-to-prisoners-common:/money-to-prisoners-common
-    # command: >
-    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
-    #   && /venv/bin/python /app/run.py serve"
-    links:
-      - api
-    user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_noms_ops.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
-  send-money:
-    container_name: mtp_send_money
-    stdin_open: true
-    tty: true
-    build:
-      context: ../money-to-prisoners-send-money
-      dockerfile: $PWD/Dockerfile-dev
-      args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: send-money
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
-    ports:
-      - "8004:8004"
-      - "3004:3004"
-    volumes:
-      - ../money-to-prisoners-send-money:/app
-      - send-money_node_modules:/app/node_modules
-    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
-    #   - ../money-to-prisoners-common:/money-to-prisoners-common
-    # command: >
-    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
-    #   && /venv/bin/python /app/run.py serve"
-    links:
-      - api
-    user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_send_money.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+
   cashbook:
-    container_name: mtp_cashbook
+    container_name: mtp-cashbook
     stdin_open: true
     tty: true
     build:
       context: ../money-to-prisoners-cashbook
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: cashbook
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
     ports:
       - "8001:8001"
       - "3001:3001"
@@ -148,30 +77,20 @@ services:
     #   && /venv/bin/python /app/run.py serve"
     links:
       - api
+    depends_on:
+      - api
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_cashbook.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      FIU_EMAIL: fiu-example@example.com
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
+
   bank-admin:
-    container_name: mtp_bank_admin
+    container_name: mtp-bank-admin
     stdin_open: true
     tty: true
     build:
       context: ../money-to-prisoners-bank-admin
-      dockerfile: $PWD/Dockerfile-dev
+      dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: bank-admin
-        LOCAL_DJANGO_SETTINGS_MODULE: mtp_bank_admin.settings.base
     ports:
       - "8002:8002"
       - "3002:3002"
@@ -185,20 +104,67 @@ services:
     #   && /venv/bin/python /app/run.py serve"
     links:
       - api
+    depends_on:
+      - api
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DJANGO_SETTINGS_MODULE: mtp_bank_admin.settings.base
-      DEBUG: "True"
-      API_URL: http://api:8000
-      PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
+
+  noms-ops:
+    container_name: mtp-noms-ops
+    stdin_open: true
+    tty: true
+    build:
+      context: ../money-to-prisoners-noms-ops
+      dockerfile: Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+    ports:
+      - "8003:8003"
+      - "3003:3003"
+    volumes:
+      - ../money-to-prisoners-noms-ops:/app
+      - noms-ops_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: >
+    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
+    #   && /venv/bin/python /app/run.py serve"
+    links:
+      - api
+    depends_on:
+      - api
+    user: mtp
+    environment: *default-environment
+
+  send-money:
+    container_name: mtp-send_money
+    stdin_open: true
+    tty: true
+    build:
+      context: ../money-to-prisoners-send-money
+      dockerfile: Dockerfile-dev
+      args:
+        ECR_ENDPOINT: ${ECR_ENDPOINT}
+    ports:
+      - "8004:8004"
+      - "3004:3004"
+    volumes:
+      - ../money-to-prisoners-send-money:/app
+      - send-money_node_modules:/app/node_modules
+    # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
+    #   - ../money-to-prisoners-common:/money-to-prisoners-common
+    # command: >
+    #   bash -c "/venv/bin/python /app/run.py python_dependencies --common-path ../money-to-prisoners-common
+    #   && /venv/bin/python /app/run.py serve"
+    links:
+      - api
+    depends_on:
+      - api
+    user: mtp
+    environment: *default-environment
+
   start-page:
-    container_name: mtp_start_page
+    container_name: mtp-start-page
     stdin_open: true
     tty: true
     build:
@@ -206,40 +172,15 @@ services:
       dockerfile: Dockerfile-dev
       args:
         ECR_ENDPOINT: ${ECR_ENDPOINT}
-        SERVICE: start-page
     ports:
       - "8005:8080"
-    links:
-      - send-money
     user: mtp
-    environment:
-      PYTHONUNBUFFERED: 1
-      ENV: local
-      DEBUG: "True"
-  # transaction-uploader:
-    # container_name: mtp_transaction-uploader
-    # build:
-      # context: ../money-to-prisoners-transaction-uploader
-      # dockerfile: $PWD/Dockerfile-dev
-      # args:
-        # ECR_ENDPOINT: ${ECR_ENDPOINT}
-        # SERVICE: transaction-uploader
-    # user: mtp
-    # environment:
-      # PYTHONUNBUFFERED: 1
-      # ENV: local
-      # DEBUG: "True"
-      # API_URL: http://api:8000
-      # PUBLIC_CASHBOOK_HOST: http://cashbook:8001
-      # PUBLIC_BANK_ADMIN_HOST: http://bank-admin:8002
-      # PUBLIC_NOMS_OPS_HOST: http://noms-ops:8003
-      # PUBLIC_SEND_MONEY_HOST: http://send-money:8004
-      # START_PAGE_URL: http://start-page:8005
+    environment: *default-environment
 
 volumes:
   db_data:
   api_node_modules:
-  noms-ops_node_modules:
   cashbook_node_modules:
-  send-money_node_modules:
   bank-admin_node_modules:
+  noms-ops_node_modules:
+  send-money_node_modules:
