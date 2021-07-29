@@ -18,7 +18,7 @@ with open('README.rst') as readme:
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
     'Django>=2.2,<2.3',
-    'django-anymail[mailgun]~=7.2',
+    'django-anymail[mailgun]~=8.4',
     'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
     'pytz>=2021.1',
@@ -27,31 +27,31 @@ install_requires = [
     'slumber>=0.7,<0.8',
     'selenium>=3.11,<4',
     'transifex-client>=0.14,<0.15',
-    'cryptography>=3.2,<4',
-    'PyJWT>=1.7,<2',
-    'kubernetes>=12,<13',  # corresponds to server version 1.16
+    'cryptography~=3.4',
+    'PyJWT~=2.1.0',
+    'kubernetes>=17,<19',  # corresponds to server version 1.17 or 1.18
     'prometheus_client>=0.6,<1',
-    'sentry-sdk~=1.1.0',
+    'sentry-sdk~=1.3.0',
     'libsass~=0.20',
-    'uWSGI==2.0.19.1',
+    'uWSGI~=2.0.19.1',
 
     # moj-built dependencies (should be locked versions)
     'django-form-error-reporting==0.9',
     'django-moj-irat==0.6',
     'django-zendesk-tickets==0.14',
-    'govuk-bank-holidays==0.8',
+    'govuk-bank-holidays==0.9',
 ]
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
-        'flake8~=3.8.0',
-        'pep8-naming~=0.11.0',
-        'flake8-bugbear~=20.11',
-        'flake8-quotes~=3.2',
-        'flake8-blind-except~=0.1.1',
+        'flake8~=3.9.0',
+        'flake8-blind-except~=0.2.0',
+        'flake8-bugbear~=21.0',
         'flake8-debugger~=4.0',
-        'responses~=0.12.0',
-        'twine~=3.3.0',
+        'flake8-quotes~=3.2.0',
+        'pep8-naming~=0.12.0',
+        'responses~=0.13.0',
+        'twine~=3.4',
     ],
 }
 
