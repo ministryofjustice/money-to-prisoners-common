@@ -33,7 +33,7 @@ install_requires = [
     'prometheus_client>=0.6,<1',
     'sentry-sdk~=1.3.0',
     'libsass~=0.20',
-    'uWSGI==2.0.19.1',
+    'uWSGI~=2.0.19.1',
 
     # moj-built dependencies (should be locked versions)
     'django-form-error-reporting==0.9',
