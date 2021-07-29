@@ -44,12 +44,12 @@ install_requires = [
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
-        'flake8~=3.8.0',
-        'pep8-naming~=0.11.0',
-        'flake8-bugbear~=20.11',
-        'flake8-quotes~=3.2',
-        'flake8-blind-except~=0.1.1',
+        'flake8~=3.9.0',
+        'flake8-blind-except~=0.2.0',
+        'flake8-bugbear~=21.0',
         'flake8-debugger~=4.0',
+        'flake8-quotes~=3.2.0',
+        'pep8-naming~=0.12.0',
         'responses~=0.12.0',
         'twine~=3.3.0',
     ],
