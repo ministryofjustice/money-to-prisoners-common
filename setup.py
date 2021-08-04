@@ -52,6 +52,7 @@ extras_require = {
         'pep8-naming~=0.12.0',
         'responses~=0.13.0',
         'twine~=3.4',
+        'watchdog~=2.1',
     ],
 }
 
