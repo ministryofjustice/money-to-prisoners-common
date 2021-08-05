@@ -16,10 +16,10 @@
 
         {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 
-        {% include 'mtp_common/forms/field.html' with field=form.first_name rows=1 input_classes="govuk-input--width-10" only %}
-        {% include 'mtp_common/forms/field.html' with field=form.last_name rows=1 input_classes="govuk-input--width-10" only %}
-        {% include 'mtp_common/forms/field.html' with field=form.email rows=1 input_classes="govuk-input--width-10" only %}
-        {% include 'mtp_common/forms/field.html' with field=form.username rows=1 input_classes="govuk-input--width-10" only %}
+        {% include 'mtp_common/forms/field.html' with field=form.first_name input_classes="govuk-input--width-10" only %}
+        {% include 'mtp_common/forms/field.html' with field=form.last_name input_classes="govuk-input--width-10" only %}
+        {% include 'mtp_common/forms/field.html' with field=form.email input_classes="govuk-input--width-10" only %}
+        {% include 'mtp_common/forms/field.html' with field=form.username input_classes="govuk-input--width-10" only %}
 
         {% block sign_up_extras_fields %}{% endblock %}
 
