@@ -21,7 +21,7 @@ class NotifyClient:
     def __init__(self):
         """
         Ensures GOV.UK Notify account exists and populates a map of template names to IDs
-        :raises TemplateError if templates with duplicate names exist
+        :raises TemplateError if templates with duplicate names exist or if the generic one is missing
         """
         self._template_map = {}
         self.client = NotificationsAPIClient(settings.GOVUK_NOTIFY_API_KEY)
@@ -36,10 +36,14 @@ class NotifyClient:
         for template in templates['templates']:
             if template['name'] in self._template_map:
                 duplicates.add(template['name'])
+            if template['name'] == 'generic' and '((message))' not in template['body']:
+                raise TemplateError('Email template ‘generic’ is missing `((message))` personalisation')
             self._template_map[template['name']] = template['id']
         if duplicates:
             # if duplicates are found, apps cannot reliably choose appropriate template
             raise TemplateError(f'Duplicate email template names found in GOV.UK Notify: {sorted(duplicates)}')
+        if 'generic' not in self._template_map:
+            raise TemplateError('Email template ‘generic’ not found')
 
     def get_template_id_for_name(self, template_name: str) -> str:
         """
@@ -90,3 +94,22 @@ class NotifyClient:
                     f'Problem sending {template_name} template email (ID: {message_id}) with reference `{reference}`'
                 )
         return message_ids
+
+    def send_plain_text_email(
+        self,
+        to: typing.Union[str, typing.List[str]],
+        message: str,
+        reference: str = None,
+        staff_email: bool = None,
+    ) -> typing.List[str]:
+        """
+        Send plain text email using the generic template with no control over subject or formatting/links
+        This should only be used as a last resort or exceptional fallback
+        """
+        return self.send_email(
+            template_name='generic',
+            to=to,
+            personalisation={'message': message},
+            reference=reference,
+            staff_email=staff_email,
+        )

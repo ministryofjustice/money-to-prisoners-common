@@ -36,6 +36,7 @@ def mock_all_templates_response(rsps, templates=()):
         f'{GOVUK_NOTIFY_API_BASE_URL}/v2/templates?type=email',
         match_querystring=True,
         json={'templates': templates or [
+            fake_template('0000', 'generic', required_personalisations=['message']),
             fake_template('11', 'test-template'),
             fake_template('12', 'test-template2'),
         ]},
@@ -99,6 +100,7 @@ class NotifyTestCase(SimpleTestCase):
         # if multiple templates have the same name, the client cannot be created
         with responses.RequestsMock() as rsps, self.assertRaises(TemplateError):
             mock_all_templates_response(rsps, templates=[
+                fake_template('0000', 'generic', required_personalisations=['message']),
                 fake_template('11', 'test-template'),
                 fake_template('12', 'test-template'),
             ])
@@ -141,6 +143,7 @@ class NotifyTestCase(SimpleTestCase):
         # can send a personalised email by checking params posted to GOV.UK Notify
         with responses.RequestsMock() as rsps:
             mock_all_templates_response(rsps, templates=[
+                fake_template('0000', 'generic', required_personalisations=['message']),
                 fake_template('11', 'test-template', required_personalisations=['first name']),
             ])
             client = NotifyClient.shared_client()
@@ -155,6 +158,7 @@ class NotifyTestCase(SimpleTestCase):
         # can send a personalised email with a reference by checking params posted to GOV.UK Notify
         with responses.RequestsMock() as rsps:
             mock_all_templates_response(rsps, templates=[
+                fake_template('0000', 'generic', required_personalisations=['message']),
                 fake_template('11', 'test-template', required_personalisations=['first name']),
             ])
             client = NotifyClient.shared_client()
@@ -196,3 +200,13 @@ class NotifyTestCase(SimpleTestCase):
             client.send_email('test-template', 'sample1@localhost')
             mock_send_email_response(rsps, '11', 'sample1@localhost', staff_email=False)
             client.send_email('test-template', 'sample1@localhost', staff_email=False)
+
+    @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)
+    def test_send_plain_text_email(self):
+        # can send a plain text email by checking params posted to GOV.UK Notify
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            message = 'Unformatted message\nwithout links'
+            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={'message': message})
+            client.send_plain_text_email('sample@localhost', message)

@@ -16,7 +16,6 @@ TODO:
  - testing utils to make mocking easier
  - delivery callbacks
  - collect email addresses that permanently fail?
- - use plain text template as a backup when a template is missing?
  - EmailBackend that attempts to send plain text emails?
 """
 from mtp_common.notify.client import NotifyClient, TemplateError  # noqa: F401
