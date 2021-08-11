@@ -13,7 +13,6 @@ NB: Only emails are handled currently
 TODO:
  - management command super class to assert templates exist during CI test and/or deploy steps
    - maybe schedule periodic runs?
- - appropriate reply-to id auto-selected if staff app
  - testing utils to make mocking easier
  - delivery callbacks
  - collect email addresses that permanently fail?

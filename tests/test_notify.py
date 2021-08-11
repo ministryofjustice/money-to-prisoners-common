@@ -7,6 +7,8 @@ from mtp_common.notify import NotifyClient, TemplateError
 
 GOVUK_NOTIFY_TEST_API_KEY = 'test-11111111-1111-1111-1111-111111111111-22222222-2222-2222-2222-222222222222'
 GOVUK_NOTIFY_API_BASE_URL = 'https://api.notifications.service.gov.uk'
+GOVUK_NOTIFY_TEST_REPLY_TO_STAFF = '1234'
+GOVUK_NOTIFY_TEST_REPLY_TO_PUBLIC = '3123'
 
 
 def fake_template(template_id, template_name, required_personalisations=()):
@@ -40,7 +42,7 @@ def mock_all_templates_response(rsps, templates=()):
     )
 
 
-def mock_send_email_response(rsps, template_id, to, personalisation=None, reference=None):
+def mock_send_email_response(rsps, template_id, to, personalisation=None, reference=None, staff_email=None):
     json_sent = {
         'template_id': template_id,
         'email_address': to,
@@ -49,6 +51,10 @@ def mock_send_email_response(rsps, template_id, to, personalisation=None, refere
         json_sent['personalisation'] = personalisation
     if reference:
         json_sent['reference'] = reference
+    if staff_email is True:
+        json_sent['email_reply_to_id'] = GOVUK_NOTIFY_TEST_REPLY_TO_STAFF
+    if staff_email is False:
+        json_sent['email_reply_to_id'] = GOVUK_NOTIFY_TEST_REPLY_TO_PUBLIC
 
     message_id = str(uuid.uuid4())
     json_received = {
@@ -163,3 +169,30 @@ class NotifyTestCase(SimpleTestCase):
             client.send_email(
                 'test-template', 'sample@localhost', personalisation=personalisation, reference=reference,
             )
+
+    @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
+                       GOVUK_NOTIFY_REPLY_TO_STAFF=GOVUK_NOTIFY_TEST_REPLY_TO_STAFF,
+                       GOVUK_NOTIFY_REPLY_TO_PUBLIC=GOVUK_NOTIFY_TEST_REPLY_TO_PUBLIC)
+    def test_choose_public_reply_to_address_by_default(self):
+        # public site should default to using public reply-to address, but allows overriding
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            mock_send_email_response(rsps, '11', 'sample1@localhost', staff_email=False)
+            client.send_email('test-template', 'sample1@localhost')
+            mock_send_email_response(rsps, '11', 'sample1@localhost', staff_email=True)
+            client.send_email('test-template', 'sample1@localhost', staff_email=True)
+
+    @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
+                       GOVUK_NOTIFY_REPLY_TO_STAFF=GOVUK_NOTIFY_TEST_REPLY_TO_STAFF,
+                       GOVUK_NOTIFY_REPLY_TO_PUBLIC=GOVUK_NOTIFY_TEST_REPLY_TO_PUBLIC,
+                       MOJ_INTERNAL_SITE=True)
+    def test_choose_staff_reply_to_address_if_internal_app(self):
+        # internal sites should default to using staff reply-to address, but allow overriding
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            mock_send_email_response(rsps, '11', 'sample1@localhost', staff_email=True)
+            client.send_email('test-template', 'sample1@localhost')
+            mock_send_email_response(rsps, '11', 'sample1@localhost', staff_email=False)
+            client.send_email('test-template', 'sample1@localhost', staff_email=False)
