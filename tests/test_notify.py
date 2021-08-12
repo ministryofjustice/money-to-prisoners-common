@@ -1,3 +1,4 @@
+from unittest import mock
 import uuid
 
 from django.core import mail
@@ -15,17 +16,21 @@ GOVUK_NOTIFY_TEST_REPLY_TO_PUBLIC = '3123'
 
 
 def fake_template(template_id, template_name, required_personalisations=()):
+    # fakes a template details response from GOV.UK Notify
+    # the template called "generic" is special and is always expected to exist
+    subject = 'Prisoner money' if template_name == 'generic' else 'Email subject'
+    body = 'Email body' if not required_personalisations else '\n'.join(
+        f'(({field}))'
+        for field in required_personalisations
+    )
     return {
         'type': 'email', 'postage': None, 'letter_contact_block': None,
         'created_at': '2021-08-11T11:00:00Z', 'updated_at': '2021-08-11T11:00:00Z', 'created_by': 'mtp@localhost',
         'version': 1,
         'id': template_id,
         'name': template_name,
-        'subject': 'Subject',
-        'body': 'Email ' + '\n'.join(
-            f'(({field}))'
-            for field in required_personalisations
-        ),
+        'subject': subject,
+        'body': body,
         'personalisation': {
             field: {'required': True}
             for field in required_personalisations
@@ -250,10 +255,62 @@ class NotifyEmailBackendTestCase(NotifyBaseTestCase):
 
 @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)
 class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
+    # used to pretend that only the generic template is registered
+    # so that this test case does not need to be updated for each new template registered with mtp-common
+    _pretend_registered_templates = {'generic': {
+        'subject': 'Prisoner money',
+        'body': '((message))',
+        'personalisation': ['message'],
+    }}
+
     @responses.activate
     def test_templates_are_registered(self):
+        # this test actually runs autodiscovery to register templates, all others mock out autodiscovery
         NotifyTemplateRegistry.get_all_templates.cache_clear()
         templates = NotifyTemplateRegistry.get_all_templates()
-        self.assertSetEqual(set(templates.keys()), {'generic'})
+        self.assertIn('generic', templates)
         for template_details in templates.values():
             self.assertSetEqual(set(template_details.keys()), {'subject', 'body', 'personalisation'})
+
+    @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value=_pretend_registered_templates)
+    def test_successful_template_checking(self, _mock_get_all_templates):
+        # pretend that only the generic template exists and check that matching api response produces no errors
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            error, messages = NotifyTemplateRegistry.check_notify_templates()
+            self.assertFalse(error)
+            self.assertEqual(len(messages), 0)
+
+    @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value={'generic': {
+        'subject': 'Just for testing',
+        'body': '((message))\n-----\nPrisoner money team',
+        'personalisation': ['message'],
+    }})
+    def test_template_checking_with_warnings(self, _mock_get_all_templates):
+        # pretend that the expected subject and body for the generic email was different
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            error, messages = NotifyTemplateRegistry.check_notify_templates()
+            self.assertFalse(error)
+            self.assertListEqual(
+                messages,
+                ['Email template ‘generic’ has different subject',
+                 'Email template ‘generic’ has different body copy']
+            )
+
+    @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value={'generic': {
+        'subject': 'Prisoner money',
+        'body': '((message))\n-----\n((footer))',
+        'personalisation': ['message', 'footer'],
+    }})
+    def test_template_checking_with_errors(self, _mock_get_all_templates):
+        # pretend that the generic email expected more personalisation
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            error, messages = NotifyTemplateRegistry.check_notify_templates()
+            self.assertTrue(error)
+            self.assertListEqual(
+                messages,
+                ['Email template ‘generic’ has different body copy',
+                 'Email template ‘generic’ is missing required personalisation: footer']
+            )
