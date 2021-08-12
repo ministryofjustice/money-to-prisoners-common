@@ -2,6 +2,7 @@ from unittest import mock
 import uuid
 
 from django.core import mail
+from django.core.management import call_command
 from django.test import SimpleTestCase, override_settings
 import responses
 
@@ -314,3 +315,9 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
                 ['Email template ‘generic’ has different body copy',
                  'Email template ‘generic’ is missing required personalisation: footer']
             )
+
+    @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value=_pretend_registered_templates)
+    def test_management_command(self, _mock_get_all_templates):
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            call_command('check_notify_templates', verbosity=0)

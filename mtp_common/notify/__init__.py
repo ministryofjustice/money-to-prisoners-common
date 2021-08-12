@@ -11,8 +11,6 @@ MTP apps must be able to find and refer to templates by ID. This module intends 
 NB: Only emails are handled currently
 
 TODO:
- - management command super class to assert templates exist during CI test and/or deploy steps
-   - maybe schedule periodic runs?
  - testing utils to make mocking easier
  - delivery callbacks
  - collect email addresses that permanently fail?
