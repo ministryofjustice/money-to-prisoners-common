@@ -11,7 +11,6 @@ MTP apps must be able to find and refer to templates by ID. This module intends 
 NB: Only emails are handled currently
 
 TODO:
- - testing utils to make mocking easier
  - delivery callbacks
  - collect email addresses that permanently fail?
 """
