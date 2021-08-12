@@ -5,6 +5,7 @@ from django.test import SimpleTestCase, override_settings
 import responses
 
 from mtp_common.notify import NotifyClient, TemplateError
+from mtp_common.notify.templates import NotifyTemplateRegistry
 from mtp_common.test_utils import silence_logger
 
 GOVUK_NOTIFY_TEST_API_KEY = 'test-11111111-1111-1111-1111-111111111111-22222222-2222-2222-2222-222222222222'
@@ -245,3 +246,14 @@ class NotifyEmailBackendTestCase(NotifyBaseTestCase):
                 to=['sample@localhost', 'sample1@localhost'], cc=['sample2@localhost'], bcc=['sample3@localhost'],
             ).send()
         self.assertEqual(len(mail.outbox), 0)
+
+
+@override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)
+class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
+    @responses.activate
+    def test_templates_are_registered(self):
+        NotifyTemplateRegistry.get_all_templates.cache_clear()
+        templates = NotifyTemplateRegistry.get_all_templates()
+        self.assertSetEqual(set(templates.keys()), {'generic'})
+        for template_details in templates.values():
+            self.assertSetEqual(set(template_details.keys()), {'subject', 'body', 'personalisation'})
