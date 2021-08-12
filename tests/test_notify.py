@@ -1,9 +1,11 @@
 import uuid
 
+from django.core import mail
 from django.test import SimpleTestCase, override_settings
 import responses
 
 from mtp_common.notify import NotifyClient, TemplateError
+from mtp_common.test_utils import silence_logger
 
 GOVUK_NOTIFY_TEST_API_KEY = 'test-11111111-1111-1111-1111-111111111111-22222222-2222-2222-2222-222222222222'
 GOVUK_NOTIFY_API_BASE_URL = 'https://api.notifications.service.gov.uk'
@@ -84,11 +86,13 @@ def mock_send_email_response(rsps, template_id, to, personalisation=None, refere
     )
 
 
-class NotifyTestCase(SimpleTestCase):
+class NotifyBaseTestCase(SimpleTestCase):
     def setUp(self):
         # ensure client is not reused
         NotifyClient.shared_client.cache_clear()
 
+
+class NotifyTestCase(NotifyBaseTestCase):
     @override_settings(GOVUK_NOTIFY_API_KEY='')
     def test_missing_settings(self):
         # client cannot be created if api key is missing
@@ -210,3 +214,34 @@ class NotifyTestCase(SimpleTestCase):
             message = 'Unformatted message\nwithout links'
             mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={'message': message})
             client.send_plain_text_email('sample@localhost', message)
+
+
+@override_settings(EMAIL_BACKEND='mtp_common.notify.email_backend.NotifyEmailBackend',
+                   GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)
+class NotifyEmailBackendTestCase(NotifyBaseTestCase):
+    def test_email_is_sent_using_notify(self):
+        # subject and body both appear in the plain text message body of the email
+        with responses.RequestsMock() as rsps, silence_logger():
+            mock_all_templates_response(rsps)
+            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={
+                'message': 'Email subject\n-------------\nUnformatted message\nwithout links',
+            })
+            mail.EmailMessage(
+                subject='Email subject', body='Unformatted message\nwithout links',
+                to=['sample@localhost'],
+            ).send()
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_email_is_sent_to_all_recipients(self):
+        # CCed and BBCed addresses also get sent an individual email (GOV.UK Notify does not permit multiple recipients)
+        with responses.RequestsMock() as rsps, silence_logger():
+            mock_all_templates_response(rsps)
+            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={'message': '1\n-\n2'})
+            mock_send_email_response(rsps, '0000', 'sample1@localhost', personalisation={'message': '1\n-\n2'})
+            mock_send_email_response(rsps, '0000', 'sample2@localhost', personalisation={'message': '1\n-\n2'})
+            mock_send_email_response(rsps, '0000', 'sample3@localhost', personalisation={'message': '1\n-\n2'})
+            mail.EmailMessage(
+                subject='1', body='2',
+                to=['sample@localhost', 'sample1@localhost'], cc=['sample2@localhost'], bcc=['sample3@localhost'],
+            ).send()
+        self.assertEqual(len(mail.outbox), 0)
