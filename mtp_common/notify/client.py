@@ -1,9 +1,10 @@
 import functools
+import io
 import logging
 import typing
 
 from django.conf import settings
-from notifications_python_client.notifications import NotificationsAPIClient
+from notifications_python_client import NotificationsAPIClient, prepare_upload
 
 logger = logging.getLogger('mtp')
 
@@ -78,6 +79,14 @@ class NotifyClient:
             reply_to = self.reply_to_public
         else:
             reply_to = self.reply_to_default
+        if personalisation:
+            prepared_files = {}
+            for field, content in personalisation.items():
+                if isinstance(content, bytes):
+                    prepared_files[field] = prepare_upload(io.BytesIO(content))
+                elif isinstance(content, (io.RawIOBase, io.BufferedIOBase)):
+                    prepared_files[field] = prepare_upload(content)
+            personalisation.update(prepared_files)
         message_ids = []
         for email_address in to:
             response = self.client.send_email_notification(

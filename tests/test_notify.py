@@ -1,3 +1,4 @@
+import pathlib
 from unittest import mock
 
 from django.core import mail
@@ -138,6 +139,26 @@ class NotifyTestCase(NotifyBaseTestCase):
             message = 'Unformatted message\nwithout links'
             mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={'message': message})
             client.send_plain_text_email('sample@localhost', message)
+
+    @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)
+    def test_send_email_with_files(self):
+        # can send an email attaching files and byte content (GOV.UK Notify converts these to download links)
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps, templates=[
+                fake_template('0000', 'generic', required_personalisations=['message']),
+                fake_template('333', 'two-files', required_personalisations=['open file', 'byte content']),
+            ])
+            client = NotifyClient.shared_client()
+            mock_send_email_response(rsps, '333', 'sample@localhost', personalisation={
+                'open file': {'file': 'AAAAAAA=', 'is_csv': False},
+                'byte content': {'file': 'MTIzNDU=', 'is_csv': False},
+            })
+            client.send_email('two-files', 'sample@localhost', personalisation={
+                # passes an open file handle
+                'open file': (pathlib.Path(__file__).parent / 'test_notify-5-null-bytes.bin').open('rb'),
+                # passes byte content directly
+                'byte content': b'12345',
+            })
 
 
 @override_settings(EMAIL_BACKEND='mtp_common.notify.email_backend.NotifyEmailBackend',
