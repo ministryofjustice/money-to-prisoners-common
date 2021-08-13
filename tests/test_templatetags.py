@@ -1,3 +1,4 @@
+import decimal
 from unittest import mock
 
 from django import forms
@@ -148,6 +149,57 @@ class TemplateTagTestCase(SimpleTestCase):
         render([1], '1', 'and')
         render([1, 'b'], '1 and b')
         render(range(10), '0, 1, 2, 3, 4, 5, 6, 7, 8 and 9')
+
+    def test_format_currency(self):
+        def render(template, value, expected):
+            template = '{% load mtp_common %}' + template
+            response = self.load_mocked_template(template, {'value': value})
+            content = response.content.decode('utf-8')
+            self.assertEqual(expected, content)
+
+        template = '{{ value|currency }}'
+        render(template, 0, '£0.00')
+        render(template, 1, '£0.01')
+        render(template, 100, '£1.00')
+        render(template, -4210, '-£42.10')
+        render(template, 30000, '£300.00')
+        render(template, 1841691287201, '£18,416,912,872.01')
+        render(template, decimal.Decimal('1234567890'), '£12,345,678.90')
+        for invalid in (False, True, None, '', '1234'):
+            render(template, invalid, str(invalid))
+
+        template = '{% currency value %}'
+        render(template, 0, '£0.00')
+        render(template, 1, '£0.01')
+        render(template, 100, '£1.00')
+        render(template, -4210, '-£42.10')
+        render(template, 30000, '£300.00')
+        render(template, 1841691287202, '£18,416,912,872.02')
+        render(template, decimal.Decimal('1234567890'), '£12,345,678.90')
+        for invalid in (False, True, None, '', '1234'):
+            render(template, invalid, str(invalid))
+
+        template = "{% currency value '' %}"
+        render(template, 0, '0.00')
+        render(template, 1, '0.01')
+        render(template, 100, '1.00')
+        render(template, -4210, '-42.10')
+        render(template, 30000, '300.00')
+        render(template, 1841691287203, '18,416,912,872.03')
+        render(template, decimal.Decimal('1234567890'), '12,345,678.90')
+        for invalid in (False, True, None, '', '1234'):
+            render(template, invalid, str(invalid))
+
+        template = '{% currency value trim_empty_pence=True %}'
+        render(template, 0, '£0')
+        render(template, 1, '£0.01')
+        render(template, 100, '£1')
+        render(template, -4200, '-£42')
+        render(template, 30000, '£300')
+        render(template, 1841691287200, '£18,416,912,872')
+        render(template, decimal.Decimal('1234567800'), '£12,345,678')
+        for invalid in (False, True, None, '', '1234'):
+            render(template, invalid, str(invalid))
 
     def test_format_postcode(self):
         def render(postcode, expected):

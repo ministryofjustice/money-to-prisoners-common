@@ -15,7 +15,7 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext, gettext_lazy as _, override
 
 from mtp_common.api import notifications_for_request
-from mtp_common.utils import and_join, format_postcode
+from mtp_common.utils import and_join, format_currency, format_postcode
 
 try:
     from sentry_sdk import client as sentry_client
@@ -35,6 +35,16 @@ def separate_thousands(value):
     if not isinstance(value, int):
         return value
     return '{:,}'.format(value)
+
+
+@register.filter(name='currency')
+def currency_filter(pence):
+    return format_currency(pence) or pence
+
+
+@register.simple_tag(name='currency')
+def currency_tag(pence, symbol='£', trim_empty_pence=False):
+    return format_currency(pence, symbol, trim_empty_pence) or pence
 
 
 @register.filter
