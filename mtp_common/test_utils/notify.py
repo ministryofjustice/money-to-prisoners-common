@@ -31,9 +31,6 @@ class NotifyMock(responses.RequestsMock):
     Assertions can be made on `send_email_calls` before the context manager exits.
     """
 
-    def __init__(self, assert_all_requests_are_fired=False, **kwargs):
-        super().__init__(assert_all_requests_are_fired=assert_all_requests_are_fired, **kwargs)
-
     def __enter__(self):
         # ensure client is not reused
         NotifyClient.shared_client.cache_clear()

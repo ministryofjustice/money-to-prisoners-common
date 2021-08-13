@@ -263,7 +263,7 @@ class SendEmailTestCase(SimpleTestCase):
             raise APIError
 
         mocked_send_email.side_effect = count_calls_and_raise_error
-        with self.assertRaises(APIError), NotifyMock():
+        with self.assertRaises(APIError), NotifyMock(assert_all_requests_are_fired=False):
             send_email('generic', 'admin@mtp.local', retry_attempts=10)
         self.assertEqual(state['calls'], 1)
         self.assertTrue(logger.exception.called, True)
@@ -284,7 +284,7 @@ class SendEmailTestCase(SimpleTestCase):
 
         mocked_send_email.side_effect = count_calls_and_raise_error
         uwsgi.spool = spooler.__call__
-        with NotifyMock():
+        with NotifyMock(assert_all_requests_are_fired=False):
             send_email('generic', 'admin@mtp.local', retry_attempts=3)
         self.assertEqual(state['calls'], 4)
         self.assertTrue(logger.exception.called, True)
