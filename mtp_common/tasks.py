@@ -1,97 +1,46 @@
-from email.utils import parseaddr
 import logging
-from urllib.parse import urljoin
+import typing
 
-from anymail.exceptions import AnymailRequestsAPIError
-from anymail.message import AnymailMessage
-from django.conf import settings
-from django.core.mail.backends.console import EmailBackend as ConsoleEmailBackend
-from django.template import loader
-from django.utils.encoding import force_text
-from django.utils.translation import activate, get_language
+from notifications_python_client.errors import APIError
 
+from mtp_common.notify import NotifyClient
 from mtp_common.spooling import Context, spoolable
 
 logger = logging.getLogger('mtp')
 
 
 @spoolable()
-def send_email(to, text_template, subject, context=None, html_template=None, from_address=None,
-               anymail_tags=(), retry_attempts=2, spoolable_ctx: Context = None):
-    from_address = from_address or default_from_address()
-    if not isinstance(to, (list, tuple)):
-        to = [to]
-    template_context = prepare_context(context)
-
-    email = prepare_email(from_address, to, subject, text_template, html_template, template_context, anymail_tags)
-
-    if settings.ENVIRONMENT != 'prod':
-        if all(is_test_email(recipient) for recipient in email.recipients()):
-            ConsoleEmailBackend(fail_silently=False).write_message(email)
-            return
-
+def send_email(
+    template_name: str,
+    to: typing.Union[str, typing.List[str]],
+    personalisation: dict = None,
+    reference: str = None,
+    staff_email: bool = None,
+    retry_attempts: int = 2,
+    spoolable_ctx: Context = None,
+):
+    """
+    Asynchronously sends an email using GOV.UK Notify.
+    A temporary error or connection problem allows the spooler to retry twice by default.
+    If a template is missing, the spooler will not retry.
+    """
+    client = NotifyClient.shared_client()
     try:
-        email.send()
-    except AnymailRequestsAPIError as e:
-        if hasattr(e, 'status_code') and e.status_code == 400:
-            try:
-                message = e.response.json()['message']
-            except (AttributeError, TypeError, ValueError, KeyError):
-                message = 'Mailgun 400 response'
-            if "'to' parameter is not a valid address" in message:
-                logger.warning(message)
-            else:
-                logger.exception(message)
-            return
+        client.send_email(
+            template_name=template_name,
+            to=to,
+            personalisation=personalisation,
+            reference=reference,
+            staff_email=staff_email,
+        )
+    except APIError:
         if not spoolable_ctx.spooled or not retry_attempts:
             raise
-        send_email(to, text_template, subject, context=context,
-                   html_template=html_template, from_address=from_address,
-                   anymail_tags=anymail_tags,
-                   retry_attempts=retry_attempts - 1)
-
-
-def default_from_address():
-    return getattr(settings, 'MAILGUN_FROM_ADDRESS', '') or settings.DEFAULT_FROM_EMAIL
-
-
-def prepare_context(context=None):
-    if hasattr(settings, 'PUBLIC_STATIC_URL'):
-        static_url = settings.PUBLIC_STATIC_URL
-    else:
-        static_url = urljoin(settings.SITE_URL, settings.STATIC_URL)
-    return {
-        'static_url': static_url,
-        **(context or {})
-    }
-
-
-def prepare_email(from_address, to, subject, text_template, html_template, template_context, anymail_tags):
-    if not get_language():
-        language = getattr(settings, 'LANGUAGE_CODE', 'en')
-        activate(language)
-
-    text_body = loader.get_template(text_template).render(template_context)
-    email = AnymailMessage(
-        subject=subject,
-        body=text_body.strip('\n'),
-        from_email=from_address,
-        to=to
-    )
-    if anymail_tags:
-        email.tags = list(map(force_text, anymail_tags))
-    if html_template:
-        html_body = loader.get_template(html_template).render(template_context)
-        email.attach_alternative(html_body, 'text/html')
-    return email
-
-
-def is_test_email(address):
-    try:
-        address = parseaddr(force_text(address))[1]
-        return any(
-            address.endswith(domain)
-            for domain in ('@local', '.local')
+        send_email(
+            template_name=template_name,
+            to=to,
+            personalisation=personalisation,
+            reference=reference,
+            staff_email=staff_email,
+            retry_attempts=retry_attempts - 1,
         )
-    except ValueError:
-        pass
