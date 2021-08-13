@@ -64,8 +64,8 @@ class NotifyTemplateRegistry:
 
             # check body
             if (
-                template_details['body'].strip() !=
-                notify_template['body'].strip()
+                template_details['body'].splitlines() !=
+                notify_template['body'].splitlines()
             ):
                 messages.append(f'Email template ‘{template_name}’ has different body copy')
 
