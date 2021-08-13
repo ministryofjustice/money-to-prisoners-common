@@ -242,7 +242,7 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
         'body': '((message))\n-----\n((footer))',
         'personalisation': ['message', 'footer'],
     }})
-    def test_template_checking_with_errors(self, _mock_get_all_templates):
+    def test_template_checking_with_missing_personalisation(self, _mock_get_all_templates):
         # pretend that the generic email expected more personalisation
         with responses.RequestsMock() as rsps:
             mock_all_templates_response(rsps)
@@ -252,6 +252,23 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
                 messages,
                 ['Email template ‘generic’ has different body copy',
                  'Email template ‘generic’ is missing required personalisation: footer']
+            )
+
+    @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value={'generic': {
+        'subject': 'Prisoner money',
+        'body': 'No personalised content',
+        'personalisation': [],
+    }})
+    def test_template_checking_with_unexpected_personalisation(self, _mock_get_all_templates):
+        # pretend that the generic email expected less personalisation
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            error, messages = NotifyTemplateRegistry.check_notify_templates()
+            self.assertTrue(error)
+            self.assertListEqual(
+                messages,
+                ['Email template ‘generic’ has different body copy',
+                 'Email template ‘generic’ requires unexpected personalisation: message']
             )
 
     @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value=_pretend_registered_templates)

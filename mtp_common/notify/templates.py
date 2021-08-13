@@ -32,7 +32,8 @@ class NotifyTemplateRegistry:
     def check_notify_templates(cls) -> (bool, typing.List[str]):
         """
         Checks that templates exist in GOV.UK Notify and whether their contents are as expected.
-        If a template is missing or does not include an expected personalisation, it's considered to be an error.
+        If a template is missing or does not include an expected personalisation or requires unexpected personalisation,
+        it's considered to be an error.
         If a template's subject of body does not match what's expected, it's considered a warning.
         :returns (bool, [str]) with the boolean flag indicating a hard error and a list of warning/error messages
         """
@@ -69,13 +70,22 @@ class NotifyTemplateRegistry:
                 messages.append(f'Email template ‘{template_name}’ has different body copy')
 
             # check personalisation
-            notify_template_personalisation = set(notify_template.get('personalisation', {}))
+            notify_template_personalisation = notify_template.get('personalisation', {})
             expected_personalisation = set(template_details['personalisation'])
-            missing_personalisation = expected_personalisation.difference(notify_template_personalisation)
+            missing_personalisation = expected_personalisation.difference(set(notify_template_personalisation))
+            unexpected_personalisation = set(
+                field
+                for field, details in notify_template_personalisation.items()
+                if details.get('required')
+            ).difference(expected_personalisation)
             if missing_personalisation:
                 error = True
                 missing = ', '.join(missing_personalisation)
                 messages.append(f'Email template ‘{template_name}’ is missing required personalisation: {missing}')
+            if unexpected_personalisation:
+                error = True
+                missing = ', '.join(unexpected_personalisation)
+                messages.append(f'Email template ‘{template_name}’ requires unexpected personalisation: {missing}')
 
         return error, messages
 
