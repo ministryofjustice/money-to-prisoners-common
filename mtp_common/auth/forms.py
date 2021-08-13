@@ -255,18 +255,15 @@ class EmailChangeForm(GARequestErrorReportingMixin, forms.Form):
         if self.is_valid():
             email = self.cleaned_data.get('email')
             send_email(
-                self.request.user.email,
-                'mtp_common/auth/email-change-email.txt',
-                _('Your prisoner money email address has been changed'),
-                context={
-                    'user': self.request.user,
+                template_name='common-change-email',
+                to=self.request.user.email,
+                personalisation={
+                    'first_name': self.request.user.first_name,
                     'new_email': email,
                     'site_url': settings.SITE_URL,
                     'feedback_url': urljoin(settings.SITE_URL, reverse('submit_ticket')),
-                    'staff_email': True,
                 },
-                html_template='mtp_common/auth/email-change-email.html',
-                anymail_tags=['change-email'],
+                staff_email=True,
             )
             try:
                 session = api_client.get_api_session(self.request)

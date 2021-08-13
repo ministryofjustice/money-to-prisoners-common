@@ -1,4 +1,5 @@
 import functools
+import textwrap
 import typing
 
 from django.utils.module_loading import autodiscover_modules
@@ -89,5 +90,19 @@ class CommonNotifyTemplates(NotifyTemplateRegistry):
             'subject': 'Prisoner money',
             'body': '((message))',
             'personalisation': ['message'],
+        },
+        'common-change-email': {
+            'subject': 'Your prisoner money email address has been changed',
+            'body': textwrap.dedent("""
+                Dear ((first_name)),
+
+                The email address associated with your account at ((site_url)) was recently changed to ((new_email)).
+
+                If this action was not taken by you, please contact us at ((feedback_url)) immediately.
+
+                Kind regards,
+                Prisoner money team
+            """).strip(),
+            'personalisation': ['first_name', 'site_url', 'new_email', 'feedback_url'],
         },
     }
