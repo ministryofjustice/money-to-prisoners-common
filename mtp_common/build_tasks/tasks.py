@@ -34,13 +34,8 @@ def serve(context: Context, port=8000, browsersync_port=3000, browsersync_ui_por
     """
     Starts a development server with auto-building and live-reload
     """
-    try:
-        from watchdog.observers import Observer
-    except ImportError:
-        context.pip_command('install', 'watchdog>0.8,<0.9')
-        from watchdog.observers import Observer
-
     from watchdog.events import PatternMatchingEventHandler
+    from watchdog.observers import Observer
 
     class RebuildHandler(PatternMatchingEventHandler):
         def __init__(self, *args, **kwargs):
