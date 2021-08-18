@@ -18,9 +18,9 @@ with open('README.rst') as readme:
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
     'Django>=2.2,<2.3',
-    'django-anymail[mailgun]~=8.4',
     'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
+    'notifications-python-client~=6.2',
     'pytz>=2021.1',
     'requests>=2.18,<3',
     'requests-oauthlib>=1,<2',
