@@ -95,11 +95,11 @@ class CommonNotifyTemplates(NotifyTemplateRegistry):
     Templates that mtp-common expects to exist in GOV.UK Notify
     """
     templates = {
-        # this template is used as a fallback to send plain text messages with a generic subject
         'generic': {
-            'subject': 'Prisoner money',
+            # this template is only used as a fallback to send plain text messages, e.g. using the Django email backend
+            'subject': '((subject))',
             'body': '((message))',
-            'personalisation': ['message'],
+            'personalisation': ['subject', 'message'],
         },
         'common-change-email': {
             'subject': 'Your prisoner money email address has been changed',

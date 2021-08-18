@@ -136,9 +136,13 @@ class NotifyTestCase(NotifyBaseTestCase):
         with responses.RequestsMock() as rsps:
             mock_all_templates_response(rsps)
             client = NotifyClient.shared_client()
+            subject = 'Test subject'
             message = 'Unformatted message\nwithout links'
-            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={'message': message})
-            client.send_plain_text_email('sample@localhost', message)
+            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={
+                'subject': subject,
+                'message': message,
+            })
+            client.send_plain_text_email('sample@localhost', subject, message)
 
     @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)
     def test_send_email_with_files(self):
@@ -169,7 +173,8 @@ class NotifyEmailBackendTestCase(NotifyBaseTestCase):
         with responses.RequestsMock() as rsps, silence_logger():
             mock_all_templates_response(rsps)
             mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={
-                'message': 'Email subject\n-------------\nUnformatted message\nwithout links',
+                'subject': 'Email subject',
+                'message': 'Unformatted message\nwithout links',
             })
             mail.EmailMessage(
                 subject='Email subject', body='Unformatted message\nwithout links',
@@ -179,14 +184,18 @@ class NotifyEmailBackendTestCase(NotifyBaseTestCase):
 
     def test_email_is_sent_to_all_recipients(self):
         # CCed and BBCed addresses also get sent an individual email (GOV.UK Notify does not permit multiple recipients)
+        personalisation = {
+            'subject': 'Email title',
+            'message': 'Body text\r\nFooter\r\n',
+        }
         with responses.RequestsMock() as rsps, silence_logger():
             mock_all_templates_response(rsps)
-            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation={'message': '1\n-\n2'})
-            mock_send_email_response(rsps, '0000', 'sample1@localhost', personalisation={'message': '1\n-\n2'})
-            mock_send_email_response(rsps, '0000', 'sample2@localhost', personalisation={'message': '1\n-\n2'})
-            mock_send_email_response(rsps, '0000', 'sample3@localhost', personalisation={'message': '1\n-\n2'})
+            mock_send_email_response(rsps, '0000', 'sample@localhost', personalisation=personalisation)
+            mock_send_email_response(rsps, '0000', 'sample1@localhost', personalisation=personalisation)
+            mock_send_email_response(rsps, '0000', 'sample2@localhost', personalisation=personalisation)
+            mock_send_email_response(rsps, '0000', 'sample3@localhost', personalisation=personalisation)
             mail.EmailMessage(
-                subject='1', body='2',
+                subject='Email title', body='Body text\r\nFooter\r\n',
                 to=['sample@localhost', 'sample1@localhost'], cc=['sample2@localhost'], bcc=['sample3@localhost'],
             ).send()
         self.assertEqual(len(mail.outbox), 0)
@@ -197,9 +206,9 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
     # used to pretend that only the generic template is registered
     # so that this test case does not need to be updated for each new template registered with mtp-common
     _pretend_registered_templates = {'generic': {
-        'subject': 'Prisoner money',
+        'subject': '((subject))',
         'body': '((message))',
-        'personalisation': ['message'],
+        'personalisation': ['subject', 'message'],
     }}
 
     @responses.activate
@@ -221,9 +230,9 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
             self.assertEqual(len(messages), 0)
 
     @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value={'generic': {
-        'subject': 'Just for testing',
+        'subject': 'Prisoner money: ((subject))',
         'body': '((message))\n-----\nPrisoner money team',
-        'personalisation': ['message'],
+        'personalisation': ['subject', 'message'],
     }})
     def test_template_checking_with_warnings(self, _mock_get_all_templates):
         # pretend that the expected subject and body for the generic email was different
@@ -238,9 +247,9 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
             )
 
     @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value={'generic': {
-        'subject': 'Prisoner money',
+        'subject': '((subject))',
         'body': '((message))\n-----\n((footer))',
-        'personalisation': ['message', 'footer'],
+        'personalisation': ['subject', 'message', 'footer'],
     }})
     def test_template_checking_with_missing_personalisation(self, _mock_get_all_templates):
         # pretend that the generic email expected more personalisation
@@ -255,9 +264,9 @@ class NotifyTemplateRegistryTestCase(NotifyBaseTestCase):
             )
 
     @mock.patch.object(NotifyTemplateRegistry, 'get_all_templates', return_value={'generic': {
-        'subject': 'Prisoner money',
-        'body': 'No personalised content',
-        'personalisation': [],
+        'subject': '((subject))',
+        'body': 'No personalised content in the body',
+        'personalisation': ['subject'],
     }})
     def test_template_checking_with_unexpected_personalisation(self, _mock_get_all_templates):
         # pretend that the generic email expected less personalisation

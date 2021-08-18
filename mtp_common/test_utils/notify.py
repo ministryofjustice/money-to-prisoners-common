@@ -102,12 +102,17 @@ _base_email_template_response = {
 
 def fake_template(template_id, template_name, required_personalisations=()):
     # fakes a template details response from GOV.UK Notify
-    # the template called "generic" is special and is always expected to exist
-    subject = 'Prisoner money' if template_name == 'generic' else 'Email subject'
-    body = 'Email body' if not required_personalisations else '\n'.join(
-        f'(({field}))'
-        for field in required_personalisations
-    )
+    if template_name == 'generic':
+        # the template called "generic" is special and is always expected to exist
+        # it's a fallback used to be able to send a message with any subject and body
+        subject = '((subject))'
+        body = '((message))'
+    else:
+        subject = 'Email subject'
+        body = 'Email body' if not required_personalisations else '\n'.join(
+            f'(({field}))'
+            for field in required_personalisations
+        )
     return dict(
         _base_email_template_response,
         id=template_id,
@@ -127,7 +132,7 @@ def mock_all_templates_response(rsps, templates=()):
         f'{GOVUK_NOTIFY_API_BASE_URL}/v2/templates?type=email',
         match_querystring=True,
         json={'templates': templates or [
-            fake_template('0000', 'generic', required_personalisations=['message']),
+            fake_template('0000', 'generic', required_personalisations=['subject', 'message']),
             fake_template('11', 'test-template'),
             fake_template('12', 'test-template2'),
         ]},

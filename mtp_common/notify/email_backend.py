@@ -13,7 +13,6 @@ class NotifyEmailBackend(BaseEmailBackend):
     """
     Email backend that uses NotifyClient to send plain text emails.
     Should only be used as a fallback because attachments, links and formatting are not supported.
-    The email subject becomes part of the email body text.
     MTP apps should use the `send_email` task instead with this backend handling emails for core Django functionality.
     """
 
@@ -21,12 +20,10 @@ class NotifyEmailBackend(BaseEmailBackend):
         for email_message in email_messages:
             to = email_message.to + email_message.cc + email_message.bcc
             subject = email_message.subject
-            rule = '-' * len(subject)
-            body = email_message.body
-            message = f'{subject}\n{rule}\n{body}'
+            message = email_message.body
             if email_message.attachments:
                 logger.error(
-                    f'Sending email ‘{subject}’ using GOV.UK Notify but discarding attachments. '
+                    f'Sending email ‘{subject}’ using GOV.UK Notify but discarding attachments! '
                     f'Avoid using {self.__class__.__name__}, it should only exist as a fallback.'
                 )
             else:
@@ -36,6 +33,7 @@ class NotifyEmailBackend(BaseEmailBackend):
                 )
             NotifyClient.shared_client().send_plain_text_email(
                 to=to,
+                subject=subject,
                 message=message,
             )
         return len(email_messages)

@@ -37,8 +37,11 @@ class NotifyClient:
         for template in templates['templates']:
             if template['name'] in self._template_map:
                 duplicates.add(template['name'])
-            if template['name'] == 'generic' and '((message))' not in template['body']:
-                raise TemplateError('Email template ‘generic’ is missing `((message))` personalisation')
+            if template['name'] == 'generic':
+                if '((subject))' not in template['subject']:
+                    raise TemplateError('Email template ‘generic’ is missing `((subject))` subject personalisation')
+                if '((message))' not in template['body']:
+                    raise TemplateError('Email template ‘generic’ is missing `((message))` body personalisation')
             self._template_map[template['name']] = template['id']
         if duplicates:
             # if duplicates are found, apps cannot reliably choose appropriate template
@@ -107,18 +110,22 @@ class NotifyClient:
     def send_plain_text_email(
         self,
         to: typing.Union[str, typing.List[str]],
+        subject: str,
         message: str,
         reference: str = None,
         staff_email: bool = None,
     ) -> typing.List[str]:
         """
-        Send plain text email using the generic template with no control over subject or formatting/links
+        Send plain text email using the generic template with no control over formatting/links
         This should only be used as a last resort or exceptional fallback
         """
         return self.send_email(
             template_name='generic',
             to=to,
-            personalisation={'message': message},
+            personalisation={
+                'subject': subject,
+                'message': message,
+            },
             reference=reference,
             staff_email=staff_email,
         )
