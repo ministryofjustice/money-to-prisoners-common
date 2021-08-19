@@ -43,6 +43,14 @@ class MojUser:
     def email(self):
         return self.user_data.get('email')
 
+    @property
+    def first_name(self):
+        return self.user_data.get('first_name')
+
+    @property
+    def last_name(self):
+        return self.user_data.get('last_name')
+
     def get_full_name(self):
         if not hasattr(self, '_full_name'):
             name_parts = [
@@ -76,6 +84,8 @@ class MojAnonymousUser:
     token = None
     user_data = {}
     username = ''
+    first_name = ''
+    last_name = ''
     email = ''
 
     def get_full_name(self):

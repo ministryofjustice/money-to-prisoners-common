@@ -7,7 +7,7 @@ from mtp_common.auth.test_utils import generate_tokens
 class UserPermissionsTestCase(SimpleTestCase):
 
     def setUp(self, *args, **kwargs):
-        super(UserPermissionsTestCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
 
         self.user = MojUser(5, generate_tokens(), {
             'first_name': 'Sam',
@@ -18,6 +18,12 @@ class UserPermissionsTestCase(SimpleTestCase):
                 'allowed_permission_3'
             ]
         })
+
+    def test_fields(self):
+        self.assertEqual(self.user.first_name, 'Sam')
+        self.assertEqual(self.user.last_name, 'Hall')
+        self.assertEqual(self.user.get_full_name(), 'Sam Hall')
+        self.assertFalse(self.user.email)
 
     def test_has_perm_succeeds_if_present(self):
         self.assertTrue(self.user.has_perm('allowed_permission_1'))
