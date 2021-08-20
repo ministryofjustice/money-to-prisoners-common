@@ -204,8 +204,7 @@ class SpoolableTestCase(unittest.TestCase):
         self.assertTrue(logger.error.called, True)
 
 
-@override_settings(APP='common', ENVIRONMENT='local',
-                   GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
+@override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
                    GOVUK_NOTIFY_REPLY_TO_STAFF=GOVUK_NOTIFY_TEST_REPLY_TO_STAFF)
 @unittest.skipIf(spooler.installed, 'Cannot test spoolable tasks under uWSGI')
 class SendEmailTestCase(SimpleTestCase):
@@ -250,7 +249,6 @@ class SendEmailTestCase(SimpleTestCase):
 
         self.assertEqual(len(mail.outbox), 0)
 
-    @override_settings(ENVIRONMENT='prod')
     @mock.patch('mtp_common.spooling.logger')
     @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
     def test_synchronous_send_email_does_not_retry(self, mocked_send_email, logger):
@@ -268,7 +266,6 @@ class SendEmailTestCase(SimpleTestCase):
         self.assertEqual(state['calls'], 1)
         self.assertTrue(logger.exception.called, True)
 
-    @override_settings(ENVIRONMENT='prod')
     @mock.patch.object(spooler, 'installed', True)
     @mock.patch('mtp_common.spooling.logger')
     @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
