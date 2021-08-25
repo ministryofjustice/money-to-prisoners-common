@@ -59,6 +59,18 @@ class NotifyClient:
         except KeyError:
             raise TemplateError(f'Email template ‘{template_name}’ not found')
 
+    @classmethod
+    def can_send_email_to_address(cls, email_address: str) -> bool:
+        """
+        Returns False for email addresses whose domain name is configured to be ignored in non-production
+        This is useful in order to prevent fake email addresses leading to error responses from GOV.UK Notify
+        """
+        if settings.ENVIRONMENT != 'prod':
+            email_domain = email_address.split('@', 1)[1]
+            if email_domain.lower() in getattr(settings, 'GOVUK_NOTIFY_BLOCKED_DOMAINS', ()):
+                return False
+        return True
+
     def send_email(
         self,
         template_name: str,
@@ -66,7 +78,7 @@ class NotifyClient:
         personalisation: dict = None,
         reference: str = None,
         staff_email: bool = None,
-    ) -> typing.List[str]:
+    ) -> typing.List[typing.Optional[str]]:
         """
         Sends a templated email via GOV.UK Notify with personalisations
         :returns list of GOV.UK Notify message IDs
@@ -92,6 +104,12 @@ class NotifyClient:
             personalisation.update(prepared_files)
         message_ids = []
         for email_address in to:
+            if not self.can_send_email_to_address(email_address):
+                logger.warning(
+                    f'Skipping sending {template_name} template email to {email_address} because domain is ignored'
+                )
+                message_ids.append(None)
+                continue
             response = self.client.send_email_notification(
                 email_address=email_address,
                 template_id=template_id,
@@ -102,7 +120,7 @@ class NotifyClient:
             message_id = response.get('id')
             message_ids.append(message_id)
             if not message_id or response.get('reference') != reference:
-                logging.exception(
+                logger.exception(
                     f'Problem sending {template_name} template email (ID: {message_id}) with reference `{reference}`'
                 )
         return message_ids

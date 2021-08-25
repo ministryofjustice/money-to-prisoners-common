@@ -164,6 +164,60 @@ class NotifyTestCase(NotifyBaseTestCase):
                 'byte content': b'12345',
             })
 
+    @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
+                       GOVUK_NOTIFY_BLOCKED_DOMAINS={'mtp.local', 'localhost'},
+                       ENVIRONMENT='test')
+    @mock.patch('mtp_common.notify.client.logger')
+    def test_emails_not_sent_to_blocked_domains(self, mock_logger):
+        # in non-prod environments, specified email domain will not have emails sent to them
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            message_ids = client.send_email('test-template', ['sample@mtp.local', 'root@localhost'])
+        self.assertSequenceEqual(message_ids, [None, None])
+        self.assertEqual(mock_logger.warning.call_count, 2)
+
+        NotifyClient.shared_client.cache_clear()
+        mock_logger.reset_mock()
+
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            mock_send_email_response(rsps, '12', 'sample@outside.local')
+            message_ids = client.send_email('test-template2', ['sample@outside.local', 'root@localhost'])
+        self.assertEqual(len(message_ids), 2)
+        self.assertIsNotNone(message_ids[0])
+        self.assertIsNone(message_ids[1])
+        self.assertEqual(mock_logger.warning.call_count, 1)
+
+    @override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
+                       GOVUK_NOTIFY_BLOCKED_DOMAINS={'mtp.local', 'localhost'},
+                       ENVIRONMENT='prod')
+    @mock.patch('mtp_common.notify.client.logger')
+    def test_emails_still_sent_to_blocked_domains_in_production(self, mock_logger):
+        # in prod environment, emails are always sent
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            mock_send_email_response(rsps, '11', 'sample@mtp.local')
+            mock_send_email_response(rsps, '11', 'root@localhost')
+            message_ids = client.send_email('test-template', ['sample@mtp.local', 'root@localhost'])
+        self.assertEqual(len(message_ids), 2)
+        self.assertNotIn(None, message_ids)
+
+        NotifyClient.shared_client.cache_clear()
+
+        with responses.RequestsMock() as rsps:
+            mock_all_templates_response(rsps)
+            client = NotifyClient.shared_client()
+            mock_send_email_response(rsps, '12', 'sample@outside.local')
+            mock_send_email_response(rsps, '12', 'root@localhost')
+            message_ids = client.send_email('test-template2', ['sample@outside.local', 'root@localhost'])
+        self.assertEqual(len(message_ids), 2)
+        self.assertNotIn(None, message_ids)
+
+        mock_logger.warning.assert_not_called()
+
 
 @override_settings(EMAIL_BACKEND='mtp_common.notify.email_backend.NotifyEmailBackend',
                    GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY)

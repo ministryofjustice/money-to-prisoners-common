@@ -24,6 +24,7 @@ Features
 * Cookie management tools to anonymise users and allow them to opt in
 * Prometheus metrics view providing app version information
 * Constants shared between apps
+* Email sending using GOV.UK Notify
 
 Usage
 -----

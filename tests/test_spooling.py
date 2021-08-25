@@ -5,7 +5,8 @@ from unittest import mock
 
 from django.core import mail
 from django.test.utils import override_settings
-from notifications_python_client.errors import APIError
+from notifications_python_client.errors import APIError, HTTPError, InvalidResponse
+from requests import RequestException
 
 from mtp_common.spooling import Context, Task, spoolable, spooler
 from mtp_common.test_utils.notify import NotifyMock, GOVUK_NOTIFY_TEST_API_KEY, GOVUK_NOTIFY_TEST_REPLY_TO_STAFF
@@ -204,8 +205,7 @@ class SpoolableTestCase(unittest.TestCase):
         self.assertTrue(logger.error.called, True)
 
 
-@override_settings(APP='common', ENVIRONMENT='local',
-                   GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
+@override_settings(GOVUK_NOTIFY_API_KEY=GOVUK_NOTIFY_TEST_API_KEY,
                    GOVUK_NOTIFY_REPLY_TO_STAFF=GOVUK_NOTIFY_TEST_REPLY_TO_STAFF)
 @unittest.skipIf(spooler.installed, 'Cannot test spoolable tasks under uWSGI')
 class SendEmailTestCase(SimpleTestCase):
@@ -250,7 +250,6 @@ class SendEmailTestCase(SimpleTestCase):
 
         self.assertEqual(len(mail.outbox), 0)
 
-    @override_settings(ENVIRONMENT='prod')
     @mock.patch('mtp_common.spooling.logger')
     @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
     def test_synchronous_send_email_does_not_retry(self, mocked_send_email, logger):
@@ -268,23 +267,84 @@ class SendEmailTestCase(SimpleTestCase):
         self.assertEqual(state['calls'], 1)
         self.assertTrue(logger.exception.called, True)
 
-    @override_settings(ENVIRONMENT='prod')
-    @mock.patch.object(spooler, 'installed', True)
-    @mock.patch('mtp_common.spooling.logger')
-    @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
-    @mock.patch('mtp_common.spooling.uwsgi')
-    def test_asynchronous_send_email_retries(self, uwsgi, mocked_send_email, logger):
+    def assertAsynchronousSendEmailRetries(self, uwsgi, mocked_send_email, logger, error_to_raise):  # noqa: N802
         from mtp_common.tasks import send_email
 
         state = {'calls': 0}
 
         def count_calls_and_raise_error(*args, **kwargs):
             state['calls'] += 1
-            raise APIError
+            raise error_to_raise
 
         mocked_send_email.side_effect = count_calls_and_raise_error
         uwsgi.spool = spooler.__call__
         with NotifyMock(assert_all_requests_are_fired=False):
             send_email('generic', 'admin@mtp.local', retry_attempts=3)
-        self.assertEqual(state['calls'], 4)
+        self.assertEqual(state['calls'], 4, msg='send_email should have retried 3 times and failed after')
         self.assertTrue(logger.exception.called, True)
+
+    @mock.patch.object(spooler, 'installed', True)
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
+    @mock.patch('mtp_common.spooling.uwsgi')
+    def test_asynchronous_send_email_retries_on_503_service_unavailable(self, uwsgi, mocked_send_email, logger):
+        self.assertAsynchronousSendEmailRetries(
+            uwsgi, mocked_send_email, logger,
+            APIError
+        )
+
+    @mock.patch.object(spooler, 'installed', True)
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
+    @mock.patch('mtp_common.spooling.uwsgi')
+    def test_asynchronous_send_email_retries_on_500_internal_error(self, uwsgi, mocked_send_email, logger):
+        self.assertAsynchronousSendEmailRetries(
+            uwsgi, mocked_send_email, logger,
+            HTTPError.create(RequestException(response=mock.MagicMock(status_code=500)))
+        )
+
+    def assertAsynchronousSendEmailDoesNotRetry(self, uwsgi, mocked_send_email, logger, error_to_raise):  # noqa: N802
+        from mtp_common.tasks import send_email
+
+        state = {'calls': 0}
+
+        def count_calls_and_raise_error(*args, **kwargs):
+            state['calls'] += 1
+            raise error_to_raise
+
+        mocked_send_email.side_effect = count_calls_and_raise_error
+        uwsgi.spool = spooler.__call__
+        with NotifyMock(assert_all_requests_are_fired=False):
+            send_email('generic', 'admin@mtp.local', retry_attempts=10)
+        self.assertEqual(state['calls'], 1, msg='send_email should not have retried')
+        self.assertTrue(logger.exception.called, True)
+
+    @mock.patch.object(spooler, 'installed', True)
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
+    @mock.patch('mtp_common.spooling.uwsgi')
+    def test_asynchronous_send_email_does_not_retry_on_invalid_json_response(self, uwsgi, mocked_send_email, logger):
+        self.assertAsynchronousSendEmailDoesNotRetry(
+            uwsgi, mocked_send_email, logger,
+            InvalidResponse
+        )
+
+    @mock.patch.object(spooler, 'installed', True)
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
+    @mock.patch('mtp_common.spooling.uwsgi')
+    def test_asynchronous_send_email_does_not_retry_on_400(self, uwsgi, mocked_send_email, logger):
+        self.assertAsynchronousSendEmailDoesNotRetry(
+            uwsgi, mocked_send_email, logger,
+            HTTPError.create(RequestException(response=mock.MagicMock(status_code=400)))
+        )
+
+    @mock.patch.object(spooler, 'installed', True)
+    @mock.patch('mtp_common.spooling.logger')
+    @mock.patch('mtp_common.notify.client.NotifyClient.send_email')
+    @mock.patch('mtp_common.spooling.uwsgi')
+    def test_asynchronous_send_email_does_not_retry_on_403(self, uwsgi, mocked_send_email, logger):
+        self.assertAsynchronousSendEmailDoesNotRetry(
+            uwsgi, mocked_send_email, logger,
+            HTTPError.create(RequestException(response=mock.MagicMock(status_code=403)))
+        )
