@@ -221,16 +221,17 @@ class SendEmailTestCase(SimpleTestCase):
 
         self.assertIn(b'send_email', spooler._registry)
 
-        email_args = ('generic', 'test1@example.com')
-        email_kwargs = dict(personalisation={'abc': '321'}, staff_email=True)
         job = {
             spooler.identifier: b'send_email',
-            b'args': pickle.dumps(email_args),
-            b'kwargs': pickle.dumps(email_kwargs),
+            b'args': pickle.dumps(('generic', 'test1@example.com')),
+            b'kwargs': pickle.dumps(dict(staff_email=True)),
+            b'body': pickle.dumps(dict(personalisation={'abc': '321'})),
         }
 
         # schedule call
-        self.assertIsNone(mtp_common.tasks.send_email(*email_args, **email_kwargs))
+        self.assertIsNone(mtp_common.tasks.send_email(
+            'generic', 'test1@example.com', personalisation={'abc': '321'}, staff_email=True)
+        )
         self.assertEqual(len(mail.outbox), 0)
         call_args, _ = uwsgi.spool.call_args
         self.assertDictEqual(call_args[0], job)

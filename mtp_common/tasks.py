@@ -9,7 +9,7 @@ from mtp_common.spooling import Context, spoolable
 logger = logging.getLogger('mtp')
 
 
-@spoolable()
+@spoolable(body_params=('personalisation',))
 def send_email(
     template_name: str,
     to: typing.Union[str, typing.List[str]],
