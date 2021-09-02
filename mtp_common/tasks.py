@@ -4,6 +4,7 @@ import typing
 from notifications_python_client.errors import APIError, InvalidResponse
 
 from mtp_common.notify import NotifyClient
+from mtp_common.s3_bucket import S3BucketClient
 from mtp_common.spooling import Context, spoolable
 
 logger = logging.getLogger('mtp')
@@ -55,3 +56,17 @@ def send_email(
             )
         else:
             raise e
+
+
+@spoolable(body_params=('file_contents',))
+def upload_to_s3(file_contents: bytes, path: str, content_type: str = None, tags: dict = None):
+    """
+    Asynchronously uploads a file into shared S3 bucket
+    """
+    client = S3BucketClient()
+    client.upload(
+        file_contents=file_contents,
+        path=path,
+        content_type=content_type,
+        tags=tags,
+    )
