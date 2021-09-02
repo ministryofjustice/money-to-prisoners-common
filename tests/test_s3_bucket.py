@@ -1,6 +1,7 @@
 import io
 import os
 from unittest import mock
+from urllib.parse import parse_qsl
 
 from kubernetes.client.rest import ApiException
 from kubernetes.config.incluster_config import SERVICE_HOST_ENV_NAME
@@ -59,7 +60,39 @@ class S3BucketTestCase(SimpleTestCase):
             kwargs = mock_s3_client.upload_fileobj.call_args_list[0].kwargs
             self.assertEqual(kwargs['Bucket'], 'cloud-platform-TEST1')
             self.assertEqual(kwargs['Key'], 'test.bin')
+            self.assertDictEqual(
+                dict(parse_qsl(kwargs['ExtraArgs']['Tagging'])),
+                {'app': 'common', 'environment': 'test'},
+            )
+            self.assertNotIn('ContentType', kwargs['ExtraArgs'])
             self.assertTrue(isinstance(kwargs['Fileobj'], io.BytesIO))
+
+    @mock.patch('mtp_common.s3_bucket.k8s_client')
+    @mock.patch('mtp_common.s3_bucket.load_incluster_config')
+    def test_upload_passes_extra_tags_to_boto(self, mock_config, mock_client):
+        self.setup_k8s_incluster_config(mock_config, pod_name='app')
+        mock_s3_secret_response(mock_client)
+        client = S3BucketClient()
+        with mock.patch.object(client, 's3_client') as mock_s3_client:
+            client.upload('1,2,3\n'.encode(), 'test.csv', tags={'abc': '123', 'key': 'value'})
+            self.assertEqual(mock_s3_client.upload_fileobj.call_count, 1)
+            kwargs = mock_s3_client.upload_fileobj.call_args_list[0].kwargs
+            tags = dict(parse_qsl(kwargs['ExtraArgs']['Tagging']))
+            tags.pop('app')
+            tags.pop('environment')
+            self.assertDictEqual(tags, {'abc': '123', 'key': 'value'})
+
+    @mock.patch('mtp_common.s3_bucket.k8s_client')
+    @mock.patch('mtp_common.s3_bucket.load_incluster_config')
+    def test_upload_passes_content_type_to_boto(self, mock_config, mock_client):
+        self.setup_k8s_incluster_config(mock_config, pod_name='app')
+        mock_s3_secret_response(mock_client)
+        client = S3BucketClient()
+        with mock.patch.object(client, 's3_client') as mock_s3_client:
+            client.upload('1,2,3\n'.encode(), 'test.csv', content_type='text/csv')
+            self.assertEqual(mock_s3_client.upload_fileobj.call_count, 1)
+            kwargs = mock_s3_client.upload_fileobj.call_args_list[0].kwargs
+            self.assertEqual(kwargs['ExtraArgs']['ContentType'], 'text/csv')
 
     @mock.patch('mtp_common.s3_bucket.k8s_client')
     @mock.patch('mtp_common.s3_bucket.load_incluster_config')

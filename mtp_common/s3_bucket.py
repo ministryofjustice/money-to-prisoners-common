@@ -1,6 +1,7 @@
 import base64
 import io
 import typing
+from urllib.parse import urlencode
 
 import boto3
 from django.conf import settings
@@ -53,13 +54,24 @@ class S3BucketClient:
             aws_secret_access_key=self.s3_secret['secret_access_key'],
         )
 
-    def upload(self, file_contents: typing.Union[bytes, io.RawIOBase, io.BufferedIOBase], path: str):
+    def upload(
+        self,
+        file_contents: typing.Union[bytes, io.RawIOBase, io.BufferedIOBase],
+        path: str,
+        content_type: str = None,
+        tags: dict = None,
+    ):
         if isinstance(file_contents, bytes):
             file_contents = io.BytesIO(file_contents)
+        tags = dict(tags or {}, app=settings.APP, environment=settings.ENVIRONMENT)
+        extra_args = {'Tagging': urlencode(tags)}
+        if content_type:
+            extra_args['ContentType'] = content_type
         self.s3_client.upload_fileobj(
             Fileobj=file_contents,
             Bucket=self.s3_secret['bucket_name'],
             Key=path,
+            ExtraArgs=extra_args,
         )
 
     def dowload(self, path: str) -> bytes:
