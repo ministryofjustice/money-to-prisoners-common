@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 
 import boto3
 from django.conf import settings
+from django.http.response import StreamingHttpResponse
 from kubernetes import client as k8s_client
 from kubernetes.client.rest import ApiException
 from kubernetes.config import ConfigException, load_incluster_config
@@ -82,3 +83,15 @@ class S3BucketClient:
             Fileobj=file_contents,
         )
         return file_contents.getvalue()
+
+    def download_stream(self, path: str) -> StreamingHttpResponse:
+        s3_object = self.s3_client.get_object(
+            Bucket=self.s3_secret['bucket_name'],
+            Key=path,
+        )
+        response = StreamingHttpResponse(
+            streaming_content=s3_object['Body'],
+            content_type=s3_object['ContentType'],
+        )
+        response['Last-Modified'] = s3_object['ResponseMetadata']['HTTPHeaders']['last-modified']
+        return response

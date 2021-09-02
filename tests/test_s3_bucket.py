@@ -108,3 +108,27 @@ class S3BucketTestCase(SimpleTestCase):
             self.assertEqual(data, b'12345')
             self.assertEqual(kwargs['Bucket'], 'cloud-platform-TEST1')
             self.assertEqual(kwargs['Key'], 'test.bin')
+
+    @mock.patch('mtp_common.s3_bucket.k8s_client')
+    @mock.patch('mtp_common.s3_bucket.load_incluster_config')
+    def test_streaming_download(self, mock_config, mock_client):
+        self.setup_k8s_incluster_config(mock_config, pod_name='app')
+        mock_s3_secret_response(mock_client)
+        client = S3BucketClient()
+        with mock.patch.object(client, 's3_client') as mock_s3_client:
+            mock_s3_client.get_object.return_value = {
+                # NB: this is a small subset of what's returned by S3
+                'ResponseMetadata': {'HTTPHeaders': {'last-modified': 'Wed, 01 Sep 2021 12:00:00 GMT'}},
+                'Body': io.BytesIO('1,2,3\n'.encode()),
+                'ContentType': 'text/csv',
+            }
+            response = client.download_stream('test.csv')
+            header_bytes = bytes(response)
+            body_bytes = b''.join(iter(response))
+            self.assertEqual(mock_s3_client.get_object.call_count, 1)
+            kwargs = mock_s3_client.get_object.call_args_list[0].kwargs
+            self.assertEqual(kwargs['Bucket'], 'cloud-platform-TEST1')
+            self.assertEqual(kwargs['Key'], 'test.csv')
+            self.assertIn(b'text/csv', header_bytes)
+            self.assertIn(b'01 Sep 2021 12:00:00', header_bytes)
+            self.assertEqual(body_bytes.decode(), '1,2,3\n')
