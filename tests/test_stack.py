@@ -1,7 +1,5 @@
-import os
 from unittest import mock
 
-from kubernetes.client.configuration import Configuration
 from kubernetes.client.rest import ApiException
 from kubernetes.config import ConfigException
 
@@ -11,14 +9,7 @@ from tests.utils import SimpleTestCase
 
 class StackTestCase(SimpleTestCase):
     def setup_k8s_responses(self, mock_config, mock_client, pod_name):
-        os.environ['KUBERNETES_SERVICE_HOST'] = '127.0.0.1'
-        os.environ['KUBERNETES_SERVICE_PORT'] = '9988'
-        os.environ['POD_NAME'] = pod_name
-        configuration = Configuration()
-        configuration.host = 'http://127.0.0.1:9988'
-        configuration.api_key = {'authorization': 'bearer T0ken'}
-        Configuration.set_default(configuration)
-        mock_config.return_value = None
+        self.setup_k8s_incluster_config(mock_config, pod_name)
         pod1 = mock.MagicMock()
         pod1.metadata.name = 'api-123'
         pod1.status.phase = 'Running'
