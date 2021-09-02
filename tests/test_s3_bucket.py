@@ -3,10 +3,11 @@ import os
 from unittest import mock
 from urllib.parse import parse_qsl
 
+from django.test import override_settings
 from kubernetes.client.rest import ApiException
 from kubernetes.config.incluster_config import SERVICE_HOST_ENV_NAME
 
-from mtp_common.s3_bucket import S3BucketClient, S3BucketError
+from mtp_common.s3_bucket import S3BucketClient, S3BucketError, make_download_token, parse_download_token
 from tests.utils import SimpleTestCase
 
 
@@ -132,3 +133,39 @@ class S3BucketTestCase(SimpleTestCase):
             self.assertIn(b'text/csv', header_bytes)
             self.assertIn(b'01 Sep 2021 12:00:00', header_bytes)
             self.assertEqual(body_bytes.decode(), '1,2,3\n')
+
+
+@override_settings(S3_BUCKET_SIGNING_KEY='0000111122223333')
+class DownloadTokenTestCase(SimpleTestCase):
+    def test_token_round_trip(self):
+        tokens = make_download_token('backup/2021-09-02', 'files.zip')
+        self.assertNotEqual(tokens['bucket_path'], 'backup/2021-09-02/files.zip',
+                            msg='full bucket path should have some random characters added')
+        self.assertGreater(len(tokens['download_token']), len(tokens['bucket_path']),
+                           msg='download token should contain a signature')
+        bucket_path = parse_download_token(tokens['download_token'])
+        self.assertEqual(bucket_path, tokens['bucket_path'],
+                         msg='parsed download token should be the full bucket path')
+        path_prefix, _random, _signature, filename = tokens['download_token'].rsplit('/', 3)
+        self.assertEqual(path_prefix, 'backup/2021-09-02',
+                         msg='path prefix should be preserved in download token')
+        self.assertEqual(filename, 'files.zip',
+                         msg='trailing file name should be preserved in download token')
+
+    def test_token_tampering(self):
+        download_token = make_download_token('export', '2021-09.zip')['download_token']
+        path_prefix, random, signature, filename = download_token.split('/')
+        parse_download_token(f'{path_prefix}/{random}/{signature}/{filename}')  # proves that full token still parses
+        with self.assertRaises(ValueError, msg='modified path prefix still parsed'):
+            parse_download_token(f'downloads/{random}/{signature}/{filename}')
+        with self.assertRaises(ValueError, msg='modified random prefix still parsed'):
+            parse_download_token(f'{path_prefix}/0000000000000/{signature}/{filename}')
+        with self.assertRaises(ValueError, msg='invalid signature still parsed'):
+            parse_download_token(f'{path_prefix}/{random}/123abc000/{filename}')
+        with self.assertRaises(ValueError, msg='modified filename still parsed'):
+            parse_download_token(f'{path_prefix}/{random}/{signature}/2021-08.zip')
+
+    def test_invalid_tokens(self):
+        for token in ('', 'export/2021-09.zip', 'export/0000000000000/2021-09.zip'):
+            with self.assertRaises(ValueError):
+                parse_download_token(token)

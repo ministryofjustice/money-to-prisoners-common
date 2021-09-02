@@ -5,7 +5,9 @@ from urllib.parse import urlencode
 
 import boto3
 from django.conf import settings
+from django.core.signing import base64_hmac
 from django.http.response import StreamingHttpResponse
+from django.utils.crypto import constant_time_compare, get_random_string
 from kubernetes import client as k8s_client
 from kubernetes.client.rest import ApiException
 from kubernetes.config import ConfigException, load_incluster_config
@@ -95,3 +97,41 @@ class S3BucketClient:
         )
         response['Last-Modified'] = s3_object['ResponseMetadata']['HTTPHeaders']['last-modified']
         return response
+
+
+def _sign_bucket_path(bucket_path: str) -> str:
+    return base64_hmac(salt='mtp_common.s3_bucket', value=bucket_path, key=settings.S3_BUCKET_SIGNING_KEY)
+
+
+def make_download_token(path_prefix: str, filename: str) -> dict:
+    """
+    Given a path prefix and file name, generates a longer path to store objects in S3
+    and also returns a signed token to be used for downloads.
+    The signed token reveals the full S3 path, however the signature prevents tampering.
+    """
+    if not path_prefix or not filename:
+        raise ValueError
+    path_prefix = path_prefix.strip('/') + '/' + get_random_string(35)
+    bucket_path = f'{path_prefix}/{filename}'
+    signature = _sign_bucket_path(bucket_path)
+    download_token = f'{path_prefix}/{signature}/{filename}'
+    return {
+        'bucket_path': bucket_path,
+        'download_token': download_token,
+    }
+
+
+def parse_download_token(download_token: str) -> str:
+    """
+    Parses a download token and returns a full path to the object in S3 if the token has a valid signature.
+    :raises ValueError if the token is invalid
+    """
+    download_token = download_token.rsplit('/', 2)
+    if len(download_token) != 3:
+        raise ValueError
+    path_prefix, signature, filename = download_token
+    bucket_path = f'{path_prefix}/{filename}'
+    expected_signature = _sign_bucket_path(bucket_path)
+    if not constant_time_compare(signature, expected_signature):
+        raise ValueError
+    return bucket_path
