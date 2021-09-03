@@ -135,7 +135,7 @@ class S3BucketTestCase(SimpleTestCase):
             self.assertEqual(body_bytes.decode(), '1,2,3\n')
 
 
-@override_settings(S3_BUCKET_SIGNING_KEY='0000111122223333')
+@override_settings(S3_BUCKET_SIGNING_KEY='0000111122223333', EMAILS_URL='http://localhost:8006')
 class DownloadTokenTestCase(SimpleTestCase):
     def test_token_round_trip(self):
         tokens = make_download_token('backup/2021-09-02', 'files.zip')
@@ -143,6 +143,8 @@ class DownloadTokenTestCase(SimpleTestCase):
                             msg='full bucket path should have some random characters added')
         self.assertGreater(len(tokens['download_token']), len(tokens['bucket_path']),
                            msg='download token should contain a signature')
+        self.assertTrue(tokens['download_url'].startswith('http://localhost:8006/download/'))
+        self.assertTrue(tokens['download_url'].endswith(tokens['download_token']))
         bucket_path = parse_download_token(tokens['download_token'])
         self.assertEqual(bucket_path, tokens['bucket_path'],
                          msg='parsed download token should be the full bucket path')

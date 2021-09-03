@@ -1,7 +1,7 @@
 import base64
 import io
 import typing
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin
 
 import boto3
 from django.conf import settings
@@ -106,8 +106,9 @@ def _sign_bucket_path(bucket_path: str) -> str:
 def make_download_token(path_prefix: str, filename: str) -> dict:
     """
     Given a path prefix and file name, generates a longer path to store objects in S3
-    and also returns a signed token to be used for downloads.
+    and also returns a signed token to be used for downloads and a pre-composed download url.
     The signed token reveals the full S3 path, however the signature prevents tampering.
+    The download url links directly to the mtp-emails app.
     """
     if not path_prefix or not filename:
         raise ValueError
@@ -118,6 +119,7 @@ def make_download_token(path_prefix: str, filename: str) -> dict:
     return {
         'bucket_path': bucket_path,
         'download_token': download_token,
+        'download_url': urljoin(settings.EMAILS_URL, f'/download/{download_token}'),
     }
 
 
