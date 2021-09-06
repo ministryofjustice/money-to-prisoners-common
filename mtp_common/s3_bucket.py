@@ -85,7 +85,7 @@ class S3BucketClient:
         )
         return file_contents.getvalue()
 
-    def download_stream(self, path: str) -> StreamingHttpResponse:
+    def download_as_streaming_response(self, path: str) -> StreamingHttpResponse:
         s3_object = self.s3_client.get_object(
             Bucket=self.s3_secret['bucket_name'],
             Key=path,

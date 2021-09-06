@@ -123,7 +123,7 @@ class S3BucketTestCase(SimpleTestCase):
                 'Body': io.BytesIO('1,2,3\n'.encode()),
                 'ContentType': 'text/csv',
             }
-            response = client.download_stream('test.csv')
+            response = client.download_as_streaming_response('test.csv')
             header_bytes = bytes(response)
             body_bytes = b''.join(iter(response))
             self.assertEqual(mock_s3_client.get_object.call_count, 1)
