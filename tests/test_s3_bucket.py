@@ -7,7 +7,7 @@ from django.test import override_settings
 from kubernetes.client.rest import ApiException
 from kubernetes.config.incluster_config import SERVICE_HOST_ENV_NAME
 
-from mtp_common.s3_bucket import S3BucketClient, S3BucketError, make_download_token, parse_download_token
+from mtp_common.s3_bucket import S3BucketClient, S3BucketError, make_bucket_download_url
 from tests.utils import SimpleTestCase
 
 
@@ -135,39 +135,23 @@ class S3BucketTestCase(SimpleTestCase):
             self.assertEqual(body_bytes.decode(), '1,2,3\n')
 
 
-@override_settings(S3_BUCKET_SIGNING_KEY='0000111122223333', EMAILS_URL='http://localhost:8006')
-class DownloadTokenTestCase(SimpleTestCase):
-    def test_token_round_trip(self):
-        tokens = make_download_token('backup/2021-09-02', 'files.zip')
-        self.assertNotEqual(tokens['bucket_path'], 'backup/2021-09-02/files.zip',
-                            msg='full bucket path should have some random characters added')
-        self.assertGreater(len(tokens['download_token']), len(tokens['bucket_path']),
-                           msg='download token should contain a signature')
-        self.assertTrue(tokens['download_url'].startswith('http://localhost:8006/download/'))
-        self.assertTrue(tokens['download_url'].endswith(tokens['download_token']))
-        bucket_path = parse_download_token(tokens['download_token'])
-        self.assertEqual(bucket_path, tokens['bucket_path'],
-                         msg='parsed download token should be the full bucket path')
-        path_prefix, _random, _signature, filename = tokens['download_token'].rsplit('/', 3)
-        self.assertEqual(path_prefix, 'backup/2021-09-02',
-                         msg='path prefix should be preserved in download token')
-        self.assertEqual(filename, 'files.zip',
-                         msg='trailing file name should be preserved in download token')
+@override_settings(EMAILS_URL='http://localhost:8006')
+class S3BucketDownloadURLTestCase(SimpleTestCase):
+    def test_make_download_url(self):
+        values = make_bucket_download_url('backup-folder/2021', '09-06.zip')
+        bucket_path = values['bucket_path']
+        self.assertTrue(bucket_path.startswith('backup-folder/2021'),
+                        msg='bucket path should preserve folder structure')
+        self.assertTrue(bucket_path.endswith('/09-06.zip'),
+                        msg='bucket path should preserve filename')
+        self.assertGreater(len(bucket_path), len('backup-folder/2021') + len('/09-06.zip'),
+                           msg='bucket path should have added randomness')
+        download_url = values['download_url']
+        self.assertTrue(download_url.startswith('http://localhost:8006/'))
+        self.assertTrue(download_url.endswith(bucket_path))
 
-    def test_token_tampering(self):
-        download_token = make_download_token('export', '2021-09.zip')['download_token']
-        path_prefix, random, signature, filename = download_token.split('/')
-        parse_download_token(f'{path_prefix}/{random}/{signature}/{filename}')  # proves that full token still parses
-        with self.assertRaises(ValueError, msg='modified path prefix still parsed'):
-            parse_download_token(f'downloads/{random}/{signature}/{filename}')
-        with self.assertRaises(ValueError, msg='modified random prefix still parsed'):
-            parse_download_token(f'{path_prefix}/0000000000000/{signature}/{filename}')
-        with self.assertRaises(ValueError, msg='invalid signature still parsed'):
-            parse_download_token(f'{path_prefix}/{random}/123abc000/{filename}')
-        with self.assertRaises(ValueError, msg='modified filename still parsed'):
-            parse_download_token(f'{path_prefix}/{random}/{signature}/2021-08.zip')
-
-    def test_invalid_tokens(self):
-        for token in ('', 'export/2021-09.zip', 'export/0000000000000/2021-09.zip'):
-            with self.assertRaises(ValueError):
-                parse_download_token(token)
+    def test_cannot_make_download_url_with_empty_inputs(self):
+        with self.assertRaises(ValueError):
+            make_bucket_download_url('', 'filename.csv')
+        with self.assertRaises(ValueError):
+            make_bucket_download_url('folder/abc/', '')
