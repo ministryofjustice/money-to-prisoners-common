@@ -7,7 +7,7 @@ from django.test import override_settings
 from kubernetes.client.rest import ApiException
 from kubernetes.config.incluster_config import SERVICE_HOST_ENV_NAME
 
-from mtp_common.s3_bucket import S3BucketClient, S3BucketError, make_bucket_download_url
+from mtp_common.s3_bucket import S3BucketClient, S3BucketError, generate_upload_path, get_download_url
 from tests.utils import SimpleTestCase
 
 
@@ -138,20 +138,21 @@ class S3BucketTestCase(SimpleTestCase):
 @override_settings(EMAILS_URL='http://localhost:8006')
 class S3BucketDownloadURLTestCase(SimpleTestCase):
     def test_make_download_url(self):
-        values = make_bucket_download_url('backup-folder/2021', '09-06.zip')
-        bucket_path = values['bucket_path']
+        bucket_path = generate_upload_path('backup-folder/2021', '09-06.zip')
         self.assertTrue(bucket_path.startswith('backup-folder/2021'),
                         msg='bucket path should preserve folder structure')
         self.assertTrue(bucket_path.endswith('/09-06.zip'),
                         msg='bucket path should preserve filename')
         self.assertGreater(len(bucket_path), len('backup-folder/2021') + len('/09-06.zip'),
                            msg='bucket path should have added randomness')
-        download_url = values['download_url']
+        download_url = get_download_url(bucket_path)
         self.assertTrue(download_url.startswith('http://localhost:8006/'))
         self.assertTrue(download_url.endswith(bucket_path))
 
     def test_cannot_make_download_url_with_empty_inputs(self):
         with self.assertRaises(ValueError):
-            make_bucket_download_url('', 'filename.csv')
+            generate_upload_path('', 'filename.csv')
         with self.assertRaises(ValueError):
-            make_bucket_download_url('folder/abc/', '')
+            generate_upload_path('/', 'filename.csv')
+        with self.assertRaises(ValueError):
+            generate_upload_path('folder/abc/', '')

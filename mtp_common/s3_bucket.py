@@ -102,17 +102,20 @@ class S3BucketClient:
         return response
 
 
-def make_bucket_download_url(path_prefix: str, filename: str) -> dict:
+def generate_upload_path(path_prefix: str, filename: str) -> str:
     """
-    Given a path prefix and file name, generates a longer path to store objects in S3
+    Given a path prefix and file name, generates a longer path to store files in S3
     in order to make bucket paths not guessable/enumerable.
-    The download url links directly to the mtp-emails app.
     """
+    path_prefix = path_prefix.strip('/')
+    filename = filename.lstrip('/')
     if not path_prefix or not filename:
         raise ValueError
-    path_prefix = path_prefix.strip('/') + '/' + get_random_string(35)
-    bucket_path = f'{path_prefix}/{filename}'
-    return {
-        'bucket_path': bucket_path,
-        'download_url': urljoin(settings.EMAILS_URL, f'/download/{bucket_path}'),
-    }
+    return f'{path_prefix}/{get_random_string(35)}/{filename}'
+
+
+def get_download_url(bucket_path) -> str:
+    """
+    Returns absolute url to download file from S3 via mtp-emails app.
+    """
+    return urljoin(settings.EMAILS_URL, f'/download/{bucket_path}')
