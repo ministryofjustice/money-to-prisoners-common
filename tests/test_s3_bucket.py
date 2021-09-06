@@ -63,7 +63,7 @@ class S3BucketTestCase(SimpleTestCase):
             self.assertEqual(kwargs['Key'], 'test.bin')
             self.assertDictEqual(
                 dict(parse_qsl(kwargs['ExtraArgs']['Tagging'])),
-                {'app': 'common', 'environment': 'test'},
+                {'application': 'common', 'environment-name': 'test'},
             )
             self.assertNotIn('ContentType', kwargs['ExtraArgs'])
             self.assertTrue(isinstance(kwargs['Fileobj'], io.BytesIO))
@@ -79,8 +79,8 @@ class S3BucketTestCase(SimpleTestCase):
             self.assertEqual(mock_s3_client.upload_fileobj.call_count, 1)
             kwargs = mock_s3_client.upload_fileobj.call_args_list[0].kwargs
             tags = dict(parse_qsl(kwargs['ExtraArgs']['Tagging']))
-            tags.pop('app')
-            tags.pop('environment')
+            tags.pop('application')
+            tags.pop('environment-name')
             self.assertDictEqual(tags, {'abc': '123', 'key': 'value'})
 
     @mock.patch('mtp_common.s3_bucket.k8s_client')

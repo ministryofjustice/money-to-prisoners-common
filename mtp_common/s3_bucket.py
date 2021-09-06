@@ -65,7 +65,11 @@ class S3BucketClient:
     ):
         if isinstance(file_contents, bytes):
             file_contents = io.BytesIO(file_contents)
-        tags = dict(tags or {}, app=settings.APP, environment=settings.ENVIRONMENT)
+        tags = tags or {}
+        tags.update({
+            'application': settings.APP,
+            'environment-name': settings.ENVIRONMENT,
+        })
         extra_args = {'Tagging': urlencode(tags)}
         if content_type:
             extra_args['ContentType'] = content_type
