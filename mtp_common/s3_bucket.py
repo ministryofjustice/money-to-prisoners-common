@@ -114,8 +114,11 @@ def generate_upload_path(path_prefix: str, filename: str) -> str:
     return f'{path_prefix}/{get_random_string(35)}/{filename}'
 
 
-def get_download_url(bucket_path) -> str:
+def get_download_url(bucket_path: str) -> str:
     """
     Returns absolute url to download file from S3 via mtp-emails app.
+    :raises ValueError if the object is not under emails/*
     """
+    if not bucket_path.startswith('emails/'):
+        raise ValueError('Only files within emails/* are downloadable via emails app')
     return urljoin(settings.EMAILS_URL, f'/download/{bucket_path}')

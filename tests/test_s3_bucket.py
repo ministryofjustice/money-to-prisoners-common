@@ -137,22 +137,32 @@ class S3BucketTestCase(SimpleTestCase):
 
 @override_settings(EMAILS_URL='http://localhost:8006')
 class S3BucketDownloadURLTestCase(SimpleTestCase):
-    def test_make_download_url(self):
-        bucket_path = generate_upload_path('backup-folder/2021', '09-06.zip')
-        self.assertTrue(bucket_path.startswith('backup-folder/2021'),
+    def test_make_upload_path_and_download_url(self):
+        bucket_path = generate_upload_path('emails/2021', '09-06.zip')
+        self.assertTrue(bucket_path.startswith('emails/2021'),
                         msg='bucket path should preserve folder structure')
         self.assertTrue(bucket_path.endswith('/09-06.zip'),
                         msg='bucket path should preserve filename')
-        self.assertGreater(len(bucket_path), len('backup-folder/2021') + len('/09-06.zip'),
+        self.assertGreater(len(bucket_path), len('emails/2021') + len('/09-06.zip'),
                            msg='bucket path should have added randomness')
         download_url = get_download_url(bucket_path)
         self.assertTrue(download_url.startswith('http://localhost:8006/'))
         self.assertTrue(download_url.endswith(bucket_path))
 
-    def test_cannot_make_download_url_with_empty_inputs(self):
+    def test_cannot_make_upload_path_with_empty_inputs(self):
         with self.assertRaises(ValueError):
             generate_upload_path('', 'filename.csv')
         with self.assertRaises(ValueError):
             generate_upload_path('/', 'filename.csv')
         with self.assertRaises(ValueError):
             generate_upload_path('folder/abc/', '')
+
+    def test_cannot_get_download_url_outside_of_emails_folder(self):
+        samples = (
+            '',
+            'names.csv',
+            'backup/names.csv',
+        )
+        for sample in samples:
+            with self.assertRaises(ValueError):
+                get_download_url(sample)
