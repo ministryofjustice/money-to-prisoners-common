@@ -1,0 +1,14 @@
+.mtp-footer-feedback {
+  margin-top: govuk-spacing(9);
+  padding: govuk-spacing(3);
+  background: $govuk-brand-colour;
+  color: $govuk-body-background-colour;
+
+  a {
+    @include govuk-link-style-inverse;
+  }
+
+  @media print {
+    display: none;
+  }
+}
