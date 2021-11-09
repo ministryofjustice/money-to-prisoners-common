@@ -32,7 +32,7 @@ install_requires = [
     'boto3~=1.18.32',
     'kubernetes~=19.0',  # corresponds to server version 1.19 (matching `live` cluster)
     'prometheus_client>=0.6,<1',
-    'sentry-sdk~=1.3.0',
+    'sentry-sdk>=1.3,<1.5',
     'libsass~=0.20',
     'uWSGI~=2.0.19.1',
 
