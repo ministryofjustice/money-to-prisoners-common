@@ -3,6 +3,9 @@ updates:
   - package-ecosystem: pip
     directory: /
     ignore:
+      - dependency-name: Django
+        update-types:
+          - version-update:semver-major
       - dependency-name: kubernetes
         update-types:
           - version-update:semver-major
