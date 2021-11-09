@@ -40,7 +40,7 @@ install_requires = [
     'django-form-error-reporting==0.9',
     'django-moj-irat==0.6',
     'django-zendesk-tickets==0.14',
-    'govuk-bank-holidays==0.9',
+    'govuk-bank-holidays==0.10',
 ]
 extras_require = {
     'testing': [
