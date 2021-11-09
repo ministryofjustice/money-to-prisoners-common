@@ -2,7 +2,22 @@ version: 2
 updates:
   - package-ecosystem: pip
     directory: /
+    ignore:
+      - dependency-name: Django
+        update-types:
+          - version-update:semver-major
+      - dependency-name: kubernetes
+        update-types:
+          - version-update:semver-major
     schedule:
       interval: weekly
     pull-request-branch-name:
       separator: '-'
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /mtp_common/templates/mtp_common/build_tasks
+    schedule:
+      interval: weekly

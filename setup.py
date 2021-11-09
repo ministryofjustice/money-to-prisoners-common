@@ -30,7 +30,7 @@ install_requires = [
     'cryptography~=3.4',
     'PyJWT~=2.1.0',
     'boto3~=1.18.32',
-    'kubernetes>=17,<19',  # corresponds to server version 1.17 or 1.18
+    'kubernetes~=19.0',  # corresponds to server version 1.19 (matching `live` cluster)
     'prometheus_client>=0.6,<1',
     'sentry-sdk~=1.3.0',
     'libsass~=0.20',
@@ -45,11 +45,11 @@ install_requires = [
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
-        'flake8~=3.9.0',
+        'flake8~=4.0',
         'flake8-blind-except~=0.2.0',
         'flake8-bugbear~=21.0',
         'flake8-debugger~=4.0',
-        'flake8-quotes~=3.2.0',
+        'flake8-quotes~=3.3.0',
         'pep8-naming~=0.12.0',
         'responses~=0.13.0',
         'twine~=3.4',
