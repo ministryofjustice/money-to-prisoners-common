@@ -25,16 +25,16 @@ install_requires = [
     'requests>=2.18,<3',
     'requests-oauthlib>=1,<2',
     'slumber>=0.7,<0.8',
-    'selenium>=3.11,<5',
+    'selenium~=4.0',
     'transifex-client>=0.14,<0.15',
-    'cryptography>=3.4,<36.0',
+    'cryptography~=35.0',
     'PyJWT~=2.1.0',
     'boto3>=1.18.32,<1.21.0',
     'kubernetes~=19.0',  # corresponds to server version 1.19 (matching `live` cluster)
     'prometheus_client>=0.6,<1',
-    'sentry-sdk>=1.3,<1.5',
+    'sentry-sdk~=1.4',
     'libsass~=0.20',
-    'uWSGI>=2.0.19.1,<2.0.21.0',
+    'uWSGI~=2.0.20',
 
     # moj-built dependencies (should be locked versions)
     'django-form-error-reporting==0.9',
