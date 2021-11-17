@@ -28,7 +28,6 @@ install_requires = [
     'selenium~=4.0',
     'transifex-client>=0.14,<0.15',
     'cryptography~=35.0',
-    'PyJWT>=2.1,<2.4',
     'boto3>=1.18.32,<1.21.0',
     'kubernetes~=19.0',  # corresponds to server version 1.19 (matching `live` cluster)
     'prometheus_client>=0.6,<1',
@@ -51,7 +50,7 @@ extras_require = {
         'flake8-debugger~=4.0',
         'flake8-quotes~=3.3.0',
         'pep8-naming~=0.12.0',
-        'responses>=0.13,<0.16',
+        'responses~=0.16.0',
         'twine~=3.4',
         'watchdog~=2.1',
     ],
