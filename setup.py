@@ -46,7 +46,7 @@ extras_require = {
         # third-party dependencies (versions should be flexible to allow for bug fixes)
         'flake8~=4.0',
         'flake8-blind-except~=0.2.0',
-        'flake8-bugbear~=21.0',
+        'flake8-bugbear>=21,<23',
         'flake8-debugger~=4.0',
         'flake8-quotes~=3.3.0',
         'pep8-naming~=0.12.0',
