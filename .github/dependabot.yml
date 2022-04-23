@@ -4,20 +4,20 @@ updates:
     directory: /
     ignore:
       - dependency-name: Django
-        update-types:
-          - version-update:semver-major
+        versions:
+          - ">=2.3"
       - dependency-name: kubernetes
-        update-types:
-          - version-update:semver-major
+        versions:
+          - ">=22"
     schedule:
-      interval: weekly
+      interval: monthly
     pull-request-branch-name:
       separator: '-'
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
   - package-ecosystem: npm
     directory: /mtp_common/templates/mtp_common/build_tasks
     schedule:
-      interval: weekly
+      interval: monthly
