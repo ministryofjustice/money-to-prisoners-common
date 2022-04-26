@@ -7,6 +7,7 @@ from django.utils.translation import get_language
 from oauthlib.oauth2 import LegacyApplicationClient
 import requests
 from requests.auth import HTTPBasicAuth
+from requests.exceptions import RequestException
 from requests_oauthlib import OAuth2Session
 import slumber
 
@@ -14,6 +15,7 @@ from . import update_token_in_session, urljoin
 from .exceptions import (
     Unauthorized, Forbidden, HttpNotFoundError, HttpClientError, HttpServerError
 )
+from mtp_common.nomis import Retry
 
 
 # set insecure transport depending on settings val
@@ -78,7 +80,26 @@ class MoJOAuth2Session(LocalisedOAuth2Session):
             url = urljoin(self.base_url, url)
         if 'timeout' not in kwargs:
             kwargs['timeout'] = 15
-        return super().request(method, url, data=data, headers=headers, **kwargs)
+        retries = kwargs.pop('retries', 0)  # Don't retry by default
+
+        retries = Retry(max_retries=retries)
+        should_retry = False
+        response = None
+        while True:
+            try:
+                response = super().request(method, url, data=data, headers=headers, **kwargs)
+            except RequestException as e:
+                should_retry = retries.should_retry(exception=e)
+                if not should_retry:
+                    raise e
+            else:
+                should_retry = retries.should_retry(response=response)
+                if not should_retry:
+                    break
+            finally:
+                retries.before_retrying(kwargs)
+
+        return response
 
 
 def authenticate(username, password):
