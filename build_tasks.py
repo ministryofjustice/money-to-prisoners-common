@@ -79,6 +79,7 @@ def setup_django_for_testing(_: Context):
             },
         }],
         MIDDLEWARE=(
+            'mtp_common.metrics.middleware.RequestMetricsMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.middleware.locale.LocaleMiddleware',
             'django.middleware.common.CommonMiddleware',
