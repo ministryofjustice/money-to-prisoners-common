@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 
 from mtp_common.auth import views
 from mtp_common.auth.basic import basic_auth
+from mtp_common.metrics.views import metrics_view
 from mtp_common.user_admin.forms import SignUpForm
 import mtp_common.user_admin.views as user_admin_views
 from mtp_common.views import SettingsView
@@ -88,5 +89,8 @@ urlpatterns = [
     ),
 
     # mocked basic auth view
-    url(r'^basic-auth/', basic_auth('BASIC_USER', 'BASIC_PASSWORD')(dummy_view), name='basic-auth')
+    url(r'^basic-auth/', basic_auth('BASIC_USER', 'BASIC_PASSWORD')(dummy_view), name='basic-auth'),
+
+    # prometheus metrics
+    url(r'^metrics.txt$', metrics_view, name='prometheus_metrics'),
 ]
