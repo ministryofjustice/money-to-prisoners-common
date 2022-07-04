@@ -22,11 +22,11 @@
     <meta property="og:image" content="{% static 'images/govuk-opengraph-image.png' %}" />
   </head>
   <body class="govuk-template__body {% block body_classes %}{% endblock %}">
-    <script>document.body.className = document.body.className + ' js-enabled';</script>
+    <script {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}>document.body.className = document.body.className + ' js-enabled';</script>
     {% block body_start %}{% endblock %}
 
     {% block skip_link %}
-      <a href="#main-content" class="govuk-skip-link">
+      <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">
         {% trans 'Skip to main content' %}
       </a>
     {% endblock %}

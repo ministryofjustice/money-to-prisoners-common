@@ -26,7 +26,7 @@
 </div>
 
 {% if character_count %}
-  <div id="{{ field.id_for_label }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+  <div id="{{ field.id_for_label }}-info" class="govuk-hint govuk-character-count__message">
     {% blocktrans trimmed %}
       You can enter up to {{ character_count }} characters
     {% endblocktrans %}

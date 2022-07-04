@@ -16,7 +16,7 @@
   </style>
 
   {% if analytics_policy.enabled %}
-    <script>
+    <script {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -41,16 +41,24 @@
 
 {% block body_start %}
   {% block cookie_message %}
-    <aside class="mtp-cookie-banner">
-      <div class="mtp-cookie-banner__container govuk-width-container">
-        <p>
-          {% trans 'GOV.UK uses cookies to make the site simpler.' %}
-          <a href="https://www.gov.uk/help/cookies">
-            {% trans 'Find out more about cookies' %}
-          </a>
-        </p>
+    <div class="govuk-cookie-banner mtp-cookie-banner" data-nosnippet role="region">
+      <div class="govuk-cookie-banner__message govuk-width-container">
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-cookie-banner__content">
+              <p>
+                {% trans 'GOV.UK uses cookies to make the site simpler.' %}
+                <a href="https://www.gov.uk/help/cookies">
+                  {% trans 'Find out more about cookies' %}
+                </a>
+              </p>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </aside>
+    </div>
   {% endblock %}
 {% endblock %}
 
