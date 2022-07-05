@@ -397,6 +397,7 @@ class AccordionNode(template.Node):
                 other_nodes.append(node)
         other_content = other_nodes.render(context)
         context.push()
+        context['name'] = name
         context['accordion_content'] = accordion_content
         context['other_content'] = other_content
         accordion_template = context.template.engine.get_template(self.template_name)

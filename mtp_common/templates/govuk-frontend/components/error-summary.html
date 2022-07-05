@@ -8,7 +8,7 @@
 
 {% if form.errors %}
   {% random_string as error_summary_id %}
-  <div class="govuk-error-summary" aria-labelledby="error-summary-title__{{ error_summary_id }}" role="alert" tabindex="-1" data-module="govuk-error-summary">
+  <div class="govuk-error-summary" aria-labelledby="error-summary-title__{{ error_summary_id }}" role="alert" data-module="govuk-error-summary">
     <h2 class="govuk-error-summary__title" id="error-summary-title__{{ error_summary_id }}">
       {{ form.error_summary_title|default:_('There was a problem') }}
     </h2>

@@ -31,6 +31,14 @@
 }
 
 
+// do not print cookie banners
+.govuk-cookie-banner {
+  @media print {
+    display: none;
+  }
+}
+
+
 // no govuk-frontend class is available for the inverse of .govuk-!-display-none-print
 .mtp-\!-display-print-only {
   display: none;
