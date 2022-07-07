@@ -435,7 +435,7 @@ class Context:
             args.insert(0, '--verbose')
         return pip(args)
 
-    def shell(self, command, *args, environment=None):
+    def shell(self, command, *args, environment=None, check=True):
         """
         Runs a shell command
         """
@@ -444,7 +444,10 @@ class Context:
         self.debug(self.yellow_style(f'$ {command}'))
         env = self.env.copy()
         env.update(environment or {})
-        return subprocess.call(command, shell=True, env=env)
+        return_code = subprocess.call(command, shell=True, env=env)
+        if check and return_code:
+            raise TaskError(f'Shell command `{command}` exited with error code: {return_code}')
+        return return_code
 
     def node_tool(self, tool, *args):
         """
