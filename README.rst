@@ -33,8 +33,7 @@ This is not a standalone Django application and is included as a requirement of 
 
 * Make code changes and add any tests necessary
 * Test using ``./run.py test`` or ``python setup.py test``
-* Update the package version with ``./run.py set_version --version [?.?.?]``
-* Commit, tag with the version and push changes to Github
+* Bump the package version with ``./run.py bump_version [--major | --minor | --patch]``
 * Submit to PyPi by:
 
   * making a new release on Github (package version comes from the code, not Github release title)

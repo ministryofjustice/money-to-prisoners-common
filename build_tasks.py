@@ -141,23 +141,26 @@ def test(context: Context, test_labels=None):
 
 
 @tasks.register()
-def set_version(context: Context, version=None, bump=False):
+def bump_version(context: Context, major=False, minor=False, patch=False):
     """
-    Updates the version of MTP-common
+    Bumps the version of MTP-common, commits and tags the change
     """
-    if bump and version:
-        raise TaskError('You cannot bump and set a specific version')
-    if bump:
-        from mtp_common import VERSION
+    bump_levels = [major, minor, patch]
+    if bump_levels.count(True) != 1:
+        raise TaskError('Specify either --major, --minor or --patch')
 
-        version = list(VERSION)
-        version[-1] += 1
-    else:
-        try:
-            version = list(map(int, version.split('.')))
-            assert len(version) == 3
-        except (AttributeError, ValueError, AssertionError):
-            raise TaskError('Version must be in the form N.N.N')
+    from mtp_common import VERSION
+
+    version = list(VERSION)
+    level = bump_levels.index(True)
+    version[level] += 1  # bump selected level
+    version[level + 1:] = [0] * (len(version) - 1 - level)  # set lower levels to 0
+
+    # true if there are uncommitted changes before version is bumped
+    git_already_dirty = any(map(bool, (
+        context.shell('git', 'diff', '--quiet'),
+        context.shell('git', 'diff', '--quiet', '--cached')
+    )))
 
     dotted_version = '.'.join(map(str, version))
     replacements = [
@@ -165,7 +168,7 @@ def set_version(context: Context, version=None, bump=False):
          'VERSION = (%s)' % ', '.join(map(str, version)),
          'mtp_common/__init__.py'),
         (r'^  "version":.*$',
-         '  "version": "%s",' % dotted_version,
+         f'  "version": "{dotted_version}",',
          'package.json'),
     ]
     for search, replacement, path in replacements:
@@ -174,7 +177,21 @@ def set_version(context: Context, version=None, bump=False):
         content = re.sub(search, replacement, content, flags=re.MULTILINE)
         with open(os.path.join(root_path, path), 'w') as f:
             f.write(content)
-    context.debug('Updated version to %s' % dotted_version)
+    context.info(f'Updated version to {dotted_version}')
+
+    if git_already_dirty:
+        context.error('Cannot commit version bump because repository was already dirty')
+        return
+
+    context.shell('git', 'checkout', 'main')
+    context.shell('git', 'add', *[path for _, _, path in replacements])
+    context.shell('git', 'commit', '--message', f'"Bump to {dotted_version}"')
+    context.shell('git', 'tag', dotted_version)
+    context.shell('git', 'push', '--atomic', 'origin', 'main', dotted_version)
+    context.info('Publish to PyPI by creating new release:\n'
+                 'https://github.com/ministryofjustice/money-to-prisoners-common/releases/new?'
+                 f'tag={dotted_version}&'
+                 f'title={dotted_version}')
 
 
 @tasks.register('setup_django_for_testing', hidden=True)
