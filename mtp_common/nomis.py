@@ -165,7 +165,7 @@ class Connector:
             'Authorization': f'Bearer {bearer_token}',
         }
 
-    def request(self, verb, path, params=None, json=None, timeout=15, retries=0, session=None):
+    def request(self, verb, path, params=None, json=None, timeout=30, retries=0, session=None):
         """
         Makes a request call to Prison API (i.e. NOMIS).
         You probably want to use the `get` or the `post` methods instead.
@@ -193,7 +193,7 @@ class Connector:
             'status_code': response.status_code,
         }
 
-    def get(self, path, params=None, timeout=15, retries=0, session=None):
+    def get(self, path, params=None, timeout=30, retries=0, session=None):
         """
         Makes a GET request to Prison API (i.e. NOMIS).
         """
@@ -205,7 +205,7 @@ class Connector:
             }
         return self.request('get', path, params=params, timeout=timeout, retries=retries, session=session)
 
-    def post(self, path, data=None, timeout=15, retries=0, session=None):
+    def post(self, path, data=None, timeout=30, retries=0, session=None):
         """
         Makes a POST request to Prison API (i.e. NOMIS).
         """
@@ -234,7 +234,7 @@ class Connector:
                 'Content-Length': '0',
                 'Authorization': f'Basic {creds}',
             },
-            timeout=10,
+            timeout=30,
         )
         response.raise_for_status()
 

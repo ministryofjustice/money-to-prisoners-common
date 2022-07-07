@@ -76,8 +76,7 @@ class MoJOAuth2Session(LocalisedOAuth2Session):
     def request(self, method, url, data=None, headers=None, **kwargs):
         if self.base_url and not urlsplit(url).scheme:
             url = urljoin(self.base_url, url)
-        if 'timeout' not in kwargs:
-            kwargs['timeout'] = 15
+        kwargs.setdefault('timeout', 30)
         return super().request(method, url, data=data, headers=headers, **kwargs)
 
 
@@ -104,7 +103,7 @@ def authenticate(username, password):
         username=username,
         password=password,
         auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
-        timeout=15,
+        timeout=30,
         encoding='utf-8'
     )
 
@@ -128,7 +127,7 @@ def revoke_token(access_token):
             'client_id': settings.API_CLIENT_ID,
             'client_secret': settings.API_CLIENT_SECRET,
         },
-        timeout=15
+        timeout=30
     )
     return response.status_code == 200
 
@@ -174,7 +173,7 @@ def get_authenticated_api_session(username, password):
         username=username,
         password=password,
         auth=HTTPBasicAuth(settings.API_CLIENT_ID, settings.API_CLIENT_SECRET),
-        timeout=15,
+        timeout=30,
         encoding='utf-8'
     )
     return session
