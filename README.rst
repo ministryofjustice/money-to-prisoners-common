@@ -183,7 +183,15 @@ After this has been done once, bringing up apps again only requires repeating st
 
    NB: The newer ``docker compose up`` form only works after the ``docker-compose up`` has already built the containers the first time!
 
-In order to run all Docker containers you may need to perform the steps in the `Slack thread`_
+You may run into the following issue when running `mtp-bank-admin` and `mtp-emails`:
+
+  .. code-block:: sh
+
+    FileNotFoundError: [Errno 2] No such file or directory: '/app/mtp_bank_admin/assets-static'
+    None
+    [Errno 2] No such file or directory: '/app/mtp_bank_admin/assets-static'
+
+I fixed this by commenting out `get_project_dir('assets-static')` in those project's file `settings/base.py`
 
 5. Create standard users and populate database with sample data. In this repo:
 
