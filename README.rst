@@ -183,16 +183,6 @@ After this has been done once, bringing up apps again only requires repeating st
 
    NB: The newer ``docker compose up`` form only works after the ``docker-compose up`` has already built the containers the first time!
 
-You may run into the following issue when running `mtp-bank-admin` and `mtp-emails`:
-
-  .. code-block:: sh
-
-    FileNotFoundError: [Errno 2] No such file or directory: '/app/mtp_bank_admin/assets-static'
-    None
-    [Errno 2] No such file or directory: '/app/mtp_bank_admin/assets-static'
-
-This can be fixed by creating an empty `assets-static` directory in those projects.
-
 5. Create standard users and populate database with sample data. In this repo:
 
 .. code-block:: sh
