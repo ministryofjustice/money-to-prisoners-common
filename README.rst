@@ -87,6 +87,7 @@ Check out each app and helper repository side-by-side in one directory using git
 * `money-to-prisoners-cashbook`_
 * `money-to-prisoners-bank-admin`_
 * `money-to-prisoners-noms-ops`_
+* `money-to-prisoners-emails`_
 * `money-to-prisoners-transaction-uploader`_ – NB: this app does not expose a web interface
 * `money-to-prisoners-send-money`_
 * `money-to-prisoners-start-page`_
@@ -210,6 +211,8 @@ Irrespective of how the apps were run, those exposing a web interface will be ac
 * send-money: http://localhost:3004/
 * start-page: http://localhost:8005/
 
+You can find login details in `load_test_data.py`_
+
 Caveat: You can only log into one app at a time locally because the cookies within which the session is stored are namespaced to domain only.
 
 Additional Bespoke Packages
@@ -235,6 +238,8 @@ There are additional bespoke dependencies defined as python dependencies within 
 .. _money-to-prisoners-start-page: https://github.com/ministryofjustice/money-to-prisoners-start-page
 .. _money-to-prisoners-common: https://github.com/ministryofjustice/money-to-prisoners-common
 .. _money-to-prisoners-deploy: https://github.com/ministryofjustice/money-to-prisoners-deploy
+.. _money-to-prisoners-emails: https://github.com/ministryofjustice/money-to-prisoners-emails
+.. _load_test_data.py: https://github.com/ministryofjustice/money-to-prisoners-api/blob/a6e039a3fc85d675c62658c226a3bd94d27355d5/mtp_api/apps/core/management/commands/load_test_data.py#L221-L229
 .. _django-form-error-reporting: https://github.com/ministryofjustice/django-form-error-reporting
 .. _django-zendesk-tickets: https://github.com/ministryofjustice/django-zendesk-tickets
 .. _govuk-bank-holidays: https://github.com/ministryofjustice/govuk-bank-holidays
