@@ -191,7 +191,7 @@ You may run into the following issue when running `mtp-bank-admin` and `mtp-emai
     None
     [Errno 2] No such file or directory: '/app/mtp_bank_admin/assets-static'
 
-I fixed this by commenting out `get_project_dir('assets-static')` in those project's file `settings/base.py`
+This can be fixed by creating an empty `assets-static` directory in those projects.
 
 5. Create standard users and populate database with sample data. In this repo:
 
