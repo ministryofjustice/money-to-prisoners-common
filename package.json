@@ -15,7 +15,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "eslint": "~8.19",
+    "eslint": "~8.21",
     "sass-lint": "~1.13.1"
   }
 }
