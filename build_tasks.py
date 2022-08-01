@@ -227,7 +227,8 @@ def clean(context: Context, delete_dependencies: bool = False):
     """
     paths = ['docs/build', 'build', 'dist', '.eggs'] + glob.glob('*.egg-info')
     context.shell('rm -rf %s' % paths_for_shell(paths))
-    context.shell('find %s -name "*.pyc" -or -name __pycache__ -delete' % context.app.django_app_name)
+    context.shell(f'find {context.app.django_app_name} -name "*.pyc" -delete')
+    context.shell(f'find {context.app.django_app_name} -name __pycache__ -delete')
 
     if delete_dependencies:
         context.info('Cleaning local %s dependencies' % context.app.name)
