@@ -1,29 +1,31 @@
 from django.test import SimpleTestCase
 
-from mtp_common.auth.models import MojUser
+from mtp_common.auth.models import MojUser, MojAnonymousUser
 from mtp_common.auth.test_utils import generate_tokens
 
 
 class UserPermissionsTestCase(SimpleTestCase):
-
-    def setUp(self, *args, **kwargs):
-        super().setUp(*args, **kwargs)
-
+    def setUp(self):
         self.user = MojUser(5, generate_tokens(), {
+            'pk': 5,
+            'username': 'sam-hall',
             'first_name': 'Sam',
             'last_name': 'Hall',
+            'email': 'sam@mtp.local',
             'permissions': [
                 'allowed_permission_1',
                 'allowed_permission_2',
                 'allowed_permission_3'
-            ]
+            ],
         })
 
     def test_fields(self):
+        self.assertEqual(self.user.get_username(), 'sam-hall')
         self.assertEqual(self.user.first_name, 'Sam')
         self.assertEqual(self.user.last_name, 'Hall')
         self.assertEqual(self.user.get_full_name(), 'Sam Hall')
-        self.assertFalse(self.user.email)
+        self.assertEqual(self.user.get_short_name(), 'Sam')
+        self.assertEqual(self.user.email, 'sam@mtp.local')
 
     def test_has_perm_succeeds_if_present(self):
         self.assertTrue(self.user.has_perm('allowed_permission_1'))
@@ -55,3 +57,19 @@ class UserPermissionsTestCase(SimpleTestCase):
             'allowed_permission_1',
             'forbidden_permission'
         ]))
+
+
+class AnonymousUserPermissionsTestCase(SimpleTestCase):
+    def setUp(self):
+        self.user = MojAnonymousUser()
+
+    def test_fields(self):
+        self.assertEqual(self.user.get_username(), '')
+        self.assertEqual(self.user.first_name, '')
+        self.assertEqual(self.user.last_name, '')
+        self.assertEqual(self.user.get_full_name(), '')
+        self.assertEqual(self.user.get_short_name(), '')
+        self.assertEqual(self.user.email, '')
+
+    def test_has_no_perms(self):
+        self.assertFalse(self.user.has_perm('change_something'))
