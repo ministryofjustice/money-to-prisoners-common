@@ -39,6 +39,9 @@ class MojUser:
     def username(self):
         return self.user_data.get('username')
 
+    def get_username(self):
+        return self.username
+
     @property
     def email(self):
         return self.user_data.get('email')
@@ -59,6 +62,9 @@ class MojUser:
             ]
             self._full_name = ' '.join(filter(None, name_parts))
         return self._full_name
+
+    def get_short_name(self):
+        return self.user_data.get('first_name')
 
     def get_initials(self):
         if self.get_full_name():
@@ -88,7 +94,13 @@ class MojAnonymousUser:
     last_name = ''
     email = ''
 
+    def get_username(self):
+        return self.username
+
     def get_full_name(self):
+        return ''
+
+    def get_short_name(self):
         return ''
 
     @property
