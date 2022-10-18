@@ -16,8 +16,8 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "~2.27",
-    "eslint": "~8.23",
-    "sass-lint": "~1.13"
+    "eslint": "~8.25",
+    "sass-lint": "~1.13.1"
   },
   "dependencies": {
     "govuk-frontend": "~4.3",
