@@ -154,8 +154,14 @@ class NotifyTestCase(NotifyBaseTestCase):
             ])
             client = NotifyClient.shared_client()
             mock_send_email_response(rsps, '333', 'sample@localhost', personalisation={
-                'open file': {'file': 'AAAAAAA=', 'is_csv': False},
-                'byte content': {'file': 'MTIzNDU=', 'is_csv': False},
+                'open file': {
+                    'file': 'AAAAAAA=', 'is_csv': False,
+                    'confirm_email_before_download': False, 'retention_period': '52 weeks',
+                },
+                'byte content': {
+                    'file': 'MTIzNDU=', 'is_csv': False,
+                    'confirm_email_before_download': False, 'retention_period': '52 weeks',
+                },
             })
             client.send_email('two-files', 'sample@localhost', personalisation={
                 # passes an open file handle

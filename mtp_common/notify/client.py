@@ -98,9 +98,17 @@ class NotifyClient:
             prepared_files = {}
             for field, content in personalisation.items():
                 if isinstance(content, bytes):
-                    prepared_files[field] = prepare_upload(io.BytesIO(content))
+                    prepared_files[field] = prepare_upload(
+                        io.BytesIO(content),
+                        confirm_email_before_download=False,
+                        retention_period='52 weeks',
+                    )
                 elif isinstance(content, (io.RawIOBase, io.BufferedIOBase)):
-                    prepared_files[field] = prepare_upload(content)
+                    prepared_files[field] = prepare_upload(
+                        content,
+                        confirm_email_before_download=False,
+                        retention_period='52 weeks',
+                    )
             personalisation.update(prepared_files)
         message_ids = []
         for email_address in to:
