@@ -21,9 +21,9 @@ install_requires = [
     'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
     'notifications-python-client~=6.4',
-    'pytz>=2022.4',
-    'requests>=2.28,<3',
-    'requests-oauthlib>=1,<2',
+    'pytz>=2022.7',
+    'requests~=2.28',
+    'requests-oauthlib~=1.3',
     'slumber>=0.7,<0.8',
     'selenium~=4.5',
     'transifex-client>=0.14,<0.15',
@@ -36,7 +36,7 @@ install_requires = [
     'prometheus-client>=0.14,<1',
     'sentry-sdk~=1.9',
     'libsass~=0.22',
-    'uWSGI~=2.0.20',
+    'uWSGI~=2.0.21',
 
     # moj-built dependencies (should be locked versions)
     'django-form-error-reporting==0.10',
