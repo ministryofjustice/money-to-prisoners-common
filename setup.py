@@ -30,11 +30,11 @@ install_requires = [
     'cryptography>=38,<39',
     'boto3~=1.26',
     'kubernetes~=22.0',  # corresponds to server version 1.22 (within skew of `live` cluster)
-    'opencensus~=0.10',
+    'opencensus~=0.11',
     'opencensus-ext-azure~=1.1',
-    'opencensus-ext-django~=0.7',
-    'prometheus-client>=0.14,<1',
-    'sentry-sdk~=1.9',
+    'opencensus-ext-django~=0.8',
+    'prometheus-client>=0.15,<1',
+    'sentry-sdk~=1.12',
     'libsass~=0.22',
     'uWSGI~=2.0.21',
 
