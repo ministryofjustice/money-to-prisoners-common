@@ -35,7 +35,7 @@ install_requires = [
     'opencensus-ext-django~=0.7',
     'prometheus-client>=0.14,<1',
     'sentry-sdk~=1.9',
-    'libsass~=0.21',
+    'libsass~=0.22',
     'uWSGI~=2.0.20',
 
     # moj-built dependencies (should be locked versions)
