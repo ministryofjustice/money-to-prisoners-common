@@ -27,7 +27,7 @@ install_requires = [
     'slumber>=0.7,<0.8',
     'selenium~=4.5',
     'transifex-client>=0.14,<0.15',
-    'cryptography>=38,<39',
+    'cryptography>=38,<40',
     'boto3~=1.26',
     'kubernetes~=22.0',  # corresponds to server version 1.22 (within skew of `live` cluster)
     'opencensus~=0.11',
@@ -49,7 +49,7 @@ extras_require = {
         # third-party dependencies (versions should be flexible to allow for bug fixes)
         'flake8~=6.0',
         'flake8-blind-except~=0.2.1',
-        'flake8-bugbear~=22.12',
+        'flake8-bugbear~=23.1',
         'flake8-debugger~=4.1',
         'flake8-quotes~=3.3',
         'pep8-naming~=0.13.3',
