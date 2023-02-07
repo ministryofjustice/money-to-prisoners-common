@@ -100,9 +100,9 @@ Each app describes its own installation in its read-me file, but here’s a quic
 
 1. Setup local postgres database server. There’s no need to create a user or database if using default settings.
 
-2. Install python version 3.8.
+2. Install python version 3.10.
 
-3. Install nodejs version 16.
+3. Install nodejs version 18.
 
 4. Setup a python virtual environment for each app. These are used to isolate python dependency libraries for each app.
 
