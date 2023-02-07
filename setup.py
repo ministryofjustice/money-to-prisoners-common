@@ -1,11 +1,7 @@
 import importlib
 import os
-import sys
 
 from setuptools import setup, find_packages
-
-if sys.version_info < (3, 8):
-    raise SystemError('Python version must be at least 3.8')
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -76,8 +72,9 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
     ],
+    python_requires='>=3.10',
     install_requires=install_requires,
     extras_require=extras_require,
     tests_require=extras_require['testing'],
