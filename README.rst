@@ -55,9 +55,13 @@ Update translation files with ``./run.py make_messages`` – you need to do this
 
 Compile messages ``./run.py compile_messages`` – only needed during local testing or development, it happens automatically during build or upload.
 
-Pull updates from Transifex with ``./run.py translations --pull``. You’ll need to update translation files afterwards and manually check that the merges occurred correctly.
+Requires [transifex cli tool](https://github.com/transifex/cli#installation) for synchronisation:
 
-Push latest English to Transifex with ``./run.py translations --push``. NB: you should pull updates before pushing to merge correctly.
+Pull updates from Transifex with ``./run.py translations --pull``.
+You’ll need to update translation files afterwards and manually check that the merges occurred correctly.
+
+Push latest English to Transifex with ``./run.py translations --push``.
+NB: you should pull updates before pushing to merge correctly.
 
 Assets
 ------

@@ -1,14 +1,14 @@
 [main]
 host = https://www.transifex.com
 
-[mtp.common]
+[o:ministry-of-justice:p:mtp:r:common]
 file_filter = mtp_common/locale/<lang>/LC_MESSAGES/django.po
 source_file = mtp_common/locale/django.pot
 source_lang = en_GB
-type = PO
+type        = PO
 
-[mtp.common_js]
+[o:ministry-of-justice:p:mtp:r:common_js]
 file_filter = mtp_common/locale/<lang>/LC_MESSAGES/djangojs.po
 source_file = mtp_common/locale/djangojs.pot
 source_lang = en_GB
-type = PO
+type        = PO

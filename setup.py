@@ -22,7 +22,6 @@ install_requires = [
     'requests-oauthlib~=1.3',
     'slumber>=0.7,<0.8',
     'selenium~=4.5',
-    'transifex-client>=0.14,<0.15',
     'cryptography>=38,<40',
     'boto3~=1.26',
     'kubernetes~=22.0',  # corresponds to server version 1.22 (within skew of `live` cluster)
