@@ -1,5 +1,5 @@
 import configparser
-import collections
+import collections.abc
 import functools
 import inspect
 import os
@@ -28,7 +28,7 @@ class TaskError(ExecutorError):
     pass
 
 
-class Tasks(collections.MutableMapping):
+class Tasks(collections.abc.MutableMapping):
     """
     Defines a list of tasks
     """
@@ -131,7 +131,7 @@ class Task:
         return self.name.replace('_', ' ')
 
 
-class ParameterGroup(collections.MutableMapping):
+class ParameterGroup(collections.abc.MutableMapping):
     """
     Defines a set of parameters accepted by a task
     """
@@ -255,7 +255,7 @@ class Parameter:
         raise ParameterError(f'Parameter type cannot be {value_type}')
 
     @classmethod
-    def constraint_from_choices(cls, value_type: type, choices: collections.Sequence):
+    def constraint_from_choices(cls, value_type: type, choices: collections.abc.Sequence):
         """
         Returns a constraint callable based on choices of a given type
         """

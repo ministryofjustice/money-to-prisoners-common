@@ -1,4 +1,4 @@
-import collections
+import collections.abc
 import contextlib
 import datetime
 import os
@@ -27,7 +27,7 @@ def paths_for_shell(paths, separator=' '):
     return separator.join(paths)
 
 
-class FileSet(collections.Iterable, collections.Sized):
+class FileSet(collections.abc.Iterable, collections.abc.Sized):
     def __init__(self, *include, root='.'):
         self.include = list(include)
         self.root = root
