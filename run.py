@@ -17,7 +17,7 @@ def test():
 
 
 if __name__ == '__main__':
-    if sys.version_info[0:2] < (3, 8):
-        raise SystemExit('Python 3.8+ is required')
+    if sys.version_info[0:2] < (3, 10):
+        raise SystemExit('Python 3.10+ is required')
 
     main()

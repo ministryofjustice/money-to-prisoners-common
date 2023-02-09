@@ -55,9 +55,13 @@ Update translation files with ``./run.py make_messages`` – you need to do this
 
 Compile messages ``./run.py compile_messages`` – only needed during local testing or development, it happens automatically during build or upload.
 
-Pull updates from Transifex with ``./run.py translations --pull``. You’ll need to update translation files afterwards and manually check that the merges occurred correctly.
+Requires [transifex cli tool](https://github.com/transifex/cli#installation) for synchronisation:
 
-Push latest English to Transifex with ``./run.py translations --push``. NB: you should pull updates before pushing to merge correctly.
+Pull updates from Transifex with ``./run.py translations --pull``.
+You’ll need to update translation files afterwards and manually check that the merges occurred correctly.
+
+Push latest English to Transifex with ``./run.py translations --push``.
+NB: you should pull updates before pushing to merge correctly.
 
 Assets
 ------
@@ -100,9 +104,9 @@ Each app describes its own installation in its read-me file, but here’s a quic
 
 1. Setup local postgres database server. There’s no need to create a user or database if using default settings.
 
-2. Install python version 3.8.
+2. Install python version 3.10.
 
-3. Install nodejs version 16.
+3. Install nodejs version 18.
 
 4. Setup a python virtual environment for each app. These are used to isolate python dependency libraries for each app.
 
