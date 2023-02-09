@@ -16,3 +16,4 @@ recursive-include mtp_common/static *.svg
 recursive-include mtp_common/locale *.po
 recursive-include mtp_common/locale *.mo
 recursive-include mtp_common/templates *
+recursive-exclude tests *
