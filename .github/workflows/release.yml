@@ -12,11 +12,11 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: "3.10"
       - name: Setup nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Install os dependencies
         run: sudo apt-get install gettext
       - name: Install python dependencies
