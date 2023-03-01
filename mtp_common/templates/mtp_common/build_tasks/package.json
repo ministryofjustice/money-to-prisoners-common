@@ -15,8 +15,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "~2.27",
-    "eslint": "~8.33",
+    "browser-sync": "~2.28",
+    "eslint": "~8.35",
     "sass-lint": "~1.13.1"
   },
   "dependencies": {
