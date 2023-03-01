@@ -16,12 +16,12 @@ install_requires = [
     'Django>=2.2,<2.3',  # mtp apps are only compatible with django 2.2
     'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
-    'notifications-python-client>=6.4,<9.0',
+    'notifications-python-client~=8.0',
     'pytz>=2022.7',
     'requests~=2.28',
     'requests-oauthlib~=1.3',
     'slumber>=0.7,<0.8',
-    'selenium~=4.5',
+    'selenium~=4.8',
     'cryptography>=38,<40',
     'boto3~=1.26',
     'kubernetes~=22.0',  # corresponds to server version 1.22 (within skew of `live` cluster)
@@ -29,7 +29,7 @@ install_requires = [
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
     'prometheus-client>=0.15,<1',
-    'sentry-sdk~=1.12',
+    'sentry-sdk~=1.16',
     'libsass~=0.22',
     'uWSGI~=2.0.21',
 
@@ -44,13 +44,13 @@ extras_require = {
         # third-party dependencies (versions should be flexible to allow for bug fixes)
         'flake8~=6.0',
         'flake8-blind-except~=0.2.1',
-        'flake8-bugbear~=23.1',
+        'flake8-bugbear~=23.2',
         'flake8-debugger~=4.1',
         'flake8-quotes~=3.3',
         'pep8-naming~=0.13.3',
         'responses~=0.22.0',
         'twine~=4.0',
-        'watchdog~=2.2',
+        'watchdog~=2.3',
     ],
 }
 
