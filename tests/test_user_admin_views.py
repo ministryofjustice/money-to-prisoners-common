@@ -270,6 +270,7 @@ class EditUserTestCase(UserAdminTestCase):
             'first_name': 'current',
             'last_name': 'user',
             'email': 'current@user.com',
+            'is_active': True,
             'user_admin': False,
             'roles': ['prison-clerk'],
         }
@@ -375,6 +376,22 @@ class EditUserTestCase(UserAdminTestCase):
             self._init_existing_user(rsps, roles=['prison-clerk', 'security'])
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-user.html')
+
+    def test_enabled_user_shows_link_to_delete(self):
+        self.mocked_login()
+        with responses.RequestsMock() as rsps:
+            self._init_existing_user(rsps)
+            self.mock_roles_list(rsps)
+            response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
+        self.assertContains(response, 'This user can log in')
+
+    def test_disabled_user_shows_link_to_undelete(self):
+        self.mocked_login()
+        with responses.RequestsMock() as rsps:
+            self._init_existing_user(rsps, is_active=False)
+            self.mock_roles_list(rsps)
+            response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
+        self.assertContains(response, 'This user cannot log in')
 
 
 class SignUpTestCase(SimpleTestCase):

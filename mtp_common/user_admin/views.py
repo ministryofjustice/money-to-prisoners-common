@@ -302,6 +302,8 @@ class UserUpdateView(UserFormView):
             response = api_client.get_api_session(self.request).get(
                 f'users/{username}/'
             ).json()
+            is_active = response.get('is_active')
+            self.extra_context = {'is_active': is_active}
             initial = {
                 'username': response.get('username', ''),
                 'first_name': response.get('first_name', ''),
@@ -320,6 +322,7 @@ class UserUpdateView(UserFormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        context_data.update(self.extra_context)
         if self.request.user.username == self.kwargs.get('username'):
             context_data['page_title'] = _('Edit your account')
         else:
