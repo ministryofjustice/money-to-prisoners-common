@@ -86,10 +86,45 @@ class UserListTestCase(UserAdminTestCase):
             response = self.client.get(reverse('list-users'))
         self.assertNotContains(response, 'New user requests')
         self.assertContains(response, 'Edit existing users')
+        self.assertNotContains(response, 'Clear filters')
         content = response.content.decode(response.charset)
         self.assertIn('john123', content)
         self.assertIn('mary321', content)
         self.assertIn('User can manage other accounts', content)
+
+    def test_search_users(self):
+        self.mocked_login()
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'users') + '?limit=20&offset=0&simple_search=search terms',
+                match_querystring=True,
+                json={'results': [
+                    {
+                        'first_name': 'John', 'last_name': 'Smith',
+                        'username': 'john', 'email': 'john@mtp.local',
+                        'is_active': True, 'is_locked_out': False, 'user_admin': False,
+                    },
+                    {
+                        'first_name': 'Mary', 'last_name': 'Marks',
+                        'username': 'mary', 'email': 'mary@mtp.local',
+                        'is_active': False, 'is_locked_out': False, 'user_admin': True,
+                    },
+                ], 'count': 2},
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            response = self.client.get(reverse('list-users') + '?simple_search=search terms')
+        self.assertNotContains(response, 'New user requests')
+        self.assertContains(response, 'Edit existing users')
+        self.assertContains(response, 'Clear filters')
+        content = response.content.decode(response.charset)
+        self.assertIn('search terms', content)
 
     def test_delete_user_permission_propagates(self):
         self.mocked_login()

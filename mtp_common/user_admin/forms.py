@@ -49,20 +49,27 @@ class UserListForm(ApiForm):
     page = forms.IntegerField(label=_('Page'), required=False, initial=1, min_value=1)
     page_size = forms.IntegerField(label=_('Page size'), required=False, initial=20, min_value=1)
 
+    simple_search = forms.CharField(label=_('Search names, usernames and email addresses'), required=False, initial='')
+
     def clean(self):
         cleaned_data = super().clean()
         if self.is_valid():
             page_size = cleaned_data['page_size']
             page = cleaned_data['page']
+            simple_search = cleaned_data['simple_search']
+
+            params = {
+                'limit': page_size,
+                'offset': (page - 1) * page_size,
+            }
+            if simple_search:
+                params['simple_search'] = simple_search
 
             try:
                 session = self.api_session
                 response = session.get(
                     'users/',
-                    params={
-                        'limit': page_size,
-                        'offset': (page - 1) * page_size,
-                    }
+                    params=params,
                 ).json()
                 user_count = response.get('count', 0)
                 users = response.get('results', [])
@@ -79,6 +86,7 @@ class UserListForm(ApiForm):
                     account_requests = []
 
                 query_data = QueryDict(mutable=True)
+                query_data.update(simple_search=simple_search)
                 query_string = query_data.urlencode()
 
                 cleaned_data.update(

@@ -70,6 +70,19 @@
     {% trans 'Edit existing users' %}
   </h2>
 
+  <form action="." method="get" novalidate class="mtp-account-management__user-search-form">
+    {% include 'mtp_common/forms/field.html' with field=form.simple_search input_classes='govuk-input--width-20' only %}
+
+    <div class="govuk-button-group">
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+        {% trans 'Search' %}
+      </button>
+      {% if form.cleaned_data.simple_search %}
+        <a href="{% url 'list-users' %}" class="govuk-link">{% trans 'Clear filters' %}</a>
+      {% endif %}
+    </div>
+  </form>
+
   {% include 'govuk-frontend/components/error-summary.html' with form=form only %}
 
   {% if form.is_valid %}
@@ -121,6 +134,12 @@
                 </td>
               </tr>
             {% endif %}
+          {% empty %}
+            <tr>
+              <td colspan="4">
+                {% trans 'No users found' %}
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
