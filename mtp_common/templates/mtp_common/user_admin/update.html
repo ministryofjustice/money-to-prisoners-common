@@ -64,6 +64,30 @@
         </div>
       </form>
 
+      {% if is_active is True %}
+        {% include 'govuk-frontend/components/section-break.html' with visible=True size='l' %}
+
+        <p>
+          {% trans 'This user can log in.' %}
+        </p>
+        <p>
+          <a href="{% url 'delete-user' username=view.kwargs.username %}" class="govuk-button govuk-button--warning" data-module="govuk-button">
+            {% trans 'Disable this user' %}
+          </a>
+        </p>
+      {% elif is_active is False %}
+        {% include 'govuk-frontend/components/section-break.html' with visible=True size='l' %}
+
+        <p>
+          {% trans 'This user cannot log in.' %}
+        </p>
+        <p>
+          <a href="{% url 'undelete-user' username=view.kwargs.username %}" class="govuk-button" data-module="govuk-button">
+            {% trans 'Enable this user' %}
+          </a>
+        </p>
+      {% endif %}
+
     </div>
   </div>
 {% endblock %}

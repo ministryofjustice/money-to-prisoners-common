@@ -1,5 +1,4 @@
 import logging
-import math
 
 from django.conf import settings
 from django.contrib import messages
@@ -12,10 +11,10 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext, gettext_lazy as _, ngettext_lazy
 from django.views.generic.edit import FormView
 
-from mtp_common.api import api_errors_to_messages, retrieve_all_pages_for_path
+from mtp_common.api import api_errors_to_messages
 from mtp_common.auth import api_client
 from mtp_common.auth.exceptions import HttpNotFoundError, HttpClientError
-from mtp_common.user_admin.forms import UserUpdateForm, AcceptRequestForm
+from mtp_common.user_admin.forms import UserListForm, UserUpdateForm, AcceptRequestForm
 
 logger = logging.getLogger('mtp')
 
@@ -58,50 +57,6 @@ def ensure_compatible_admin(view):
         return view(request, *args, **kwargs)
 
     return wrapper
-
-
-@login_required
-@permission_required('auth.change_user', raise_exception=True)
-@ensure_compatible_admin
-def list_users(request):
-    page_size = 20
-    try:
-        page = int(request.GET['page'])
-        if page < 1:
-            raise ValueError
-    except (KeyError, ValueError):
-        page = 1
-    session = api_client.get_api_session(request)
-    response = session.get(
-        'users/',
-        params={
-            'limit': page_size,
-            'offset': (page - 1) * page_size,
-        }
-    ).json()
-    user_count = response.get('count', 0)
-    users = response.get('results', [])
-    try:
-        account_requests = retrieve_all_pages_for_path(session, 'requests/')
-        for account_request in account_requests:
-            account_request['created'] = parse_datetime(account_request['created'])
-    except HttpClientError:
-        logger.exception(
-            'User %(username)s cannot access account requests',
-            {'username': request.user.username},
-        )
-        account_requests = []
-    context = {
-        'breadcrumbs': make_breadcrumbs(),
-        'can_delete': request.user.has_perm('auth.delete_user'),
-        'locked_users_exist': any(user['is_locked_out'] for user in users),
-        'users': users,
-        'page': page,
-        'page_count': int(math.ceil(user_count / page_size)),
-        'user_count': user_count,
-        'account_requests': account_requests,
-    }
-    return render(request, 'mtp_common/user_admin/list.html', context=context)
 
 
 @login_required
@@ -211,6 +166,42 @@ def unlock_user(request, username):
     return redirect(reverse('list-users'))
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('auth.change_user', raise_exception=True), name='dispatch')
+@method_decorator(ensure_compatible_admin, name='dispatch')
+class UserListView(FormView):
+    title = _('Manage users')
+    template_name = 'mtp_common/user_admin/list.html'
+    form_class = UserListForm
+    success_url = reverse_lazy('list-users')
+
+    def get(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data.update({
+            'page_title': self.title,
+            'breadcrumbs': make_breadcrumbs(),
+            'can_delete': self.request.user.has_perm('auth.delete_user'),
+        })
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        if self.request.method == 'GET':
+            data = self.request.GET.dict()
+            for field_name, field in self.form_class.base_fields.items():
+                if field_name not in data and not field.required and field.initial is not None:
+                    data[field_name] = field.initial
+            kwargs.update(data=data)
+        return kwargs
+
+    def form_valid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+
 class UserFormView(FormView):
     title = _('Edit user')
     template_name = 'mtp_common/user_admin/update.html'
@@ -302,6 +293,8 @@ class UserUpdateView(UserFormView):
             response = api_client.get_api_session(self.request).get(
                 f'users/{username}/'
             ).json()
+            is_active = response.get('is_active')
+            self.extra_context = {'is_active': is_active}
             initial = {
                 'username': response.get('username', ''),
                 'first_name': response.get('first_name', ''),
@@ -320,6 +313,7 @@ class UserUpdateView(UserFormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        context_data.update(self.extra_context)
         if self.request.user.username == self.kwargs.get('username'):
             context_data['page_title'] = _('Edit your account')
         else:

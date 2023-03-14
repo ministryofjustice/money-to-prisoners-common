@@ -86,10 +86,45 @@ class UserListTestCase(UserAdminTestCase):
             response = self.client.get(reverse('list-users'))
         self.assertNotContains(response, 'New user requests')
         self.assertContains(response, 'Edit existing users')
+        self.assertNotContains(response, 'Clear filters')
         content = response.content.decode(response.charset)
         self.assertIn('john123', content)
         self.assertIn('mary321', content)
         self.assertIn('User can manage other accounts', content)
+
+    def test_search_users(self):
+        self.mocked_login()
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'users') + '?limit=20&offset=0&simple_search=search terms',
+                match_querystring=True,
+                json={'results': [
+                    {
+                        'first_name': 'John', 'last_name': 'Smith',
+                        'username': 'john', 'email': 'john@mtp.local',
+                        'is_active': True, 'is_locked_out': False, 'user_admin': False,
+                    },
+                    {
+                        'first_name': 'Mary', 'last_name': 'Marks',
+                        'username': 'mary', 'email': 'mary@mtp.local',
+                        'is_active': False, 'is_locked_out': False, 'user_admin': True,
+                    },
+                ], 'count': 2},
+                content_type='application/json'
+            )
+            rsps.add(
+                rsps.GET,
+                urljoin(settings.API_URL, 'requests'),
+                json={'results': [], 'count': 0},
+                content_type='application/json'
+            )
+            response = self.client.get(reverse('list-users') + '?simple_search=search terms')
+        self.assertNotContains(response, 'New user requests')
+        self.assertContains(response, 'Edit existing users')
+        self.assertContains(response, 'Clear filters')
+        content = response.content.decode(response.charset)
+        self.assertIn('search terms', content)
 
     def test_delete_user_permission_propagates(self):
         self.mocked_login()
@@ -270,6 +305,7 @@ class EditUserTestCase(UserAdminTestCase):
             'first_name': 'current',
             'last_name': 'user',
             'email': 'current@user.com',
+            'is_active': True,
             'user_admin': False,
             'roles': ['prison-clerk'],
         }
@@ -375,6 +411,22 @@ class EditUserTestCase(UserAdminTestCase):
             self._init_existing_user(rsps, roles=['prison-clerk', 'security'])
             response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
         self.assertEqual(response.templates[0].name, 'mtp_common/user_admin/incompatible-user.html')
+
+    def test_enabled_user_shows_link_to_delete(self):
+        self.mocked_login()
+        with responses.RequestsMock() as rsps:
+            self._init_existing_user(rsps)
+            self.mock_roles_list(rsps)
+            response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
+        self.assertContains(response, 'This user can log in')
+
+    def test_disabled_user_shows_link_to_undelete(self):
+        self.mocked_login()
+        with responses.RequestsMock() as rsps:
+            self._init_existing_user(rsps, is_active=False)
+            self.mock_roles_list(rsps)
+            response = self.client.get(reverse('edit-user', kwargs={'username': 'current_user'}))
+        self.assertContains(response, 'This user cannot log in')
 
 
 class SignUpTestCase(SimpleTestCase):

@@ -1,11 +1,15 @@
 import json
 import logging
+import math
 
 from django import forms
 from django.conf import settings
+from django.http import QueryDict
+from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 from form_error_reporting import GARequestErrorReportingMixin
 
+from mtp_common.api import retrieve_all_pages_for_path
 from mtp_common.auth import api_client
 from mtp_common.auth.exceptions import HttpClientError
 
@@ -39,6 +43,63 @@ class ApiForm(GARequestErrorReportingMixin, forms.Form):
         except (AttributeError, ValueError, KeyError):
             logger.exception('api returned unexpected error response')
             raise forms.ValidationError(self.error_messages['generic'])
+
+
+class UserListForm(ApiForm):
+    page = forms.IntegerField(label=_('Page'), required=False, initial=1, min_value=1)
+    page_size = forms.IntegerField(label=_('Page size'), required=False, initial=20, min_value=1)
+
+    simple_search = forms.CharField(label=_('Search names, usernames and email addresses'), required=False, initial='')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.is_valid():
+            page_size = cleaned_data['page_size']
+            page = cleaned_data['page']
+            simple_search = cleaned_data['simple_search']
+
+            params = {
+                'limit': page_size,
+                'offset': (page - 1) * page_size,
+            }
+            if simple_search:
+                params['simple_search'] = simple_search
+
+            try:
+                session = self.api_session
+                response = session.get(
+                    'users/',
+                    params=params,
+                ).json()
+                user_count = response.get('count', 0)
+                users = response.get('results', [])
+
+                try:
+                    account_requests = retrieve_all_pages_for_path(session, 'requests/')
+                    for account_request in account_requests:
+                        account_request['created'] = parse_datetime(account_request['created'])
+                except HttpClientError:
+                    logger.exception(
+                        'User %(username)s cannot access account requests',
+                        {'username': self.request.user.username},
+                    )
+                    account_requests = []
+
+                query_data = QueryDict(mutable=True)
+                query_data.update(simple_search=simple_search)
+                query_string = query_data.urlencode()
+
+                cleaned_data.update(
+                    query_string=query_string,
+                    user_count=user_count,
+                    users=users,
+                    locked_users_exist=any(user['is_locked_out'] for user in users),
+                    page_count=int(math.ceil(user_count / page_size)),
+                    account_requests=account_requests,
+                )
+            except HttpClientError as e:
+                self.api_validation_error(e)
+        return cleaned_data
 
 
 class UserUpdateForm(ApiForm):
