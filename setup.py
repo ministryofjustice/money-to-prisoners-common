@@ -48,7 +48,7 @@ extras_require = {
         'flake8-debugger~=4.1',
         'flake8-quotes~=3.3',
         'pep8-naming~=0.13.3',
-        'responses~=0.22.0',
+        'responses>=0.22,<0.24',
         'twine~=4.0',
         'watchdog~=2.3',
     ],
