@@ -16,9 +16,13 @@ class AnalyticsPolicy:
     cookie_name = 'cookie_policy'
 
     def __init__(self, request):
-        self.google_analytics_id = getattr(settings, 'GOOGLE_ANALYTICS_ID', None)
         analytics_required = getattr(settings, 'ANALYTICS_REQUIRED', True)
+
+        self.google_analytics_id = getattr(settings, 'GOOGLE_ANALYTICS_ID', None)
+        self.ga4_measurement_id = getattr(settings, 'GA4_MEASUREMENT_ID', None)
+
         self.enabled = self.google_analytics_id and (analytics_required or self.is_cookie_policy_accepted(request))
+        self.ga4_enabled = self.ga4_measurement_id and (analytics_required or self.is_cookie_policy_accepted(request))
 
     def is_cookie_policy_accepted(self, request):
         """
