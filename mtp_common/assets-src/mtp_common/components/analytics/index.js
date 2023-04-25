@@ -58,7 +58,21 @@ export var Analytics = {
     return true;
   },
 
+  /**
+   * Returns true if GA's `ga()` (legacy) is available
+   *
+   * @returns {boolean} true if GA is available
+   */
   _gaExists: function () {
     return typeof ga === typeof Function;
-  }
+  },
+
+  /**
+   * Returns true if GA4's `gtag()` is available
+   *
+   * @returns {boolean} true if GA4 is available
+   */
+  _ga4Exists: function () {
+    return typeof gtag === typeof Function;
+  },
 };
