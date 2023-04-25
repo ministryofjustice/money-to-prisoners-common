@@ -15,6 +15,9 @@ export var Analytics = {
     if (this._gaExists()) {
       $('*[data-' + this.attrName + ']').on('click', $.proxy(this._sendFromEvent, this));
     }
+    if (this._ga4Exists()) {
+      $('*[data-' + this.attrName + ']').on('click', $.proxy(this._ga4SendFromEvent, this));
+    }
   },
 
   send: function () {
@@ -91,6 +94,36 @@ export var Analytics = {
   _sendFromEvent: function (event) {
     var analyticsParams = $(event.currentTarget).data(this.attrName).split(',');
     this.send.apply(this, analyticsParams);
+    return true;
+  },
+
+  /** Event handler attached to `data-analytics`'s clicks
+   *
+   * the `data-analytics` attribute value determines whether a custom `mtp_event` is sent or a
+   * `page_view` one.
+   *
+   * Examples:
+   * - `data-analytics="pageview,/batch/-dialog_close/"` sends a `page_view` event with
+   *   page_location='/batch/-dialog_close/'
+   * - `data-analytics="event,PrisonConfirmation,Add,{{ form.all_prisons_code }}"` sends a
+   *   custom `mtp_event` event with category='PrisonConfirmation', action='Add' and
+   *   label='{{ form.all_prisons_code }}'
+   */
+  _ga4SendFromEvent: function (event) {
+    var [command, category, action, label] = $(event.currentTarget).data(this.attrName).split(',');
+    switch (command) {
+      case 'event':
+        this.ga4SendEvent(category, action, label);
+        break;
+      // NOTE: The command in the legacy GA (`ga()`) was called `pageview`. The code still
+      //       checks for `pageview` commands to maintain compatibility with existing
+      //       markup/`data-analytics` attributes.
+      //       This will still send the new GA4 event called `page_view` for page views.
+      case 'pageview' :
+        this.ga4SendPageView(category);
+        break;
+    }
+
     return true;
   },
 
