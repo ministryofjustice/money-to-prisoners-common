@@ -26,7 +26,9 @@ export var BeforeUnload = {
 
       $(window).on('beforeunload', function () {
         if ($form.serialize() !== initialData && !submitting) {
-          Analytics.send('pageview', '/-leaving_page_dialog/');
+          var pageLocation = '/-leaving_page_dialog/';
+          Analytics.send('pageview', pageLocation);
+          Analytics.ga4SendPageView(pageLocation);
           return message;
         }
       });
