@@ -9,6 +9,7 @@
 
 export var Analytics = {
   attrName: 'analytics',
+  ga4EventName: 'mtp_event',
 
   init: function () {
     if (this._gaExists()) {
@@ -38,6 +39,41 @@ export var Analytics = {
       }
       [].unshift.call(arguments, 'send');
       ga.apply(window, arguments);
+    }
+  },
+
+  /**
+   * Sends a custom GA4 'mtp_event' event with category/action/lavel params.
+   *
+   * NOTE: `category`/`action`/`label` need to be configured in
+   * Google Analytics under Admin > Custom definitions.
+   *
+   * Example
+   * ```JavaScript
+   * Analytics.ga4SendEvent('PrisonConfirmation', 'Confirm', eventLabel);
+   * ```
+   *
+   * @param {string} category Event category
+   * @param {string} action Event action
+   * @param {string} label Event label
+   */
+  ga4SendEvent: function (category, action, label) {
+    if (this._ga4Exists()) {
+      gtag.apply(window, 'event', this.ga4EventName, {
+        category: category || '',
+        action: action || '',
+        label: label || '',
+      });
+    }
+  },
+
+  /** Sends a GA4 'page_view' event with the give 'page_location'
+   *
+   * @param {string} pageLocation page location associated to the event
+   */
+  ga4SendPageView: function (pageLocation) {
+    if (this._ga4Exists()) {
+      gtag.apply(window, 'event', 'page_view', { 'page_location': pageLocation || '' });
     }
   },
 
