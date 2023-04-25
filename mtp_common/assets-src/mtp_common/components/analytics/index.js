@@ -20,31 +20,6 @@ export var Analytics = {
     }
   },
 
-  send: function () {
-    /*
-      Sends to GA passing through all specified arguments.
-      It appends an object with page, location and title to the call, if you don't want
-      this use rawSend instead.
-    */
-    if (this._gaExists()) {
-      var gaData = $('span.mtp-ga-data');
-      if (gaData) {
-        var page = gaData.data('page');
-        if (arguments[0] === 'pageview' && arguments.length > 1 && $.type(arguments[1]) === 'string') {
-          page = arguments[1];
-        }
-        var gaOverride = {
-          page: page,
-          location: gaData.data('location'),
-          title: gaData.data('title') || document.title
-        };
-        [].push.call(arguments, gaOverride);
-      }
-      [].unshift.call(arguments, 'send');
-      ga.apply(window, arguments);
-    }
-  },
-
   /**
    * Sends a custom GA4 'mtp_event' event with category/action/lavel params.
    *
@@ -80,6 +55,41 @@ export var Analytics = {
     }
   },
 
+  /**
+   * Sends a legacy GA custom event or `pageview` event
+   *
+   * @deprecated GA is deprecated in favour of GA4, use `ga4SendEvent()` or `ga4SendPageView()` instead
+   */
+  send: function () {
+    /*
+      Sends to GA passing through all specified arguments.
+      It appends an object with page, location and title to the call, if you don't want
+      this use rawSend instead.
+    */
+    if (this._gaExists()) {
+      var gaData = $('span.mtp-ga-data');
+      if (gaData) {
+        var page = gaData.data('page');
+        if (arguments[0] === 'pageview' && arguments.length > 1 && $.type(arguments[1]) === 'string') {
+          page = arguments[1];
+        }
+        var gaOverride = {
+          page: page,
+          location: gaData.data('location'),
+          title: gaData.data('title') || document.title
+        };
+        [].push.call(arguments, gaOverride);
+      }
+      [].unshift.call(arguments, 'send');
+      ga.apply(window, arguments);
+    }
+  },
+
+  /**
+   * Sends a legacy GA custom event or `pageview` event
+   *
+   * @deprecated GA is deprecated in favour of GA4, use `ga4SendEvent()` or `ga4SendPageView()` instead
+   */
   rawSend: function () {
     /*
       Sends to GA passing through all specified arguments.
