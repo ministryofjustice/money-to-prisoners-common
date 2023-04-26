@@ -4,7 +4,7 @@
 // - by adding the data-analytics attribute to any element that can be clicked
 //   eg <div data-analytics="pageview,/virtual/pageview/,user clicked there"/>
 // It needs the google analytics tracking code to be enabled on the page
-/* globals ga */
+/* globals ga gtag */
 'use strict';
 
 export var Analytics = {
