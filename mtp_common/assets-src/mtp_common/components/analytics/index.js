@@ -37,11 +37,14 @@ export var Analytics = {
    */
   ga4SendEvent: function (category, action, label) {
     if (this._ga4Exists()) {
-      gtag.apply(window, 'event', this.ga4EventName, {
-        category: category || '',
-        action: action || '',
-        label: label || '',
-      });
+      gtag.apply(window, [
+        'event', this.ga4EventName,
+        {
+          category: category || '',
+          action: action || '',
+          label: label || '',
+        },
+      ]);
     }
   },
 
@@ -51,7 +54,7 @@ export var Analytics = {
    */
   ga4SendPageView: function (pageLocation) {
     if (this._ga4Exists()) {
-      gtag.apply(window, 'event', 'page_view', { 'page_location': pageLocation || '' });
+      gtag.apply(window, ['event', 'page_view', { 'page_location': pageLocation || '' }]);
     }
   },
 
