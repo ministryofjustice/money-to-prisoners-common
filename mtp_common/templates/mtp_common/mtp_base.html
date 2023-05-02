@@ -23,18 +23,18 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', '{{ analytics_policy.ga4_measurement_id }}');
-
       {% comment "NOTE" %}
         This overrides the default page location/title sent to GA4.
         Some views send redacted/simplified page information.
       {% endcomment %}
       {% with default_ga_data=default_google_analytics_pageview %}
       {% with ga_data=google_analytics_pageview|default:default_ga_data %}
-        gtag('set', 'page_location', '{{ ga_data.location }}');
-        {% if ga_data.title %}
-          gtag('set', 'page_title', '{{ ga_data.title }}');
-        {% endif %}
+        gtag('config', '{{ analytics_policy.ga4_measurement_id }}', {
+          'page_location': '{{ ga_data.location }}',
+          {% if ga_data.title %}
+            'page_title': '{{ ga_data.title }}',
+          {% endif %}
+        });
       {% endwith %}
       {% endwith %}
 
