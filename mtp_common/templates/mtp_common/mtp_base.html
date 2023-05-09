@@ -15,6 +15,33 @@
     }
   </style>
 
+  {% if analytics_policy.ga4_enabled %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics_policy.ga4_measurement_id }}"></script>
+    <script {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      {% comment "NOTE" %}
+        This overrides the default page location/title sent to GA4.
+        Some views send redacted/simplified page information.
+      {% endcomment %}
+      {% with default_ga_data=default_google_analytics_pageview %}
+      {% with ga_data=google_analytics_pageview|default:default_ga_data %}
+        gtag('config', '{{ analytics_policy.ga4_measurement_id }}', {
+          'page_location': '{{ ga_data.location }}',
+          {% if ga_data.title %}
+            'page_title': '{{ ga_data.title }}',
+          {% endif %}
+        });
+      {% endwith %}
+      {% endwith %}
+
+      {% block ga4_end %}{% endblock %}
+    </script>
+  {% endif %}
+
   {% if analytics_policy.enabled %}
     <script {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
