@@ -224,7 +224,6 @@ Additional Bespoke Packages
 
 There are several dependencies of the ``money-to-prisoners-common`` python library which are maintained by this team, so they may require code-changes when the dependencies (e.g. Django) of the ``money-to-prisoners-common`` python library, or any of the Prisoner Money apps, are incremented.
 
-* `django-form-error-reporting`_
 * `django-zendesk-tickets`_
 * `govuk-bank-holidays`_
 
@@ -244,7 +243,6 @@ There are additional bespoke dependencies defined as python dependencies within 
 .. _money-to-prisoners-deploy: https://github.com/ministryofjustice/money-to-prisoners-deploy
 .. _money-to-prisoners-emails: https://github.com/ministryofjustice/money-to-prisoners-emails
 .. _load_test_data.py: https://github.com/ministryofjustice/money-to-prisoners-api/blob/a6e039a3fc85d675c62658c226a3bd94d27355d5/mtp_api/apps/core/management/commands/load_test_data.py#L221-L229
-.. _django-form-error-reporting: https://github.com/ministryofjustice/django-form-error-reporting
 .. _django-zendesk-tickets: https://github.com/ministryofjustice/django-zendesk-tickets
 .. _govuk-bank-holidays: https://github.com/ministryofjustice/govuk-bank-holidays
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/
