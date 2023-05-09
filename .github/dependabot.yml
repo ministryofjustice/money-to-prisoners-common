@@ -8,7 +8,7 @@ updates:
           - ">=2.3"
       - dependency-name: kubernetes
         versions:
-          - ">=22"
+          - ">=24"
     schedule:
       interval: monthly
     pull-request-branch-name:

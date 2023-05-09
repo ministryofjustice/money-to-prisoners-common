@@ -22,7 +22,7 @@ install_requires = [
     'requests-oauthlib~=1.3',
     'slumber>=0.7,<0.8',
     'selenium~=4.8',
-    'cryptography>=38,<40',
+    'cryptography~=40.0',
     'boto3~=1.26',
     'kubernetes~=24.0',  # corresponds to server version 1.24 (within skew of `live` cluster)
     'opencensus~=0.11',
@@ -48,9 +48,9 @@ extras_require = {
         'flake8-debugger~=4.1',
         'flake8-quotes~=3.3',
         'pep8-naming~=0.13.3',
-        'responses~=0.22.0',
+        'responses~=0.23.1',
         'twine~=4.0',
-        'watchdog~=2.3',
+        'watchdog~=3.0',
     ],
 }
 
