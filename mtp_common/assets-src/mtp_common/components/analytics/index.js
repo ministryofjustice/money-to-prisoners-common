@@ -52,9 +52,19 @@ export var Analytics = {
    *
    * @param {string} pageLocation page location associated to the event
    */
-  ga4SendPageView: function (pageLocation) {
+  ga4SendPageView: function (pagePath) {
     if (this._ga4Exists()) {
-      gtag.apply(window, ['event', 'page_view', { 'page_location': pageLocation || '' }]);
+      var eventParams = {
+        'page_path': pagePath,
+      };
+      var gaData = $('span.mtp-ga-data');
+      if (gaData) {
+        eventParams['page_path'] = eventParams['page_path'] || gaData.data('page');
+        eventParams['page_location'] = gaData.data('location');
+        eventParams['page_title'] = gaData.data('title') || document.title;
+      }
+
+      gtag.apply(window, ['event', 'page_view', eventParams]);
     }
   },
 
