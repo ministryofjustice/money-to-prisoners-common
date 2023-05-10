@@ -7,7 +7,6 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from form_error_reporting import GARequestErrorReportingMixin
 from requests.exceptions import ConnectionError
 
 from mtp_common.tasks import send_email
@@ -19,7 +18,7 @@ logger = logging.getLogger('mtp')
 RESET_CODE_PARAM = 'reset_code'
 
 
-class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
+class AuthenticationForm(forms.Form):
     """
     Authentication form used for authenticating users during the login process.
     """
@@ -95,7 +94,7 @@ class AuthenticationForm(GARequestErrorReportingMixin, forms.Form):
         return self.user_cache
 
 
-class PasswordChangeForm(GARequestErrorReportingMixin, forms.Form):
+class PasswordChangeForm(forms.Form):
     """
     A form that lets a user change their password by entering their old
     password.
@@ -147,7 +146,7 @@ class PasswordChangeForm(GARequestErrorReportingMixin, forms.Form):
                     raise forms.ValidationError(self.error_messages['generic'])
 
 
-class ResetPasswordForm(GARequestErrorReportingMixin, forms.Form):
+class ResetPasswordForm(forms.Form):
     error_messages = {
         'generic': _('This service is currently unavailable')
     }
@@ -183,7 +182,7 @@ class ResetPasswordForm(GARequestErrorReportingMixin, forms.Form):
                     raise forms.ValidationError(self.error_messages['generic'])
 
 
-class PasswordChangeWithCodeForm(GARequestErrorReportingMixin, forms.Form):
+class PasswordChangeWithCodeForm(forms.Form):
     """
     A form that lets a user change their password if they have a reset code.
     """
@@ -238,7 +237,7 @@ class PasswordChangeWithCodeForm(GARequestErrorReportingMixin, forms.Form):
                     raise forms.ValidationError(self.error_messages['generic'])
 
 
-class EmailChangeForm(GARequestErrorReportingMixin, forms.Form):
+class EmailChangeForm(forms.Form):
     """
     A form that lets a user change their email.
     """

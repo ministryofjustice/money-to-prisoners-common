@@ -7,7 +7,6 @@ from django.conf import settings
 from django.http import QueryDict
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
-from form_error_reporting import GARequestErrorReportingMixin
 
 from mtp_common.api import retrieve_all_pages_for_path
 from mtp_common.auth import api_client
@@ -16,7 +15,7 @@ from mtp_common.auth.exceptions import HttpClientError
 logger = logging.getLogger('mtp')
 
 
-class ApiForm(GARequestErrorReportingMixin, forms.Form):
+class ApiForm(forms.Form):
     error_messages = {
         'generic': _('This service is currently unavailable')
     }
