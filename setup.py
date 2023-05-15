@@ -14,7 +14,6 @@ with open('README.rst') as readme:
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
     'Django>=3.2.19,<3.3',
-    'six>=1.16',  # https://docs.djangoproject.com/en/4.2/releases/3.0/#removed-private-python-2-compatibility-apis
     # https://adamj.eu/tech/2020/01/27/moving-to-django-3-field-choices-enumeration-types/
     # 'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
