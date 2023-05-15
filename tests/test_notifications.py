@@ -24,7 +24,7 @@ class NotificationTestCase(SimpleTestCase):
             )
         )
 
-    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
     def test_unauthenticated_user_access(self):
         with responses.RequestsMock() as rsps:
             rsps.add(
@@ -46,7 +46,7 @@ class NotificationTestCase(SimpleTestCase):
         response_content = response.content.decode(response.charset).strip()
         self.assertIn('Test', response_content)
 
-    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
     def test_authenticated_user_access(self):
         with responses.RequestsMock() as rsps:
             rsps.add(
@@ -68,7 +68,7 @@ class NotificationTestCase(SimpleTestCase):
         response_content = response.content.decode(response.charset).strip()
         self.assertIn('Test', response_content)
 
-    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
     def test_api_errors_do_not_appear_on_page(self):
         with responses.RequestsMock() as rsps, silence_logger():
             rsps.add(
@@ -86,7 +86,7 @@ class NotificationTestCase(SimpleTestCase):
         response_content = response.content.decode(response.charset).strip()
         self.assertEqual(response_content, '')
 
-    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
     def test_can_cascade_to_fallback_notification_targets(self):
         with responses.RequestsMock() as rsps:
             rsps.add(

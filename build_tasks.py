@@ -91,7 +91,7 @@ def setup_django_for_testing(_: Context):
         ),
         CACHES={
             'default': {
-                'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
             },
         },
         CSRF_FAILURE_VIEW='mtp_common.auth.csrf.csrf_failure',

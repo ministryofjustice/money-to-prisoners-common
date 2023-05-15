@@ -346,6 +346,9 @@ class GetAccountBalancesTestCase(BaseTestCase):
     Tests related to the get_account_balances function.
     """
 
+    def setUp(self):
+        django_cache.cache.clear()
+
     def test_call(self):
         """
         Test that the function connects to Prison API (i.e. NOMIS) and gets the expected data.
@@ -387,6 +390,9 @@ class GetTransactionHistoryTestCase(BaseTestCase):
             },
         ],
     }
+
+    def setUp(self):
+        django_cache.cache.clear()
 
     def test_date_converted_to_string(self):
         """
@@ -493,6 +499,9 @@ class GetPhotographDataTestCase(BaseTestCase):
     Tests related to the get_photograph_data function.
     """
 
+    def setUp(self):
+        django_cache.cache.clear()
+
     def test_call(self):
         """
         Test that the function connects to Prison API (i.e. NOMIS) and gets the expected data.
@@ -534,6 +543,9 @@ class GetLocationTestCase(BaseTestCase):
     """
     Tests related to the get_location function.
     """
+
+    def setUp(self):
+        django_cache.cache.clear()
 
     def _test_get_location_scenario(self, nomis_mocked_response, expected_location_dict):
         with responses.RequestsMock() as rsps:
