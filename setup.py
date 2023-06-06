@@ -13,8 +13,9 @@ with open('README.rst') as readme:
 
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
-    'Django>=2.2,<2.3',  # mtp apps are only compatible with django 2.2
-    'django-extended-choices>=1.3,<2',
+    'Django>=3.2.19,<3.3',
+    # https://adamj.eu/tech/2020/01/27/moving-to-django-3-field-choices-enumeration-types/
+    # 'django-extended-choices>=1.3,<2',
     'django-widget-tweaks>=1.4,<1.5',
     'notifications-python-client~=8.0',
     'pytz>=2022.7',

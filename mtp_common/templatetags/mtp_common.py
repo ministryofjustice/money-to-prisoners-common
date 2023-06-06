@@ -9,7 +9,6 @@ from django.forms.utils import flatatt
 from django.template.base import token_kwargs
 from django.urls import NoReverseMatch, reverse
 from django.utils.crypto import get_random_string
-from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.http import urlencode
 from django.utils.translation import gettext, gettext_lazy as _, override
@@ -56,7 +55,6 @@ def postcode(value):
 
 @register.filter
 def to_string(value):
-    # TODO: use force_text?
     return str(value)
 
 
@@ -111,7 +109,7 @@ def hide_long_text(text, count=5):
     if not text:
         return text
     count = int(count)
-    words = force_text(text).split()
+    words = str(text).split()
     if len(words) <= count:
         return text
     short_text, rest_text = ' '.join(words[:count]), ' '.join(words[count:])

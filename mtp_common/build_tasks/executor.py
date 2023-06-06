@@ -567,10 +567,13 @@ class Executor:
         if task.name != 'help':
             if context.print_task_names:
                 context.info(context.blue_style(f'\n> Running {task.name} task...'))
+
             if context.print_task_paths:
                 path = inspect.getfile(task.func)
-                line = inspect.getsourcelines(task.func)[1]
-
+                try:
+                    line = inspect.getsourcelines(task.func)[1]
+                except OSError:
+                    line = '???'
                 context.info(context.blue_style(f'File "{path}", line {line}'))
 
         os.chdir(self.root_path)
