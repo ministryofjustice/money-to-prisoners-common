@@ -7,7 +7,7 @@ from mtp_common.analytics import AnalyticsPolicy, genericised_pageview
 from tests.utils import SimpleTestCase
 
 
-@override_settings(GOOGLE_ANALYTICS_ID='ABC123')
+@override_settings(GA4_MEASUREMENT_ID='ABC123')
 class CookiePolicyTestCase(SimpleTestCase):
     template = """
     {% extends 'mtp_common/mtp_base.html' %}
