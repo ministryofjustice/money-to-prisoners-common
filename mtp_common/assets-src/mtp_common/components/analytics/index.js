@@ -1,6 +1,7 @@
 // Google Analytics Utility module
 // This module offers ways to send custom events to Google Analytics:
-// - by calling Analytics.send. Eg. Analytics.send('event', 'tick', 'checkbox')
+// - by calling Analytics.ga4SendEvent(). Eg. Analytics.ga4SendEvent('event', 'tick', 'checkbox')
+// - by calling Analytics.ga4SendPageView(). Eg. Analytics.ga4SendPageView(pagePath)
 // - by adding the data-analytics attribute to any element that can be clicked
 //   eg <div data-analytics="pageview,/virtual/pageview/,user clicked there"/>
 // It needs the google analytics tracking code to be enabled on the page
@@ -45,9 +46,9 @@ export var Analytics = {
     }
   },
 
-  /** Sends a GA4 'page_view' event with the give 'page_location'
+  /** Sends a GA4 'page_view' event with the give 'page_path'
    *
-   * @param {string} pageLocation page location associated to the event
+   * @param {string} pagePath page path associated to the event
    */
   ga4SendPageView: function (pagePath) {
     if (this._ga4Exists()) {
@@ -97,6 +98,8 @@ export var Analytics = {
 
   /**
    * Returns true if GA4's `gtag()` is available
+   *
+   * @private
    *
    * @returns {boolean} true if GA4 is available
    */
