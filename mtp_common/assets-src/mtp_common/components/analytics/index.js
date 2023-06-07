@@ -4,7 +4,7 @@
 // - by adding the data-analytics attribute to any element that can be clicked
 //   eg <div data-analytics="pageview,/virtual/pageview/,user clicked there"/>
 // It needs the google analytics tracking code to be enabled on the page
-/* globals ga gtag */
+/* globals gtag */
 'use strict';
 
 export var Analytics = {
@@ -12,9 +12,6 @@ export var Analytics = {
   ga4EventName: 'mtp_event',
 
   init: function () {
-    if (this._gaExists()) {
-      $('*[data-' + this.attrName + ']').on('click', $.proxy(this._sendFromEvent, this));
-    }
     if (this._ga4Exists()) {
       $('*[data-' + this.attrName + ']').on('click', $.proxy(this._ga4SendFromEvent, this));
     }
@@ -68,58 +65,6 @@ export var Analytics = {
     }
   },
 
-  /**
-   * Sends a legacy GA custom event or `pageview` event
-   *
-   * @deprecated GA is deprecated in favour of GA4, use `ga4SendEvent()` or `ga4SendPageView()` instead
-   */
-  send: function () {
-    /*
-      Sends to GA passing through all specified arguments.
-      It appends an object with page, location and title to the call, if you don't want
-      this use rawSend instead.
-    */
-    if (this._gaExists()) {
-      var gaData = $('span.mtp-ga-data');
-      if (gaData) {
-        var page = gaData.data('page');
-        if (arguments[0] === 'pageview' && arguments.length > 1 && $.type(arguments[1]) === 'string') {
-          page = arguments[1];
-        }
-        var gaOverride = {
-          page: page,
-          location: gaData.data('location'),
-          title: gaData.data('title') || document.title
-        };
-        [].push.call(arguments, gaOverride);
-      }
-      [].unshift.call(arguments, 'send');
-      ga.apply(window, arguments);
-    }
-  },
-
-  /**
-   * Sends a legacy GA custom event or `pageview` event
-   *
-   * @deprecated GA is deprecated in favour of GA4, use `ga4SendEvent()` or `ga4SendPageView()` instead
-   */
-  rawSend: function () {
-    /*
-      Sends to GA passing through all specified arguments.
-      Unlike send, it does NOT modify any arguments.
-    */
-    if (this._gaExists()) {
-      [].unshift.call(arguments, 'send');
-      ga.apply(window, arguments);
-    }
-  },
-
-  _sendFromEvent: function (event) {
-    var analyticsParams = $(event.currentTarget).data(this.attrName).split(',');
-    this.send.apply(this, analyticsParams);
-    return true;
-  },
-
   /** Event handler attached to `data-analytics`'s clicks
    *
    * the `data-analytics` attribute value determines whether a custom `mtp_event` is sent or a
@@ -148,15 +93,6 @@ export var Analytics = {
     }
 
     return true;
-  },
-
-  /**
-   * Returns true if GA's `ga()` (legacy) is available
-   *
-   * @returns {boolean} true if GA is available
-   */
-  _gaExists: function () {
-    return typeof ga === typeof Function;
   },
 
   /**
