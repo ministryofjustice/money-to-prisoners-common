@@ -30,7 +30,7 @@ services:
       context: ../money-to-prisoners-api
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8000:8000"
       - "3000:3000"
@@ -63,7 +63,7 @@ services:
       context: ../money-to-prisoners-cashbook
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8001:8001"
       - "3001:3001"
@@ -90,7 +90,7 @@ services:
       context: ../money-to-prisoners-bank-admin
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8002:8002"
       - "3002:3002"
@@ -117,7 +117,7 @@ services:
       context: ../money-to-prisoners-noms-ops
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8003:8003"
       - "3003:3003"
@@ -144,7 +144,7 @@ services:
       context: ../money-to-prisoners-send-money
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8004:8004"
       - "3004:3004"
@@ -171,7 +171,7 @@ services:
       context: ../money-to-prisoners-start-page
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8005:8080"
     user: mtp
@@ -185,7 +185,7 @@ services:
       context: ../money-to-prisoners-emails
       dockerfile: Dockerfile-dev
       args:
-        ECR_ENDPOINT: ${ECR_ENDPOINT}
+        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8006:8006"
       - "3006:3006"
