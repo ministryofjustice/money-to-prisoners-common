@@ -1,11 +1,17 @@
 version: 2.1
+
 jobs:
   test:
     docker:
-      - image: ${ECR_ENDPOINT}/prisoner-money/money-to-prisoners:base-web
+      - image: cimg/python:3.10-node
     working_directory: /tmp/mtp
     steps:
       - checkout
+      - run:
+          name: Install os dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y gettext
       - restore_cache:
           keys:
             - py-v1-{{ checksum "setup.py" }}
@@ -13,10 +19,11 @@ jobs:
       - run:
           name: Install python dependencies
           command: |
-            python3 -m venv venv
+            python -m venv venv
             . venv/bin/activate
             pip install -U setuptools pip wheel
             pip install --editable .[testing]
+            python --version && pip --version
       - save_cache:
           key: py-v1-{{ checksum "setup.py" }}
           paths:
@@ -26,6 +33,7 @@ jobs:
           command: |
             . venv/bin/activate
             python run.py --verbosity 2 test
+
 workflows:
   version: 2
   test:

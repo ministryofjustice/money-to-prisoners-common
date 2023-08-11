@@ -163,17 +163,17 @@ After this has been done once, bringing up apps again only requires repeating st
 
    .. code-block:: sh
 
-     ./manage.py config docker-login  # log into ECR
-     ./manage.py app ci-settings [any mtp app name]  # note the $ECR_ENDPOINT value
+     ./manage.py config docker-login  # log docker into ECR
+     ./manage.py app ci-settings [any mtp app name]  # note the $ECR_REGISTRY value
 
    Alternatively, this value can be derived from the ``ecr`` kubernetes secret in the production namespace in Cloud Platform.
    Use the value of ``repo_url`` up to the first ``/``.
 
-   2. Create a ``.env`` file in this repository’s root directory adding this ``ECR_ENDPOINT`` value:
+   2. Create a ``.env`` file in this repository’s root directory adding this ``ECR_REGISTRY`` value:
 
    .. code-block::
 
-     ECR_ENDPOINT=?????????.amazonaws.com
+     ECR_REGISTRY=?????????.amazonaws.com
 
 3. Pull images from private docker registry in Cloud Platform. In the ``deploy`` repo:
 
