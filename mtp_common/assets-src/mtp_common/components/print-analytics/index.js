@@ -10,7 +10,6 @@ export var PrintAnalytics = {
     }
     window.print = (function (printfn) {
       return function () {
-        Analytics.send('event', 'print');
         Analytics.ga4SendEvent('print');
         printfn();
       };

@@ -27,7 +27,6 @@ export var BeforeUnload = {
       $(window).on('beforeunload', function () {
         if ($form.serialize() !== initialData && !submitting) {
           var pageLocation = '/-leaving_page_dialog/';
-          Analytics.send('pageview', pageLocation);
           Analytics.ga4SendPageView(pageLocation);
           return message;
         }

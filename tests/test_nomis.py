@@ -9,7 +9,7 @@ import responses
 
 from mtp_common import nomis
 from mtp_common.auth import urljoin
-from mtp_common.test_utils import local_memory_cache, silence_logger
+from mtp_common.test_utils import silence_logger
 
 
 def build_prison_api_v1_url(path):
@@ -175,6 +175,9 @@ class BaseTestCase(SimpleTestCase):
     Base class for testing Prison API (i.e. NOMIS).
     """
 
+    def setUp(self):
+        django_cache.cache.clear()
+
     def _mock_successful_auth_request(self, rsps, token='my-token'):
         rsps.add(
             responses.POST,
@@ -218,7 +221,6 @@ class PrisonApiTestCase(BaseTestCase):
             with override_settings(**{key: ''}):
                 self.assertFalse(nomis.can_access_nomis())
 
-    @local_memory_cache()
     def test_token_cached(self):
         """
         Test that the token is cached when making a Prison API (i.e. NOMIS) call.
@@ -244,7 +246,6 @@ class PrisonApiTestCase(BaseTestCase):
             'my-token',
         )
 
-    @local_memory_cache()
     def test_gets_token_from_cache(self):
         """
         Test that any cached token is used when making a Prison API (i.e. NOMIS) call.
@@ -269,7 +270,6 @@ class PrisonApiTestCase(BaseTestCase):
             'some-token',
         )
 
-    @local_memory_cache()
     def test_retries_after_401_response(self):
         """
         Test that if a request returns 401, the logic invalidates the cached token
@@ -304,7 +304,6 @@ class PrisonApiTestCase(BaseTestCase):
             'my-token',
         )
 
-    @local_memory_cache()
     def test_doesnt_retry_more_than_once_after_401_response(self):
         """
         Test that if a request returns 401, the logic invalidates the cached token

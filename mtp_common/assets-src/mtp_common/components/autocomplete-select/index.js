@@ -107,13 +107,6 @@ export var AutocompleteSelect = {
               var eventCategory = $hiddenInput.data('event-category');
               var eventAction = 'Autocomplete';
               var eventLabel = $visualInput.val() + ' > ' + suggestion.name;
-              Analytics.send(
-                'event', {
-                  eventCategory: eventCategory,
-                  eventAction: eventAction,
-                  eventLabel: eventLabel,
-                }
-              );
               Analytics.ga4SendEvent(eventCategory, eventAction, eventLabel);
             }
 

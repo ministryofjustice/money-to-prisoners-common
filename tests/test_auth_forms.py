@@ -3,7 +3,6 @@ from unittest import mock
 
 from django.conf import settings
 from django.test.testcases import SimpleTestCase
-from django.utils.encoding import force_text
 import responses
 
 from mtp_common.auth import urljoin
@@ -45,7 +44,7 @@ class AuthenticationFormTestCase(SimpleTestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.non_field_errors(),
-            [force_text(form.error_messages['invalid_login'])]
+            [str(form.error_messages['invalid_login'])]
         )
 
         mocked_authenticate.assert_called_with(**data)

@@ -4,7 +4,6 @@ from django.conf import settings
 from django.http.request import QueryDict
 from django.test import SimpleTestCase
 from django.urls import reverse, reverse_lazy
-from django.utils.encoding import force_text
 import responses
 
 from mtp_common.auth import SESSION_KEY, BACKEND_SESSION_KEY, \
@@ -81,7 +80,7 @@ class LoginViewTestCase(SimpleTestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors['__all__'],
-            [force_text(form.error_messages['invalid_login'])]
+            [str(form.error_messages['invalid_login'])]
         )
         self.assertEqual(len(self.client.session.items()), 0)  # nothing in the session
 
@@ -103,7 +102,7 @@ class LoginViewTestCase(SimpleTestCase):
         form = response.context_data['form']
         self.assertFalse(form.is_valid(), msg='user should not be able to log in if they are'
                                               'forbidden from accessing that application')
-        self.assertEqual(form.errors['__all__'], [force_text(form.error_messages['application_inaccessible'])],
+        self.assertEqual(form.errors['__all__'], [str(form.error_messages['application_inaccessible'])],
                          msg='user should see error message if they are forbidden'
                              'from accessing that application')
 
