@@ -15,8 +15,8 @@ def mock_s3_secret_response(mock_client, valid_response=True):
     secret = mock.MagicMock()
     if valid_response:
         data = {
-            'bucket_arn': 'YXJuOmF3czpzMzo6OmNsb3VkLXBsYXRmb3JtLVRFU1Qx', 'bucket_name': 'Y2xvdWQtcGxhdGZvcm0tVEVTVDE=',
-            'access_key_id': 'QUtJQTAwMDAwMDAwMDA=', 'secret_access_key': 'MDAwMDAwMDAwMDAwMDAwMDAwMDA=',
+            'bucket_arn': 'YXJuOmF3czpzMzo6OmNsb3VkLXBsYXRmb3JtLVRFU1Qx',
+            'bucket_name': 'Y2xvdWQtcGxhdGZvcm0tVEVTVDE=',
         }
     else:
         data = {}
@@ -47,7 +47,7 @@ class S3BucketTestCase(SimpleTestCase):
         mock_s3_secret_response(mock_client, valid_response=False)
         with self.assertRaises(S3BucketError) as e:
             S3BucketClient()
-        self.assertIn('S3 secret is missing required keys', str(e.exception))
+        self.assertIn('S3 bucket name is not known', str(e.exception))
 
     @mock.patch('mtp_common.s3_bucket.k8s_client')
     @mock.patch('mtp_common.s3_bucket.load_incluster_config')

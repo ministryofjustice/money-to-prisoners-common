@@ -35,7 +35,7 @@ class S3BucketClient:
                 name='s3',
                 namespace=f'money-to-prisoners-{settings.ENVIRONMENT}',
             )
-            self.s3_secret = {
+            s3_secret = {
                 key: base64.b64decode(value).decode()
                 for key, value in secret.data.items()
             }
@@ -43,18 +43,12 @@ class S3BucketClient:
             raise S3BucketError('S3 secret not found', e)
 
         # check contents
-        if any(
-            key not in self.s3_secret
-            for key in ('access_key_id', 'secret_access_key', 'bucket_name')
-        ):
-            raise S3BucketError('S3 secret is missing required keys')
+        self.bucket_name = s3_secret.get('bucket_name')
+        if not self.bucket_name:
+            raise S3BucketError('S3 bucket name is not known')
 
         # create authenticated connection to S3
-        self.s3_client = boto3.client(
-            's3',
-            aws_access_key_id=self.s3_secret['access_key_id'],
-            aws_secret_access_key=self.s3_secret['secret_access_key'],
-        )
+        self.s3_client = boto3.client('s3')
 
     def upload(
         self,
@@ -75,7 +69,7 @@ class S3BucketClient:
             extra_args['ContentType'] = content_type
         self.s3_client.upload_fileobj(
             Fileobj=file_contents,
-            Bucket=self.s3_secret['bucket_name'],
+            Bucket=self.bucket_name,
             Key=path,
             ExtraArgs=extra_args,
         )
@@ -83,7 +77,7 @@ class S3BucketClient:
     def dowload(self, path: str) -> bytes:
         file_contents = io.BytesIO()
         self.s3_client.download_fileobj(
-            Bucket=self.s3_secret['bucket_name'],
+            Bucket=self.bucket_name,
             Key=path,
             Fileobj=file_contents,
         )
@@ -91,7 +85,7 @@ class S3BucketClient:
 
     def download_as_streaming_response(self, path: str) -> StreamingHttpResponse:
         s3_object = self.s3_client.get_object(
-            Bucket=self.s3_secret['bucket_name'],
+            Bucket=self.bucket_name,
             Key=path,
         )
         response = StreamingHttpResponse(
