@@ -1,4 +1,4 @@
-VERSION = (16, 1, 1)
+VERSION = (16, 2, 0)
 __version__ = '.'.join(map(str, VERSION))
 
 default_app_config = 'mtp_common.app.AppConfig'
