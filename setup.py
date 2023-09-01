@@ -14,7 +14,7 @@ with open('README.rst') as readme:
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
     'Django>=3.2.19,<3.3',
-    'django-widget-tweaks>=1.4,<1.5',
+    'django-widget-tweaks>=1.4,<1.6',
     'notifications-python-client~=8.0',
     'pytz>=2023.3',
     'requests~=2.31',
