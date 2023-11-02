@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "~2.29",
-    "eslint": "~8.48",
+    "eslint": "~8.52",
     "sass-lint": "~1.13.1"
   },
   "dependencies": {
@@ -24,7 +24,7 @@
     "jquery": "~3.7",
     "js-cookie": "~3.0",
     "mailcheck": "~1.1",
-    "webpack": "~5.88",
+    "webpack": "~5.89",
     "webpack-cli": "~5.1"
   }
 }
