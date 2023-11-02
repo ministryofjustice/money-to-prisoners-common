@@ -109,7 +109,7 @@ Each app describes its own installation in its read-me file, but here’s a quic
 
 2. Install python version 3.10.
 
-3. Install nodejs version 18.
+3. Install nodejs version 20.
 
 4. Setup a python virtual environment for each app. These are used to isolate python dependency libraries for each app.
 
