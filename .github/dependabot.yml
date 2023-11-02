@@ -5,7 +5,7 @@ updates:
     ignore:
       - dependency-name: Django
         versions:
-          - ">=2.3"
+          - ">=3.3"
       - dependency-name: kubernetes
         versions:
           - ">=24"

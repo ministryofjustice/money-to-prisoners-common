@@ -13,24 +13,24 @@ with open('README.rst') as readme:
 
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
-    'Django>=3.2.19,<3.3',
-    'django-widget-tweaks>=1.4,<1.5',
-    'notifications-python-client~=8.0',
+    'Django>=3.2.23,<3.3',
+    'django-widget-tweaks>=1.5,<1.6',
+    'notifications-python-client~=8.1',
     'pytz>=2023.3',
     'requests~=2.31',
     'requests-oauthlib~=1.3',
     'slumber>=0.7,<0.8',
-    'selenium~=4.11',
+    'selenium~=4.15',
     'cryptography~=41.0',
     'boto3~=1.28',
     'kubernetes~=24.0',  # corresponds to server version 1.24 (within skew of `live` cluster)
     'opencensus~=0.11',
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
-    'prometheus-client>=0.17,<1',
-    'sentry-sdk~=1.29',
+    'prometheus-client>=0.18,<1',
+    'sentry-sdk~=1.33',
     'libsass~=0.22',
-    'uWSGI~=2.0.22',
+    'uWSGI~=2.0.23',
 
     # moj-built dependencies (should be locked versions)
     'django-moj-irat==0.8',
@@ -42,8 +42,10 @@ extras_require = {
         # third-party dependencies (versions should be flexible to allow for bug fixes)
         'flake8~=6.1',
         'flake8-blind-except~=0.2.1',
-        'flake8-bugbear~=23.7',
+        'flake8-bugbear~=23.9',
+        # 'flake8-commas~=2.1',
         'flake8-debugger~=4.1',
+        # 'flake8-logging~=1.2',
         'flake8-quotes~=3.3',
         'pep8-naming~=0.13.3',
         'responses~=0.23.3',
