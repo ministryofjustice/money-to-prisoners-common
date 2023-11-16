@@ -48,7 +48,7 @@ extras_require = {
         # 'flake8-logging~=1.2',
         'flake8-quotes~=3.3',
         'pep8-naming~=0.13.3',
-        'responses~=0.23.3',
+        'responses~=0.24.0',
         'twine~=4.0',
         'watchdog~=3.0',
     ],
