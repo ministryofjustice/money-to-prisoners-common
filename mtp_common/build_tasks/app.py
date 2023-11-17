@@ -93,6 +93,31 @@ class App:
 
     @property
     def common_path(self):
+        """
+        N.B. This if you set this at runtime via CLI parameter, build tasks will fail
+
+        When we specify a new path to common via `./run.py python_dependencies --common-path <new location> serve`,
+        we are actually specifying four distinct changes are once:
+        1. the path to the version of mtp-common we want to install in the local environment
+        2. the path to the version of mtp-common containing the build tasks we want to execute
+        3. the path to the version of mtp-common we want to use as a basepath to find assets for build tasks install
+           in the local environment
+        4. the path to the version we want the webserver to use when it starts up
+
+        All of this happens (roughly) in order, within a single process. Even when the old version of mtp_common is
+        uninstalled, the functionality remains available to the build process in-memory from the point at which it
+        was imported. To refresh it we would have to reimport it within every module being executed by the build
+        process (this may not even work), which is horrendous.
+
+        A better fix would be to separate this property out into two properties:
+        * One to point to the new version of mtp_common, to be used by use cases 1,3 and 4 given above
+        * One to point to the installed version of mtp_common, to be used by use case 2 given above
+
+        Additional work may need to be done to re-evaluate the task functions to be executed after the new install
+        of mtp_common, otherwise there'll still be issues with errors like `inspect.getfile(task.func)` failing
+        because task.func.__code__ points to a path that no longer exists on the filesystem, because that path
+        was evaluated prior to reinstalling mtp-common.
+        """
         try:
             path = pkg_resources.get_distribution('money-to-prisoners-common').location
         except (AttributeError, pkg_resources.DistributionNotFound):
