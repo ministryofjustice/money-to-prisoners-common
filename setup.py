@@ -34,7 +34,7 @@ install_requires = [
 
     # moj-built dependencies (should be locked versions)
     'django-moj-irat==0.8',
-    'django-zendesk-tickets==0.16',
+    'django-zendesk-tickets==0.17',
     'govuk-bank-holidays==0.13',
 ]
 extras_require = {
