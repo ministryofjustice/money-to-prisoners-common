@@ -33,7 +33,7 @@ install_requires = [
     'uWSGI~=2.0.23',
 
     # moj-built dependencies (should be locked versions)
-    'django-moj-irat==0.8',
+    'django-moj-irat==0.9',
     'django-zendesk-tickets==0.16',
     'govuk-bank-holidays==0.13',
 ]
