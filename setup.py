@@ -23,12 +23,12 @@ install_requires = [
     'selenium~=4.15',
     'cryptography~=41.0',
     'boto3~=1.28',
-    'kubernetes~=24.0',  # corresponds to server version 1.24 (within skew of `live` cluster)
+    'kubernetes~=26.0',  # corresponds to server version 1.26 (within skew of `live` cluster)
     'opencensus~=0.11',
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
-    'prometheus-client>=0.18,<1',
-    'sentry-sdk~=1.33',
+    'prometheus-client>=0.19,<1',
+    'sentry-sdk~=1.38',
     'libsass~=0.22',
     'uWSGI~=2.0.23',
 
