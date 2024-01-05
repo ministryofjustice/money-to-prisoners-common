@@ -1,6 +1,7 @@
 import functools
 import io
 import logging
+import pathlib
 import typing
 
 from django.conf import settings
@@ -80,7 +81,9 @@ class NotifyClient:
         staff_email: bool = None,
     ) -> typing.List[typing.Optional[str]]:
         """
-        Sends a templated email via GOV.UK Notify with personalisations
+        Sends a templated email via GOV.UK Notify with personalisations.
+        File attachments are specified in the `personalisation` field as bytes, an open file or pathlib.Path;
+        if the latter, the file name from the path is also included.
         :returns list of GOV.UK Notify message IDs
         :raises TemplateError if template is not found
         :raises notifications_python_client.errors.APIError if email cannot be sent
@@ -97,7 +100,14 @@ class NotifyClient:
         if personalisation:
             prepared_files = {}
             for field, content in personalisation.items():
-                if isinstance(content, bytes):
+                if isinstance(content, pathlib.Path):
+                    prepared_files[field] = prepare_upload(
+                        content.open('rb'),
+                        filename=content.name,
+                        confirm_email_before_download=False,
+                        retention_period='52 weeks',
+                    )
+                elif isinstance(content, bytes):
                     prepared_files[field] = prepare_upload(
                         io.BytesIO(content),
                         confirm_email_before_download=False,

@@ -150,20 +150,26 @@ class NotifyTestCase(NotifyBaseTestCase):
         with responses.RequestsMock() as rsps:
             mock_all_templates_response(rsps, templates=[
                 fake_template('0000', 'generic', required_personalisations=['message']),
-                fake_template('333', 'two-files', required_personalisations=['open file', 'byte content']),
+                fake_template('333', 'two-files', required_personalisations=['path', 'open file', 'byte content']),
             ])
             client = NotifyClient.shared_client()
             mock_send_email_response(rsps, '333', 'sample@localhost', personalisation={
+                'path': {
+                    'file': 'TmFtZSxFbWFpbApKb2huLGpvaG5AbXRwLmxvY2FsCg==', 'filename': 'test_notify-simple.csv',
+                    'confirm_email_before_download': False, 'retention_period': '52 weeks',
+                },
                 'open file': {
-                    'file': 'AAAAAAA=', 'is_csv': False,
+                    'file': 'AAAAAAA=', 'filename': None,
                     'confirm_email_before_download': False, 'retention_period': '52 weeks',
                 },
                 'byte content': {
-                    'file': 'MTIzNDU=', 'is_csv': False,
+                    'file': 'MTIzNDU=', 'filename': None,
                     'confirm_email_before_download': False, 'retention_period': '52 weeks',
                 },
             })
             client.send_email('two-files', 'sample@localhost', personalisation={
+                # passes a path
+                'path': pathlib.Path(__file__).parent / 'test_notify-simple.csv',
                 # passes an open file handle
                 'open file': (pathlib.Path(__file__).parent / 'test_notify-5-null-bytes.bin').open('rb'),
                 # passes byte content directly
