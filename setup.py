@@ -33,16 +33,16 @@ install_requires = [
     'uWSGI~=2.0.23',
 
     # moj-built dependencies (should be locked versions)
-    'django-moj-irat==0.8',
-    'django-zendesk-tickets==0.16',
-    'govuk-bank-holidays==0.13',
+    'django-moj-irat==0.9',
+    'django-zendesk-tickets==0.17',
+    'govuk-bank-holidays==0.14',
 ]
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
-        'flake8~=6.1',
+        'flake8~=7.0',
         'flake8-blind-except~=0.2.1',
-        'flake8-bugbear~=23.9',
+        'flake8-bugbear~=23.12',
         # 'flake8-commas~=2.1',
         'flake8-debugger~=4.1',
         # 'flake8-logging~=1.2',
