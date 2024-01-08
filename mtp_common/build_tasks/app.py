@@ -117,7 +117,7 @@ class App:
 
     @property
     def additional_asset_paths(self):
-        yield os.path.join(self.node_modules_path, 'govuk-frontend/govuk/assets')
+        yield os.path.join(self.node_modules_path, 'govuk-frontend/dist/govuk/assets')
 
     @property
     def javascript_include_paths(self):
