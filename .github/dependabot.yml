@@ -9,15 +9,24 @@ updates:
       - dependency-name: kubernetes
         versions:
           - ">=27"
+    groups:
+      minor-updates:
+        update-types: [minor, patch]
     schedule:
       interval: monthly
     pull-request-branch-name:
       separator: '-'
   - package-ecosystem: npm
     directory: /
+    groups:
+      minor-updates:
+        update-types: [minor, patch]
     schedule:
       interval: monthly
   - package-ecosystem: npm
     directory: /mtp_common/templates/mtp_common/build_tasks
+    groups:
+      minor-updates:
+        update-types: [minor, patch]
     schedule:
       interval: monthly
