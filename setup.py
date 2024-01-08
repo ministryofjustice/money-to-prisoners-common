@@ -40,7 +40,7 @@ install_requires = [
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
-        'flake8~=6.1',
+        'flake8>=6.1,<8.0',
         'flake8-blind-except~=0.2.1',
         'flake8-bugbear~=23.9',
         # 'flake8-commas~=2.1',
