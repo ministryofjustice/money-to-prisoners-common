@@ -11,7 +11,7 @@
 <div class="govuk-warning-text">
   <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
   <strong class="govuk-warning-text__text">
-    <span class="govuk-warning-text__assistive">{{ accessible_label|default:_('Warning') }}</span>
+    <span class="govuk-visually-hidden">{{ accessible_label|default:_('Warning') }}</span>
     {{ text }}
   </strong>
   {% if extra_text %}

@@ -1,15 +1,26 @@
 .mtp-internal-site {
-  .govuk-header__logotype svg {
-    vertical-align: bottom;
+  @include govuk-media-query($from: tablet) {
+    .govuk-header__logotype {
+      top: -2px;
+    }
 
-    @media print {
-      display: none;
+    .govuk-header__content {
+      margin-top: 2px;
     }
   }
 
-  @include govuk-media-query($from: tablet) {
-    .govuk-header__content {
-      margin-top: 2px;
+  .govuk-header__link--homepage {
+    box-shadow: none;
+
+    &:hover, &:active, &:focus { // NB: hover & active are already like this
+      $govuk-header-link-underline-thickness: 3px;
+      margin-bottom: $govuk-header-link-underline-thickness * -1;
+      border-bottom: $govuk-header-link-underline-thickness solid govuk-colour('white');
+      background: govuk-colour('black');
+    }
+
+    &:focus {
+      border-color: $govuk-focus-colour;
     }
   }
 
@@ -20,6 +31,20 @@
 
     .govuk-header__content {
       width: 75%;
+    }
+  }
+
+  @media print {
+    .govuk-header__logo {
+      display: none;
+    }
+
+    .govuk-header__content {
+      padding-left: 0;
+    }
+
+    .govuk-header__service-name::before {
+      content: 'HMPPS ';
     }
   }
 }

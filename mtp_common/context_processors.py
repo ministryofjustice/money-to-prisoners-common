@@ -25,19 +25,16 @@ def app_environment(_):
 def govuk_localisation(_):
     moj_internal_site = getattr(settings, 'MOJ_INTERNAL_SITE', False)
     if moj_internal_site:
-        homepage_url = 'https://intranet.noms.gsi.gov.uk/'
+        homepage_url = 'https://justiceuk.sharepoint.com/sites/HMPPSIntranet'
         logo_link_title = gettext('Go to the HMPPS Intranet')
-        global_header_text = gettext('HMPPS')
     else:
         homepage_url = 'https://www.gov.uk/'
         logo_link_title = gettext('Go to the GOV.UK homepage')
-        global_header_text = 'GOV.UK'
     html_lang = get_language()
     return {
         'moj_internal_site': moj_internal_site,
         'html_lang': html_lang or settings.LANGUAGE_CODE,
-        'home_url': '/%s/' % html_lang if html_lang else '/',
+        'home_url': f'/{html_lang}/' if html_lang else '/',
         'homepage_url': homepage_url,
         'logo_link_title': logo_link_title,
-        'global_header_text': global_header_text,
     }

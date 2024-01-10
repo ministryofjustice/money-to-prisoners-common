@@ -11,7 +11,7 @@
   NB: body can contain HTML using safe filter or nested tags by using captureoutput tag
 {% endcomment %}
 
-<details id="{% if id %}{{ id }}{% else %}id_govuk-details_{% random_string %}{% endif %}" class="govuk-details {{ classes }}" {% if open %}open{% endif %} data-module="govuk-details">
+<details id="{% if id %}{{ id }}{% else %}id_govuk-details_{% random_string %}{% endif %}" class="govuk-details {{ classes }}" {% if open %}open{% endif %}>
   <summary class="govuk-details__summary" {% if analytics %}data-analytics="{{ analytics }}"{% endif %}>
     <span class="govuk-details__summary-text">
       {{ summary }}
