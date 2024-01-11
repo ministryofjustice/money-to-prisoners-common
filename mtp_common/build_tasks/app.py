@@ -1,6 +1,5 @@
+import importlib.resources
 import os
-
-import pkg_resources
 
 from .paths import FileSet
 
@@ -93,11 +92,11 @@ class App:
 
     @property
     def common_path(self):
-        try:
-            path = pkg_resources.get_distribution('money-to-prisoners-common').location
-        except (AttributeError, pkg_resources.DistributionNotFound):
+        path = importlib.resources.files('mtp_common')
+        if not path.is_dir():
             return None
-        return os.path.relpath(os.path.join(path, 'mtp_common'), self.root_path)
+        path = str(path)
+        return os.path.relpath(path, self.root_path)
 
     @property
     def common_asset_source_path(self):
@@ -117,7 +116,7 @@ class App:
 
     @property
     def additional_asset_paths(self):
-        yield os.path.join(self.node_modules_path, 'govuk-frontend/govuk/assets')
+        yield os.path.join(self.node_modules_path, 'govuk-frontend/dist/govuk/assets')
 
     @property
     def javascript_include_paths(self):

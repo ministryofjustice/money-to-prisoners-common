@@ -2,12 +2,13 @@ $mtp-table-row-highlight-colour: govuk-tint(govuk-colour('light-blue'), 90%) !de
 
 // used for data-heavy tables
 .mtp-table {
+  @include govuk-font($size: 19);
+
   th, td {
     padding: 0.75em 1em;
     border-top: 1px solid $govuk-border-colour;
     border-bottom: 0;
     vertical-align: top;
-    @include govuk-font($size: 19);
 
     @media print {
       padding-top: 0.3em;
