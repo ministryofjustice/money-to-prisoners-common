@@ -20,6 +20,8 @@
     }
 
     &:focus {
+      background: $govuk-focus-colour;
+      color: govuk-colour('black');
       border-color: $govuk-focus-colour;
     }
   }

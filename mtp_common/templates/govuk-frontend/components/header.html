@@ -8,7 +8,7 @@
         {% if moj_internal_site %}
           <svg class="govuk-header__logotype" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 32" width="150" height="32" aria-label="HMPPS">
             <title>HMPPS</title>
-            <image xlink:href="{% static 'mtp_common/images/hmpps-logotype.svg' %}" src="{% static 'mtp_common/images/hmpps-logotype@2x.png' %}" width="150" height="32" />
+            <use href="{% static 'mtp_common/images/hmpps-logotype.svg' %}#logo" />
           </svg>
         {% else %}
           <svg class="govuk-header__logotype" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 30" width="152" height="30" aria-label="GOV.UK">
