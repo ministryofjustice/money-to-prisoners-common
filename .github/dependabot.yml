@@ -5,10 +5,10 @@ updates:
     ignore:
       - dependency-name: Django
         versions:
-          - ">=3.3"
+          - '>=3.3'
       - dependency-name: kubernetes
         versions:
-          - ">=27"
+          - '>=28'
     groups:
       minor-updates:
         update-types: [minor, patch]
