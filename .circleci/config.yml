@@ -12,10 +12,10 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y gettext
-      - restore_cache:
-          keys:
-            - py-v1-{{ checksum "setup.py" }}
-            - py-v1-
+#      - restore_cache:
+#          keys:
+#            - py-v1-{{ checksum "setup.py" }}
+#            - py-v1-
       - run:
           name: Install python dependencies
           command: |
