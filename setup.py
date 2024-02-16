@@ -42,15 +42,15 @@ extras_require = {
         # third-party dependencies (versions should be flexible to allow for bug fixes)
         'flake8~=7.0',
         'flake8-blind-except~=0.2.1',
-        'flake8-bugbear~=24.1',
+        'flake8-bugbear~=24.2',
         # 'flake8-commas~=2.1',
         'flake8-debugger~=4.1',
         # 'flake8-logging~=1.5',
-        'flake8-quotes~=3.3',
+        'flake8-quotes~=3.4',
         'pep8-naming~=0.13.3',
-        'responses~=0.24.1',
-        'twine~=4.0',
-        'watchdog~=3.0',
+        'responses~=0.25',
+        'twine~=5.0',
+        'watchdog~=4.0',
     ],
 }
 
