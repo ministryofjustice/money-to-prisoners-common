@@ -138,7 +138,7 @@ class NotifyClient:
             message_id = response.get('id')
             message_ids.append(message_id)
             if not message_id or response.get('reference') != reference:
-                logger.exception(
+                logger.error(
                     f'Problem sending {template_name} template email (ID: {message_id}) with reference `{reference}`'
                 )
         return message_ids
