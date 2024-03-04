@@ -20,17 +20,17 @@ install_requires = [
     'requests~=2.31',
     'requests-oauthlib~=1.3',
     'slumber>=0.7,<0.8',
-    'selenium~=4.17',
+    'selenium~=4.18',
     'cryptography>=42',
     'boto3~=1.34',
     'kubernetes~=27.2',  # corresponds to server version 1.27 (minor version skew should be within ±1 of cluster)
     'opencensus~=0.11',
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
-    'prometheus-client>=0.19,<1',
+    'prometheus-client>=0.20,<1',
     'sentry-sdk~=1.40',
     'libsass~=0.23',
-    'uWSGI~=2.0.23',
+    'uWSGI~=2.0.24',
 
     # moj-built dependencies (should be locked versions)
     'django-moj-irat==0.9',
