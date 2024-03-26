@@ -25,13 +25,13 @@ MTPDatePicker.prototype.buildPicker = function () {
   );
 
   $picker.on('keyup', $.proxy(function (e) {
-    if (e.keyCode === 27) {
+    if (e.key === 'Escape') {
       e.preventDefault();
       this.hide();
-    } else if (e.keyCode === 37) {
+    } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
       this.previousMonth();
-    } else if (e.keyCode === 39) {
+    } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       this.nextMonth();
     }
