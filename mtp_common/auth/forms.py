@@ -41,7 +41,7 @@ class AuthenticationForm(forms.Form):
     def __init__(self, request=None, **kwargs):
         self.request = request
         self.user_cache = None
-        super(AuthenticationForm, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -113,7 +113,7 @@ class PasswordChangeForm(forms.Form):
     def __init__(self, request=None, user=None, *args, **kwargs):
         self.request = request
         self.user = user
-        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean_new_password_confirmation(self):
         password1 = self.cleaned_data.get('new_password')
@@ -155,7 +155,7 @@ class ResetPasswordForm(forms.Form):
     def __init__(self, password_change_url, request=None, *args, **kwargs):
         self.password_change_url = password_change_url
         self.request = request
-        super(ResetPasswordForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self):
         if self.is_valid():
