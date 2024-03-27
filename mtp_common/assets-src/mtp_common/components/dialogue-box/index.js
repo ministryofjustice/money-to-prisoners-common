@@ -59,7 +59,7 @@ export var DialogueBox = {
     });
 
     $dialogue.on('keyup', function (e) {
-      if (e.keyCode === 27) {
+      if (e.key === 'Escape') {
         $dialogue.trigger('dialogue:close');
         e.preventDefault();
       }

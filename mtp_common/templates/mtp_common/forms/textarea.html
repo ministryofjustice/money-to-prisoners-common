@@ -14,22 +14,17 @@
   TODO: the widget is not currently configurable
 {% endcomment %}
 
-{% if character_count %}
-<div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="{{ character_count }}">
-{% endif %}
-
-<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if field.errors %}govuk-form-group--error{% endif %}">
+<div id="{{ field.id_for_label }}-wrapper" class="govuk-form-group {% if character_count %}govuk-character-count{% endif %} {% if field.errors %}govuk-form-group--error{% endif %}" {% if character_count %}data-module="govuk-character-count" data-maxlength="{{ character_count }}"{% endif %}>
   {% include 'mtp_common/forms/field-label.html' with field=field label_classes=label_classes only %}
   {% include 'mtp_common/forms/field-errors.html' with field=field only %}
 
   <textarea id="{{ field.id_for_label }}" class="govuk-textarea {% if character_count %}govuk-js-character-count{% endif %} {% if field.errors %}govuk-textarea--error{% endif %} {{ input_classes }}" name="{{ field.html_name }}" rows="{{ rows|default:4 }}" cols="{{ cols|default:50 }}" {% if character_count or field.help_text %}aria-describedby="{% if character_count %}{{ field.id_for_label }}-info{% endif %} {% if field.help_text %}{{ field.id_for_label }}-hint{% endif %}"{% endif %} {% for attr, attr_val in attrs.items %}{{ attr }}="{{ attr_val }}"{% endfor %}>{{ value|default:field.value|default_if_none:'' }}</textarea>
-</div>
 
-{% if character_count %}
-  <div id="{{ field.id_for_label }}-info" class="govuk-hint govuk-character-count__message">
-    {% blocktrans trimmed %}
-      You can enter up to {{ character_count }} characters
-    {% endblocktrans %}
-  </div>
+  {% if character_count %}
+    <div id="{{ field.id_for_label }}-info" class="govuk-hint govuk-character-count__message">
+      {% blocktrans trimmed %}
+        You can enter up to {{ character_count }} characters
+      {% endblocktrans %}
+    </div>
+  {% endif %}
 </div>
-{% endif %}
