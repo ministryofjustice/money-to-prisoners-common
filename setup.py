@@ -28,7 +28,7 @@ install_requires = [
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
     'prometheus-client>=0.20,<1',
-    'sentry-sdk>=1.44,<3.0',
+    'sentry-sdk~=2.3',
     'libsass~=0.23',
     'uWSGI~=2.0.26',
 
