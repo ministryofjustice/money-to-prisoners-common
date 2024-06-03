@@ -13,14 +13,14 @@ with open('README.rst') as readme:
 
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
-    'Django>=3.2.23,<3.3',
+    'Django>=3.2.25,<3.3',
     'django-widget-tweaks>=1.5,<1.6',
     'notifications-python-client~=9.0',
     'pytz>=2024.1',
-    'requests~=2.31',
+    'requests~=2.32',
     'requests-oauthlib~=2.0',
     'slumber>=0.7,<0.8',
-    'selenium~=4.19',
+    'selenium~=4.21',
     'cryptography>=42',
     'boto3~=1.34',
     'kubernetes~=27.2',  # corresponds to server version 1.27 (minor version skew should be within ±1 of cluster)
@@ -30,7 +30,7 @@ install_requires = [
     'prometheus-client>=0.20,<1',
     'sentry-sdk~=1.44',
     'libsass~=0.23',
-    'uWSGI~=2.0.24',
+    'uWSGI~=2.0.26',
 
     # moj-built dependencies (should be locked versions)
     'django-moj-irat==0.9',
@@ -47,9 +47,9 @@ extras_require = {
         'flake8-debugger~=4.1',
         # 'flake8-logging~=1.5',
         'flake8-quotes~=3.4',
-        'pep8-naming>=0.13.3,<0.15.0',
+        'pep8-naming~=0.14.1',
         'responses~=0.25',
-        'twine~=5.0',
+        'twine~=5.1',
         'watchdog~=4.0',
     ],
 }
