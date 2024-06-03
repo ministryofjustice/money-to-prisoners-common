@@ -17,7 +17,7 @@ npm-debug.log
 package-lock.json
 
 # app-specific
-.eslintrc.json
+/eslint.config.cjs
 .sass-lint.yml
 mtp_common/assets/
 
