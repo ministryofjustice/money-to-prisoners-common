@@ -251,7 +251,7 @@ def lint_config(context: Context):
     """
     Generates javasript and stylesheet linting configuration files
     """
-    context.write_template('eslintrc.json', path='.eslintrc.json')
+    context.write_template('eslint.config.cjs')
     context.write_template('sass-lint.yml', path='.sass-lint.yml')
 
 

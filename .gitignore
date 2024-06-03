@@ -4,30 +4,28 @@
 *.pot
 *.egg-info/
 .eggs/
-build/
-dist/
-env/
-venv/
+/build/
+/dist/
+/env/
+/venv/
 
 # sass & node.js
-*.sass-cache/
-.eslintcache/
-node_modules/
-npm-debug.log
-package-lock.json
+/*.sass-cache/
+/.eslintcache/
+/node_modules/
+/npm-debug.log
+/package-lock.json
 
 # app-specific
-.eslintrc.json
-.sass-lint.yml
-mtp_common/assets/
+/eslint.config.cjs
+/.sass-lint.yml
+/mtp_common/assets/
 
 # selenium
 geckodriver.log
 ghostdriver.log
 
-# Intellisense
-.mypy_cache/
-pyrightconfig.json
-
-# Development environment
-.env
+# tooling
+/.env
+/.mypy_cache/
+/pyrightconfig.json

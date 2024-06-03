@@ -8,7 +8,7 @@ export var YearFieldCompletion = {
   init: function (selector) {
     $(selector || this.selector).blur(function () {
       var $input = $(this);
-      var currentYear = (new Date()).getFullYear();
+      var currentYear = new Date().getFullYear();
       var century = 100 * Math.floor(currentYear / 100);
       var eraBoundary = parseInt($input.data('era-boundary'), 10);
       if (isNaN(eraBoundary)) {

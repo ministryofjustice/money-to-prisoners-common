@@ -1,12 +1,12 @@
 {% if sentry_dsn %}
-  <script src="https://browser.sentry-cdn.com/6.2.2/bundle.min.js" integrity="sha384-SEu4bJkpht31dkOz4nRcKDxnisSU+Jc8WRSOnBSZJ2yVMlbk4sAKQSrBw6qBVzKR" crossorigin="anonymous"></script>
+  <script src="https://browser.sentry-cdn.com/8.7.0/bundle.min.js" integrity="sha384-jKJvEneJ+gubP1DU80LdsRlB/wCxW+tWQpbHB+5oRxnwjxlSr1I5yI4pbliQi6yo" crossorigin="anonymous"></script>
   <script {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}>
     if (typeof Sentry !== 'undefined') {
       Sentry.init({
         dsn: '{{ sentry_dsn }}',
         release: '{{ app_git_commit|default:"unknown" }}',
         environment: '{{ environment }}',
-        whitelistUrls: [/app\.js/]
+        allowUrls: [/app\.js/]
       });
     }
   </script>
