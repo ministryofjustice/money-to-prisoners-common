@@ -15,7 +15,7 @@ install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
     'Django>=3.2.25,<3.3',
     'django-widget-tweaks>=1.5,<1.6',
-    'notifications-python-client~=9.0',
+    'notifications-python-client>=9,<11',
     'pytz>=2024.1',
     'requests~=2.32',
     'requests-oauthlib~=2.0',
