@@ -1,5 +1,5 @@
-var globals =  require('globals');
-var eslintJs =  require('@eslint/js');
+var globals = require('globals');
+var eslintJs = require('@eslint/js');
 
 module.exports = [
   eslintJs.configs.recommended,
