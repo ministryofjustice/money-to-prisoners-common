@@ -1,5 +1,5 @@
 {% if sentry_dsn %}
-  <script src="https://browser.sentry-cdn.com/8.7.0/bundle.min.js" integrity="sha384-jKJvEneJ+gubP1DU80LdsRlB/wCxW+tWQpbHB+5oRxnwjxlSr1I5yI4pbliQi6yo" crossorigin="anonymous"></script>
+  <script src="https://browser.sentry-cdn.com/8.27.0/bundle.min.js" integrity="sha384-EtBYFRhsvzRkOoBNKuTsaOBn5s+2M6+nfwgSM6Y6GOdxqW2Rbuabg5OrMcX7PXdG" crossorigin="anonymous"></script>
   <script {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}>
     if (typeof Sentry !== 'undefined') {
       Sentry.init({
