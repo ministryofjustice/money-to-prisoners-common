@@ -33,9 +33,9 @@ install_requires = [
     'uWSGI~=2.0.26',
 
     # moj-built dependencies (should be locked versions)
-    'django-moj-irat==0.9',
-    'django-zendesk-tickets==0.17',
-    'govuk-bank-holidays==0.14',
+    'django-moj-irat==0.10',
+    'django-zendesk-tickets==0.18',
+    'govuk-bank-holidays==0.15',
 ]
 extras_require = {
     'testing': [
