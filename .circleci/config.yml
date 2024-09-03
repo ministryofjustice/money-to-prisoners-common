@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.12-node
     working_directory: /tmp/mtp
     steps:
       - checkout
