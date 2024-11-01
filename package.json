@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "~9.9",
-    "eslint": "~9.9",
+    "eslint": "~9.13",
     "globals": "~15.9",
     "sass-lint": "~1.13"
   }
