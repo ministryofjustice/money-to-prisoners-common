@@ -105,12 +105,12 @@ def logout(request):
     user_logged_out.send(sender=user.__class__, request=request, user=user)
 
     # remember language choice saved to session
-    language = request.session.get(settings.LANGUAGE_SESSION_KEY)
+    language = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
 
     request.session.flush()
 
     if language is not None:
-        request.session[settings.LANGUAGE_SESSION_KEY] = language
+        request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = language
 
     if hasattr(request, 'user'):
         request.user = MojAnonymousUser()
