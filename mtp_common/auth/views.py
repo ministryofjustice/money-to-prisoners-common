@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -52,7 +52,7 @@ def login(request, template_name=None,
 
     def get_redirect_to():
         # Ensure the user-originating redirection url is safe.
-        if not is_safe_url(url=redirect_to, allowed_hosts=request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
             return resolve_url(settings.LOGIN_REDIRECT_URL)
         return redirect_to
 
@@ -104,7 +104,7 @@ def logout(request, template_name=None,
         next_page = request.POST.get(redirect_field_name,
                                      request.GET.get(redirect_field_name))
         # Security check -- don't allow redirection to a different host.
-        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
             next_page = request.path
 
     if next_page:
