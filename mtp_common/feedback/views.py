@@ -27,7 +27,8 @@ class FeedbackFooterView(FormView):
     def make_response(self, referer=None, errors=None):
         if errors:
             errors = errors.as_json()
-        if self.request.is_ajax():
+        is_ajax = self.request.headers.get('x-requested-with') == 'XMLHttpRequest'
+        if is_ajax:
             return HttpResponse('{"%s":%s}' % (self.return_errors_param, errors or 'null'),
                                 content_type='application/json')
 
