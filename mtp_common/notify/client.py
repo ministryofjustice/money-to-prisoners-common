@@ -75,11 +75,11 @@ class NotifyClient:
     def send_email(
         self,
         template_name: str,
-        to: typing.Union[str, typing.List[str]],
+        to: typing.Union[str, list[str]],
         personalisation: dict = None,
         reference: str = None,
         staff_email: bool = None,
-    ) -> typing.List[typing.Optional[str]]:
+    ) -> list[typing.Optional[str]]:
         """
         Sends a templated email via GOV.UK Notify with personalisations.
         File attachments are specified in the `personalisation` field as bytes, an open file or pathlib.Path;
@@ -145,12 +145,12 @@ class NotifyClient:
 
     def send_plain_text_email(
         self,
-        to: typing.Union[str, typing.List[str]],
+        to: typing.Union[str, list[str]],
         subject: str,
         message: str,
         reference: str = None,
         staff_email: bool = None,
-    ) -> typing.List[str]:
+    ) -> list[str]:
         """
         Send plain text email using the generic template with no control over formatting/links
         This should only be used as a last resort or exceptional fallback
