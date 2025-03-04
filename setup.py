@@ -16,7 +16,6 @@ install_requires = [
     'Django>=3.2.25,<3.3',
     'django-widget-tweaks>=1.5,<1.6',
     'notifications-python-client>=10,<11',
-    'pytz>=2024.1',
     'requests~=2.32',
     'requests-oauthlib~=2.0',
     'slumber>=0.7,<0.8',
