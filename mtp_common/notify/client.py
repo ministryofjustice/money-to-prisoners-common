@@ -2,7 +2,6 @@ import functools
 import io
 import logging
 import pathlib
-import typing
 
 from django.conf import settings
 from notifications_python_client import NotificationsAPIClient, prepare_upload
@@ -75,11 +74,11 @@ class NotifyClient:
     def send_email(
         self,
         template_name: str,
-        to: typing.Union[str, list[str]],
+        to: str | list[str],
         personalisation: dict = None,
         reference: str = None,
         staff_email: bool = None,
-    ) -> list[typing.Optional[str]]:
+    ) -> list[str | None]:
         """
         Sends a templated email via GOV.UK Notify with personalisations.
         File attachments are specified in the `personalisation` field as bytes, an open file or pathlib.Path;
@@ -145,7 +144,7 @@ class NotifyClient:
 
     def send_plain_text_email(
         self,
-        to: typing.Union[str, list[str]],
+        to: str | list[str],
         subject: str,
         message: str,
         reference: str = None,

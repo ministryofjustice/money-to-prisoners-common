@@ -1,5 +1,4 @@
 import logging
-import typing
 
 from notifications_python_client.errors import APIError, InvalidResponse
 
@@ -13,7 +12,7 @@ logger = logging.getLogger('mtp')
 @spoolable(body_params=('personalisation',))
 def send_email(
     template_name: str,
-    to: typing.Union[str, list[str]],
+    to: str | list[str],
     personalisation: dict = None,
     reference: str = None,
     staff_email: bool = None,
