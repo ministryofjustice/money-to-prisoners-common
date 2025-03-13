@@ -1,6 +1,5 @@
 import functools
 import textwrap
-import typing
 
 from django.utils.module_loading import autodiscover_modules
 
@@ -29,7 +28,7 @@ class NotifyTemplateRegistry:
         return cls._registry
 
     @classmethod
-    def check_notify_templates(cls) -> (bool, typing.List[str]):
+    def check_notify_templates(cls) -> tuple[bool, list[str]]:
         """
         Checks that templates exist in GOV.UK Notify and whether their contents are as expected.
         If a template is missing or does not include an expected personalisation or requires unexpected personalisation,

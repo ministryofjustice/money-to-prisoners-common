@@ -1,6 +1,5 @@
 import base64
 import io
-import typing
 from urllib.parse import urlencode, urljoin
 
 import boto3
@@ -52,7 +51,7 @@ class S3BucketClient:
 
     def upload(
         self,
-        file_contents: typing.Union[bytes, io.RawIOBase, io.BufferedIOBase],
+        file_contents: bytes | io.RawIOBase | io.BufferedIOBase,
         path: str,
         content_type: str = None,
         tags: dict = None,

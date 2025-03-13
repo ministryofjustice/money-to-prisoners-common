@@ -4,7 +4,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.forms.utils import ErrorDict, ErrorList
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import redirect
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 from requests.exceptions import HTTPError
@@ -20,14 +20,15 @@ class FeedbackFooterView(FormView):
 
     def get_success_url(self, referer=None):
         return_to = referer or self.request.META.get('HTTP_REFERER')
-        if not is_safe_url(url=return_to, allowed_hosts=self.request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=return_to, allowed_hosts=self.request.get_host()):
             return_to = '/'
         return return_to
 
     def make_response(self, referer=None, errors=None):
         if errors:
             errors = errors.as_json()
-        if self.request.is_ajax():
+        is_ajax = self.request.headers.get('x-requested-with') == 'XMLHttpRequest'
+        if is_ajax:
             return HttpResponse('{"%s":%s}' % (self.return_errors_param, errors or 'null'),
                                 content_type='application/json')
 

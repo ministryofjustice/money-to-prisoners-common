@@ -4,7 +4,6 @@ from django.contrib.auth import load_backend
 from django.middleware.csrf import rotate_token
 from django.utils.crypto import constant_time_compare
 from django.utils.module_loading import import_string
-from django.utils.translation import LANGUAGE_SESSION_KEY
 
 from .models import MojAnonymousUser, MojUser
 
@@ -106,12 +105,12 @@ def logout(request):
     user_logged_out.send(sender=user.__class__, request=request, user=user)
 
     # remember language choice saved to session
-    language = request.session.get(LANGUAGE_SESSION_KEY)
+    language = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
 
     request.session.flush()
 
     if language is not None:
-        request.session[LANGUAGE_SESSION_KEY] = language
+        request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = language
 
     if hasattr(request, 'user'):
         request.user = MojAnonymousUser()

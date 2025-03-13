@@ -1,5 +1,4 @@
 import logging
-import typing
 
 from django.core.mail.backends.base import BaseEmailBackend
 from django.core.mail.message import EmailMessage
@@ -16,7 +15,7 @@ class NotifyEmailBackend(BaseEmailBackend):
     MTP apps should use the `send_email` task instead with this backend handling emails for core Django functionality.
     """
 
-    def send_messages(self, email_messages: typing.List[EmailMessage]):
+    def send_messages(self, email_messages: list[EmailMessage]):
         for email_message in email_messages:
             to = email_message.to + email_message.cc + email_message.bcc
             subject = email_message.subject

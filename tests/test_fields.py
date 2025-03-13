@@ -1,9 +1,9 @@
 import datetime
+from datetime import timezone
 from unittest import mock
 
 from django import forms
 from django.test import SimpleTestCase
-from django.utils.timezone import utc
 
 from mtp_common.forms.fields import SplitDateField, YearField
 
@@ -74,7 +74,7 @@ class DateFieldTestCase(SimpleTestCase):
         })
         self.assertFalse(form.is_valid())
 
-    @mock.patch('mtp_common.forms.fields.now', return_value=datetime.datetime(2016, 7, 13, tzinfo=utc))
+    @mock.patch('mtp_common.forms.fields.now', return_value=datetime.datetime(2016, 7, 13, tzinfo=timezone.utc))
     def test_2_digit_year_entry(self, _):
         field = YearField()
         for year in range(100):
@@ -83,7 +83,7 @@ class DateFieldTestCase(SimpleTestCase):
             else:
                 self.assertEqual(field.clean(year), year + 1900)
 
-    @mock.patch('mtp_common.forms.fields.now', return_value=datetime.datetime(2181, 1, 1, tzinfo=utc))
+    @mock.patch('mtp_common.forms.fields.now', return_value=datetime.datetime(2181, 1, 1, tzinfo=timezone.utc))
     def test_2_digit_year_entry_next_century(self, _):
         era_boundary = 70  # make it 11 years prior as opposed to 10
         field = YearField(era_boundary=era_boundary)
