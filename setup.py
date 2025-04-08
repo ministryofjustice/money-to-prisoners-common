@@ -13,7 +13,7 @@ with open('README.rst') as readme:
 
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
-    'Django>=5.1.7,<5.2',
+    'Django>=5.2.0,<5.3',
 
     'django-widget-tweaks>=1.5,<1.6',
     'notifications-python-client>=10,<11',
@@ -35,8 +35,8 @@ install_requires = [
     'uWSGI~=2.0.28',
 
     # moj-built dependencies (should be locked versions)
-    'django-moj-irat==0.10',
-    'django-zendesk-tickets==0.18',
+    'django-moj-irat==0.11',
+    'django-zendesk-tickets==0.19',
     'govuk-bank-holidays==0.15',
 ]
 extras_require = {

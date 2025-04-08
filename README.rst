@@ -2,7 +2,7 @@ Money to Prisoners Common
 =========================
 
 A Django app containing utilities and assets common to all Prisoner Money applications.
-This version is only tested with Django 5.1.
+This version is only tested with Django 5.2.
 
 .. image:: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common.svg?style=svg
     :target: https://circleci.com/gh/ministryofjustice/money-to-prisoners-common
