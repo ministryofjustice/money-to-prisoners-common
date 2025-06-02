@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "~3.0",
-    "@eslint/js": "~9.27",
+    "@eslint/js": "~9.28",
     "eslint": "~9.27",
     "globals": "~16.0",
     "sass-lint": "~1.13"
