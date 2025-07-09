@@ -20,36 +20,36 @@ install_requires = [
     'requests~=2.32',
     'requests-oauthlib~=2.0',
     'slumber>=0.7,<0.8',
-    'selenium~=4.30',
-    'cryptography>=44',
-    'boto3~=1.37',
+    'selenium~=4.34',
+    'cryptography>=45',
+    'boto3~=1.39',
     # corresponds to server version 1.31 (minor version skew should be within ±1 of cluster)
     # https://github.com/kubernetes-client/python#compatibility-matrix-of-supported-client-versions
     'kubernetes~=31.0',
     'opencensus~=0.11',
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
-    'prometheus-client>=0.21,<1',
-    'sentry-sdk~=2.25',
+    'prometheus-client~=0.22',
+    'sentry-sdk~=2.32',
     'libsass~=0.23',
-    'uWSGI~=2.0.28',
+    'uWSGI~=2.0.30',
 
     # moj-built dependencies (should be locked versions)
     'django-moj-irat==0.11',
     'django-zendesk-tickets==0.19',
-    'govuk-bank-holidays==0.15',
+    'govuk-bank-holidays==0.16',
 ]
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
-        'flake8~=7.2',
+        'flake8~=7.3',
         'flake8-blind-except~=0.2.1',
         'flake8-bugbear~=24.12',
         # 'flake8-commas~=4.0',
         'flake8-debugger~=4.1',
-        # 'flake8-logging~=1.6',
+        # 'flake8-logging~=1.7',
         'flake8-quotes~=3.4',
-        'pep8-naming~=0.14.1',
+        'pep8-naming~=0.15',
         'responses~=0.25',
         'twine~=6.1',
         'watchdog~=6.0',
