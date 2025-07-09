@@ -7,6 +7,9 @@ $govuk-global-styles: true;
 // Improve link readability
 $govuk-new-link-styles: true;
 
+// Feature flags
+$govuk-new-organisation-colours: true;
+
 // All govuk-frontend components
 @import 'govuk-frontend/dist/govuk';
 
