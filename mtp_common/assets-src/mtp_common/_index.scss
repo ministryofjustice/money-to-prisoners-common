@@ -4,10 +4,8 @@ $govuk-assets-path: '/static/';
 // Removes need to put classes on all elements
 $govuk-global-styles: true;
 
-// Improve link readability
-$govuk-new-link-styles: true;
-
 // Feature flags
+$govuk-new-link-styles: true;
 $govuk-new-organisation-colours: true;
 
 // All govuk-frontend components
