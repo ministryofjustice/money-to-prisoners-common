@@ -17,17 +17,17 @@
     </div>
 
     <div class="govuk-header__content">
-      <a href="{{ home_url }}" class="govuk-header__link govuk-header__service-name">
-        {% block proposition %}{% trans 'Send money to someone in prison' %}{% endblock %}
-      </a>
+      {% if proposition_title %}
+        <a href="{{ home_url }}" class="govuk-header__link govuk-header__service-name">
+          {{ proposition_title }}
+        </a>
+      {% endif %}
 
-      {% block proposition_links %}
-        {% if moj_internal_site %}
-          {% include 'mtp_common/components/header-user-menu.html' %}
-        {% else %}
-          {% include 'govuk-frontend/components/header-proposition-links.html' %}
-        {% endif %}
-      {% endblock %}
+      {% if moj_internal_site %}
+        {% include 'mtp_common/components/header-user-menu.html' %}
+      {% else %}
+        {% include 'govuk-frontend/components/header-proposition-links.html' %}
+      {% endif %}
     </div>
 
     {% block after_proposition %}
