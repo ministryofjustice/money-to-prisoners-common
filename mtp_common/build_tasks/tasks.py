@@ -26,7 +26,7 @@ def start(context: Context, port=8000):
     """
     # NB: if called in the same interpreter, cannot use auto-reloading else all tasks re-run
     # context.management_command('runserver', addrport=f'0:{port}', use_reloader=False)
-    return context.shell(sys.executable, 'manage.py', 'runserver', f'0:{port}')
+    return context.shell(sys.executable, 'manage.py', 'runserver', f'0:{port}', '--insecure')
 
 
 @tasks.register('build')

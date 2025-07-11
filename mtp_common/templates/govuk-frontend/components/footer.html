@@ -4,6 +4,9 @@
 
 <footer class="govuk-footer">
   <div class="govuk-width-container">
+    {% if not moj_internal_site %}
+      {% include "govuk-frontend/components/logo.html" with classes="govuk-footer__crown" %}
+    {% endif %}
     {% block footer_top %}{% endblock %}
 
     <div class="govuk-footer__meta">

@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<section aria-label="{% trans 'Service information' %}" class="govuk-service-navigation" data-module="govuk-service-navigation">
+  <div class="govuk-width-container">
+    <div class="govuk-service-navigation__container">
+      {% if service_name %}
+        <span class="govuk-service-navigation__service-name">
+          <a href="{{ home_url }}" class="govuk-service-navigation__link">
+            {{ service_name }}
+          </a>
+        </span>
+      {% endif %}
+
+      {% if service_links %}
+        <nav aria-label="{% trans 'Menu' %}" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
+            {% trans 'Menu' %}
+          </button>
+          <ul class="govuk-service-navigation__list" id="navigation">
+            {% for link in service_links %}
+              <li class="govuk-service-navigation__item {% if link.active %}govuk-service-navigation__item--active{% endif %}">
+                <a class="govuk-service-navigation__link" href="{{ link.href }}" {% if link.active %}aria-current="true"{% endif %}>
+                  {% if link.active %}<strong class="govuk-service-navigation__active-fallback">{% endif %}
+                  {{ link.text }}
+                  {% if link.active %}</strong>{% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endif %}
+    </div>
+  </div>
+</section>
