@@ -2,8 +2,7 @@ from requests.exceptions import HTTPError
 
 
 class ApiHttpError(HTTPError):
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # noqa: B042
         super().__init__(*args)
         for key in kwargs:
             setattr(self, key, kwargs[key])

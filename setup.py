@@ -13,45 +13,45 @@ with open('README.rst') as readme:
 
 install_requires = [
     # third-party dependencies (versions should be flexible to allow for bug fixes)
-    'Django>=5.2.0,<5.3',
+    'Django>=5.2.7,<5.3',
 
     'django-widget-tweaks>=1.5,<1.6',
     'notifications-python-client>=10,<11',
     'requests~=2.32',
     'requests-oauthlib~=2.0',
     'slumber>=0.7,<0.8',
-    'selenium~=4.34',
-    'cryptography>=45',
-    'boto3~=1.39',
-    # corresponds to server version 1.31 (minor version skew should be within ±1 of cluster)
+    'selenium~=4.38',
+    'cryptography>=46',
+    'boto3~=1.40',
+    # corresponds to server version 1.32 (minor version skew should be within ±1 of cluster)
     # https://github.com/kubernetes-client/python#compatibility-matrix-of-supported-client-versions
-    'kubernetes~=31.0',
+    'kubernetes~=32.0',
     'opencensus~=0.11',
     'opencensus-ext-azure~=1.1',
     'opencensus-ext-django~=0.8',
-    'prometheus-client~=0.22',
-    'sentry-sdk~=2.32',
+    'prometheus-client~=0.23',
+    'sentry-sdk~=2.42',
     'libsass~=0.23',
-    'uWSGI~=2.0.30',
+    'uWSGI~=2.0.31',
 
     # moj-built dependencies (should be locked versions)
     'django-moj-irat==0.11',
     'django-zendesk-tickets==0.19',
-    'govuk-bank-holidays==0.16',
+    'govuk-bank-holidays==0.17',
 ]
 extras_require = {
     'testing': [
         # third-party dependencies (versions should be flexible to allow for bug fixes)
         'flake8~=7.3',
         'flake8-blind-except~=0.2.1',
-        'flake8-bugbear~=24.12',
+        'flake8-bugbear~=25.10',
         # 'flake8-commas~=4.0',
         'flake8-debugger~=4.1',
-        # 'flake8-logging~=1.7',
+        # 'flake8-logging~=1.8',
         'flake8-quotes~=3.4',
         'pep8-naming~=0.15',
         'responses~=0.25',
-        'twine~=6.1',
+        'twine~=6.2',
         'watchdog~=6.0',
     ],
 }
