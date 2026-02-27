@@ -424,12 +424,12 @@ class Context:
             f.write(content)
 
     def pip_command(self, command, *args):
-        pip_args = [sys.executable, "-m", "pip"]
+        pip_args = [sys.executable, '-m', 'pip']
 
         if self.verbosity == 0:
-            pip_args.append("--quiet")
+            pip_args.append('--quiet')
         elif self.verbosity == 2:
-            pip_args.append("--verbose")
+            pip_args.append('--verbose')
 
         pip_args.append(command)
         pip_args.extend(args)
