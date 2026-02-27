@@ -87,6 +87,7 @@ class Tasks(collections.abc.MutableMapping):
         default_tasks = list(filter(lambda task: task.default, self.values()))
         if len(default_tasks) == 1:
             return default_tasks[0]
+        return None
 
     def get_overidden_tasks(self, name):
         return self._overidden_tasks[name]
@@ -309,12 +310,12 @@ class Parameter:
     def description(self):
         constraint = self.constraint
         if not constraint:
-            return
+            return None
         if constraint in (str, int, bool):
-            return
+            return None
         if hasattr(constraint, '__doc__'):
             return ((constraint.__doc__ or '').splitlines() or [''])[0]
-        return
+        return None
 
     def consume_arguments(self, argument_list):
         """
@@ -423,11 +424,6 @@ class Context:
             f.write(content)
 
     def pip_command(self, command, *args):
-        """
-        Runs a pip command using the current interpreter.
-
-        This avoids depending on setuptools/pkg_resources, which may be absent locally.
-        """
         pip_args = [sys.executable, "-m", "pip"]
 
         if self.verbosity == 0:
