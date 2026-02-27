@@ -3,7 +3,6 @@ import os
 import sys
 import threading
 
-import pkg_resources
 
 from .executor import Context, Tasks, TaskError
 from .paths import in_dir, paths_for_shell
@@ -216,25 +215,32 @@ def bundle_stylesheets(context: Context, production_bundle=False):
     """
     Compiles stylesheets
     """
+    import sass  # provided by libsass
+
     def make_output_file(css_path):
         css_name = os.path.basename(css_path)
         base_name = os.path.splitext(css_name)[0]
         return os.path.join(context.app.scss_build_path, f'{base_name}.css')
 
-    style = 'compressed' if production_bundle else 'nested'
-    args = [
-        'pysassc',  # pysassc entrypoint always removes the first item
-        f'--output-style={style}',
-    ]
-    for path in context.app.scss_include_paths:
-        args.append(f'--include-path={path}')
+    output_style = 'compressed' if production_bundle else 'nested'
+    include_paths = list(context.app.scss_include_paths)
 
     return_code = 0
-    pysassc = pkg_resources.load_entry_point('libsass', 'console_scripts', 'pysassc')
     for source_file in context.app.scss_source_file_set.paths_for_shell(separator=None):
         context.info(f'Building {source_file}')
-        pysassc_args = [*args + [source_file, make_output_file(source_file)]]
-        return_code = pysassc(pysassc_args) or return_code
+        out_file = make_output_file(source_file)
+        try:
+            css = sass.compile(
+                filename=source_file,
+                include_paths=include_paths,
+                output_style=output_style,
+            )
+            os.makedirs(os.path.dirname(out_file), exist_ok=True)
+            with open(out_file, 'w', encoding='utf-8') as f:
+                f.write(css)
+        except Exception as e:
+            context.error(f'Failed building {source_file}: {e}')
+            return_code = return_code or 1
 
     return return_code
 

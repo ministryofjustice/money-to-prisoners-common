@@ -1,7 +1,7 @@
 {
   "name": "money-to-prisoners-common",
   "description": "Prisoner Money - Common",
-  "version": "21.2.0",
+  "version": "21.2.1",
   "private": true,
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@eslint/js": "~9.39",
     "eslint": "~9.39",
-    "globals": "~16.5",
+    "globals": "~17.3",
     "sass-lint": "~1.13"
   }
 }

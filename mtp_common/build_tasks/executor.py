@@ -10,7 +10,6 @@ import traceback
 import django
 from django.core.management import call_command
 from django.core.management.color import supports_color
-import pkg_resources
 
 from .app import App
 from .paths import FileSet
@@ -88,6 +87,7 @@ class Tasks(collections.abc.MutableMapping):
         default_tasks = list(filter(lambda task: task.default, self.values()))
         if len(default_tasks) == 1:
             return default_tasks[0]
+        return None
 
     def get_overidden_tasks(self, name):
         return self._overidden_tasks[name]
@@ -310,12 +310,12 @@ class Parameter:
     def description(self):
         constraint = self.constraint
         if not constraint:
-            return
+            return None
         if constraint in (str, int, bool):
-            return
+            return None
         if hasattr(constraint, '__doc__'):
             return ((constraint.__doc__ or '').splitlines() or [''])[0]
-        return
+        return None
 
     def consume_arguments(self, argument_list):
         """
@@ -424,16 +424,18 @@ class Context:
             f.write(content)
 
     def pip_command(self, command, *args):
-        """
-        Runs a pip command
-        """
-        pip = pkg_resources.load_entry_point('pip', 'console_scripts', 'pip')
-        args = [command] + list(args)
+        pip_args = [sys.executable, '-m', 'pip']
+
         if self.verbosity == 0:
-            args.insert(0, '--quiet')
+            pip_args.append('--quiet')
         elif self.verbosity == 2:
-            args.insert(0, '--verbose')
-        return pip(args)
+            pip_args.append('--verbose')
+
+        pip_args.append(command)
+        pip_args.extend(args)
+
+        self.debug(self.yellow_style(f"$ {' '.join(pip_args)}"))
+        return subprocess.call(pip_args, env=self.env.copy())
 
     def shell(self, command, *args, environment=None, check=True):
         """
