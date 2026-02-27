@@ -10,7 +10,6 @@ import traceback
 import django
 from django.core.management import call_command
 from django.core.management.color import supports_color
-import pkg_resources
 
 from .app import App
 from .paths import FileSet
@@ -425,15 +424,22 @@ class Context:
 
     def pip_command(self, command, *args):
         """
-        Runs a pip command
+        Runs a pip command using the current interpreter.
+
+        This avoids depending on setuptools/pkg_resources, which may be absent locally.
         """
-        pip = pkg_resources.load_entry_point('pip', 'console_scripts', 'pip')
-        args = [command] + list(args)
+        pip_args = [sys.executable, "-m", "pip"]
+
         if self.verbosity == 0:
-            args.insert(0, '--quiet')
+            pip_args.append("--quiet")
         elif self.verbosity == 2:
-            args.insert(0, '--verbose')
-        return pip(args)
+            pip_args.append("--verbose")
+
+        pip_args.append(command)
+        pip_args.extend(args)
+
+        self.debug(self.yellow_style(f"$ {' '.join(pip_args)}"))
+        return subprocess.call(pip_args, env=self.env.copy())
 
     def shell(self, command, *args, environment=None, check=True):
         """
