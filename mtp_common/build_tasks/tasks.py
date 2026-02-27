@@ -2,7 +2,8 @@ import functools
 import os
 import sys
 import threading
-import time
+
+import pkg_resources
 
 from .executor import Context, Tasks, TaskError
 from .paths import in_dir, paths_for_shell
@@ -33,136 +34,63 @@ def serve(context: Context, port=8000, browsersync_port=3000, browsersync_ui_por
     """
     Starts a development server with auto-building and live-reload
     """
-    try:
-        from watchdog.events import PatternMatchingEventHandler
-        from watchdog.observers import Observer
-        watchdog_available = True
-    except ModuleNotFoundError:
-        PatternMatchingEventHandler = None  # type: ignore[assignment]
-        Observer = None  # type: ignore[assignment]
-        watchdog_available = False
+    from watchdog.events import PatternMatchingEventHandler
+    from watchdog.observers import Observer
 
-    def reload_browsers():
-        context.debug('Reloading browsers')
-        context.node_tool('browser-sync', 'reload', f'--port={browsersync_port}')
+    class RebuildHandler(PatternMatchingEventHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self._patterns = ['*.js', '*.scss', '*.html']
+            self._ignore_directories = True
+            self.builder = None
+            self.rebuild_javascript = threading.Event()
+            self.rebuild_stylesheets = threading.Event()
 
-    def trigger_build(extension: str):
-        if extension == 'js':
-            context.debug('Triggering javascript build')
-            bundle_javascript(context)
-        elif extension == 'scss':
-            context.debug('Triggering stylesheet build')
-            bundle_stylesheets(context)
+        def on_any_event(self, event):
+            if self.builder:
+                self.builder.cancel()
+            extension = event.src_path.rsplit('.', 1)[-1].lower()
+            if extension == 'js':
+                self.rebuild_javascript.set()
+            elif extension == 'scss':
+                self.rebuild_stylesheets.set()
+            self.builder = threading.Timer(3, self.rebuild)
+            self.builder.start()
 
-    def start_browsersync():
-        context.info('Starting browser sync')
-        browsersync_args = ['start', '--host=localhost', '--no-open',
-                            '--logLevel', {0: 'silent', 1: 'info', 2: 'debug'}[context.verbosity],
-                            f'--port={browsersync_port}', f'--proxy=localhost:{port}',
-                            f'--ui-port={browsersync_ui_port}']
-        browsersync = functools.partial(context.node_tool, 'browser-sync', *browsersync_args)
-        threading.Thread(target=browsersync, daemon=True).start()
+        def rebuild(self):
+            if self.rebuild_javascript.is_set():
+                self.rebuild_javascript.clear()
+                context.debug('Triggering javascript build')
+                bundle_javascript(context)
+            if self.rebuild_stylesheets.is_set():
+                self.rebuild_stylesheets.clear()
+                context.debug('Triggering stylesheet build')
+                bundle_stylesheets(context)
+            context.debug('Reloading browsers')
+            context.node_tool('browser-sync', 'reload', f'--port={browsersync_port}')
 
-    def watch_with_polling(paths, patterns=('.js', '.scss', '.html'), interval=1.0):
-        """
-        Lightweight fallback watcher (no external deps).
-        Watches for mtime changes and triggers appropriate rebuilds.
-        """
-        context.info('watchdog not available; using polling file watcher (less fancy, still effective).')
-
-        def iter_files():
-            for root in paths:
-                if not root or not os.path.isdir(root):
-                    continue
-                for dirpath, _, filenames in os.walk(root):
-                    for filename in filenames:
-                        lower = filename.lower()
-                        if lower.endswith(patterns):
-                            yield os.path.join(dirpath, filename)
-
-        last_mtime = {}
-        debounce_deadline = None
-        pending = set()
-
-        while True:
-            changed = False
-            for file_path in iter_files():
-                try:
-                    mtime = os.path.getmtime(file_path)
-                except OSError:
-                    continue
-                old = last_mtime.get(file_path)
-                if old is None:
-                    last_mtime[file_path] = mtime
-                    continue
-                if mtime != old:
-                    last_mtime[file_path] = mtime
-                    changed = True
-                    ext = file_path.rsplit('.', 1)[-1].lower()
-                    pending.add(ext)
-
-            now = time.time()
-            if changed:
-                debounce_deadline = now + 3.0
-
-            if debounce_deadline is not None and now >= debounce_deadline:
-                for ext in sorted(pending):
-                    trigger_build(ext)
-                pending.clear()
-                reload_browsers()
-                debounce_deadline = None
-
-            time.sleep(interval)
-
+    context.info('Watching sources')
+    observer = Observer()
     paths = [
         context.app.common_asset_source_path,
         context.app.asset_source_path,
         context.app.common_templates_path,
         context.app.templates_path,
     ]
+    handler = RebuildHandler()
+    for path in paths:
+        observer.schedule(handler, path, recursive=True)
+    observer.setDaemon(True)
+    observer.start()
 
-    if watchdog_available:
-        class RebuildHandler(PatternMatchingEventHandler):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                self._patterns = ['*.js', '*.scss', '*.html']
-                self._ignore_directories = True
-                self.builder = None
-                self.rebuild_javascript = threading.Event()
-                self.rebuild_stylesheets = threading.Event()
+    context.info('Starting browser sync')
+    browsersync_args = ['start', '--host=localhost', '--no-open',
+                        '--logLevel', {0: 'silent', 1: 'info', 2: 'debug'}[context.verbosity],
+                        f'--port={browsersync_port}', f'--proxy=localhost:{port}',
+                        f'--ui-port={browsersync_ui_port}']
+    browsersync = functools.partial(context.node_tool, 'browser-sync', *browsersync_args)
+    threading.Thread(target=browsersync, daemon=True).start()
 
-            def on_any_event(self, event):
-                if self.builder:
-                    self.builder.cancel()
-                extension = event.src_path.rsplit('.', 1)[-1].lower()
-                if extension == 'js':
-                    self.rebuild_javascript.set()
-                elif extension == 'scss':
-                    self.rebuild_stylesheets.set()
-                self.builder = threading.Timer(3, self.rebuild)
-                self.builder.start()
-
-            def rebuild(self):
-                if self.rebuild_javascript.is_set():
-                    self.rebuild_javascript.clear()
-                    trigger_build('js')
-                if self.rebuild_stylesheets.is_set():
-                    self.rebuild_stylesheets.clear()
-                    trigger_build('scss')
-                reload_browsers()
-
-        context.info('Watching sources')
-        observer = Observer()
-        handler = RebuildHandler()
-        for path in paths:
-            observer.schedule(handler, path, recursive=True)
-        observer.setDaemon(True)
-        observer.start()
-    else:
-        context.info('Watching sources')
-        threading.Thread(target=watch_with_polling, args=(paths,), daemon=True).start()
-
-    start_browsersync()
     context.info('Starting web server')
     return start(context, port=port)
 
@@ -288,38 +216,25 @@ def bundle_stylesheets(context: Context, production_bundle=False):
     """
     Compiles stylesheets
     """
-    try:
-        import sass  # provided by the 'libsass' package
-    except ModuleNotFoundError as e:
-        raise TaskError(
-            "Cannot compile stylesheets because 'libsass' is not available in this environment."
-        ) from e
-
     def make_output_file(css_path):
         css_name = os.path.basename(css_path)
         base_name = os.path.splitext(css_name)[0]
         return os.path.join(context.app.scss_build_path, f'{base_name}.css')
 
-    output_style = 'compressed' if production_bundle else 'nested'
-    include_paths = list(context.app.scss_include_paths)
+    style = 'compressed' if production_bundle else 'nested'
+    args = [
+        'pysassc',  # pysassc entrypoint always removes the first item
+        f'--output-style={style}',
+    ]
+    for path in context.app.scss_include_paths:
+        args.append(f'--include-path={path}')
 
     return_code = 0
+    pysassc = pkg_resources.load_entry_point('libsass', 'console_scripts', 'pysassc')
     for source_file in context.app.scss_source_file_set.paths_for_shell(separator=None):
         context.info(f'Building {source_file}')
-        try:
-            css = sass.compile(
-                filename=source_file,
-                include_paths=include_paths,
-                output_style=output_style,
-            )
-            with open(make_output_file(source_file), 'w', encoding='utf-8') as f:
-                f.write(css)
-        except Exception:
-            # Keep going but remember an error occurred (mirrors prior behavior of aggregating return codes)
-            return_code = return_code or 1
-            context.error(f'Failed to compile {source_file}')
-            if context.verbosity >= 2:
-                raise
+        pysassc_args = [*args + [source_file, make_output_file(source_file)]]
+        return_code = pysassc(pysassc_args) or return_code
 
     return return_code
 
