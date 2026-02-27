@@ -107,25 +107,42 @@ def setup_django_for_testing(_: Context):
     django.setup()
 
 
-@tasks.register(hidden=True)
-def python_dependencies(context: Context, extras=None):
+def _read_requirements_from_setup_py(setup_py_path: str):
     """
-    Updates python dependencies
+    Extracts install_requires and extras_require from setup.py without importing/executing it.
+    This avoids a runtime dependency on setuptools.
     """
-    with mock.patch('setuptools.setup'):
-        from setup import install_requires, extras_require
+    import ast
 
-        requirements = install_requires.copy()
-        if extras:
-            requirements.extend(extras_require[extras])
-    return context.pip_command('install', *requirements)
+    with open(setup_py_path, encoding='utf-8') as f:
+        source = f.read()
 
+    tree = ast.parse(source, filename=setup_py_path)
 
-@tasks.register('python_dependencies', 'compile_messages', 'precompile_python_code', default=True)
-def build(_: Context):
-    """
-    Builds all necessary assets
-    """
+    install_requires = None
+    extras_require = None
+
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        if len(node.targets) != 1 or not isinstance(node.targets[0], ast.Name):
+            continue
+
+        name = node.targets[0].id
+        if name == 'install_requires':
+            install_requires = ast.literal_eval(node.value)
+        elif name == 'extras_require':
+            extras_require = ast.literal_eval(node.value)
+
+    if install_requires is None:
+        raise TaskError('Could not find install_requires in setup.py')
+    if extras_require is None:
+        extras_require = {}
+
+    if not isinstance(install_requires, list):
+        raise TaskError('setup.py install_requires must be a list')
+    if not isinstance(extras_require, dict):
+        raise Task
 
 
 @tasks.register('setup_django_for_testing', 'lint_config', 'build')
