@@ -22,7 +22,7 @@
     "sass-lint": "~1.13"
   },
   "dependencies": {
-    "govuk-frontend": "~5.13",
+    "govuk-frontend": "~6.0",
     "jquery": "~3.7",
     "js-cookie": "~3.0",
     "mailcheck": "~1.1",
