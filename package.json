@@ -17,7 +17,7 @@
   "devDependencies": {
     "@eslint/js": "~9.39",
     "eslint": "~9.39",
-    "globals": "~17.3",
+    "globals": "~17.4",
     "sass-lint": "~1.13"
   }
 }
