@@ -14,7 +14,7 @@ services:
 
   db:
     container_name: mtp-api-db
-    image: postgres:10-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
+    image: postgres:16-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
     environment:
       POSTGRES_DB: mtp_api
       POSTGRES_USER: mtp_api
