@@ -16,13 +16,13 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "~3.0",
-    "@eslint/js": "~9.39",
+    "@eslint/js": "~10.0",
     "eslint": "~9.39",
     "globals": "~17.4",
     "sass-lint": "~1.13"
   },
   "dependencies": {
-    "govuk-frontend": "~6.0",
+    "govuk-frontend": "~6.1",
     "jquery": "~4.0",
     "js-cookie": "~3.0",
     "mailcheck": "~1.1",
