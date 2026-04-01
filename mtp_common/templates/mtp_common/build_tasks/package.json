@@ -17,7 +17,7 @@
   "devDependencies": {
     "browser-sync": "~3.0",
     "@eslint/js": "~10.0",
-    "eslint": "~9.39",
+    "eslint": "~10.1",
     "globals": "~17.4",
     "sass-lint": "~1.13"
   },
