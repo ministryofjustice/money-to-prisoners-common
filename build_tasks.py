@@ -212,11 +212,18 @@ def docs(context: Context):
 
 
 @tasks.register('clean', 'build')
-def upload(context: Context):
+def build_dist(context: Context):
     """
-    Builds and uploads MTP-common to pypi
+    Builds MTP-common source and wheel distributions into dist/
     """
     context.shell(sys.executable, 'setup.py', 'sdist', 'bdist_wheel')
+
+
+@tasks.register('build_dist')
+def upload(context: Context):
+    """
+    Builds and uploads MTP-common to pypi (manual/local release; CI uses trusted publishing)
+    """
     context.shell('twine', 'upload', '--non-interactive', 'dist/*')
 
 
