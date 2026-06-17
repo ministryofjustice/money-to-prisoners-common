@@ -2,10 +2,15 @@ name: Release to PYPI
 on:
   release:
     types: [created]
+permissions:
+  contents: read
 jobs:
   release:
     name: Release to PYPI
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # required for PyPI trusted publishing (OIDC)
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -23,8 +28,7 @@ jobs:
         run: |
           pip install -U setuptools pip wheel
           pip install --editable .[testing]
-      - name: Build and upload to PYPI
-        run: python run.py upload
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      - name: Build distributions
+        run: python run.py build_dist
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
