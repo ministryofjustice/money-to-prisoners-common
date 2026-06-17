@@ -21,6 +21,12 @@ updates:
     directories:
       - /
       - /mtp_common/templates/mtp_common/build_tasks
+    ignore:
+      # govuk-frontend 6.x requires Dart Sass; the build uses LibSass. Pin to 5.x
+      # until bundle_stylesheets is migrated to Dart Sass.
+      - dependency-name: govuk-frontend
+        versions:
+          - '>=6'
     groups:
       minor-updates:
         update-types: [minor, patch]
