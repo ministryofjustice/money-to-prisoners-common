@@ -19,6 +19,7 @@ def app_environment(_):
         'APP_BUILD_DATE': getattr(settings, 'APP_BUILD_DATE', None),
         'APP_GIT_COMMIT': app_git_commit,
         'APP_GIT_COMMIT_SHORT': (app_git_commit or 'unknown')[:7],
+        'servicenow_password_reset_url': getattr(settings, 'SERVICENOW_PASSWORD_RESET_URL', ''),
     }
 
 

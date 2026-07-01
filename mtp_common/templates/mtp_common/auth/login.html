@@ -30,9 +30,8 @@
         </div>
       </form>
 
-      {% url 'reset_password' as reset_password_url %}
-      {% if reset_password_url %}
-        <p><a href="{{ reset_password_url }}">{% trans 'Forgotten your password?' %}</a></p>
+      {% if servicenow_password_reset_url %}
+        <p><a href="{{ servicenow_password_reset_url }}">{% trans 'Forgotten your password?' %}</a></p>
       {% endif %}
 
     </div>
