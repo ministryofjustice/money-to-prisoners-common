@@ -1,0 +1,28 @@
+name: Test
+on:
+  push:
+permissions:
+  contents: read
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Setup python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Setup nodejs
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Install os dependencies
+        run: sudo apt-get install gettext
+      - name: Install python dependencies
+        run: |
+          pip install -U setuptools pip wheel
+          pip install --editable .[testing]
+      - name: Run tests
+        run: python run.py --verbosity 2 test
