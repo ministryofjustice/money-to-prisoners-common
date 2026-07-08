@@ -27,6 +27,14 @@ updates:
       - dependency-name: govuk-frontend
         versions:
           - '>=6'
+      # jquery 4.x is ESM-only: webpack's ProvidePlugin binds `$` to the module
+      # namespace object (not the function) so `$(...)` throws `$ is not a function`,
+      # and 4.0 removed APIs still used across the apps ($.proxy, $.isArray, $.trim,
+      # .size()). Pin to 3.x until the ProvidePlugin config and those call sites are
+      # migrated. See IR-1755.
+      - dependency-name: jquery
+        versions:
+          - '>=4'
     groups:
       minor-updates:
         update-types: [minor, patch]
