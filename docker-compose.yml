@@ -1,5 +1,3 @@
-version: "3.8"
-
 x-environment: &default-environment
   # apps should define their own environment variables and fallbacks;
   # only docker-compose-specific overrides should go here
@@ -29,8 +27,6 @@ services:
     build:
       context: ../money-to-prisoners-api
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8000:8000"
       - "3000:3000"
@@ -62,8 +58,6 @@ services:
     build:
       context: ../money-to-prisoners-cashbook
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8001:8001"
       - "3001:3001"
@@ -89,8 +83,6 @@ services:
     build:
       context: ../money-to-prisoners-bank-admin
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8002:8002"
       - "3002:3002"
@@ -116,8 +108,6 @@ services:
     build:
       context: ../money-to-prisoners-noms-ops
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8003:8003"
       - "3003:3003"
@@ -143,8 +133,6 @@ services:
     build:
       context: ../money-to-prisoners-send-money
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8004:8004"
       - "3004:3004"
@@ -170,8 +158,6 @@ services:
     build:
       context: ../money-to-prisoners-start-page
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8005:8080"
     user: mtp
@@ -184,8 +170,6 @@ services:
     build:
       context: ../money-to-prisoners-emails
       dockerfile: Dockerfile-dev
-      args:
-        ECR_REGISTRY: ${ECR_REGISTRY}
     ports:
       - "8006:8006"
       - "3006:3006"

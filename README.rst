@@ -151,36 +151,12 @@ Each app describes its own installation in its read-me file, but here’s a quic
 
 After this has been done once, bringing up apps again only requires repeating step 5.
 
-**Running using docker-compose (requires access to the private deploy repository)**
+**Running using docker-compose**
 
-1. Get access to `money-to-prisoners-deploy`_ and see read-me inside to unlock it.
+App images are published as public packages at ``ghcr.io/ministryofjustice/money-to-prisoners-*``,
+so no credentials, AWS access or registry login are needed – docker pulls them anonymously.
 
-2. Setup local environment:
-
-   1. Get the docker registry address of ECR used for deployed environment in Cloud Platform. In the ``deploy`` repo:
-
-   .. code-block:: sh
-
-     ./manage.py config docker-login  # log docker into ECR
-     ./manage.py app ci-settings [any mtp app name]  # note the $ECR_REGISTRY value
-
-   Alternatively, this value can be derived from the ``ecr`` kubernetes secret in the production namespace in Cloud Platform.
-   Use the value of ``repo_url`` up to the first ``/``.
-
-   2. Create a ``.env`` file in this repository’s root directory adding this ``ECR_REGISTRY`` value:
-
-   .. code-block::
-
-     ECR_REGISTRY=?????????.amazonaws.com
-
-3. Pull images from private docker registry in Cloud Platform. In the ``deploy`` repo:
-
-.. code-block:: sh
-
-  ./manage.py config docker-login  # only necessary if not done above
-  ./manage.py image pull-ecr
-
-4. Launch all apps in concert. In this repo:
+1. Launch all apps in concert. In this repo:
 
 .. code-block:: sh
 
@@ -188,19 +164,19 @@ After this has been done once, bringing up apps again only requires repeating st
 
    NB: The newer ``docker compose up`` form only works after the ``docker-compose up`` has already built the containers the first time!
 
-5. Create standard users and populate database with sample data. In this repo:
+2. Create standard users and populate database with sample data. In this repo:
 
 .. code-block:: sh
 
   docker-compose exec api ./manage.py load_test_data
 
 After this has been done once, bringing up the full stack in future only requires running ``docker-compose up``
-or ``docker compose up`` in this repo. Deleting docker images, containers or volumes will require repeating steps 3 to 5.
+or ``docker compose up`` in this repo. Deleting docker images, containers or volumes will require repeating both steps.
 
 If you run into issues with the dockerised development environment, the following troubleshooting steps should reset the state:
 
 * Shutdown existing docker-compose containers, and remove volumes/networks/images with ``docker-compose down -v --rmi all`` from this repo’s root directory (note this will wipe your local database, omit the ``-v`` to prevent this)
-* Pull fresh base images (step 3 above)
+* Pull fresh app images via ``docker-compose pull`` from this repo’s root directory
 * Rebuild the app images without cache via ``docker-compose build --no-cache`` from this repo’s root directory
 * Restart the apps in the background via ``docker-compose up -d`` from this repo’s root directory
 * Tail the logs at your leisure via ``docker-compose logs <app>`` from money-to-prisoners-common root directory
