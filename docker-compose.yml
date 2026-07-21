@@ -32,6 +32,8 @@ services:
       - "3000:3000"
     volumes:
       - ../money-to-prisoners-api:/app
+      # see docker/no-local-settings.py
+      - ./docker/no-local-settings.py:/app/mtp_api/settings/local.py:ro
       - api_node_modules:/app/node_modules
     # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
     #   - ../money-to-prisoners-common:/money-to-prisoners-common
@@ -63,6 +65,8 @@ services:
       - "3001:3001"
     volumes:
       - ../money-to-prisoners-cashbook:/app
+      # see docker/no-local-settings.py
+      - ./docker/no-local-settings.py:/app/mtp_cashbook/settings/local.py:ro
       - cashbook_node_modules:/app/node_modules
     # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
     #   - ../money-to-prisoners-common:/money-to-prisoners-common
@@ -88,6 +92,8 @@ services:
       - "3002:3002"
     volumes:
       - ../money-to-prisoners-bank-admin:/app
+      # see docker/no-local-settings.py
+      - ./docker/no-local-settings.py:/app/mtp_bank_admin/settings/local.py:ro
       - bank-admin_node_modules:/app/node_modules
     # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
     #   - ../money-to-prisoners-common:/money-to-prisoners-common
@@ -113,6 +119,8 @@ services:
       - "3003:3003"
     volumes:
       - ../money-to-prisoners-noms-ops:/app
+      # see docker/no-local-settings.py
+      - ./docker/no-local-settings.py:/app/mtp_noms_ops/settings/local.py:ro
       - noms-ops_node_modules:/app/node_modules
     # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
     #   - ../money-to-prisoners-common:/money-to-prisoners-common
@@ -138,6 +146,8 @@ services:
       - "3004:3004"
     volumes:
       - ../money-to-prisoners-send-money:/app
+      # see docker/no-local-settings.py
+      - ./docker/no-local-settings.py:/app/mtp_send_money/settings/local.py:ro
       - send-money_node_modules:/app/node_modules
     # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
     #   - ../money-to-prisoners-common:/money-to-prisoners-common
@@ -175,6 +185,8 @@ services:
       - "3006:3006"
     volumes:
       - ../money-to-prisoners-emails:/app
+      # see docker/no-local-settings.py
+      - ./docker/no-local-settings.py:/app/mtp_emails/settings/local.py:ro
       - emails_node_modules:/app/node_modules
     # Uncomment following lines and restart containers to install money-to-prisoners-common in editable mode
     #   - ../money-to-prisoners-common:/money-to-prisoners-common

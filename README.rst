@@ -86,7 +86,7 @@ Local Development Environment
 
 Prisoner Money apps can be run natively (i.e. directly by python on your machine) or using docker-compose.
 Using docker-compose is perhaps the easiest way to bring up all Prisoner Money apps in concert,
-but it requires access to the private `money-to-prisoners-deploy`_ infrastructure.
+and needs no credentials of any kind.
 However, when editing this common library, it’s easier to run them natively
 because this package can be installed in "editable" mode.
 
@@ -159,6 +159,13 @@ After this has been done once, bringing up apps again only requires repeating st
 
 App images are published as public packages at ``ghcr.io/ministryofjustice/money-to-prisoners-*``,
 so no credentials, AWS access or registry login are needed – docker pulls them anonymously.
+
+NB: docker-compose builds each app from its own checkout, so **all the app repositories above must be
+cloned side-by-side** in one directory first. It is not enough to clone this repository alone.
+
+Your own ``settings/local.py`` in any app is deliberately ignored inside the containers –
+see ``docker/no-local-settings.py`` for why. Overrides for the containers belong in
+``docker-compose.yml``.
 
 1. Launch all apps in concert. In this repo:
 
