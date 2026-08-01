@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Setup nodejs
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - name: Install os dependencies
