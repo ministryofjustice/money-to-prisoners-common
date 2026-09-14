@@ -8,6 +8,20 @@ x-environment: &default-environment
 
   API_URL: http://api:8000
 
+  # "If Test does it, Parity should too": mirrors the "November 2nd changes" policy flag that
+  # money-to-prisoners-deploy sets for the real test/parity environments (see
+  # config/{test,parity}/env/bank-admin.yml there). Without it, local behaves like an
+  # environment from before that policy change (e.g. Bank Admin still shows Access Pay refund
+  # downloads), which doesn't match test/parity and breaks Playwright specs that assert the
+  # current behaviour.
+  #
+  # NOTE: test/parity also set BANK_TRANSFERS_ENABLED: "0" and PRISONER_CAPPING_ENABLED: "1"
+  # for send-money/cashbook/noms-ops as part of the same policy change. Don't add those here
+  # without first checking the Playwright send-money/cashbook/noms-ops suites: enabling
+  # PRISONER_CAPPING_ENABLED locally currently breaks the send-money happy-path spec, because
+  # it triggers a NOMIS prisoner lookup this local stack doesn't have data for.
+  NOVEMBER_SECOND_CHANGES_LIVE: "1"
+
 services:
 
   db:
@@ -105,7 +119,13 @@ services:
     depends_on:
       - api
     user: mtp
-    environment: *default-environment
+    environment:
+      <<: *default-environment
+      # picked up from a gitignored root .env file - see docker/no-local-settings.py for why
+      # these can't just go in mtp_bank_admin/settings/local.py
+      ZENDESK_API_USERNAME: ${ZENDESK_API_USERNAME:-}
+      ZENDESK_API_TOKEN: ${ZENDESK_API_TOKEN:-}
+      ZENDESK_REQUESTER_ID: ${ZENDESK_REQUESTER_ID:-}
 
   noms-ops:
     container_name: mtp-noms-ops
