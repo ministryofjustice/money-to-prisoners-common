@@ -179,7 +179,13 @@ services:
     depends_on:
       - api
     user: mtp
-    environment: *default-environment
+    environment:
+      <<: *default-environment
+      # picked up from a gitignored root .env file - see docker/no-local-settings.py for why
+      # this can't just go in mtp_send_money/settings/local.py. Uses the GDS Sandbox test key
+      # (same one test uses) - safe to share, does not move real money.
+      GOVUK_PAY_URL: https://publicapi.payments.service.gov.uk/v1
+      GOVUK_PAY_AUTH_TOKEN: ${GOVUK_PAY_AUTH_TOKEN:-}
 
   start-page:
     container_name: mtp-start-page
@@ -218,7 +224,11 @@ services:
     depends_on:
       - api
     user: mtp
-    environment: *default-environment
+    environment:
+      <<: *default-environment
+      # picked up from a gitignored root .env file - see docker/no-local-settings.py for why
+      # this can't just go in mtp_emails/settings/local.py
+      GOVUK_NOTIFY_CALLBACKS_BEARER_TOKEN: ${GOVUK_NOTIFY_CALLBACKS_BEARER_TOKEN:-}
 
 volumes:
   db_data:
