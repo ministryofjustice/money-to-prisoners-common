@@ -29,3 +29,4 @@ ghostdriver.log
 /.env
 /.mypy_cache/
 /pyrightconfig.json
+/.idea

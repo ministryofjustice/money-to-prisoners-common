@@ -207,6 +207,14 @@ You can find login details in `load_test_data.py`_
 
 Caveat: You can only log into one app at a time locally because the cookies within which the session is stored are namespaced to domain only.
 
+Parity testing
+--------------
+
+See `PARITY.md <PARITY.md>`_ for how to run the whole local stack (Docker Compose, secrets,
+Playwright suite) against the fixed, reproducible ``parity`` data set, and how to deploy a
+branch to the real ``parity`` environment. See `money-to-prisoners-api`_'s ``PARITY.md`` for how
+that fixture data set itself is structured and how to add more of it.
+
 Additional Bespoke Packages
 ---------------------------
 
