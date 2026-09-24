@@ -177,6 +177,9 @@ services:
     build:
       context: ../money-to-prisoners-start-page
       dockerfile: Dockerfile-dev
+    volumes:
+      # the image serves /app with reloading, so edits to app/ show without a rebuild
+      - ../money-to-prisoners-start-page/app:/app
     ports:
       - "8005:8080"
     user: mtp
