@@ -90,6 +90,10 @@ and needs no credentials of any kind.
 However, when editing this common library, it’s easier to run them natively
 because this package can be installed in "editable" mode.
 
+To work on a single app you do not need anything below: each app repository has its own ``docker-compose.yml``
+that runs it with the database, the API and the other apps from their published images.
+See the `getting-started guide <https://github.com/ministryofjustice/money-to-prisoners-deploy/blob/main/docs/getting-started.md>`_, which also lists the local addresses and test logins.
+
 Check out each app and helper repository side-by-side in one directory using git:
 
 * `money-to-prisoners-api`_
@@ -127,7 +131,7 @@ Each app describes its own installation in its read-me file, but here’s a quic
 
    .. code-block:: sh
 
-     for app in api cashbook bank-admin noms-ops transaction-uploader send-money start-page deploy; do
+     for app in api cashbook bank-admin noms-ops emails transaction-uploader send-money start-page deploy; do
        cd money-to-prisoners-$app
        mkvirtualenv -a . money-to-prisoners-$app
        [[ -f requirements/dev.txt ]] && pip install -r requirements/dev.txt
@@ -194,16 +198,19 @@ If you run into issues with the dockerised development environment, the followin
 
 **Accessing the apps**
 
-Irrespective of how the apps were run, those exposing a web interface will be accessible:
+Apps exposing a web interface are accessible at the addresses below.
+The 300x addresses go through browser-sync, which reloads the page as you make changes; it runs with ``./run.py serve``,
+which is also what docker-compose uses. With ``./run.py start`` use the 800x address instead.
 
 * api: http://localhost:8000/admin/
-* cashbook: http://localhost:3001/
-* bank-admin: http://localhost:3002/
-* noms-ops: http://localhost:3003/
-* send-money: http://localhost:3004/
+* cashbook: http://localhost:3001/ or http://localhost:8001/
+* bank-admin: http://localhost:3002/ or http://localhost:8002/
+* noms-ops: http://localhost:3003/ or http://localhost:8003/
+* send-money: http://localhost:3004/ or http://localhost:8004/
 * start-page: http://localhost:8005/
+* emails: http://localhost:3006/ or http://localhost:8006/ (no pages of its own; serves downloads and GOV.UK Notify callbacks)
 
-You can find login details in `load_test_data.py`_
+Test logins are listed in the `getting-started guide <https://github.com/ministryofjustice/money-to-prisoners-deploy/blob/main/docs/getting-started.md#test-logins>`_.
 
 Caveat: You can only log into one app at a time locally because the cookies within which the session is stored are namespaced to domain only.
 
@@ -238,7 +245,6 @@ There are additional bespoke dependencies defined as python dependencies within 
 .. _money-to-prisoners-common: https://github.com/ministryofjustice/money-to-prisoners-common
 .. _money-to-prisoners-deploy: https://github.com/ministryofjustice/money-to-prisoners-deploy
 .. _money-to-prisoners-emails: https://github.com/ministryofjustice/money-to-prisoners-emails
-.. _load_test_data.py: https://github.com/ministryofjustice/money-to-prisoners-api/blob/a6e039a3fc85d675c62658c226a3bd94d27355d5/mtp_api/apps/core/management/commands/load_test_data.py#L221-L229
 .. _django-zendesk-tickets: https://github.com/ministryofjustice/django-zendesk-tickets
 .. _govuk-bank-holidays: https://github.com/ministryofjustice/govuk-bank-holidays
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/
