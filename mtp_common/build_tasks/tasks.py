@@ -165,31 +165,6 @@ def dependencies(_: Context):
 
 
 @tasks.register(hidden=True)
-def docker_compose_config(context: Context, port=8000):
-    """
-    Generates a docker-compose.yml file
-    """
-    context.write_template('docker-compose.yml', context={
-        'port': port,
-    })
-
-
-@tasks.register('docker_compose_config', hidden=True)
-def local_docker(context: Context):
-    """
-    Runs the app in a docker container; for local development only!
-    Once performed, `docker-compose up` can be used directly
-    """
-    args = ()
-    if context.verbosity > 1:
-        args += ('--verbose',)
-    args += ('up', '--build', '--remove-orphans')
-    if not context.use_colour:
-        args += ('--no-color',)
-    context.shell('docker-compose', *args)
-
-
-@tasks.register(hidden=True)
 def webpack_config(context: Context):
     """
     Generates a webpack.config.js file
@@ -383,7 +358,7 @@ def clean(context: Context, delete_dependencies: bool = False):
     """
     paths = [
         context.app.asset_build_path, context.app.collected_assets_path,
-        'docker-compose.yml', 'package.json', 'package-lock.json', 'webpack.config.js',
+        'package.json', 'package-lock.json', 'webpack.config.js',
     ]
     context.shell(f'rm -rf {paths_for_shell(paths)}')
     context.shell(f'find {context.app.django_app_name} -name "*.pyc" -or -name __pycache__ -delete')
