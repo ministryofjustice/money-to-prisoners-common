@@ -14,13 +14,14 @@ services:
 
   db:
     container_name: mtp-api-db
-    image: postgres:16-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
+    image: postgres:18-alpine  # should match version setup in mtp-deploy terraformed rds.db_engine_version
     environment:
       POSTGRES_DB: mtp_api
       POSTGRES_USER: mtp_api
       POSTGRES_PASSWORD: postgres
     volumes:
-      - db_data:/var/lib/postgresql/data
+      # PostgreSQL 18+ images keep data in /var/lib/postgresql/<major>/docker, so mount the parent
+      - postgres_data:/var/lib/postgresql
 
   api:
     container_name: mtp-api
@@ -215,7 +216,7 @@ services:
       GOVUK_NOTIFY_CALLBACKS_BEARER_TOKEN: ${GOVUK_NOTIFY_CALLBACKS_BEARER_TOKEN:-}
 
 volumes:
-  db_data:
+  postgres_data:
   api_node_modules:
   cashbook_node_modules:
   bank-admin_node_modules:
