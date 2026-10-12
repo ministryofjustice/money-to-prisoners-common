@@ -51,7 +51,7 @@ extras_require = {
         'flake8-quotes~=3.4',
         'pep8-naming~=0.15',
         'responses~=0.25',
-        'twine~=6.2',
+        'twine~=7.0',
         'watchdog~=6.0',
     ],
 }
