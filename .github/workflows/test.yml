@@ -26,3 +26,5 @@ jobs:
           pip install --editable .[testing]
       - name: Run tests
         run: python run.py --verbosity 2 test
+      - name: Test security scan result mapping
+        run: python -m unittest discover -s .github/tests -v

@@ -88,6 +88,10 @@ jobs:
           fi
           test -s "$RUNNER_TEMP/snyk-results.sarif"
           echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Map findings to tracked manifests
+        env:
+          SCAN_TARGET: ${{ matrix.target }}
+        run: python .github/scripts/map_snyk_sarif.py "$RUNNER_TEMP/snyk-results.sarif" "$SCAN_TARGET"
       - name: Upload results
         uses: github/codeql-action/upload-sarif@v4
         with:
