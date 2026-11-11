@@ -1,0 +1,104 @@
+name: Security Snyk dependency scans
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '49 6 * * 1' # Every Monday, matching application image scans
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: python
+          - target: npm-common
+            manifest: package.json
+          - target: npm-template
+            manifest: mtp_common/templates/mtp_common/build_tasks/package.json
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Install Python dependencies in an isolated environment
+        if: matrix.target == 'python'
+        run: |
+          python -m venv "$RUNNER_TEMP/snyk-venv"
+          source "$RUNNER_TEMP/snyk-venv/bin/activate"
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --editable .
+          python -m pip freeze --exclude-editable > requirements-snyk.txt
+          test -s requirements-snyk.txt
+      - name: Resolve npm dependencies in a temporary directory
+        if: matrix.target != 'python'
+        env:
+          NPM_MANIFEST: ${{ matrix.manifest }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/snyk-npm"
+          node - <<'NODE'
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync(process.env.NPM_MANIFEST, 'utf8'));
+          // The shared build manifest uses app-specific template values for these fields.
+          manifest.name = 'mtp-common-scan';
+          manifest.version = '0.0.0';
+          fs.writeFileSync(process.env.RUNNER_TEMP + '/snyk-npm/package.json', JSON.stringify(manifest));
+          NODE
+          cd "$RUNNER_TEMP/snyk-npm"
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Install Snyk CLI
+        run: npm install --global snyk@1.1304.2
+      - name: Scan resolved dependencies
+        id: snyk
+        env:
+          SCAN_TARGET: ${{ matrix.target }}
+          SNYK_CLIENT_ID: ${{ secrets.HMPPS_SNYK_CLIENT_ID }}
+          SNYK_CLIENT_SECRET: ${{ secrets.HMPPS_SNYK_CLIENT_SECRET }}
+          SNYK_TOKEN: ${{ secrets.HMPPS_SNYK_API_KEY }}
+        run: |
+          if [ -n "$SNYK_CLIENT_ID" ] && [ -n "$SNYK_CLIENT_SECRET" ]; then
+            unset SNYK_TOKEN
+            snyk auth --client-id "$SNYK_CLIENT_ID" --client-secret "$SNYK_CLIENT_SECRET" >/dev/null
+          elif [ -z "$SNYK_TOKEN" ]; then
+            echo 'Snyk credentials are not configured' >&2
+            exit 1
+          fi
+          if [ "$SCAN_TARGET" = python ]; then
+            source "$RUNNER_TEMP/snyk-venv/bin/activate"
+            set -- --file=requirements-snyk.txt --package-manager=pip --command=python
+          else
+            cd "$RUNNER_TEMP/snyk-npm"
+            set -- --file=package.json --dev
+          fi
+          set +e
+          snyk test "$@" --severity-threshold=high --sarif-file-output="$RUNNER_TEMP/snyk-results.sarif"
+          status=$?
+          set -e
+          if [ "$status" -gt 1 ]; then
+            echo "Snyk scan failed with exit code $status" >&2
+            exit "$status"
+          fi
+          test -s "$RUNNER_TEMP/snyk-results.sarif"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Map findings to tracked manifests
+        env:
+          SCAN_TARGET: ${{ matrix.target }}
+        run: python .github/scripts/map_snyk_sarif.py "$RUNNER_TEMP/snyk-results.sarif" "$SCAN_TARGET"
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/snyk-results.sarif
+          category: snyk-${{ matrix.target }}
+      - name: Report vulnerability findings
+        if: steps.snyk.outputs.status == '1'
+        run: |
+          echo 'Snyk found high or critical vulnerabilities; review code scanning alerts.' >&2
+          exit 1

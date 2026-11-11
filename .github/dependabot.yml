@@ -3,12 +3,13 @@ updates:
   - package-ecosystem: pip
     directory: /
     ignore:
+      # Match the supported ranges in setup.py while allowing compatible fixes.
       - dependency-name: Django
         versions:
-          - '>=3.3'
+          - '>=5.3'
       - dependency-name: kubernetes
         versions:
-          - '>=30'
+          - '>=33'
     groups:
       minor-updates:
         update-types: [minor, patch]
