@@ -10,6 +10,8 @@ from kubernetes import client as k8s_client
 from kubernetes.client.rest import ApiException
 from kubernetes.config import ConfigException, load_incluster_config
 
+from mtp_common.private_estate_downloads import PREFIX as PRIVATE_ESTATE_PREFIX
+
 
 class S3BucketError(Exception):
     pass
@@ -107,11 +109,15 @@ def generate_upload_path(path_prefix: str, filename: str) -> str:
     return f'{path_prefix}/{get_random_string(35)}/{filename}'
 
 
-def get_download_url(bucket_path: str) -> str:
+def get_download_url(bucket_path: str, private_estate_token: str = None) -> str:
     """
     Returns absolute url to download file from S3 via mtp-emails app.
-    :raises ValueError if the object is not under emails/*
+    :raises ValueError if the object is not under an allowed prefix
     """
+    if private_estate_token is not None:
+        if not bucket_path.startswith(PRIVATE_ESTATE_PREFIX) or not private_estate_token:
+            raise ValueError('A token and private estate object path are required')
+        return urljoin(settings.EMAILS_URL, '/download-private?' + urlencode({'token': private_estate_token}))
     if not bucket_path.startswith('emails/'):
-        raise ValueError('Only files within emails/* are downloadable via emails app')
+        raise ValueError('Only files within emails/* are downloadable without a private estate token')
     return urljoin(settings.EMAILS_URL, f'/download/{bucket_path}')
