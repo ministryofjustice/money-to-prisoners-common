@@ -16,6 +16,7 @@ import base64
 import datetime
 import logging
 from urllib.parse import quote_plus
+import warnings
 
 from django.conf import settings
 from django.core.cache import cache
@@ -154,6 +155,13 @@ class Connector:
     def prison_api_v1_base_url(self):
         return urljoin(settings.HMPPS_PRISON_API_BASE_URL, '/api/v1', trailing_slash=False)
 
+    @property
+    def base_url(self):
+        """
+        Base url that request paths are relative to; subclasses can override this to talk to other HMPPS APIs.
+        """
+        return self.prison_api_v1_base_url
+
     def build_request_api_headers(self):
         """
         :return: dict with headers to used in calls to the Prison API (i.e. NOMIS).
@@ -175,7 +183,7 @@ class Connector:
 
         response = request_retry(
             verb,
-            urljoin(self.prison_api_v1_base_url, path, trailing_slash=False),
+            urljoin(self.base_url, path, trailing_slash=False),
             retries=retries,
             session=session,
             headers=self.build_request_api_headers(),
@@ -348,6 +356,15 @@ def get_photograph_data(prisoner_number, retries=0, session=None):
 
 
 def get_location(prisoner_number, retries=2, session=None):
+    """
+    Deprecated: use `mtp_common.prisoner_search.get_location` instead,
+    which does not depend on Prison API (i.e. NOMIS).
+    """
+    warnings.warn(
+        'mtp_common.nomis.get_location is deprecated, use mtp_common.prisoner_search.get_location',
+        DeprecationWarning,
+        stacklevel=2,
+    )
     result = connector.get(
         '/offenders/{prisoner_number}/location'.format(
             prisoner_number=quote_plus(prisoner_number)

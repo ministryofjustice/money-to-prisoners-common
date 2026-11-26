@@ -103,6 +103,7 @@ def setup_django_for_testing(_: Context):
         HMPPS_CLIENT_SECRET='mtp-secret',
         HMPPS_AUTH_BASE_URL='https://noms-auth-dev.local',
         HMPPS_PRISON_API_BASE_URL='https://noms-api-dev.local',
+        HMPPS_OFFENDER_SEARCH_BASE_URL='https://prisoner-search-dev.local',
     )
     django.setup()
 
